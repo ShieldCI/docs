@@ -52,8 +52,8 @@ docs/
 │   │   └── first-analysis.md
 │   └── analyzers/
 │       ├── overview.md
-│       ├── security/          # 20+ security analyzers
-│       ├── performance/       # 19 performance analyzers
+│       ├── security/          
+│       ├── performance/       
 │       ├── reliability/
 │       ├── code-quality/
 │       └── best-practices/
