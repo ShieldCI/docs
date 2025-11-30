@@ -30,5 +30,11 @@ features:
   - icon: 🚀
     title: CI/CD Ready
     details: Seamlessly integrate into your existing CI/CD pipeline
+  - icon: 💻
+    title: Recommendations on your terminal
+    details: Get actionable recommendations directly in your terminal with clear explanations and code examples
+  - icon: 👥
+    title: Collaborate with team mates
+    details: Share analysis results, track issues, and work together to improve code quality across your team
 ---
 
