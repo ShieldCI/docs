@@ -103,10 +103,6 @@ Many analyzers are environment-aware and only run when relevant:
 - OPcache Configuration
 - Configuration Caching
 
-// Development only
-- Development Dependencies
-- Debug Mode Checks
-
 // All environments
 - Security Vulnerabilities
 - SQL Injection Detection
