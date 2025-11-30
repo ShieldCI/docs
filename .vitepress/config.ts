@@ -32,27 +32,6 @@ export default defineConfig({
     // Search
     search: {
       provider: 'local',
-      options: {
-        locales: {
-          root: {
-            translations: {
-              button: {
-                buttonText: 'Search',
-                buttonAriaLabel: 'Search documentation'
-              },
-              modal: {
-                noResultsText: 'No results for',
-                resetButtonTitle: 'Reset search',
-                footer: {
-                  selectText: 'to select',
-                  navigateText: 'to navigate',
-                  closeText: 'to close'
-                }
-              }
-            }
-          }
-        }
-      }
     },
     
     // Social links
