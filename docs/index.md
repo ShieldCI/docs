@@ -6,7 +6,8 @@ hero:
   text: "Documentation"
   tagline: Modern security and code quality analysis for Laravel applications with 200+ comprehensive analyzers.
   image:
-    src: /logo.svg
+    light: /icon.svg
+    dark: /icon-dark.svg
     alt: ShieldCI
   actions:
     - theme: brand
