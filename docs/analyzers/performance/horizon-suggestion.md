@@ -1,0 +1,68 @@
+---
+title: Horizon Suggestion
+description: Recommends Laravel Horizon for better queue monitoring and management when using Redis queues
+icon: zap
+outline: [2, 3]
+---
+
+# Horizon Suggestion
+
+## What This Checks
+
+Recommends Laravel Horizon for better queue monitoring and management when using Redis queues.
+
+## Why It Matters
+
+- **Monitoring:** Real-time queue metrics and failed job tracking
+- **Management:** Easy queue worker management and scaling
+- **Developer Experience:** Beautiful dashboard for queue insights
+
+Horizon provides essential visibility into queue operations that basic queue:work doesn't offer.
+
+## How to Fix
+
+### Quick Fix (5 minutes)
+
+```bash
+composer require laravel/horizon
+php artisan horizon:install
+php artisan migrate
+```
+
+### Proper Fix (30 minutes)
+
+**Install and Configure:**
+```bash
+composer require laravel/horizon
+php artisan horizon:install
+php artisan migrate
+
+# Configure
+php artisan vendor:publish --tag=horizon-config
+```
+
+**Start Horizon:**
+```bash
+php artisan horizon
+```
+
+**Production Supervisor Config:**
+```ini
+[program:horizon]
+process_name=%(program_name)s
+command=php /path/to/artisan horizon
+autostart=true
+autorestart=true
+user=forge
+redirect_stderr=true
+stdout_logfile=/path/to/horizon.log
+stopwaitsecs=3600
+```
+
+## References
+
+- [Laravel Horizon](https://laravel.com/docs/horizon)
+
+## Related Analyzers
+
+- [Queue Driver](/analyzers/performance/queue-driver)

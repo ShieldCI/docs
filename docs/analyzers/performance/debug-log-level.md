@@ -1,0 +1,101 @@
+---
+title: Debug Log Level Analyzer
+description: Detects excessive debug logging in production that degrades performance and fills disk space
+icon: alert-circle
+outline: [2, 3]
+---
+
+# Debug Log Level Analyzer
+
+## What This Checks
+
+Detects excessive debug logging in production that degrades performance and fills disk space.
+
+## Why It Matters
+
+- **Performance Impact:** Debug logging can slow applications by 20-50%
+- **Disk Space:** Verbose logs quickly fill disk storage
+- **Security:** Debug logs may expose sensitive data
+
+Debug-level logging captures every framework operation. In production, this creates massive log files and significantly impacts performance.
+
+## How to Fix
+
+### Quick Fix (5 minutes)
+
+```env
+# .env
+LOG_LEVEL=warning
+```
+
+### Proper Fix (30 minutes)
+
+**Configure Log Levels per Environment:**
+
+```php
+// config/logging.php
+'channels' => [
+    'stack' => [
+        'driver' => 'stack',
+        'channels' => ['single'],
+        'ignore_exceptions' => false,
+    ],
+
+    'single' => [
+        'driver' => 'single',
+        'path' => storage_path('logs/laravel.log'),
+        'level' => env('LOG_LEVEL', 'debug'),
+    ],
+],
+```
+
+```env
+# .env.production
+LOG_LEVEL=error
+
+# .env.staging
+LOG_LEVEL=warning
+
+# .env.local
+LOG_LEVEL=debug
+```
+
+**Use Proper Logging:**
+```php
+// ❌ Don't log debug in production code
+Log::debug('User accessed page', ['user' => $user]);
+
+// ✅ Use appropriate levels
+Log::error('Payment failed', ['error' => $e->getMessage()]);
+Log::warning('API rate limit approaching');
+Log::info('User registered', ['id' => $user->id]);
+```
+
+## Common Mistakes to Avoid
+
+1. **Debug logging in production:**
+   ```env
+   # ❌ Too verbose
+   LOG_LEVEL=debug
+
+   # ✅ Errors only
+   LOG_LEVEL=error
+   ```
+
+2. **Not rotating logs:**
+   ```php
+   // config/logging.php
+   'daily' => [
+       'driver' => 'daily',
+       'days' => 14,  // Keep 2 weeks
+   ],
+   ```
+
+## References
+
+- [Laravel Logging](https://laravel.com/docs/logging)
+- [PSR-3 Log Levels](https://www.php-fig.org/psr/psr-3/)
+
+## Related Analyzers
+
+- [Debug Mode](/analyzers/security/debug-mode)

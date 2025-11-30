@@ -1,0 +1,24 @@
+{
+  "name": "shieldci-docs",
+  "version": "1.0.0",
+  "description": "ShieldCI Documentation - Built with VitePress",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "serve": "vitepress serve"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.0.0",
+    "@vueuse/core": "^11.0.0",
+    "gray-matter": "^4.0.3",
+    "tailwindcss": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vitepress": "^1.6.0",
+    "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "lucide-vue-next": "^0.460.0"
+  }
+}
