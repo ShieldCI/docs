@@ -2,29 +2,29 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
 
-@theme {  
+@theme {
   /* Semantic Colors */
   --color-security-red-50: #FEF2F2;
   --color-security-red-100: #FEE2E2;
   --color-security-red-600: #DC2626;
   --color-security-red-700: #B91C1C;
   --color-security-red-800: #991B1B;
-  
+
   --color-warning-orange-50: #FFF7ED;
   --color-warning-orange-100: #FFEDD5;
   --color-warning-orange-500: #F97316;
   --color-warning-orange-600: #EA580C;
-  
+
   --color-caution-yellow-50: #FEFCE8;
   --color-caution-yellow-100: #FEF9C3;
   --color-caution-yellow-400: #FACC15;
   --color-caution-yellow-500: #EAB308;
-  
+
   --color-success-green-50: #F0FDF4;
   --color-success-green-100: #DCFCE7;
   --color-success-green-600: #16A34A;
   --color-success-green-700: #15803D;
-  
+
   /* Fonts */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', 'Courier New', monospace;
@@ -38,7 +38,7 @@
   --vp-c-brand-dark: var(--color-blue-700);
   --vp-c-brand-darker: var(--color-blue-800);
   --vp-c-brand-1: var(--color-blue-600);
-    
+
   --vp-font-family-base: var(--font-sans);
   --vp-font-family-mono: var(--font-mono);
 
@@ -66,6 +66,15 @@
 }
 
 .dark {
+  --vp-c-text-1: var(--color-gray-200);
+  --vp-c-text-2: var(--color-gray-400);
+  --vp-c-text-3: var(--color-gray-600);
+
+  --vp-button-sponsor-border: var(--color-gray-700);
+  --vp-button-sponsor-text: var(--color-white);
+
+  --vp-c-divider: var(--color-gray-700);
+  --vp-c-border: var(--color-gray-700);
   --vp-c-gutter: var(--color-gray-700);
 }
 
@@ -96,5 +105,17 @@ code {
 .dark .prose code {
   background: var(--color-gray-800);
   color: var(--color-blue-400);
+}
+
+.VPNav {
+  box-shadow: rgba(29, 30, 32, 0.08) 0px 0px 16px 0px, rgba(29, 30, 32, 0.04) 0px 0px 12px 0px;
+}
+
+.VPNav .divider {
+    @apply hidden;
+}
+
+.VPNavBarTitle.has-sidebar .title {
+    @apply border-b-0;
 }
 
