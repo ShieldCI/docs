@@ -9,7 +9,7 @@ outline: [2, 3]
 
 | Analyzer ID       | Category     | Severity   | Time To Fix  |
 | ------------------| :----------: |:----------:| ------------:|
-| `cookie-security` | 🛡️ Security  | Critical       | 15 minutes   |
+| `cookie-security` | 🛡️ Security  | Critical   | 15 minutes   |
 
 ## What This Checks
 
