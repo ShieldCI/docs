@@ -2,8 +2,8 @@
 layout: home
 
 hero:
-  name: "ShieldCI"
-  text: "Documentation"
+  name: ShieldCI
+  text: AI-powered code analysis
   tagline: Modern security and code quality analysis for Laravel applications with 200+ comprehensive analyzers.
   image:
     light: /icon.svg
