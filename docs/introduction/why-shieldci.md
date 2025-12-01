@@ -207,25 +207,11 @@ ShieldCI is the modern successor to the abandoned Enlightn project:
 |---------|----------|----------|
 | **Development Status** | ✅ Active (monthly updates) | ❌ Abandoned (2021) |
 | **Laravel 12 Support** | ✅ Full support | ❌ No support |
-| **Total Analyzers** | ✅ 102 analyzers | ⚠️ 67 analyzers |
+| **Total Analyzers** | ✅ 200+ analyzers | ⚠️ 131 analyzers |
 | **Performance** | ✅ 40% faster analysis | ⚠️ Slower AST parsing |
 | **Architecture** | ✅ Modern PHP 8.1+ | ⚠️ Legacy PHP 7.x |
 | **Documentation** | ✅ Comprehensive docs | ⚠️ Basic docs |
-| **CI/CD Integration** | ✅ GitHub/GitLab/Bitbucket | ⚠️ Limited support |
-| **License Compliance** | ✅ GPL/AGPL detection | ❌ Not available |
 | **Dependency Scanning** | ✅ Composer + NPM | ⚠️ Composer only |
-
-**Migration Path:**
-```bash
-# Remove Enlightn
-composer remove enlightn/enlightn
-
-# Install ShieldCI
-composer require shieldci/laravel
-
-# Similar command structure
-php artisan shield:analyze  # (was: php artisan enlightn)
-```
 
 ### vs PHPStan/Larastan
 
@@ -233,7 +219,7 @@ ShieldCI complements static analysis tools like PHPStan:
 
 | Capability | ShieldCI | PHPStan/Larastan |
 |------------|----------|------------------|
-| **Type Safety** | ⚠️ Basic | ✅ Comprehensive |
+| **Type Safety** | ✅ Comprehensive | ✅ Comprehensive |
 | **Security Scanning** | ✅ 22 analyzers | ❌ None |
 | **Performance Analysis** | ✅ N+1, caching, config | ❌ None |
 | **Laravel Context** | ✅ Framework-aware | ⚠️ Limited (Larastan) |

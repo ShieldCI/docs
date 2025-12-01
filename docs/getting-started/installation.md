@@ -424,36 +424,6 @@ See [CI/CD Integration](/integrations/ci-cd) for detailed setup guides:
 
 ## Upgrading
 
-### From Laravel Enlightn
-
-Migrate from Enlightn to ShieldCI:
-
-```bash
-# 1. Remove Enlightn
-composer remove enlightn/enlightn enlightn/enlightn-pro
-
-# 2. Install ShieldCI
-composer require shieldci/laravel
-
-# 3. Migrate configuration (if you had custom Enlightn config)
-# ShieldCI uses similar structure, update config/shieldci.php
-```
-
-**Configuration mapping:**
-```php
-// Enlightn: config/enlightn.php
-'analyzers' => ['security', 'performance']
-
-// ShieldCI: config/shieldci.php
-'analyzers' => [
-    'security' => true,
-    'performance' => true,
-    'reliability' => true,
-    'code_quality' => true,
-    'best_practices' => true,
-]
-```
-
 ### From Previous ShieldCI Versions
 
 ```bash
