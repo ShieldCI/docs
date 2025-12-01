@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Password Hashing Strength
 
+| Analyzer ID        | Category     | Severity   | Time To Fix  |
+| -------------------| :----------: |:----------:| ------------:|
+| `hashing-strength` | 🛡️ Security  | Critical   | 15 minutes   |
+
 ## What This Checks
 
 Validates that your Laravel application uses secure password hashing algorithms with appropriate security parameters. Checks for weak hashing drivers (MD5, SHA1, SHA256), insufficient bcrypt rounds, weak Argon2 parameters, and code-level vulnerabilities like md5() or sha1() usage for passwords.

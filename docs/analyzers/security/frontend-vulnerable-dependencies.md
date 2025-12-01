@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Frontend Vulnerable Dependency Analyzer
 
+| Analyzer ID                        | Category     | Severity   | Time To Fix  |
+| -----------------------------------| :----------: |:----------:| ------------:|
+| `frontend-vulnerable-dependencies` | 🛡️ Security  | Critical   | 60 minutes   |
+
 ## What This Checks
 
 Scans your npm and yarn dependencies for known security vulnerabilities using npm audit and yarn audit. Identifies packages with CVEs, security advisories, outdated versions, and missing lock files that expose your application to attacks through the frontend dependency chain.

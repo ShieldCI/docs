@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Cache Driver Configuration
 
+| Analyzer ID    | Category       | Severity   | Time To Fix  |
+| ---------------| :------------: |:----------:| ------------:|
+| `cache-driver` | ⚡ Performance  | High       | 60 minutes   |
+
 ## What This Checks
 
 Validates that your Laravel application uses an appropriate cache driver for the current environment, ensuring optimal performance in production and proper setup for development.

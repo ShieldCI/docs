@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Session Driver Configuration
 
+| Analyzer ID      | Category       | Severity   | Time To Fix  |
+| -----------------| :------------: |:----------:| ------------:|
+| `session-driver` | ⚡ Performance  | Medium     | 30 minutes   |
+
 ## What This Checks
 
 Validates that Laravel's session driver is appropriate for production scalability - Redis or database for multi-server setups, avoiding file-based sessions in load-balanced environments.

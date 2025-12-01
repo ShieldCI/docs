@@ -7,7 +7,9 @@ outline: [2, 3]
 
 # Stable Dependency Analyzer
 
-**Category:** Security · **Severity:** Low · **Analyzer ID:** `stable-dependencies`
+| Analyzer ID           | Category     | Severity   | Time To Fix  |
+| ----------------------| :----------: |:----------:| ------------:|
+| `stable-dependencies` | 🛡️ Security  | Low        | 30 minutes   |
 
 ## What This Checks
 

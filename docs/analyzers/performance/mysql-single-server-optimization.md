@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # MySQL Single Server Optimization
 
+| Analyzer ID                        | Category       | Severity   | Time To Fix  |
+| -----------------------------------| :------------: |:----------:| ------------:|
+| `mysql-single-server-optimization` | ⚡ Performance  | Medium     | 30 minutes   |
+
 ## What This Checks
 
 Detects MySQL read/write configuration on single server, suggesting optimization opportunities.

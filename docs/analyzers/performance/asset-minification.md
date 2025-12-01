@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Asset Minification
 
+| Analyzer ID          | Category       | Severity   | Time To Fix  |
+| ---------------------| :------------: |:----------:| ------------:|
+| `asset-minification` | ⚡ Performance  | Medium     | 15 minutes   |
+
 ## What This Checks
 
 Validates that JavaScript and CSS assets are minified for production deployment.

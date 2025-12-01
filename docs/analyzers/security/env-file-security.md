@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Environment File Security
 
+| Analyzer ID         | Category     | Severity   | Time To Fix  |
+| --------------------| :----------: |:----------:| ------------:|
+| `env-file-security` | 🛡️ Security  | Critical       | 10 minutes   |
+
 ## What This Checks
 
 Validates that Laravel environment files are properly secured against exposure and credential leaks. Detects `.env` files in public directories, real credentials in `.env.example`, missing `.gitignore` entries, files committed to git repositories, and insecure file permissions that could expose database passwords, API keys, and other sensitive configuration data.

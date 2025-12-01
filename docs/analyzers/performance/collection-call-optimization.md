@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Collection Call Optimization
 
+| Analyzer ID                    | Category       | Severity   | Time To Fix  |
+| -------------------------------| :------------: |:----------:| ------------:|
+| `collection-call-optimization` | ⚡ Performance  | High       | 45 minutes   |
+
 ## What This Checks
 
 Detects inefficient collection operations that could be optimized for better performance.

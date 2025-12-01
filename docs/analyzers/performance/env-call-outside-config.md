@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Env Call Analyzer
 
+| Analyzer ID               | Category       | Severity   | Time To Fix  |
+| --------------------------| :------------: |:----------:| ------------:|
+| `env-call-outside-config` | ⚡ Performance  | High       | 30 minutes   |
+
 ## What This Checks
 
 Detects direct `env()` calls outside config files, which breaks config caching and causes unpredictable behavior.

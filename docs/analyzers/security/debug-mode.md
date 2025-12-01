@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Debug Mode Security
 
+| Analyzer ID  | Category     | Severity   | Time To Fix  |
+| -------------| :----------: |:----------:| ------------:|
+| `debug-mode` | 🛡️ Security  | High       | 5 minutes   |
+
 ## What This Checks
 
 Detects debug mode configurations and debugging functions that expose sensitive information in production environments. Scans for `APP_DEBUG=true`, hardcoded debug settings, debug functions (`dd()`, `dump()`, `ray()`), error display configurations, and debug packages in production dependencies that can leak application internals, credentials, and stack traces to attackers.

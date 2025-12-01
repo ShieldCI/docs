@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Application Key Security
 
+| Analyzer ID        | Category     | Severity   | Time To Fix  |
+| -------------------| :----------: |:----------:| ------------:|
+| `app-key-security` | 🛡️ Security  | Critical    | 5 minutes   |
+
 ## What This Checks
 
 Validates that Laravel's `APP_KEY` encryption key is properly configured, secure, and consistent across environment files. Checks for missing keys, placeholder values, weak formats, duplicate definitions, cached configurations, and cross-environment inconsistencies.

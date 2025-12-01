@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # OPcache Enabled
 
+| Analyzer ID       | Category       | Severity   | Time To Fix  |
+| ------------------| :------------: |:----------:| ------------:|
+| `opcache-enabled` | ⚡ Performance  | High       | 15 minutes   |
+
 ## What This Checks
 
 Validates that PHP's OPcache extension is installed, enabled, and properly configured for production performance with optimal settings for Laravel applications.

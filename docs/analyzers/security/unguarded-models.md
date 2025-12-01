@@ -7,7 +7,9 @@ outline: [2, 3]
 
 # Unguarded Models Analyzer
 
-**Category:** Security · **Severity:** High (Critical in controllers/services) · **Analyzer ID:** `unguarded-models`
+| Analyzer ID        | Category     | Severity   | Time To Fix  |
+| -------------------| :----------: |:----------:| ------------:|
+| `unguarded-models` | 🛡️ Security  | High       | 20 minutes   |
 
 ## What This Checks
 

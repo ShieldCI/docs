@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Dependency License Compliance Analyzer
 
+| Analyzer ID          | Category     | Severity   | Time To Fix  |
+| ---------------------| :----------: |:----------:| ------------:|
+| `license-compliance` | 🛡️ Security  | Critical   | 120 minutes   |
+
 ## What This Checks
 
 Validates that all dependencies use legally acceptable licenses for your application type. Detects GPL/AGPL licenses in commercial applications, packages with restrictive licenses, missing license information, and supports configurable license whitelists.

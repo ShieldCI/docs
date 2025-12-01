@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Configuration Caching
 
+| Analyzer ID      | Category       | Severity   | Time To Fix  |
+| -----------------| :------------: |:----------:| ------------:|
+| `config-caching` | ⚡ Performance  | High       | 5 minutes   |
+
 ## What This Checks
 
 Verifies that Laravel's configuration caching is properly configured for each environment - cached in production for performance, and uncached in development for flexibility.

@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # CSRF Protection
 
+| Analyzer ID       | Category     | Severity   | Time To Fix  |
+| ------------------| :----------: |:----------:| ------------:|
+| `csrf-protection` | 🛡️ Security  | High       | 20 minutes   |
+
 ## What This Checks
 
 Detects missing or weak Cross-Site Request Forgery (CSRF) protection in Laravel applications. Validates that forms include `@csrf` directives, AJAX requests use CSRF tokens, VerifyCsrfToken middleware is properly registered, middleware exception patterns aren't overly broad, and state-changing routes have appropriate protection.

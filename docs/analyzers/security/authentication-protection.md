@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Authentication & Authorization Protection
 
+| Analyzer ID                 | Category     | Severity   | Time To Fix  |
+| ----------------------------| :----------: |:----------:| ------------:|
+| `authentication-protection` | 🛡️ Security  | High       | 25 minutes   |
+
 ## What This Checks
 
 Detects missing authentication and authorization protection throughout your Laravel application. Scans routes, controllers, and code for authentication vulnerabilities including unprotected routes (POST, PUT, PATCH, DELETE), controllers with sensitive methods lacking authentication, missing authorization checks, and unsafe `Auth::user()` usage without null safety checks.

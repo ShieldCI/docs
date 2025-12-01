@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Mass Assignment Vulnerability Detection
 
+| Analyzer ID       | Category     | Severity   | Time To Fix  |
+| ------------------| :----------: |:----------:| ------------:|
+| `mass-assignment` | 🛡️ Security  | High       | 25 minutes   |
+
 ## What This Checks
 
 Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, allowing attackers to modify unintended database fields. This analyzer checks for models without `$fillable` or `$guarded` protection, dangerous method calls with `request()->all()`, query builder operations with raw request data, and multiple unsafe request data retrieval patterns.

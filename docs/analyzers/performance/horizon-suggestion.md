@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Horizon Suggestion
 
+| Analyzer ID          | Category       | Severity   | Time To Fix  |
+| ---------------------| :------------: |:----------:| ------------:|
+| `horizon-suggestion` | ⚡ Performance  | Low       | 15 minutes   |
+
 ## What This Checks
 
 Recommends Laravel Horizon for better queue monitoring and management when using Redis queues.

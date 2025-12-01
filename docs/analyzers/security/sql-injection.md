@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # SQL Injection Detector
 
+| Analyzer ID     | Category     | Severity   | Time To Fix  |
+| ----------------| :----------: |:----------:| ------------:|
+| `sql-injection` | 🛡️ Security  | Critical   | 30 minutes   |
+
 ## What This Checks
 
 This analyzer detects potential SQL injection vulnerabilities in your Laravel application by identifying unsafe database query patterns, including string concatenation in raw SQL methods, variable interpolation in queries, use of `DB::unprepared()`, and native PHP database functions that bypass Laravel's query protections.

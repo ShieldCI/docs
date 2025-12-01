@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # HSTS Header Analyzer
 
+| Analyzer ID   | Category     | Severity   | Time To Fix  |
+| --------------| :----------: |:----------:| ------------:|
+| `hsts-header` | 🛡️ Security  | High       | 10 minutes   |
+
 ## What This Checks
 
 Validates that HTTPS-only applications properly implement HTTP Strict Transport Security (HSTS) headers. Checks for HSTS middleware presence, max-age directive (minimum 6 months), includeSubDomains directive, optional preload directive, and secure session cookie configuration.

@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Fillable Foreign Key Security Analyzer
 
+| Analyzer ID            | Category     | Severity   | Time To Fix  |
+| -----------------------| :----------: |:----------:| ------------:|
+| `fillable-foreign-key` | 🛡️ Security  | High       | 15 minutes   |
+
 ## What This Checks
 
 Detects foreign key fields in Laravel Eloquent models' `$fillable` arrays that could allow unauthorized relationship manipulation and privilege escalation attacks. Flags critical patterns (`user_id`, `owner_id`, `tenant_id`, etc.) and generic `*_id` fields that enable mass assignment of foreign keys.

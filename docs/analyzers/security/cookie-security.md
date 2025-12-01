@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Cookie Security
 
+| Analyzer ID       | Category     | Severity   | Time To Fix  |
+| ------------------| :----------: |:----------:| ------------:|
+| `cookie-security` | 🛡️ Security  | Critical       | 15 minutes   |
+
 ## What This Checks
 
 Validates that Laravel's cookie security configuration properly protects against XSS, CSRF, and man-in-the-middle attacks. Scans session configuration (`config/session.php`) and middleware registration (`app/Http/Kernel.php` or `bootstrap/app.php`) for HttpOnly flag, Secure flag, SameSite attribute, and EncryptCookies middleware to ensure cookies are protected from JavaScript access, transmitted only over HTTPS, defended against cross-site attacks, and encrypted.

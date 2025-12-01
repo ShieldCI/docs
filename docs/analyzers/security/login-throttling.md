@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Login Throttling Analyzer
 
+| Analyzer ID        | Category     | Severity   | Time To Fix  |
+| -------------------| :----------: |:----------:| ------------:|
+| `login-throttling` | 🛡️ Security  | High       | 20 minutes   |
+
 ## What This Checks
 
 Detects missing rate limiting on authentication endpoints to prevent brute force attacks. Validates that login routes have throttle middleware, controllers use Laravel's throttling traits, or RateLimiter is implemented to restrict failed login attempts.

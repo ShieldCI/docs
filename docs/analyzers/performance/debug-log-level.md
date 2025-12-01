@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Debug Log Level Analyzer
 
+| Analyzer ID       | Category       | Severity   | Time To Fix  |
+| ------------------| :------------: |:----------:| ------------:|
+| `debug-log-level` | ⚡ Performance  | High       | 5 minutes    |
+
 ## What This Checks
 
 Detects excessive debug logging in production that degrades performance and fills disk space.

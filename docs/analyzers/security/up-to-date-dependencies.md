@@ -7,7 +7,9 @@ outline: [2, 3]
 
 # Up-to-Date Dependency Analyzer
 
-**Category:** Security · **Severity:** Low · **Analyzer ID:** `up-to-date-dependencies`
+| Analyzer ID               | Category     | Severity   | Time To Fix  |
+| --------------------------| :----------: |:----------:| ------------:|
+| `up-to-date-dependencies` | 🛡️ Security  | Low        | 60 minutes   |
 
 ## What This Checks
 

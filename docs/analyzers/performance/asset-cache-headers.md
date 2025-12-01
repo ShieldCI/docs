@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Asset Cache Headers
 
+| Analyzer ID           | Category       | Severity   | Time To Fix  |
+| ----------------------| :------------: |:----------:| ------------:|
+| `asset-cache-headers` | ⚡ Performance  | High       | 30 minutes   |
+
 ## What This Checks
 
 Validates that proper HTTP cache headers are configured for static assets and responses.

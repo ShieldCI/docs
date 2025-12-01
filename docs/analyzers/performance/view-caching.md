@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # View Caching
 
+| Analyzer ID    | Category       | Severity  | Time To Fix  |
+| ---------------| :------------: |:---------:| ------------:|
+| `view-caching` | ⚡ Performance  | Medium    | 5 minutes    |
+
 ## What This Checks
 
 Validates that Blade templates are properly precompiled and cached in production/staging environments for optimal performance.

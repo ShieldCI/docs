@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Development Dependencies Check
 
+| Analyzer ID                   | Category       | Severity   | Time To Fix  |
+| ------------------------------| :------------: |:----------:| ------------:|
+| `dev-dependencies-production` | ⚡ Performance  | High       | 10 minutes   |
+
 ## What This Checks
 
 Ensures development dependencies are not installed in production environments.

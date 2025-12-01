@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Environment File HTTP Accessibility
 
+| Analyzer ID              | Category     | Severity   | Time To Fix  |
+| -------------------------| :----------: |:----------:| ------------:|
+| `env-http-accessibility` | 🛡️ Security  | Critical   | 20 minutes   |
+
 ## What This Checks
 
 Performs runtime HTTP checks to verify that `.env` files cannot be accessed via web requests. Tests 8 common exposure paths including root level (`/.env`), path traversal (`/../.env`), and misconfigurations in public, storage, app, and config directories. This analyzer complements static file security checks by testing actual HTTP accessibility.

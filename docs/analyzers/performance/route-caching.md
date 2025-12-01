@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Route Caching
 
+| Analyzer ID     | Category       | Severity   | Time To Fix  |
+| ----------------| :------------: |:----------:| ------------:|
+| `route-caching` | ⚡ Performance  | High       | 5 minutes   |
+
 ## What This Checks
 
 Validates that Laravel's route caching is properly configured - enabled in production for performance, and disabled in development for flexibility.

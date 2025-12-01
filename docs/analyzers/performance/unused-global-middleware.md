@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Unused Global Middleware
 
+| Analyzer ID                | Category       | Severity  | Time To Fix  |
+| ---------------------------| :------------: |:---------:| ------------:|
+| `unused-global-middleware` | ⚡ Performance  | Low       | 10 minutes   |
+
 ## What This Checks
 
 Detects global middleware that runs on every request but may not be needed, impacting performance.

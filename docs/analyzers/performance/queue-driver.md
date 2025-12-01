@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Queue Driver Configuration
 
+| Analyzer ID    | Category       | Severity   | Time To Fix  |
+| ---------------| :------------: |:----------:| ------------:|
+| `queue-driver` | ⚡ Performance  | Medium     | 30 minutes   |
+
 ## What This Checks
 
 Ensures Laravel's queue driver is configured for reliability and performance - Redis or SQS for production, avoiding sync driver that blocks requests.

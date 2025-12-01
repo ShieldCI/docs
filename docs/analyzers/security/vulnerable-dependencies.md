@@ -7,7 +7,9 @@ outline: [2, 3]
 
 # Vulnerable Dependency Analyzer
 
-**Category:** Security · **Severity:** Critical · **Analyzer ID:** `vulnerable-dependencies`
+| Analyzer ID               | Category     | Severity   | Time To Fix  |
+| --------------------------| :----------: |:----------:| ------------:|
+| `vulnerable-dependencies` | 🛡️ Security  | Critical    | 60 minutes   |
 
 ## What This Checks
 

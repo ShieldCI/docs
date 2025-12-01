@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # Composer Autoloader Optimization
 
+| Analyzer ID               | Category       | Severity   | Time To Fix  |
+| --------------------------| :------------: |:----------:| ------------:|
+| `autoloader-optimization` | ⚡ Performance  | High       | 5 minutes    |
+
 ## What This Checks
 
 Validates that Composer's autoloader is optimized for production performance by checking for classmap optimization and authoritative classmap configuration.

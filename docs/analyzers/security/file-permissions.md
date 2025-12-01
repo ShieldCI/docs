@@ -7,6 +7,10 @@ outline: [2, 3]
 
 # File Permissions Security Analyzer
 
+| Analyzer ID        | Category     | Severity   | Time To Fix  |
+| -------------------| :----------: |:----------:| ------------:|
+| `file-permissions` | 🛡️ Security  | Critical   | 15 minutes   |
+
 ## What This Checks
 
 Validates that your Laravel application's files and directories use secure Unix permissions. Checks for world-writable files and directories, overly permissive permissions exceeding recommended levels, sensitive files like `.env` with weak permissions, group-writable critical files, and executable permissions on non-executable files like PHP and configuration files.
