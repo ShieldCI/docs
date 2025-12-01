@@ -6,8 +6,8 @@ hero:
   text: AI-powered code analysis
   tagline: Modern security and code quality analysis for Laravel applications with 200+ comprehensive analyzers.
   image:
-    light: /icon.svg
-    dark: /icon-dark.svg
+    light: /icon-version-2.svg
+    dark: /icon-dark-version-2.svg
     alt: ShieldCI
   actions:
     - theme: brand

@@ -18,8 +18,8 @@ export default defineConfig({
   // Theme configuration
   themeConfig: {
     logo: {
-      light: '/logo.svg',
-      dark: '/logo-dark.svg',
+      light: '/logo-version-2.svg',
+      dark: '/logo-dark-version-2.svg',
       alt: 'ShieldCI',
     },
     siteTitle: false,
