@@ -96,7 +96,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.1'
 
       - name: Install Dependencies
         run: composer install --no-dev --optimize-autoloader
@@ -133,7 +133,7 @@ php artisan route:cache
 php artisan view:cache
 
 # Reload PHP-FPM
-sudo -S service php8.2-fpm reload
+sudo -S service php8.1-fpm reload
 ```
 
 **Makefile for Consistent Commands:**

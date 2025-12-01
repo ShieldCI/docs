@@ -441,7 +441,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.1
 
       - name: Install Dependencies
         run: composer install --no-dev
@@ -466,7 +466,7 @@ jobs:
 ```yaml
 shieldci:
   stage: test
-  image: php:8.2
+  image: php:8.1
   script:
     - composer install --no-dev
     - php artisan shield:analyze --format=json
@@ -643,9 +643,3 @@ Structured JSON output for automation:
 - **SOC 2:** Pro version includes audit reports
 - **HIPAA:** Can be used in HIPAA-compliant environments
 - **ISO 27001:** Compatible with security standards
-
-## Next Steps
-
-- **[Installation](/getting-started/installation)** - Get ShieldCI running
-- **[First Analysis](/getting-started/first-analysis)** - Run your first scan
-- **[Configuration](/getting-started/configuration)** - Customize analyzers

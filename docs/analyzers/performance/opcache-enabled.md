@@ -27,13 +27,13 @@ PHP normally parses and compiles scripts on every request. OPcache stores the co
 
 ```bash
 # Ubuntu/Debian
-sudo apt-get install php8.2-opcache
+sudo apt-get install php8.1-opcache
 
 # CentOS/RHEL
 sudo yum install php82-opcache
 
 # macOS (Homebrew)
-brew install php@8.2
+brew install php@8.1
 # OPcache is included by default
 
 # Verify installation
@@ -51,13 +51,13 @@ opcache.enable_cli=0  ; Keep disabled for CLI
 Then restart PHP-FPM:
 ```bash
 # Ubuntu/Debian
-sudo systemctl restart php8.2-fpm
+sudo systemctl restart php8.1-fpm
 
 # CentOS/RHEL
 sudo systemctl restart php-fpm
 
 # macOS
-brew services restart php@8.2
+brew services restart php@8.1
 ```
 
 ### Proper Fix (30 minutes)
@@ -67,7 +67,7 @@ Implement production-optimized OPcache configuration:
 **Optimal php.ini Configuration for Laravel:**
 
 ```ini
-; /etc/php/8.2/fpm/php.ini (or your php.ini location)
+; /etc/php/8.1/fpm/php.ini (or your php.ini location)
 
 [opcache]
 ; Enable OPcache for web requests
@@ -103,7 +103,7 @@ opcache.optimization_level=0x7FFEBFFF
 
 **Environment-Specific Configuration:**
 
-For production/staging (`/etc/php/8.2/fpm/php.ini`):
+For production/staging (`/etc/php/8.1/fpm/php.ini`):
 ```ini
 [opcache]
 opcache.enable=1
@@ -113,7 +113,7 @@ opcache.memory_consumption=256
 opcache.max_accelerated_files=20000
 ```
 
-For development (`/etc/php/8.2/cli/php.ini`):
+For development (`/etc/php/8.1/cli/php.ini`):
 ```ini
 [opcache]
 opcache.enable=0  ; Or enable with validation
@@ -125,7 +125,7 @@ opcache.revalidate_freq=2  ; Check every 2 seconds
 
 ```dockerfile
 # Dockerfile
-FROM php:8.2-fpm
+FROM php:8.1-fpm
 
 # Install OPcache
 RUN docker-php-ext-install opcache
@@ -182,7 +182,7 @@ php -r "print_r(opcache_get_configuration());"
 
 # 3. After deployment, reset OPcache
 # Option 1: Restart PHP-FPM (recommended)
-sudo systemctl restart php8.2-fpm
+sudo systemctl restart php8.1-fpm
 
 # Option 2: Use opcache_reset() (only if you have a script for it)
 curl https://yoursite.com/opcache-reset.php
@@ -205,7 +205,7 @@ php -r "print_r(opcache_get_status());" | grep hit_rate
 2. **Forgetting to reset OPcache after deployment:**
    ```bash
    # After deploying code changes
-   sudo systemctl restart php8.2-fpm  # ✅ Required!
+   sudo systemctl restart php8.1-fpm  # ✅ Required!
 
    # Or use opcache_reset() via web endpoint
    curl https://yoursite.com/opcache-reset.php  # ✅ Alternative

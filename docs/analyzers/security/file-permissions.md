@@ -154,7 +154,7 @@ echo "Permissions applied successfully"
 **4. Dockerfile with Proper Permissions**
 
 ```dockerfile
-FROM php:8.2-fpm
+FROM php:8.1-fpm
 
 # Copy application
 COPY --chown=www-data:www-data . /var/www/html

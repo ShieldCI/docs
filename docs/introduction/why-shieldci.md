@@ -120,7 +120,7 @@ public function index()
 
 ```bash
 # 1. Install
-composer require shieldci/laravel --dev
+composer require shieldci/laravel
 
 # 2. Analyze
 php artisan shield:analyze
@@ -209,7 +209,7 @@ ShieldCI is the modern successor to the abandoned Enlightn project:
 | **Laravel 12 Support** | ✅ Full support | ❌ No support |
 | **Total Analyzers** | ✅ 102 analyzers | ⚠️ 67 analyzers |
 | **Performance** | ✅ 40% faster analysis | ⚠️ Slower AST parsing |
-| **Architecture** | ✅ Modern PHP 8.2+ | ⚠️ Legacy PHP 7.x |
+| **Architecture** | ✅ Modern PHP 8.1+ | ⚠️ Legacy PHP 7.x |
 | **Documentation** | ✅ Comprehensive docs | ⚠️ Basic docs |
 | **CI/CD Integration** | ✅ GitHub/GitLab/Bitbucket | ⚠️ Limited support |
 | **License Compliance** | ✅ GPL/AGPL detection | ❌ Not available |
@@ -221,7 +221,7 @@ ShieldCI is the modern successor to the abandoned Enlightn project:
 composer remove enlightn/enlightn
 
 # Install ShieldCI
-composer require shieldci/laravel --dev
+composer require shieldci/laravel
 
 # Similar command structure
 php artisan shield:analyze  # (was: php artisan enlightn)
@@ -246,8 +246,8 @@ ShieldCI complements static analysis tools like PHPStan:
 Use both tools together for maximum coverage:
 ```bash
 # Type safety + Laravel quality
-composer require phpstan/phpstan --dev
-composer require shieldci/laravel --dev
+composer require phpstan/phpstan
+composer require shieldci/laravel
 
 # Run both in CI
 php vendor/bin/phpstan analyse

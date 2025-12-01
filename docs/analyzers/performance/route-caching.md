@@ -93,7 +93,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.1'
           extensions: mbstring, xml, zip
 
       - name: Install Dependencies
@@ -141,7 +141,7 @@ php artisan view:cache
 
 # Reload PHP-FPM
 ( flock -w 10 9 || exit 1
-    echo 'Restarting FPM...'; sudo -S service php8.2-fpm reload ) 9>/tmp/fpmlock
+    echo 'Restarting FPM...'; sudo -S service php8.1-fpm reload ) 9>/tmp/fpmlock
 ```
 
 **4. Laravel Vapor (Serverless):**
@@ -165,7 +165,7 @@ environments:
 
 ```dockerfile
 # Dockerfile
-FROM php:8.2-fpm as build
+FROM php:8.1-fpm as build
 
 WORKDIR /var/www
 
@@ -182,7 +182,7 @@ RUN php artisan route:cache && \
     php artisan event:cache
 
 # Production image
-FROM php:8.2-fpm
+FROM php:8.1-fpm
 
 WORKDIR /var/www
 

@@ -242,7 +242,7 @@ php artisan shield:analyze
 3. **Reinstall package:**
    ```bash
    composer remove shieldci/laravel
-   composer require shieldci/laravel --dev
+   composer require shieldci/laravel
    ```
 
 ### Issue: Memory Limit Exceeded
@@ -335,7 +335,7 @@ Add ShieldCI to your Sail environment:
 services:
   laravel.test:
     build:
-      context: ./vendor/laravel/sail/runtimes/8.2
+      context: ./vendor/laravel/sail/runtimes/8.1
       dockerfile: Dockerfile
     extra_hosts:
       - 'host.docker.internal:host-gateway'
@@ -433,7 +433,7 @@ Migrate from Enlightn to ShieldCI:
 composer remove enlightn/enlightn enlightn/enlightn-pro
 
 # 2. Install ShieldCI
-composer require shieldci/laravel --dev
+composer require shieldci/laravel
 
 # 3. Migrate configuration (if you had custom Enlightn config)
 # ShieldCI uses similar structure, update config/shieldci.php
@@ -483,7 +483,7 @@ Visit [shieldci.com/pricing](https://shieldci.com/pricing) to purchase a Pro lic
 
 **Step 2: Install Pro Package**
 ```bash
-composer require shieldci/laravel-pro --dev
+composer require shieldci/laravel-pro
 ```
 
 **Step 3: Activate License**

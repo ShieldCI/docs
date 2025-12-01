@@ -125,7 +125,7 @@ ShieldCI is the modern successor to the abandoned Laravel Enlightn project, prov
 
 ### 1. Install Package
 ```bash
-composer require shieldci/laravel --dev
+composer require shieldci/laravel
 ```
 
 ### 2. Configure
@@ -245,9 +245,3 @@ Ready to improve your Laravel application's security and quality?
 - ✅ Fewer false positives
 - ✅ Actionable recommendations
 - ✅ Performance + security
-
-## Next Steps
-
-- [Why ShieldCI?](/introduction/why-shieldci) - Learn more about benefits
-- [How It Works](/introduction/how-it-works) - Technical deep dive
-- [Installation](/getting-started/installation) - Start using ShieldCI

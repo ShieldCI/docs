@@ -73,7 +73,7 @@ brew services start redis
 redis-cli ping  # Should return "PONG"
 
 # 2. Install PHP Redis extension
-sudo apt-get install php8.2-redis
+sudo apt-get install php8.1-redis
 
 # Or via PECL
 pecl install redis
@@ -121,7 +121,7 @@ REDIS_DB=0
 
 ```bash
 # 1. Install Memcached server
-sudo apt-get install memcached php8.2-memcached
+sudo apt-get install memcached php8.1-memcached
 
 # Start Memcached
 sudo systemctl start memcached
@@ -294,7 +294,7 @@ php artisan tinker
    php -m | grep redis
 
    # If not found, install it
-   sudo apt-get install php8.2-redis
+   sudo apt-get install php8.1-redis
    ```
 
 ## References
