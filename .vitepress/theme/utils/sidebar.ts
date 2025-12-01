@@ -46,12 +46,7 @@ function buildSidebar(dir: string, basePath: string = ''): SidebarItem[] {
   // Define custom ordering for specific directories
   const orderMap: Record<string, string[]> = {
     'introduction': ['what-is-shieldci', 'why-shieldci', 'how-it-works'],
-    'getting-started': ['installation', 'configuration', 'first-analysis'],
-    'security': ['overview'],
-    'performance': ['overview'],
-    'reliability': ['overview'],
-    'code-quality': ['overview'],
-    'best-practices': ['overview']
+    'getting-started': ['installation', 'configuration', 'first-analysis']
   }
   
   try {
@@ -104,7 +99,7 @@ function buildSidebar(dir: string, basePath: string = ''): SidebarItem[] {
             collapsed: false
           })
         }
-      } else if (entry.endsWith('.md') && entry !== 'README.md') {
+      } else if (entry.endsWith('.md') && entry !== 'README.md' && entry !== 'index.md') {
         const slug = entry.replace('.md', '')
         const title = getFileTitle(fullPath)
         
@@ -162,82 +157,47 @@ export function getSidebar() {
   ]
   
   if (analyzersSecurity.length > 0) {
-    // Find overview page and move it to the front
-    const securityItems = [...analyzersSecurity]
-    const overviewIndex = securityItems.findIndex(item => item.link?.includes('/security/overview'))
-    if (overviewIndex > 0) {
-      const overview = securityItems.splice(overviewIndex, 1)[0]
-      securityItems.unshift(overview)
-    }
-    
     analyzersItems.push({
       text: 'Security',
+      link: '/analyzers/security/',
       collapsed: false,
-      items: securityItems
+      items: analyzersSecurity
     })
   }
   
   if (analyzersPerformance.length > 0) {
-    // Find overview page and move it to the front
-    const performanceItems = [...analyzersPerformance]
-    const overviewIndex = performanceItems.findIndex(item => item.link?.includes('/performance/overview'))
-    if (overviewIndex > 0) {
-      const overview = performanceItems.splice(overviewIndex, 1)[0]
-      performanceItems.unshift(overview)
-    }
-    
     analyzersItems.push({
       text: 'Performance',
+      link: '/analyzers/performance/',
       collapsed: false,
-      items: performanceItems
+      items: analyzersPerformance
     })
   }
   
   if (analyzersReliability.length > 0) {
-    // Find overview page and move it to the front
-    const reliabilityItems = [...analyzersReliability]
-    const overviewIndex = reliabilityItems.findIndex(item => item.link?.includes('/reliability/overview'))
-    if (overviewIndex > 0) {
-      const overview = reliabilityItems.splice(overviewIndex, 1)[0]
-      reliabilityItems.unshift(overview)
-    }
-    
     analyzersItems.push({
       text: 'Reliability',
+      link: '/analyzers/reliability/',
       collapsed: false,
-      items: reliabilityItems
+      items: analyzersReliability
     })
   }
   
   if (analyzersCodeQuality.length > 0) {
-    // Find overview page and move it to the front
-    const codeQualityItems = [...analyzersCodeQuality]
-    const overviewIndex = codeQualityItems.findIndex(item => item.link?.includes('/code-quality/overview'))
-    if (overviewIndex > 0) {
-      const overview = codeQualityItems.splice(overviewIndex, 1)[0]
-      codeQualityItems.unshift(overview)
-    }
-    
     analyzersItems.push({
       text: 'Code Quality',
+      link: '/analyzers/code-quality/',
       collapsed: false,
-      items: codeQualityItems
+      items: analyzersCodeQuality
     })
   }
   
   if (analyzersBestPractices.length > 0) {
-    // Find overview page and move it to the front
-    const bestPracticesItems = [...analyzersBestPractices]
-    const overviewIndex = bestPracticesItems.findIndex(item => item.link?.includes('/best-practices/overview'))
-    if (overviewIndex > 0) {
-      const overview = bestPracticesItems.splice(overviewIndex, 1)[0]
-      bestPracticesItems.unshift(overview)
-    }
-    
     analyzersItems.push({
       text: 'Best Practices',
+      link: '/analyzers/best-practices/',
       collapsed: false,
-      items: bestPracticesItems
+      items: analyzersBestPractices
     })
   }
   
