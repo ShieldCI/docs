@@ -523,5 +523,4 @@ php artisan cache:clear
 
 - **Documentation:** [docs.shieldci.com](https://docs.shieldci.com)
 - **GitHub Issues:** [github.com/shieldci/laravel/issues](https://github.com/shieldci/laravel/issues)
-- **Discord Community:** [discord.gg/shieldci](https://discord.gg/shieldci)
 - **Email Support:** support@shieldci.com (Pro customers)
