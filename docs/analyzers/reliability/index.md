@@ -1,13 +1,13 @@
 ---
 title: Reliability Analyzers
-description: 24 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
+description: 25 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
 icon: check-circle
 outline: [2, 3]
 ---
 
 # Reliability Analyzers
 
-**24 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
+**25 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
 
 ## Overview
 
@@ -21,8 +21,10 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **[Cache Status](/analyzers/reliability/cache-status)** - Validates cache connectivity and functionality
 - **[Composer Validation](/analyzers/reliability/composer-validation)** - Ensures composer.json is valid and follows best practices
 - **[Database Status](/analyzers/reliability/database-status)** - Ensures database connections are accessible and functioning
-- **[Environment File Existence](/analyzers/reliability/env-file-exists)** - Ensures .env file exists for application configuration
-- **[Environment Variables Complete](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables are defined
+- **[Directory Write Permissions](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions
+- **[Environment File Existence](/analyzers/reliability/env-file-exists)** - Ensures .env file exists, is readable, not empty, and checks for broken symlinks
+- **[Environment Variables Complete](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables from .env.example are defined in .env
+- **[Environment Example Documentation](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
 - **[Maintenance Mode Status](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
 
 ### Code Quality & Static Analysis
