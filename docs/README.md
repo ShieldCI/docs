@@ -80,7 +80,7 @@ Each analyzer documentation page follows this template:
 
 1. **What This Checks** - Clear 1-2 sentence description of what the analyzer detects
 2. **Why It Matters** - Explain the security risk, performance impact, or compliance requirement
-3. **How to Fix** - Provide Quick Fix (5 min) and Proper Fix (30 min) with code examples
+3. **How to Fix** - Provide Quick Fix (with time) and Proper Fix (with time) with code examples
 4. **Common Mistakes to Avoid** - List frequent errors and pitfalls
 5. **References** - Link to Laravel docs, security advisories, and related resources
 6. **Related Analyzers** - Cross-link to related analyzers
@@ -164,7 +164,7 @@ php artisan docs:index
 
 ## Deployment
 
-Documentation auto-deploys on push to `main` branch:
+Documentation auto-deploys on push to `master` branch:
 
 1. GitHub Actions builds the site
 2. Search index is updated (Algolia)
