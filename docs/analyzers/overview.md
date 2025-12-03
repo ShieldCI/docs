@@ -1,13 +1,13 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 102 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's 103 analyzers across 5 categories
 icon: shield-check
 outline: [2, 3]
 ---
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 102 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 103 analyzers across all categories.
 
 ## Categories
 
@@ -35,7 +35,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - View Compilation
 
 ### [Reliability](/analyzers/reliability/overview)
-**24 analyzers** ensuring your application handles errors gracefully and maintains uptime.
+**25 analyzers** ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
 - Error Handling Patterns
@@ -63,12 +63,12 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 
 ## Analyzer Package
 
-### Free Package (102 Analyzers)
+### Free Package (103 Analyzers)
 The open-source package includes comprehensive analyzers across all categories:
 
 - ✅ All 22 security analyzers
 - ✅ All 18 performance analyzers
-- ✅ All 24 reliability analyzers
+- ✅ All 25 reliability analyzers
 - ✅ All 15 code quality analyzers
 - ✅ All 23 best practices analyzers
 

@@ -30,14 +30,14 @@ ShieldCI is purpose-built for Laravel applications, understanding Laravel's conv
 ### Successor to Laravel Enlightn
 ShieldCI is the modern successor to the abandoned Laravel Enlightn project, providing:
 - **Modern Laravel support** - Full compatibility with Laravel 9, 10, 11, and 12
-- **102 analyzers** - Comprehensive coverage across 5 categories
+- **103 analyzers** - Comprehensive coverage across 5 categories
 - **Active development** - Regular updates and new analyzers
 - **Better performance** - Optimized analysis engine
 - **Enhanced reporting** - Beautiful, actionable insights
 
 ### Comprehensive Analysis
 
-**102 Analyzers Across 5 Categories:**
+**103 Analyzers Across 5 Categories:**
 
 1. **Security** (22 analyzers)
    - OWASP Top 10 2021 coverage
@@ -53,7 +53,7 @@ ShieldCI is the modern successor to the abandoned Laravel Enlightn project, prov
    - OPcache settings
    - Route and config caching
 
-3. **Reliability** (24 analyzers)
+3. **Reliability** (25 analyzers)
    - Error handling & logging
    - Queue configuration
    - Session management

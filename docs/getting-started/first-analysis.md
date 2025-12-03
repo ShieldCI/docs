@@ -26,7 +26,7 @@ php artisan shield:analyze
 **What happens next:**
 1. ShieldCI discovers your project structure (3-5 seconds)
 2. Parses PHP files into Abstract Syntax Trees (10-20 seconds)
-3. Runs 102 analyzers across 5 categories (20-30 seconds)
+3. Runs 103 analyzers across 5 categories (20-30 seconds)
 4. Generates detailed report (2-5 seconds)
 
 **Total duration:** 30-60 seconds for typical Laravel apps

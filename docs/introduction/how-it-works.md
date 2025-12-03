@@ -34,7 +34,7 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
 │  3. Analysis Phase                                          │
-│  ├─ Run 102 specialized analyzers                           │
+│  ├─ Run 103 specialized analyzers                           │
 │  ├─ Check security patterns                                 │
 │  ├─ Detect performance anti-patterns                        │
 │  └─ Validate best practices                                 │
@@ -64,7 +64,7 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
 - Caches parsed results for performance
 
 **3. Analyzer Registry**
-- Maintains catalog of 102 analyzers
+- Maintains catalog of 103 analyzers
 - Filters analyzers by category, severity, and tags
 - Manages analyzer dependencies
 - Supports dynamic analyzer loading
@@ -205,7 +205,7 @@ class NPlusOneQueryAnalyzer extends AbstractFileAnalyzer
    - Method: AST analysis + configuration checks
    - Example: Detect N+1 queries by finding relationship access in loops
 
-3. **Reliability Analyzers** (24 total)
+3. **Reliability Analyzers** (25 total)
    - Pattern: Validate error handling and configuration
    - Method: Configuration parsing + environment checks
    - Example: Ensure `APP_DEBUG=false` in production

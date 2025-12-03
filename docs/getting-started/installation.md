@@ -183,7 +183,7 @@ php artisan shield:analyze
 This will:
 1. Discover your Laravel project structure
 2. Parse PHP files into ASTs
-3. Run all 102 analyzers
+3. Run all 103 analyzers
 4. Generate a detailed report
 
 **Expected duration:** 30-60 seconds for typical Laravel apps
