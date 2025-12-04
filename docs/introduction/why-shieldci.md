@@ -232,7 +232,6 @@ ShieldCI complements static analysis tools like PHPStan:
 Use both tools together for maximum coverage:
 ```bash
 # Type safety + Laravel quality
-composer require phpstan/phpstan
 composer require shieldci/laravel
 
 # Run both in CI
