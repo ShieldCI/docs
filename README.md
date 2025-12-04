@@ -314,29 +314,6 @@ Use Badge components for severity:
 - **Medium:** `<Badge variant="medium">Medium</Badge>`
 - **Low:** `<Badge variant="low">Low</Badge>`
 
-## Troubleshooting
-
-### Build Errors
-
-```bash
-# Clear cache and rebuild
-rm -rf node_modules .vitepress/cache
-npm install
-npm run build
-```
-
-### Search Not Working
-
-- Ensure all Markdown files have proper frontmatter
-- Check that `search.provider: 'local'` is set in config
-- Verify file structure matches navigation configuration
-
-### Styling Issues
-
-- Clear browser cache
-- Check Tailwind CSS configuration in `index.css`
-- Verify brand color variables are defined
-
 ## Resources
 
 - [VitePress Documentation](https://vitepress.dev/)
