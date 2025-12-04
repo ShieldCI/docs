@@ -43,7 +43,7 @@ php artisan session:table  # If using database
 ```
 
 **Configure:**
-```env
+```ini
 SESSION_DRIVER=redis
 SESSION_LIFETIME=120
 SESSION_ENCRYPT=false
@@ -53,7 +53,7 @@ SESSION_CONNECTION=default
 ## Common Mistakes to Avoid
 
 1. **File driver in load-balanced production:**
-   ```env
+   ```ini
    # ❌ Sessions lost between servers
    SESSION_DRIVER=file
 
@@ -62,7 +62,7 @@ SESSION_CONNECTION=default
    ```
 
 2. **Cookie driver with large session data:**
-   ```env
+   ```ini
    # ❌ Cookie size limit (4KB)
    SESSION_DRIVER=cookie
 

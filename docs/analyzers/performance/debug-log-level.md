@@ -27,7 +27,7 @@ Debug-level logging captures every framework operation. In production, this crea
 
 ### Quick Fix (5 minutes)
 
-```env
+```ini
 # .env
 LOG_LEVEL=warning
 ```
@@ -53,7 +53,7 @@ LOG_LEVEL=warning
 ],
 ```
 
-```env
+```ini
 # .env.production
 LOG_LEVEL=error
 
@@ -78,7 +78,7 @@ Log::info('User registered', ['id' => $user->id]);
 ## Common Mistakes to Avoid
 
 1. **Debug logging in production:**
-   ```env
+   ```ini
    # ❌ Too verbose
    LOG_LEVEL=debug
 

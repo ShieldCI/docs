@@ -104,7 +104,7 @@ return [
 
 **2. Set Correct Environment Variables**
 
-```env
+```ini
 # .env.local (development)
 APP_DEBUG=true
 APP_ENV=local
@@ -300,7 +300,7 @@ php artisan config:cache
    ```
 
 6. **Different debug settings across production servers:**
-   ```env
+   ```ini
    # ❌ BAD - Inconsistent settings
    production-server-1/.env: APP_DEBUG=false
    production-server-2/.env: APP_DEBUG=true  # Forgot to update!

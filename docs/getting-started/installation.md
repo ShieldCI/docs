@@ -460,7 +460,7 @@ composer require shieldci/laravel-pro
 
 Set your license key in your environment:
 
-```env
+```ini
 # .env
 SHIELDCI_LICENSE_KEY=YOUR-LICENSE-KEY
 ```

@@ -101,7 +101,7 @@ curl https://yoursite.com/../.env       # Should 404
 
 **2. Configure .gitignore Properly**
 
-```gitignore
+```
 # .gitignore - Comprehensive environment file exclusion
 
 # Environment files
@@ -148,7 +148,7 @@ git push origin --force --tags
 
 **4. Create Secure .env.example Template**
 
-```env
+```ini
 # .env.example - Safe template (committed to git)
 
 # Application
@@ -245,7 +245,7 @@ php artisan config:cache
 ## Common Mistakes to Avoid
 
 1. **Committing real credentials to .env.example:**
-   ```env
+   ```ini
    # ❌ BAD - .env.example with real secrets
    APP_KEY=base64:RealProductionKey123456789ABC...
    DB_PASSWORD=ActualDatabasePassword!
@@ -267,7 +267,7 @@ php artisan config:cache
    ```
 
 3. **Missing .env in .gitignore:**
-   ```gitignore
+   ```
    # ❌ BAD - .gitignore without .env
    /vendor
    /node_modules

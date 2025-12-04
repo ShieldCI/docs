@@ -262,7 +262,7 @@ Let's fix the **Debug Mode** critical issue step-by-step.
 ```
 
 **.env:**
-```env
+```ini
 APP_DEBUG=true  # ❌ Debug enabled
 ```
 
@@ -277,7 +277,7 @@ nano .env
 ```
 
 **2. Change debug setting:**
-```env
+```ini
 # BEFORE
 APP_DEBUG=true
 
@@ -318,7 +318,7 @@ No issues found in config/app.php
 ```
 
 **.env.production:**
-```env
+```ini
 APP_DEBUG=false  # ✅ Debug disabled
 LOG_LEVEL=error
 LOG_CHANNEL=stack

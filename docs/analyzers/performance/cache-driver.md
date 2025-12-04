@@ -87,7 +87,7 @@ composer require predis/predis
 # Or use phpredis extension (faster)
 ```
 
-```env
+```ini
 # .env configuration
 CACHE_DRIVER=redis
 REDIS_CLIENT=phpredis  # or 'predis'
@@ -135,7 +135,7 @@ sudo systemctl enable memcached
 echo "stats" | nc localhost 11211
 ```
 
-```env
+```ini
 # .env configuration
 CACHE_DRIVER=memcached
 MEMCACHED_HOST=127.0.0.1
@@ -172,7 +172,7 @@ MEMCACHED_PORT=11211
 composer require aws/aws-sdk-php
 ```
 
-```env
+```ini
 CACHE_DRIVER=dynamodb
 AWS_ACCESS_KEY_ID=your-key
 AWS_SECRET_ACCESS_KEY=your-secret
@@ -248,7 +248,7 @@ php artisan tinker
 ## Common Mistakes to Avoid
 
 1. **Using file driver in load-balanced production:**
-   ```env
+   ```ini
    # ❌ BAD - Cache not shared between servers
    CACHE_DRIVER=file
 
@@ -257,7 +257,7 @@ php artisan tinker
    ```
 
 2. **Using database driver (defeats caching purpose):**
-   ```env
+   ```ini
    # ❌ BAD - Adds load to database
    CACHE_DRIVER=database
 
@@ -266,7 +266,7 @@ php artisan tinker
    ```
 
 3. **Using array driver in production:**
-   ```env
+   ```ini
    # ❌ BAD - Cache lost after each request
    CACHE_DRIVER=array  # Only for testing!
 
@@ -275,7 +275,7 @@ php artisan tinker
    ```
 
 4. **Not configuring Redis password in production:**
-   ```env
+   ```ini
    # ❌ BAD - No authentication
    REDIS_PASSWORD=null
 
@@ -284,7 +284,7 @@ php artisan tinker
    ```
 
 5. **Using APCu in containerized environments:**
-   ```env
+   ```ini
    # ❌ BAD - Each container has separate cache
    CACHE_DRIVER=apc
 

@@ -27,7 +27,7 @@ The sync driver processes jobs immediately in the same request, blocking the use
 
 ### Quick Fix (5 minutes)
 
-```env
+```ini
 # .env
 QUEUE_CONNECTION=redis
 ```
@@ -45,7 +45,7 @@ composer require predis/predis
 composer require aws/aws-sdk-php
 ```
 
-```env
+```ini
 QUEUE_CONNECTION=sqs
 AWS_ACCESS_KEY_ID=your-key
 AWS_SECRET_ACCESS_KEY=your-secret
@@ -61,7 +61,7 @@ php artisan queue:work redis --tries=3
 ## Common Mistakes to Avoid
 
 1. **Sync driver in production:**
-   ```env
+   ```ini
    # ❌ Blocks requests
    QUEUE_CONNECTION=sync
 

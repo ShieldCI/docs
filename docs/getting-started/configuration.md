@@ -411,7 +411,7 @@ return [
 ```
 
 **.env:**
-```env
+```ini
 # Development
 SHIELDCI_FAIL_ON=medium
 

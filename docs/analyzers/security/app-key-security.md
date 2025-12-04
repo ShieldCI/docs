@@ -100,7 +100,7 @@ APP_KEY=base64:SAME_KEY_AS_PRODUCTION
 
 **3. Never Commit Real Keys to Git**
 
-```env
+```ini
 # .env.example - Use placeholders only
 APP_NAME=Laravel
 APP_ENV=production
@@ -186,7 +186,7 @@ cat bootstrap/cache/config.php | grep 'key'
 ## Common Mistakes to Avoid
 
 1. **Using the same key across different applications:**
-   ```env
+   ```ini
    # ❌ BAD - Sharing key between different apps
    app1/.env: APP_KEY=base64:SHARED_KEY
    app2/.env: APP_KEY=base64:SHARED_KEY  # Security risk!
@@ -206,7 +206,7 @@ cat bootstrap/cache/config.php | grep 'key'
    ```
 
 3. **Multiple APP_KEY definitions in same file:**
-   ```env
+   ```ini
    # ❌ BAD - Duplicate definitions
    APP_KEY=base64:FirstKey
    APP_DEBUG=false
@@ -217,7 +217,7 @@ cat bootstrap/cache/config.php | grep 'key'
    ```
 
 4. **Different keys across production environments:**
-   ```env
+   ```ini
    # ❌ BAD - Different keys
    production-server-1/.env: APP_KEY=base64:KEY_1
    production-server-2/.env: APP_KEY=base64:KEY_2  # Sessions won't work!
