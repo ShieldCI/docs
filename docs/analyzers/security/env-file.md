@@ -251,7 +251,7 @@ php artisan config:cache
 
 ## Related Analyzers
 
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key configuration
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug information exposure
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates encryption key configuration
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug information exposure
 - [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
 - [HSTS Header Analyzer](/analyzers/security/hsts-header) - Validates SSL/TLS configuration via HSTS headers

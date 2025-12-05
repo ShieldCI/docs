@@ -186,25 +186,11 @@ php artisan tinker
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
-
-```php
-// Analyzer configuration
-public static bool $runInCI = false;
-```
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
-- Hashing configuration is environment-specific, not applicable in CI
 - CI environments may use faster hashing settings for test performance
-- Production hashing settings should be validated in staging/production
 - Prevents false failures in CI pipelines
-
-**Run manually if needed:**
-
-```bash
-# Check password hashing configuration locally or in staging
-php artisan shield:analyze --analyzer=hashing-strength
-```
 
 ## References
 
@@ -217,7 +203,7 @@ php artisan shield:analyze --analyzer=hashing-strength
 
 ## Related Analyzers
 
-- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates authentication implementation
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects sensitive configuration
-- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates session cookie security configuration
+- [Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization) - Validates authentication implementation
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
+- [Environment File Analyzer](/analyzers/security/env-file) - Protects sensitive configuration
+- [Cookie Analyzer](/analyzers/security/cookie) - Validates session cookie security configuration

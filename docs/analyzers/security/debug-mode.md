@@ -235,7 +235,7 @@ php artisan config:cache
 
 ## Related Analyzers
 
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects .env files from exposure
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key configuration
-- [Debug Log Level](/analyzers/performance/debug-log-level) - Checks logging performance impact
-- [Custom Error Pages](/analyzers/reliability/custom-error-pages) - Validates exception handling patterns
+- [Environment File Analyzer](/analyzers/security/env-file) - Protects .env files from exposure
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates encryption key configuration
+- [Debug Log Level Analyzer](/analyzers/performance/debug-log-level) - Checks logging performance impact
+- [Custom Error Pages Analyzer](/analyzers/reliability/custom-error-pages) - Validates exception handling patterns

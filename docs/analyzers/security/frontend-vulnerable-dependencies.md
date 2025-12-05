@@ -209,7 +209,7 @@ return [
 
 ## Related Analyzers
 
-- [Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies) - Scans Composer dependencies
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates Laravel encryption keys
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
+- [Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies) - Scans Composer dependencies
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates Laravel encryption keys
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token requirements

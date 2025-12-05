@@ -281,24 +281,12 @@ SHIELDCI_GUEST_URL=https://staging.yourapp.com \
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
-
-```php
-// Analyzer configuration
-public static bool $runInCI = false;
-```
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
 - HTTP checks require a live web server, not applicable in CI
 - CI environments typically don't have a publicly accessible web server
 - Requires actual HTTP requests to test .env file accessibility
-
-**Run manually if needed:**
-
-```bash
-# Check .env HTTP accessibility locally or in staging
-php artisan shield:analyze --analyzer=env-http-accessibility
-```
 
 ## References
 
@@ -309,7 +297,7 @@ php artisan shield:analyze --analyzer=env-http-accessibility
 
 ## Related Analyzers
 
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks file permissions and .gitignore
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key security
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
-- [Configuration Caching](/analyzers/performance/config-caching) - Validates production config caching
+- [Environment File Analyzer](/analyzers/security/env-file) - Checks file permissions and .gitignore
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates encryption key security
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Validates production config caching

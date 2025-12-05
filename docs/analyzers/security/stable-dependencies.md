@@ -83,5 +83,5 @@ composer update --prefer-stable
 
 ## Related Analyzers
 
-- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — scans npm/yarn lock files for known CVEs.
+- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — scans npm/yarn lock files for known CVEs.
 - [Dependency License Compliance Analyzer](/analyzers/security/license-compliance) — validates OSS license requirements for all dependencies.

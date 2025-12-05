@@ -18,28 +18,28 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 ### Critical Vulnerabilities
 
 - **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
-- **[XSS Vulnerability Analyzer](/analyzers/security/xss-detection)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
+- **[XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
 - **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
-- **[Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
+- **[Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
 - **[Unguarded Models Analyzer](/analyzers/security/unguarded-models)** - Detects Model::unguard() usage that disables mass assignment protection
 
 ### Authentication & Authorization
 
-- **[Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection)** - Detects missing authentication and authorization protection on routes and controllers
+- **[Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization)** - Detects missing authentication and authorization protection on routes and controllers
 - **[Login Throttling Analyzer](/analyzers/security/login-throttling)** - Detects missing rate limiting on authentication endpoints to prevent brute force attacks
 
 ### Configuration & Secrets
 
-- **[Application Key Security Analyzer](/analyzers/security/app-key-security)** - Validates that the application encryption key is properly configured and secure
-- **[Environment File Security Analyzer](/analyzers/security/env-file-security)** - Validates .env file security, location, and prevents exposure of sensitive data
+- **[Application Key Analyzer](/analyzers/security/app-key)** - Validates that the application encryption key is properly configured and secure
+- **[Environment File Analyzer](/analyzers/security/env-file)** - Validates .env file security, location, and prevents exposure of sensitive data
 - **[Environment File HTTP Accessibility Analyzer](/analyzers/security/env-http-accessibility)** - Verifies .env file is not accessible via HTTP requests to the web server
-- **[Debug Mode Security Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled and debugging functions that expose sensitive information
-- **[PHP Configuration Security Analyzer](/analyzers/security/php-ini-security)** - Validates that PHP ini settings are configured securely
+- **[Debug Mode Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled and debugging functions that expose sensitive information
+- **[PHP Configuration Analyzer](/analyzers/security/php-ini)** - Validates that PHP ini settings are configured securely
 
 ### Data Protection
 
 - **[Password Hashing Strength Analyzer](/analyzers/security/hashing-strength)** - Validates that password hashing configuration uses secure parameters
-- **[Cookie Security Analyzer](/analyzers/security/cookie-security)** - Validates cookie encryption and security configuration
+- **[Cookie Analyzer](/analyzers/security/cookie)** - Validates cookie encryption and security configuration
 - **[Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key)** - Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation
 
 ### HTTP Security
@@ -48,11 +48,11 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 ### Dependencies & Updates
 
-- **[Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies)** - Scans composer dependencies for known security vulnerabilities
-- **[Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies)** - Scans npm/yarn dependencies for known security vulnerabilities
-- **[Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies)** - Checks if dependencies are up-to-date with available bug fixes and security patches
-- **[Stable Dependency Analyzer](/analyzers/security/stable-dependencies)** - Validates that all dependencies use stable versions rather than dev/alpha/beta releases
-- **[Dependency License Analyzer](/analyzers/security/license-compliance)** - Validates that all dependencies use legally acceptable licenses for your application type
+- **[Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies)** - Scans composer dependencies for known security vulnerabilities
+- **[Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies)** - Scans npm/yarn dependencies for known security vulnerabilities
+- **[Up-to-Date Dependencies Analyzer](/analyzers/security/up-to-date-dependencies)** - Checks if dependencies are up-to-date with available bug fixes and security patches
+- **[Stable Dependencies Analyzer](/analyzers/security/stable-dependencies)** - Validates that all dependencies use stable versions rather than dev/alpha/beta releases
+- **[Dependency License Compliance Analyzer](/analyzers/security/license-compliance)** - Validates that all dependencies use legally acceptable licenses for your application type
 
 ### File System Security
 
@@ -89,14 +89,14 @@ php artisan shield:analyze --category=security
 
 ```bash
 php artisan shield:analyze --analyzer=sql-injection
-php artisan shield:analyze --analyzer=xss-detection
-php artisan shield:analyze --analyzer=mass-assignment
+php artisan shield:analyze --analyzer=xss-vulnerabilities
+php artisan shield:analyze --analyzer=mass-assignment-vulnerabilities
 ```
 
 ### Run Multiple Analyzers
 
 ```bash
-php artisan shield:analyze --analyzer=sql-injection,xss-detection,csrf-protection
+php artisan shield:analyze --analyzer=sql-injection,xss-vulnerabilities,csrf-protection
 ```
 
 ## Best Practices

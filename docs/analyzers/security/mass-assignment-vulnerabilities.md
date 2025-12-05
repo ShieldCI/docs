@@ -282,7 +282,7 @@ php artisan tinker
 ## Related Analyzers
 
 - [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects raw SQL queries with user input
-- [XSS Vulnerability Analyzer](/analyzers/security/xss-detection) - Prevents cross-site scripting attacks
+- [XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities) - Prevents cross-site scripting attacks
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token protection
-- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates policy and gate checks
-- [Fillable Foreign Key Security Analyzer](/analyzers/security/fillable-foreign-key) - Detects foreign keys in fillable arrays
+- [Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization) - Validates policy and gate checks
+- [Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key) - Detects foreign keys in fillable arrays

@@ -196,7 +196,7 @@ fi
 
 ## Related Analyzers
 
-- [Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies) - Checks for known security vulnerabilities
-- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - NPM package vulnerabilities
-- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Identifies outdated packages
-- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) - Validates version constraints
+- [Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies) - Checks for known security vulnerabilities
+- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - NPM package vulnerabilities
+- [Up-to-Date Dependencies Analyzer](/analyzers/security/up-to-date-dependencies) - Identifies outdated packages
+- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) - Validates version constraints

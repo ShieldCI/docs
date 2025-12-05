@@ -52,6 +52,6 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 
 ## Related Analyzers
 
-- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure cookie configuration
+- [Cookie Analyzer](/analyzers/security/cookie) - Validates secure cookie configuration
 - [HSTS Header Analyzer](/analyzers/security/hsts-header) - Validates HSTS header configuration
-- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates
+- [Up-to-Date Dependencies Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates

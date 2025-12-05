@@ -123,10 +123,10 @@ public function searchUsers(Request $request)
 
 ## Related Analyzers
 
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Debug mode can leak SQL queries in error messages
-- [Debug Log Level](/analyzers/performance/debug-log-level) - Prevents logging of SQL queries with sensitive data
-- [Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment) - Protects against mass assignment vulnerabilities
-- [XSS Vulnerability Analyzer](/analyzers/security/xss-detection) - Detects cross-site scripting vulnerabilities
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Debug mode can leak SQL queries in error messages
+- [Debug Log Level Analyzer](/analyzers/performance/debug-log-level) - Prevents logging of SQL queries with sensitive data
+- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) - Protects against mass assignment vulnerabilities
+- [XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities) - Detects cross-site scripting vulnerabilities
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Ensures CSRF protection is enabled
 
 ---

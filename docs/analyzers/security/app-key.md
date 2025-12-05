@@ -186,25 +186,12 @@ cat bootstrap/cache/config.php | grep 'key'
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
-
-```php
-// Analyzer configuration
-public static bool $runInCI = false;
-```
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
-- App key configuration is environment-specific, not applicable in CI
 - CI environments typically use test keys that differ from production
 - Prevents false failures in CI pipelines
 - Should be checked in staging/production environments where real keys are used
-
-**Run manually if needed:**
-
-```bash
-# Check app key configuration locally
-php artisan shield:analyze --analyzer=app-key-security
-```
 
 ## References
 
@@ -215,7 +202,7 @@ php artisan shield:analyze --analyzer=app-key-security
 
 ## Related Analyzers
 
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file permissions and .gitignore
+- [Environment File Analyzer](/analyzers/security/env-file) - Checks .env file permissions and .gitignore
 - [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
 - [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session configuration

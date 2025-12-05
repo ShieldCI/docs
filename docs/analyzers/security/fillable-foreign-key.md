@@ -241,6 +241,6 @@ return [
 
 ## Related Analyzers
 
-- [Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment) - Validates $fillable/$guarded configuration
-- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Checks for proper authorization
+- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) - Validates $fillable/$guarded configuration
+- [Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization) - Checks for proper authorization
 - [Unguarded Models Analyzer](/analyzers/security/unguarded-models) - Detects Model::unguard() usage

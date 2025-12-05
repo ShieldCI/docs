@@ -173,24 +173,12 @@ HSTS_MIN_MAX_AGE=604800  // 1 week for testing
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
-
-```php
-// Analyzer configuration
-public static bool $runInCI = false;
-```
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
 - HSTS header checks require a live web server, not applicable in CI
 - CI environments typically don't have a publicly accessible HTTPS web server
 - Requires actual HTTP requests to verify HSTS headers are present
-
-**Run manually if needed:**
-
-```bash
-# Check HSTS header configuration locally or in staging
-php artisan shield:analyze --analyzer=hsts-header
-```
 
 ## References
 
@@ -203,6 +191,6 @@ php artisan shield:analyze --analyzer=hsts-header
 
 ## Related Analyzers
 
-- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure cookie configuration
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures HTTPS in production
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects HTTPS configuration
+- [Cookie Analyzer](/analyzers/security/cookie) - Validates secure cookie configuration
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures HTTPS in production
+- [Environment File Analyzer](/analyzers/security/env-file) - Protects HTTPS configuration

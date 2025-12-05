@@ -244,7 +244,7 @@ jobs:
 
 ## Related Analyzers
 
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file security and .gitignore
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates Laravel encryption keys
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
-- [Configuration Caching](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [Environment File Analyzer](/analyzers/security/env-file) - Checks .env file security and .gitignore
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates Laravel encryption keys
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production

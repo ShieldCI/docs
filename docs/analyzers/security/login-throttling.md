@@ -246,6 +246,6 @@ protected function sendFailedLoginResponse(Request $request)
 ## Related Analyzers
 
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Prevents cross-site request forgery
-- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure session cookie configuration
+- [Cookie Analyzer](/analyzers/security/cookie) - Validates secure session cookie configuration
 - [Password Hashing Strength Analyzer](/analyzers/security/hashing-strength) - Ensures strong password storage
-- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates authentication implementation
+- [Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization) - Validates authentication implementation

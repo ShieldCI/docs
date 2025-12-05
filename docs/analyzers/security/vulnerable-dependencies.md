@@ -59,6 +59,6 @@ composer update vendor/package
 
 ## Related Analyzers
 
-- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) - Ensures stable tagged releases
-- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates
-- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - Scans npm/yarn dependencies
+- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) - Ensures stable tagged releases
+- [Up-to-Date Dependencies Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates
+- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - Scans npm/yarn dependencies

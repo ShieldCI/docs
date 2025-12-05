@@ -13,7 +13,9 @@ outline: [2, 3]
 
 ## What This Checks
 
-Validates that PHP configuration (`php.ini`) follows security best practices for production and staging environments. Checks include:
+Validates that PHP configuration (`php.ini`) follows security best practices for production and staging environments. This analyzer automatically runs only in production and staging environments, as development environments may have different PHP ini settings for debugging purposes (which is acceptable).
+
+Checks include:
 
 - **Dangerous settings disabled**: `allow_url_fopen`, `allow_url_include`, `expose_php`
 - **Error handling**: `display_errors` disabled, `log_errors` enabled
@@ -208,6 +210,13 @@ Customize the analyzer in your Laravel config:
 // config/shieldci.php
 
 return [
+    // Map custom environment names to standard types (if needed)
+    'environment_mapping' => [
+        'production-us' => 'production',
+        'production-eu' => 'production',
+        'staging-preview' => 'staging',
+    ],
+
     'php_configuration' => [
         // Path to your php.ini file (auto-detected if not set)
         'ini_path' => null,
@@ -245,6 +254,8 @@ return [
     ],
 ];
 ```
+
+**Note:** If you use custom environment names (e.g., `production-us`, `production-blue`), configure `environment_mapping` so the analyzer recognizes them as production/staging environments.
 
 **5. Monitor PHP Configuration in CI/CD**
 
@@ -284,23 +295,29 @@ RUN php -r "exit(ini_get('allow_url_include') === 'Off' ? 0 : 1);" \
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- PHP ini settings are environment-specific and not applicable in CI
+- Local/Development/Testing environments may have permissive settings for debugging (e.g., `display_errors = On`), which is acceptable
+- Production and staging should have strict security settings
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
 
 ```php
-// Analyzer configuration
-public static bool $runInCI = false;
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
 ```
 
-**Why skip in CI?**
-- PHP ini settings checks are environment-specific, not applicable in CI
-- CI environments may have different PHP configurations than production
-
-**Run manually if needed:**
-
-```bash
-# Check PHP ini security configuration locally or in staging
-php artisan shield:analyze --analyzer=php-ini-security
-```
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 
@@ -314,7 +331,7 @@ php artisan shield:analyze --analyzer=php-ini-security
 
 ## Related Analyzers
 
-- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Validates APP_DEBUG is disabled in production
-- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file permissions
-- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates APP_KEY configuration
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Validates APP_DEBUG is disabled in production
+- [Environment File Analyzer](/analyzers/security/env-file) - Checks .env file permissions
+- [Application Key Analyzer](/analyzers/security/app-key) - Validates APP_KEY configuration
 - [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects SQL injection vulnerabilities
