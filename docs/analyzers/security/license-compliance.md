@@ -126,11 +126,6 @@ return [
             'AGPL-3.0',
             // Add licenses your legal team flags
         ],
-
-        // Allow specific packages (use with caution!)
-        'allowed_packages' => [
-            // 'vendor/gpl-package' => 'Approved by Legal - Ticket #12345'
-        ],
     ],
 ];
 ```
@@ -190,68 +185,6 @@ if git diff --cached --name-only | grep -q "composer.lock"; then
 fi
 ```
 
-## Common Mistakes to Avoid
-
-1. **Not checking transitive dependencies:**
-   ```bash
-   # ❌ BAD - Only checking direct dependencies
-   composer show --direct
-
-   # ✅ GOOD - Check all dependencies (including nested)
-   composer show --all
-   composer licenses  # Shows all transitive dependencies
-   ```
-
-2. **Assuming LGPL is the same as GPL:**
-   ```php
-   // ❌ BAD - Treating LGPL like GPL
-   'restrictive_licenses' => ['GPL-3.0', 'LGPL-3.0']
-
-   // ✅ GOOD - LGPL allows linking in commercial apps
-   'whitelisted_licenses' => ['MIT', 'Apache-2.0', 'LGPL-3.0']
-   'restrictive_licenses' => ['GPL-3.0', 'AGPL-3.0']
-   ```
-
-3. **Ignoring dev dependencies completely:**
-   ```php
-   // ❌ BAD - Deploying dev dependencies to production
-   composer install  // Installs dev dependencies
-
-   // ✅ GOOD - Exclude dev dependencies in production
-   composer install --no-dev
-
-   // Dev GPL tools (PHPUnit, PHPStan) are OK for development
-   ```
-
-4. **Not understanding dual licensing:**
-   ```json
-   // Package offers choice: MIT OR GPL-3.0
-   {"license": ["MIT", "GPL-3.0"]}
-
-   // ✅ You can choose MIT (no GPL obligations)
-   // ❌ Some tools incorrectly flag this as GPL violation
-   ```
-
-5. **Confusing license versions:**
-   ```php
-   // Different GPL versions have different rules
-   'GPL-2.0'           // Older version
-   'GPL-2.0-only'      // Cannot upgrade to GPL-3.0
-   'GPL-2.0-or-later'  // Can use GPL-2.0 or GPL-3.0
-   'GPL-3.0'           // Newer version (stricter)
-   'GPL-3.0-only'      // Must use GPL-3.0
-   'GPL-3.0-or-later'  // Can upgrade to future GPL versions
-   ```
-
-6. **Forgetting about AGPL in SaaS applications:**
-   ```php
-   // ❌ BAD - Using AGPL in SaaS (must disclose source to users)
-   composer require vendor/agpl-package
-
-   // ✅ GOOD - Avoid AGPL entirely for SaaS
-   // AGPL triggers when users access over network (not just distribution)
-   ```
-
 ## References
 
 - [SPDX License List](https://spdx.org/licenses/) - Standard license identifiers
@@ -263,7 +196,7 @@ fi
 
 ## Related Analyzers
 
-- [Vulnerable Dependencies](/analyzers/security/vulnerable-dependencies) - Checks for known security vulnerabilities
-- [Frontend Vulnerable Dependencies](/analyzers/security/frontend-vulnerable-dependencies) - NPM package vulnerabilities
-- [Dependency Version Constraints](/analyzers/reliability/dependency-constraints) - Validates version constraints
-- [Outdated Dependencies](/analyzers/maintenance/outdated-dependencies) - Identifies outdated packages
+- [Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies) - Checks for known security vulnerabilities
+- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - NPM package vulnerabilities
+- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Identifies outdated packages
+- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) - Validates version constraints

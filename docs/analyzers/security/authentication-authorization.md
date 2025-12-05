@@ -1,15 +1,15 @@
 ---
-title: Authentication & Authorization Protection
+title: Authentication & Authorization Analyzer
 description: Detects missing authentication and authorization protection throughout your Laravel application
 icon: lock
 outline: [2, 3]
 ---
 
-# Authentication & Authorization Protection
+# Authentication & Authorization Analyzer
 
 | Analyzer ID                 | Category     | Severity   | Time To Fix  |
 | ----------------------------| :----------: |:----------:| ------------:|
-| `authentication-protection` | 🛡️ Security  | High       | 25 minutes   |
+| `authentication-authorization` | 🛡️ Security  | High       | 25 minutes   |
 
 ## What This Checks
 
@@ -292,102 +292,6 @@ class AuthenticationTest extends TestCase
 }
 ```
 
-## Common Mistakes to Avoid
-
-1. **Protecting routes with auth but not implementing authorization:**
-   ```php
-   // BAD - Authenticated users can delete anyone's posts
-   Route::delete('/posts/{id}', function ($id) {
-       Post::findOrFail($id)->delete();
-   })->middleware('auth');
-
-   // GOOD - Check ownership before deletion
-   Route::delete('/posts/{post}', function (Post $post) {
-       $this->authorize('delete', $post);
-       $post->delete();
-   })->middleware('auth');
-   ```
-
-2. **Using Auth::user() without null checks in public controllers:**
-   ```php
-   // BAD - Crashes if user is not logged in
-   public function show()
-   {
-       $email = Auth::user()->email;
-       return view('profile', ['email' => $email]);
-   }
-
-   // GOOD - Use middleware or null-safe operators
-   public function show()
-   {
-       $email = Auth::user()?->email ?? 'guest@example.com';
-       return view('profile', ['email' => $email]);
-   }
-   ```
-
-3. **Forgetting to protect API routes:**
-   ```php
-   // BAD - Unprotected API endpoints
-   Route::post('/api/posts', [Api\PostController::class, 'store']);
-
-   // GOOD - Protect with Sanctum
-   Route::middleware(['auth:sanctum'])->group(function () {
-       Route::post('/api/posts', [Api\PostController::class, 'store']);
-   });
-   ```
-
-4. **Checking roles directly in controllers instead of using policies:**
-   ```php
-   // BAD - Authorization logic in controller
-   public function destroy(Post $post)
-   {
-       if (Auth::user()->role !== 'admin' && Auth::user()->id !== $post->user_id) {
-           abort(403);
-       }
-       $post->delete();
-   }
-
-   // GOOD - Use policies
-   public function destroy(Post $post)
-   {
-       $this->authorize('delete', $post);
-       $post->delete();
-   }
-   ```
-
-5. **Relying only on frontend hiding without securing backend routes:**
-   ```blade
-   <!-- BAD - Frontend hiding doesn't prevent access -->
-   @if(auth()->check() && auth()->user()->isAdmin())
-       <a href="/admin/users">Manage Users</a>
-   @endif
-   <!-- But /admin/users route is not protected! -->
-   ```
-
-   ```php
-   // GOOD - Secure the backend route
-   Route::middleware(['auth', 'admin'])->group(function () {
-       Route::get('/admin/users', [Admin\UserController::class, 'index']);
-   });
-   ```
-
-6. **Using authentication when you need authorization:**
-   ```php
-   // BAD - Authentication alone isn't enough
-   public function update(Post $post)
-   {
-       // Any authenticated user can update any post!
-       $post->update(request()->all());
-   }
-
-   // GOOD - Add authorization
-   public function update(Post $post)
-   {
-       $this->authorize('update', $post);
-       $post->update(request()->validated());
-   }
-   ```
-
 ## References
 
 - [Laravel Authentication Documentation](https://laravel.com/docs/authentication)
@@ -399,7 +303,7 @@ class AuthenticationTest extends TestCase
 
 ## Related Analyzers
 
-- [CSRF Protection](/analyzers/security/csrf-protection) - Validates CSRF token requirements
-- [App Key Security](/analyzers/security/app-key-security) - Ensures encryption keys are secure
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
-- [Debug Mode](/analyzers/security/debug-mode) - Prevents debug mode in production
+- [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token requirements
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Ensures encryption keys are secure
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates session cookie security configuration
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production

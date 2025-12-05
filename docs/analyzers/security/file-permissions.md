@@ -1,11 +1,11 @@
 ---
-title: File Permissions Security Analyzer
+title: File Permissions Analyzer
 description: Validates that your Laravel application's files and directories use secure Unix permissions
 icon: lock
 outline: [2, 3]
 ---
 
-# File Permissions Security Analyzer
+# File Permissions Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
@@ -235,74 +235,6 @@ jobs:
           php artisan shield:analyze --analyzer=file-permissions
 ```
 
-## Common Mistakes to Avoid
-
-1. **Using 777 permissions (world-writable):**
-   ```bash
-   # BAD - Gives everyone full access
-   chmod -R 777 storage/
-   chmod 777 .env
-
-   # GOOD - Minimal necessary permissions
-   chmod -R 775 storage/
-   chmod 600 .env
-   ```
-
-2. **Making configuration files executable:**
-   ```bash
-   # BAD - PHP and config files don't need execute permission
-   chmod 755 config/database.php
-   chmod +x .env
-
-   # GOOD - Read/write only
-   chmod 644 config/database.php
-   chmod 600 .env
-   ```
-
-3. **Making .env world-readable:**
-   ```bash
-   # BAD - Anyone can read secrets
-   chmod 644 .env
-   # -rw-r--r-- (group and others can read)
-
-   # GOOD - Owner only
-   chmod 600 .env
-   # -rw------- (only owner can read/write)
-   ```
-
-4. **Applying same permissions to all directories:**
-   ```bash
-   # BAD - Storage needs different permissions than app code
-   chmod -R 755 .
-
-   # GOOD - Different permissions for different purposes
-   chmod -R 755 app config routes
-   chmod -R 775 storage bootstrap/cache
-   chmod 600 .env
-   ```
-
-5. **Forgetting to set proper ownership:**
-   ```bash
-   # BAD - Files owned by deployment user, not web server
-   # Deployment as 'ubuntu' user
-   git pull
-   # Files now owned by ubuntu:ubuntu
-
-   # GOOD - Set ownership to web server user
-   git pull
-   chown -R www-data:www-data .
-   ```
-
-6. **Relying on obscurity instead of permissions:**
-   ```bash
-   # BAD - Hidden file with weak permissions
-   chmod 644 .secret_api_keys  # Still readable!
-
-   # GOOD - Proper permissions
-   chmod 600 .env
-   # And ensure it's in .gitignore
-   ```
-
 ## References
 
 - [Laravel Security Best Practices](https://laravel.com/docs/deployment#optimization)
@@ -312,7 +244,7 @@ jobs:
 
 ## Related Analyzers
 
-- [Environment File Security](/analyzers/security/env-file-security) - Checks .env file security and .gitignore
-- [App Key Security](/analyzers/security/app-key-security) - Validates Laravel encryption keys
-- [Debug Mode](/analyzers/security/debug-mode) - Prevents debug mode in production
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file security and .gitignore
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates Laravel encryption keys
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
 - [Configuration Caching](/analyzers/performance/config-caching) - Ensures config is cached in production

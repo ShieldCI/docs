@@ -1,11 +1,11 @@
 ---
-title: Password Hashing Strength
+title: Password Hashing Strength Analyzer
 description: Validates that your Laravel application uses secure password hashing algorithms with appropriate security parameters
 icon: lock
 outline: [2, 3]
 ---
 
-# Password Hashing Strength
+# Password Hashing Strength Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
@@ -184,66 +184,27 @@ php artisan tinker
 ],
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Using MD5, SHA1, or SHA256 for passwords:**
-   ```php
-   // ❌ BAD - Broken algorithms
-   $password = md5($request->password);
-   $password = sha1($request->password);
-   $password = hash('sha256', $request->password);
+This analyzer is automatically skipped in CI environments:
 
-   // ✅ GOOD - Password-specific algorithms
-   $password = Hash::make($request->password);
-   ```
+```php
+// Analyzer configuration
+public static bool $runInCI = false;
+```
 
-2. **Weak bcrypt rounds (10 or less):**
-   ```php
-   // ❌ BAD - Vulnerable to GPU attacks
-   'bcrypt' => ['rounds' => 10]  // Laravel default
+**Why skip in CI?**
+- Hashing configuration is environment-specific, not applicable in CI
+- CI environments may use faster hashing settings for test performance
+- Production hashing settings should be validated in staging/production
+- Prevents false failures in CI pipelines
 
-   // ✅ GOOD - Secure minimum
-   'bcrypt' => ['rounds' => 12]  // 2024 standard
-   ```
+**Run manually if needed:**
 
-3. **Insufficient Argon2 memory:**
-   ```php
-   // ❌ BAD - Vulnerable to GPU/ASIC attacks
-   'argon' => ['memory' => 1024]  // Only 1 MB
-
-   // ✅ GOOD - Resists hardware attacks
-   'argon' => ['memory' => 65536]  // 64 MB
-   ```
-
-4. **Storing passwords without hashing:**
-   ```php
-   // ❌ BAD - Plain text storage
-   $user->password = $request->password;
-
-   // ✅ GOOD - Always hash before storage
-   $user->password = Hash::make($request->password);
-   ```
-
-5. **Using the same salt for all users:**
-   ```php
-   // ❌ BAD - Custom salting (don't do this!)
-   define('PASSWORD_SALT', 'my-secret-salt');
-   $hash = md5($password . PASSWORD_SALT);
-
-   // ✅ GOOD - bcrypt/Argon2 handle salts automatically
-   $hash = Hash::make($password);  // Unique salt per password
-   ```
-
-6. **Implementing custom password hashing:**
-   ```php
-   // ❌ BAD - Custom algorithms always fail
-   function myCustomHash($password) {
-       return md5($password . SALT);
-   }
-
-   // ✅ GOOD - Use Laravel's tested implementation
-   Hash::make($password);
-   ```
+```bash
+# Check password hashing configuration locally or in staging
+php artisan shield:analyze --analyzer=hashing-strength
+```
 
 ## References
 
@@ -256,7 +217,7 @@ php artisan tinker
 
 ## Related Analyzers
 
-- [Authentication](/analyzers/security/authentication) - Validates authentication implementation
-- [Debug Mode](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
-- [Env File Security](/analyzers/security/env-file-security) - Protects sensitive configuration
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
+- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates authentication implementation
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects sensitive configuration
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates session cookie security configuration

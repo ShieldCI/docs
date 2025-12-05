@@ -1,15 +1,16 @@
 ---
-title: Application Key Security
+title: Application Key Analyzer
 description: Validates that Laravel's APP_KEY encryption key is properly configured, secure, and consistent across environment files
 icon: lock
 outline: [2, 3]
+tags: encryption,app-key,security,configuration
 ---
 
-# Application Key Security
+# Application Key Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `app-key-security` | 🛡️ Security  | Critical    | 5 minutes   |
+| `app-key` | 🛡️ Security  | Critical    | 5 minutes   |
 
 ## What This Checks
 
@@ -69,7 +70,7 @@ Implement comprehensive APP_KEY security across all environments:
 # Generate key for each environment
 php artisan key:generate
 
-# For production, store in environment variables (not in .env)
+# For production, store in environment variables
 # Laravel Forge/Vapor:
 # - Add APP_KEY to environment variables in dashboard
 
@@ -183,72 +184,27 @@ php artisan tinker
 cat bootstrap/cache/config.php | grep 'key'
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Using the same key across different applications:**
-   ```ini
-   # ❌ BAD - Sharing key between different apps
-   app1/.env: APP_KEY=base64:SHARED_KEY
-   app2/.env: APP_KEY=base64:SHARED_KEY  # Security risk!
+This analyzer is automatically skipped in CI environments:
 
-   # ✅ GOOD - Each app has its own key
-   app1/.env: APP_KEY=base64:UNIQUE_KEY_1
-   app2/.env: APP_KEY=base64:UNIQUE_KEY_2
-   ```
+```php
+// Analyzer configuration
+public static bool $runInCI = false;
+```
 
-2. **Committing real keys to version control:**
-   ```bash
-   # ❌ BAD - Real key in .env.example
-   APP_KEY=base64:/AvmHMmBChdiKxwxReS4zWfHKXAfl0vsbJIf2fT3gHA=
+**Why skip in CI?**
+- App key configuration is environment-specific, not applicable in CI
+- CI environments typically use test keys that differ from production
+- Prevents false failures in CI pipelines
+- Should be checked in staging/production environments where real keys are used
 
-   # ✅ GOOD - Placeholder in .env.example
-   APP_KEY=base64:your-key-here
-   ```
+**Run manually if needed:**
 
-3. **Multiple APP_KEY definitions in same file:**
-   ```ini
-   # ❌ BAD - Duplicate definitions
-   APP_KEY=base64:FirstKey
-   APP_DEBUG=false
-   APP_KEY=base64:SecondKey  # Laravel uses first one, confusing!
-
-   # ✅ GOOD - Single definition
-   APP_KEY=base64:OnlyOneKey
-   ```
-
-4. **Different keys across production environments:**
-   ```ini
-   # ❌ BAD - Different keys
-   production-server-1/.env: APP_KEY=base64:KEY_1
-   production-server-2/.env: APP_KEY=base64:KEY_2  # Sessions won't work!
-
-   # ✅ GOOD - Same key across load-balanced servers
-   production-server-1/.env: APP_KEY=base64:SAME_KEY
-   production-server-2/.env: APP_KEY=base64:SAME_KEY
-   ```
-
-5. **Hardcoding key in config/app.php:**
-   ```php
-   // ❌ BAD - Hardcoded in config file
-   // config/app.php
-   'key' => 'base64:/AvmHMmBChdiKxwxReS4zWfHKXAfl0vsbJIf2fT3gHA=',
-
-   // ✅ GOOD - Read from environment
-   // config/app.php
-   'key' => env('APP_KEY'),
-   ```
-
-6. **Forgetting to clear config cache after changing key:**
-   ```bash
-   # After changing APP_KEY in .env:
-
-   # ❌ BAD - Changes won't take effect
-   # (just editing .env)
-
-   # ✅ GOOD - Clear cache
-   php artisan config:clear
-   php artisan config:cache  # Re-cache for production
-   ```
+```bash
+# Check app key configuration locally
+php artisan shield:analyze --analyzer=app-key-security
+```
 
 ## References
 
@@ -259,7 +215,7 @@ cat bootstrap/cache/config.php | grep 'key'
 
 ## Related Analyzers
 
-- [Environment File Security](/analyzers/security/env-file-security) - Checks .env file permissions and .gitignore
-- [Configuration Caching](/analyzers/performance/config-caching) - Ensures config is cached in production
-- [Debug Mode](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
-- [Session Driver Configuration](/analyzers/performance/session-driver) - Validates session configuration
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file permissions and .gitignore
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
+- [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session configuration

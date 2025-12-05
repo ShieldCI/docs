@@ -1,15 +1,15 @@
 ---
-title: Cookie Security
+title: Cookie Analyzer
 description: Validates that Laravel's cookie security configuration properly protects against XSS, CSRF, and man-in-the-middle attacks
 icon: lock
 outline: [2, 3]
 ---
 
-# Cookie Security
+# Cookie Analyzer
 
 | Analyzer ID       | Category     | Severity   | Time To Fix  |
 | ------------------| :----------: |:----------:| ------------:|
-| `cookie-security` | 🛡️ Security  | Critical   | 15 minutes   |
+| `cookie` | 🛡️ Security  | Critical   | 15 minutes   |
 
 ## What This Checks
 
@@ -284,74 +284,6 @@ SESSION_SECURE_COOKIE=false
 SESSION_SAME_SITE=lax
 ```
 
-## Common Mistakes to Avoid
-
-1. **Disabling HttpOnly for no valid reason:**
-   ```php
-   // ❌ BAD - Allows JavaScript to access cookies
-   'http_only' => false,
-
-   // ✅ GOOD - JavaScript cannot access cookies
-   'http_only' => true,
-   ```
-
-2. **Using Secure=false in production:**
-   ```php
-   // ❌ BAD - Cookies sent over HTTP (insecure)
-   'secure' => false,
-
-   // ✅ GOOD - Cookies only sent over HTTPS
-   'secure' => env('SESSION_SECURE_COOKIE', true),
-   ```
-
-3. **Setting SameSite to null or 'none':**
-   ```php
-   // ❌ BAD - No CSRF protection
-   'same_site' => null,
-   'same_site' => 'none',
-
-   // ✅ GOOD - CSRF protection enabled
-   'same_site' => 'lax',    // Recommended
-   'same_site' => 'strict',  // Maximum security
-   ```
-
-4. **Commenting out EncryptCookies middleware:**
-   ```php
-   // ❌ BAD - app/Http/Kernel.php
-   protected $middleware = [
-       // \App\Http\Middleware\EncryptCookies::class,  // Commented!
-   ];
-
-   // ✅ GOOD
-   protected $middleware = [
-       \App\Http\Middleware\EncryptCookies::class,  // Enabled
-   ];
-   ```
-
-5. **Using SameSite=strict with OAuth:**
-   ```php
-   // ❌ BAD - Breaks OAuth login flows
-   'same_site' => 'strict',  // Too restrictive for OAuth
-
-   // ✅ GOOD - Allows OAuth while maintaining CSRF protection
-   'same_site' => 'lax',
-   ```
-
-6. **Excluding too many cookies from encryption:**
-   ```php
-   // ❌ BAD - app/Http/Middleware/EncryptCookies.php
-   protected $except = [
-       'user_preferences',
-       'cart_items',
-       'session_data',  // Too many exclusions!
-   ];
-
-   // ✅ GOOD - Minimal exclusions
-   protected $except = [
-       // Only if absolutely necessary
-   ];
-   ```
-
 ## References
 
 - [Laravel Session Documentation](https://laravel.com/docs/session)
@@ -362,7 +294,7 @@ SESSION_SAME_SITE=lax
 
 ## Related Analyzers
 
-- [CSRF Protection](/analyzers/security/csrf-protection) - Validates CSRF token implementation
-- [App Key Security](/analyzers/security/app-key-security) - Ensures encryption keys are secure
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
-- [HTTPS Enforcement](/analyzers/security/https-enforcement) - Ensures HTTPS is required
+- [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token implementation
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Ensures encryption keys are secure
+- [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session driver for scalability
+- [HSTS Header Analyzer](/analyzers/security/hsts-header) - Ensures HTTPS is required via HSTS headers

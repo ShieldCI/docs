@@ -1,15 +1,15 @@
 ---
-title: XSS Vulnerability Analyzer
+title: XSS Vulnerabilities Analyzer
 description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output and missing Content-Security-Policy headers
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# XSS Vulnerability Analyzer
+# XSS Vulnerabilities Analyzer
 
-| Analyzer ID     | Category     | Severity   | Time To Fix  |
-| ----------------| :----------: |:----------:| ------------:|
-| `xss-detection` | 🛡️ Security  | High       | 30 minutes   |
+| Analyzer ID           | Category     | Severity   | Time To Fix  |
+| ----------------------| :----------: |:----------:| ------------:|
+| `xss-vulnerabilities` | 🛡️ Security  | High       | 30 minutes   |
 
 
 ## What This Checks
@@ -44,13 +44,6 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 4. **Add tests**: Write feature tests ensuring responses include the CSP header and that critical templates escape user-controlled content.
 5. **Automate**: Run this analyzer (or similar static analysis) in CI to block regressions.
 
-## Common Mistakes to Avoid
-
-- Whitelisting entire controllers to skip Blade escaping instead of sanitizing specific fields.
-- Adding `unsafe-inline` to CSP to “fix” a broken asset pipeline—this negates CSP entirely.
-- Forgetting that JavaScript contexts need JSON encoding; `{{ $var }}` inside `<script>` still needs `@json($var)`.
-- Relying solely on CSP; inline libraries like Alpine or Livewire still must sanitize output.
-
 ## References
 
 - [Laravel Blade & XSS](https://laravel.com/docs/blade#displaying-data)
@@ -59,6 +52,6 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 
 ## Related Analyzers
 
-- [Cookie Security Analyzer](../security/cookie-security.md)
-- [HSTS Header Analyzer](../security/hsts-header.md)
-- [Up-to-Date Dependency Analyzer](../security/up-to-date-dependencies.md)
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure cookie configuration
+- [HSTS Header Analyzer](/analyzers/security/hsts-header) - Validates HSTS header configuration
+- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates

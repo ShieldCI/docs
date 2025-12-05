@@ -1,15 +1,15 @@
 ---
-title: Mass Assignment Vulnerability Detection
+title: Mass Assignment Vulnerabilities Analyzer
 description: Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# Mass Assignment Vulnerability Detection
+# Mass Assignment Vulnerabilities Analyzer
 
-| Analyzer ID       | Category     | Severity   | Time To Fix  |
-| ------------------| :----------: |:----------:| ------------:|
-| `mass-assignment` | 🛡️ Security  | High       | 25 minutes   |
+| Analyzer ID                       | Category     | Severity   | Time To Fix  |
+| ----------------------------------| :----------: |:----------:| ------------:|
+| `mass-assignment-vulnerabilities` | 🛡️ Security  | High       | 25 minutes   |
 
 ## What This Checks
 
@@ -281,8 +281,8 @@ php artisan tinker
 
 ## Related Analyzers
 
-- [SQL Injection Detection](/analyzers/security/sql-injection) - Detects raw SQL queries with user input
-- [XSS Prevention](/analyzers/security/xss-detection) - Prevents cross-site scripting attacks
-- [CSRF Protection](/analyzers/security/csrf-protection) - Validates CSRF token protection
-- [Input Validation](/analyzers/security/input-validation) - Ensures proper validation rules
-- [Authorization Checks](/analyzers/security/authorization) - Validates policy and gate checks
+- [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects raw SQL queries with user input
+- [XSS Vulnerability Analyzer](/analyzers/security/xss-detection) - Prevents cross-site scripting attacks
+- [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token protection
+- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates policy and gate checks
+- [Fillable Foreign Key Security Analyzer](/analyzers/security/fillable-foreign-key) - Detects foreign keys in fillable arrays

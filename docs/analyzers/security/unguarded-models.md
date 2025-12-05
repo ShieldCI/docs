@@ -1,5 +1,5 @@
 ---
-title: Unguarded Models
+title: Unguarded Models Analyzer
 description: Scans for Model::unguard() calls that disable Laravel's mass-assignment protection
 icon: shield-alert
 outline: [2, 3]
@@ -62,13 +62,6 @@ Model::reguard();
 4. **Wrap imports**: if a seeder or migration needs unguarded writes, wrap the block and call `Model::reguard()` in a `finally` clause to guarantee re-guarding even on exceptions.
 5. **Add tests** around your import/service layers to ensure no requests can set privileged flags without authorization.
 
-## Common Mistakes to Avoid
-
-- Leaving `Model::unguard()` in controllers or jobs that process user input.
-- Forgetting to call `Model::reguard()` after a batch import.
-- Globally unguarding in service providers (e.g., `AppServiceProvider::boot`) “just to get things working”.
-- Assuming `require-dev` code is harmless—seeders, factories, and tests can still end up in production if commands run in the wrong environment.
-
 ## References
 
 - [Laravel Mass Assignment Docs](https://laravel.com/docs/eloquent#mass-assignment)
@@ -77,6 +70,6 @@ Model::reguard();
 
 ## Related Analyzers
 
-- [Mass Assignment Analyzer](../security/mass-assignment.md) — detects missing `$fillable`/`$guarded` definitions.
-- [Fillable Foreign Key Analyzer](../security/fillable-foreign-key.md) — ensures relationship IDs aren’t mass assignable.
-- [Stable Dependency Analyzer](../security/stable-dependencies.md) — keeps your vendor libraries on predictable, secure releases.
+- [Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment) — detects missing `$fillable`/`$guarded` definitions.
+- [Fillable Foreign Key Security Analyzer](/analyzers/security/fillable-foreign-key) — ensures relationship IDs aren't mass assignable.
+- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) — keeps your vendor libraries on predictable, secure releases.

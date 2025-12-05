@@ -1,11 +1,11 @@
 ---
-title: Vulnerable Dependency Analyzer
+title: Vulnerable Dependencies Analyzer
 description: Detects vulnerable Composer packages with CVEs and abandoned dependencies using OSV API
 icon: package
 outline: [2, 3]
 ---
 
-# Vulnerable Dependency Analyzer
+# Vulnerable Dependencies Analyzer
 
 | Analyzer ID               | Category     | Severity   | Time To Fix  |
 | --------------------------| :----------: |:----------:| ------------:|
@@ -51,13 +51,6 @@ composer update vendor/package
 4. **Remove or fork abandoned packages**: if no drop-in replacement exists, fork the package, apply patches, and reference your fork explicitly.
 5. **Automate**: add `composer audit` (or this analyzer) to CI so regressions get caught before merges.
 
-## Common Mistakes to Avoid
-
-- Ignoring advisories because “it’s only dev dependencies” — vulnerable test tools can still compromise developer machines.
-- Deleting `composer.lock` to silence the analyzer instead of updating packages.
-- Assuming vendor patches will be backported to older branches—many advisories only patch the latest stable release.
-- Forgetting to re-run `composer dump-autoload` / CI tests after upgrading libraries.
-
 ## References
 
 - [Composer Audit](https://getcomposer.org/doc/03-cli.md#audit)
@@ -66,6 +59,6 @@ composer update vendor/package
 
 ## Related Analyzers
 
-- [Stable Dependency Analyzer](../security/stable-dependencies.md)
-- [Up-to-Date Dependency Analyzer](../security/up-to-date-dependencies.md)
-- [Frontend Vulnerable Dependency Analyzer](../security/frontend-vulnerable-dependencies.md)
+- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) - Ensures stable tagged releases
+- [Up-to-Date Dependency Analyzer](/analyzers/security/up-to-date-dependencies) - Checks for dependency updates
+- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - Scans npm/yarn dependencies

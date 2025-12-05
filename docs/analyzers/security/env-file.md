@@ -1,15 +1,15 @@
 ---
-title: Environment File Security
+title: Environment File Analyzer
 description: Validates that Laravel environment files are properly secured against exposure and credential leaks
 icon: lock
 outline: [2, 3]
 ---
 
-# Environment File Security
+# Environment File Analyzer
 
 | Analyzer ID         | Category     | Severity   | Time To Fix  |
 | --------------------| :----------: |:----------:| ------------:|
-| `env-file-security` | 🛡️ Security  | Critical       | 10 minutes   |
+| `env-file` | 🛡️ Security  | Critical       | 10 minutes   |
 
 ## What This Checks
 
@@ -242,79 +242,6 @@ php artisan cache:clear
 php artisan config:cache
 ```
 
-## Common Mistakes to Avoid
-
-1. **Committing real credentials to .env.example:**
-   ```ini
-   # ❌ BAD - .env.example with real secrets
-   APP_KEY=base64:RealProductionKey123456789ABC...
-   DB_PASSWORD=ActualDatabasePassword!
-   AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG...
-
-   # ✅ GOOD - .env.example with placeholders
-   APP_KEY=
-   DB_PASSWORD=
-   AWS_SECRET_ACCESS_KEY=
-   ```
-
-2. **World-readable permissions on .env:**
-   ```bash
-   # ❌ BAD - Anyone on server can read
-   -rw-r--r-- 1 www-data www-data 1234 .env
-
-   # ✅ GOOD - Only owner can read/write
-   -rw------- 1 www-data www-data 1234 .env
-   ```
-
-3. **Missing .env in .gitignore:**
-   ```
-   # ❌ BAD - .gitignore without .env
-   /vendor
-   /node_modules
-   # .env missing!
-
-   # ✅ GOOD - .gitignore includes .env
-   /vendor
-   /node_modules
-   .env
-   .env.*
-   !.env.example
-   ```
-
-4. **.env file in public directory:**
-   ```bash
-   # ❌ BAD - Publicly accessible
-   public/.env  # https://site.com/.env downloads it!
-
-   # ✅ GOOD - In application root
-   .env         # Not web-accessible
-   ```
-
-5. **Not rotating credentials after exposure:**
-   ```bash
-   # ❌ BAD - Just removing .env from git
-   git rm .env
-   git commit -m "Remove .env"
-   # Credentials still valid!
-
-   # ✅ GOOD - Rotate all credentials
-   php artisan key:generate --force
-   # Update database passwords
-   # Regenerate all API keys
-   # Change AWS credentials
-   ```
-
-6. **Inconsistent permissions across environments:**
-   ```bash
-   # ❌ BAD - Different permissions
-   production-server-1: -rw------- .env (600) ✓
-   production-server-2: -rw-r--r-- .env (644) ✗
-
-   # ✅ GOOD - Consistent secure permissions
-   production-server-1: -rw------- .env (600) ✓
-   production-server-2: -rw------- .env (600) ✓
-   ```
-
 ## References
 
 - [Laravel Environment Configuration Documentation](https://laravel.com/docs/configuration#environment-configuration)
@@ -324,7 +251,7 @@ php artisan config:cache
 
 ## Related Analyzers
 
-- [App Key Security](/analyzers/security/app-key-security) - Validates encryption key configuration
-- [Debug Mode](/analyzers/security/debug-mode) - Prevents debug information exposure
-- [Configuration Caching](/analyzers/performance/config-caching) - Ensures config is cached in production
-- [HTTPS Enforcement](/analyzers/security/https-enforcement) - Validates SSL/TLS configuration
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key configuration
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug information exposure
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [HSTS Header Analyzer](/analyzers/security/hsts-header) - Validates SSL/TLS configuration via HSTS headers

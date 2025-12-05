@@ -1,11 +1,11 @@
 ---
-title: Frontend Vulnerable Dependency Analyzer
+title: Frontend Vulnerable Dependencies Analyzer
 description: Scans npm and yarn dependencies for known security vulnerabilities using npm audit and yarn audit
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# Frontend Vulnerable Dependency Analyzer
+# Frontend Vulnerable Dependencies Analyzer
 
 | Analyzer ID                        | Category     | Severity   | Time To Fix  |
 | -----------------------------------| :----------: |:----------:| ------------:|
@@ -198,75 +198,6 @@ return [
 ];
 ```
 
-## Common Mistakes to Avoid
-
-1. **Blindly running `npm audit fix --force` without testing:**
-   ```bash
-   # BAD - Can break your application
-   npm audit fix --force
-   git commit -am "Fix vulnerabilities"  # Without testing!
-
-   # GOOD - Test before committing
-   npm audit fix --force
-   npm test
-   npm run build
-   # Manually test critical features
-   git commit -am "Fix vulnerabilities"
-   ```
-
-2. **Ignoring lock files or excluding them from version control:**
-   ```bash
-   # BAD - Inconsistent builds
-   echo "package-lock.json" >> .gitignore
-   echo "yarn.lock" >> .gitignore
-
-   # GOOD - Commit lock files
-   git add package-lock.json yarn.lock
-   git commit -m "Add lock files for reproducible builds"
-   ```
-
-3. **Installing unverified packages without research:**
-   ```bash
-   # BAD - Potential malware
-   npm install random-package-from-internet
-
-   # GOOD - Research first
-   npm info package-name  # Check downloads, maintainers
-   # Visit https://npmjs.com/package/package-name
-   # Check GitHub stars, issues, recent updates
-   npm install package-name
-   ```
-
-4. **Ignoring all moderate/low severity warnings:**
-   ```bash
-   # BAD - Masks real issues
-   npm audit --audit-level=critical  # Ignores high/moderate
-
-   # GOOD - Address all severity levels appropriately
-   npm audit
-   # Fix critical/high immediately
-   # Schedule moderate/low for regular updates
-   ```
-
-5. **Using outdated npm/yarn versions:**
-   ```bash
-   # BAD - Missing security features
-   npm -v  # Shows 6.x or older
-
-   # GOOD - Keep package managers updated
-   npm install -g npm@latest
-   npm -v  # Should be 8.0+
-   ```
-
-6. **Using npm install instead of npm ci in CI/CD:**
-   ```bash
-   # BAD - Can install different versions
-   npm install
-
-   # GOOD - Clean install from lock file
-   npm ci
-   ```
-
 ## References
 
 - [npm audit Documentation](https://docs.npmjs.com/cli/audit)
@@ -278,7 +209,7 @@ return [
 
 ## Related Analyzers
 
-- [Backend Vulnerable Dependencies](/analyzers/security/backend-vulnerable-dependencies) - Scans Composer dependencies
-- [App Key Security](/analyzers/security/app-key-security) - Validates Laravel encryption keys
-- [Debug Mode](/analyzers/security/debug-mode) - Prevents debug mode in production
-- [CSRF Protection](/analyzers/security/csrf-protection) - Validates CSRF token requirements
+- [Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies) - Scans Composer dependencies
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates Laravel encryption keys
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
+- [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token requirements

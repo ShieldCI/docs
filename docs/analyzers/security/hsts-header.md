@@ -171,78 +171,26 @@ HSTS_MIN_MAX_AGE=31536000  // 1 year
 HSTS_MIN_MAX_AGE=604800  // 1 week for testing
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Adding HSTS before testing HTTPS thoroughly:**
-   ```php
-   // ❌ BAD - Set max-age to 1 year immediately
-   // Day 1 of HTTPS: 'max-age=31536000'
+This analyzer is automatically skipped in CI environments:
 
-   // ✅ GOOD - Start small, increase gradually
-   // Week 1: 'max-age=604800'  // 1 week
-   // Week 2-3: 'max-age=2592000'  // 1 month
-   // After testing: 'max-age=31536000'  // 1 year
-   ```
+```php
+// Analyzer configuration
+public static bool $runInCI = false;
+```
 
-2. **Adding includeSubDomains without testing all subdomains:**
-   ```php
-   // ❌ BAD - Forgot dev.example.com doesn't have HTTPS
-   'max-age=31536000; includeSubDomains'
-   // Result: dev.example.com becomes inaccessible!
+**Why skip in CI?**
+- HSTS header checks require a live web server, not applicable in CI
+- CI environments typically don't have a publicly accessible HTTPS web server
+- Requires actual HTTP requests to verify HSTS headers are present
 
-   // ✅ GOOD - Test all subdomains first
-   // curl -I https://www.example.com  ✓
-   // curl -I https://api.example.com  ✓
-   // curl -I https://dev.example.com  ✗ Fix this first!
-   ```
+**Run manually if needed:**
 
-3. **Submitting to preload list prematurely:**
-   ```php
-   // ❌ BAD - Preload on day 1 of HTTPS
-   // Preload is permanent - very hard to remove!
-
-   // ✅ GOOD - Test for months, then preload
-   // Test with 'max-age=31536000; includeSubDomains' for 3-6 months
-   // Then add 'preload' and submit to hstspreload.org
-   ```
-
-4. **HSTS enabled but cookies still insecure:**
-   ```php
-   // ❌ BAD - HSTS protects connection, but cookies sent over HTTP
-   // HSTS: 'max-age=31536000; includeSubDomains'
-   // config/session.php: 'secure' => false
-
-   // ✅ GOOD - Enable secure cookies
-   // config/session.php: 'secure' => true
-   ```
-
-5. **Disabling HSTS in staging/testing:**
-   ```php
-   // ❌ BAD - Staging should mirror production
-   if (app()->environment('production')) {
-       'max-age=31536000'
-   } else {
-       'max-age=0'  // Disabled!
-   }
-
-   // ✅ GOOD - Use shorter max-age, not zero
-   if (app()->environment('production')) {
-       'max-age=31536000'
-   } else {
-       'max-age=3600'  // 1 hour for testing
-   }
-   ```
-
-6. **Mixing HTTP and HTTPS content:**
-   ```html
-   <!-- ❌ BAD - Mixed content errors -->
-   <img src="http://example.com/logo.png">
-   <script src="http://cdn.example.com/app.js"></script>
-
-   <!-- ✅ GOOD - All HTTPS -->
-   <img src="https://example.com/logo.png">
-   <script src="https://cdn.example.com/app.js"></script>
-   ```
+```bash
+# Check HSTS header configuration locally or in staging
+php artisan shield:analyze --analyzer=hsts-header
+```
 
 ## References
 
@@ -255,7 +203,6 @@ HSTS_MIN_MAX_AGE=604800  // 1 week for testing
 
 ## Related Analyzers
 
-- [Cookie Security](/analyzers/security/cookie-security) - Validates secure cookie configuration
-- [Debug Mode](/analyzers/security/debug-mode) - Ensures HTTPS in production
-- [Environment File Security](/analyzers/security/env-file-security) - Protects HTTPS configuration
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure cookie configuration
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures HTTPS in production
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects HTTPS configuration

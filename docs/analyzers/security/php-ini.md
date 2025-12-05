@@ -1,15 +1,15 @@
 ---
-title: PHP Configuration Security
+title: PHP Configuration Analyzer
 description: Validates that PHP ini settings are configured securely for production environments
 icon: cog
 outline: [2, 3]
 ---
 
-# PHP Configuration Security
+# PHP Configuration Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `php-ini-security` | 🛡️ Security  | High       | 15 minutes  |
+| `php-ini`          | 🛡️ Security  | High       | 15 minutes  |
 
 ## What This Checks
 
@@ -282,6 +282,26 @@ RUN php -r "exit(ini_get('allow_url_include') === 'Off' ? 0 : 1);" \
     || (echo "❌ Insecure PHP configuration!" && exit 1)
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments:
+
+```php
+// Analyzer configuration
+public static bool $runInCI = false;
+```
+
+**Why skip in CI?**
+- PHP ini settings checks are environment-specific, not applicable in CI
+- CI environments may have different PHP configurations than production
+
+**Run manually if needed:**
+
+```bash
+# Check PHP ini security configuration locally or in staging
+php artisan shield:analyze --analyzer=php-ini-security
+```
+
 ## References
 
 - [PHP Security Configuration](https://www.php.net/manual/en/security.php)
@@ -294,7 +314,7 @@ RUN php -r "exit(ini_get('allow_url_include') === 'Off' ? 0 : 1);" \
 
 ## Related Analyzers
 
-- [Debug Mode](/analyzers/security/debug-mode) - Validates APP_DEBUG is disabled in production
-- [Environment File Security](/analyzers/security/env-file-security) - Checks .env file permissions
-- [Application Key Security](/analyzers/security/app-key-security) - Validates APP_KEY configuration
-- [SQL Injection Detection](/analyzers/security/sql-injection) - Detects SQL injection vulnerabilities
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Validates APP_DEBUG is disabled in production
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks .env file permissions
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates APP_KEY configuration
+- [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects SQL injection vulnerabilities

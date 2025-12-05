@@ -17,22 +17,22 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 ### Critical Vulnerabilities
 
-- **[SQL Injection Detector](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
-- **[XSS Vulnerability Detector](/analyzers/security/xss-detection)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
+- **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
+- **[XSS Vulnerability Analyzer](/analyzers/security/xss-detection)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
 - **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
-- **[Mass Assignment Vulnerability Detector](/analyzers/security/mass-assignment)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
+- **[Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
 - **[Unguarded Models Analyzer](/analyzers/security/unguarded-models)** - Detects Model::unguard() usage that disables mass assignment protection
 
 ### Authentication & Authorization
 
-- **[Authentication & Authorization Analyzer](/analyzers/security/authentication-protection)** - Detects missing authentication and authorization protection on routes and controllers
+- **[Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection)** - Detects missing authentication and authorization protection on routes and controllers
 - **[Login Throttling Analyzer](/analyzers/security/login-throttling)** - Detects missing rate limiting on authentication endpoints to prevent brute force attacks
 
 ### Configuration & Secrets
 
 - **[Application Key Security Analyzer](/analyzers/security/app-key-security)** - Validates that the application encryption key is properly configured and secure
 - **[Environment File Security Analyzer](/analyzers/security/env-file-security)** - Validates .env file security, location, and prevents exposure of sensitive data
-- **[Environment File HTTP Accessibility Check](/analyzers/security/env-http-accessibility)** - Verifies .env file is not accessible via HTTP requests to the web server
+- **[Environment File HTTP Accessibility Analyzer](/analyzers/security/env-http-accessibility)** - Verifies .env file is not accessible via HTTP requests to the web server
 - **[Debug Mode Security Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled and debugging functions that expose sensitive information
 - **[PHP Configuration Security Analyzer](/analyzers/security/php-ini-security)** - Validates that PHP ini settings are configured securely
 
@@ -149,6 +149,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Performance Analyzers](/analyzers/performance/overview)** - Optimize application performance
-- **[Reliability Analyzers](/analyzers/reliability/overview)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices/overview)** - Follow Laravel conventions
+- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards

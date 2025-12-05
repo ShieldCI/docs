@@ -1,11 +1,11 @@
 ---
-title: Environment File HTTP Accessibility
+title: Environment File HTTP Accessibility Analyzer
 description: Performs runtime HTTP checks to verify that .env files cannot be accessed via web requests
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# Environment File HTTP Accessibility
+# Environment File HTTP Accessibility Analyzer
 
 | Analyzer ID              | Category     | Severity   | Time To Fix  |
 | -------------------------| :----------: |:----------:| ------------:|
@@ -279,68 +279,26 @@ SHIELDCI_GUEST_URL=https://staging.yourapp.com \
     php artisan shield:analyze --analyzer=env-http-accessibility
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Pointing web server to project root instead of public/:**
-   ```nginx
-   # ❌ BAD - Exposes .env
-   root /var/www/yourapp;
+This analyzer is automatically skipped in CI environments:
 
-   # ✅ GOOD - Only public/ is accessible
-   root /var/www/yourapp/public;
-   ```
+```php
+// Analyzer configuration
+public static bool $runInCI = false;
+```
 
-2. **Forgetting to block dotfiles:**
-   ```apache
-   # ❌ BAD - No dotfile protection
-   <Directory /var/www/yourapp/public>
-       AllowOverride All
-   </Directory>
+**Why skip in CI?**
+- HTTP checks require a live web server, not applicable in CI
+- CI environments typically don't have a publicly accessible web server
+- Requires actual HTTP requests to test .env file accessibility
 
-   # ✅ GOOD - Block all dotfiles
-   <FilesMatch "^\.">
-       Require all denied
-   </FilesMatch>
-   ```
+**Run manually if needed:**
 
-3. **Not testing path traversal:**
-   ```bash
-   # ❌ BAD - Only testing /.env
-   curl https://yourapp.com/.env
-
-   # ✅ GOOD - Test all attack vectors
-   curl https://yourapp.com/../.env
-   curl https://yourapp.com/../../.env
-   curl https://yourapp.com/public/.env
-   ```
-
-4. **Storing .env in public directory:**
-   ```bash
-   # ❌ BAD - File in web root
-   your-app/public/.env
-
-   # ✅ GOOD - File above web root
-   your-app/.env
-   ```
-
-5. **Allowing directory listing:**
-   ```apache
-   # ❌ BAD - Shows file list
-   Options +Indexes
-
-   # ✅ GOOD - Disable listing
-   Options -Indexes
-   ```
-
-6. **Not verifying after deployment:**
-   ```bash
-   # ❌ BAD - Deploy and hope
-   git push production main
-
-   # ✅ GOOD - Deploy and verify
-   git push production main
-   curl -I https://yourapp.com/.env  # Should fail
-   ```
+```bash
+# Check .env HTTP accessibility locally or in staging
+php artisan shield:analyze --analyzer=env-http-accessibility
+```
 
 ## References
 
@@ -351,7 +309,7 @@ SHIELDCI_GUEST_URL=https://staging.yourapp.com \
 
 ## Related Analyzers
 
-- [Env File Security](/analyzers/security/env-file-security) - Checks file permissions and .gitignore
-- [App Key Security](/analyzers/security/app-key-security) - Validates encryption key security
-- [Debug Mode](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Checks file permissions and .gitignore
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key security
+- [Debug Mode Security Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
 - [Configuration Caching](/analyzers/performance/config-caching) - Validates production config caching

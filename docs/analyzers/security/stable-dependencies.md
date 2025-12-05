@@ -1,11 +1,11 @@
 ---
-title: Stable Dependency
+title: Stable Dependencies Analyzer
 description: Ensures composer.json enforces stable dependencies and scans for unstable package constraints
 icon: package
 outline: [2, 3]
 ---
 
-# Stable Dependency Analyzer
+# Stable Dependencies Analyzer
 
 | Analyzer ID           | Category     | Severity   | Time To Fix  |
 | ----------------------| :----------: |:----------:| ------------:|
@@ -75,13 +75,6 @@ composer update --prefer-stable
    Ensure Composer reports `Nothing to install or update` afterwards.
 5. **Lock it down in CI**: add `composer update --dry-run --prefer-stable` to CI to catch regressions before code is merged.
 
-## Common Mistakes to Avoid
-
-- Relying on `minimum-stability: dev` because a single dependency lacked a tag—publish a forked tag instead.
-- Forgetting to remove `@beta` flags after a stable release becomes available.
-- Assuming `require-dev` is safe—unstable tools can still influence code generation or leak into production when the env is misconfigured.
-- Running `composer update` locally without `--prefer-stable`, then wondering why CI reports additional upgrades.
-
 ## References
 
 - [Composer Stability Settings](https://getcomposer.org/doc/04-schema.md#minimum-stability)
@@ -90,5 +83,5 @@ composer update --prefer-stable
 
 ## Related Analyzers
 
-- [Frontend Vulnerable Dependencies Analyzer](../security/frontend-vulnerable-dependencies.md) — scans npm/yarn lock files for known CVEs.
-- [License Compliance Analyzer](../security/license-compliance.md) — validates OSS license requirements for all dependencies.
+- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — scans npm/yarn lock files for known CVEs.
+- [Dependency License Compliance Analyzer](/analyzers/security/license-compliance) — validates OSS license requirements for all dependencies.

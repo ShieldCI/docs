@@ -1,11 +1,11 @@
 ---
-title: Fillable Foreign Key Security Analyzer
+title: Fillable Foreign Key Analyzer
 description: Detects foreign key fields in Eloquent models' fillable arrays that could allow unauthorized relationship manipulation
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# Fillable Foreign Key Security Analyzer
+# Fillable Foreign Key Analyzer
 
 | Analyzer ID            | Category     | Severity   | Time To Fix  |
 | -----------------------| :----------: |:----------:| ------------:|
@@ -232,80 +232,6 @@ return [
 ];
 ```
 
-## Common Mistakes to Avoid
-
-1. **Using $request->all() for mass assignment:**
-   ```php
-   // ❌ BAD - Allows any field to be set
-   Post::create($request->all());
-
-   // ✅ GOOD - Explicitly specify allowed fields
-   Post::create($request->only(['title', 'content']));
-   ```
-
-2. **Relying only on validation without removing from $fillable:**
-   ```php
-   // ❌ BAD - Validation can be bypassed
-   protected $fillable = ['title', 'content', 'user_id'];
-
-   public function rules() {
-       return ['title' => 'required', 'content' => 'required'];
-       // user_id not validated but still fillable!
-   }
-
-   // ✅ GOOD - Remove from fillable entirely
-   protected $fillable = ['title', 'content'];
-   ```
-
-3. **Forgetting to set foreign keys explicitly:**
-   ```php
-   // ❌ BAD - user_id remains null
-   protected $fillable = ['title', 'content'];
-   Post::create($request->only(['title', 'content']));
-   // Forgot to set user_id!
-
-   // ✅ GOOD - Always set explicitly
-   $post = new Post($request->only(['title', 'content']));
-   $post->user_id = auth()->id();
-   $post->save();
-   ```
-
-4. **Using empty $fillable or $guarded:**
-   ```php
-   // ❌ BAD - Everything is fillable!
-   protected $fillable = [];
-   protected $guarded = [];
-
-   // ✅ GOOD - Explicitly guard sensitive fields
-   protected $guarded = ['id', 'user_id', 'tenant_id', 'created_at', 'updated_at'];
-   ```
-
-5. **Not using global scopes for multi-tenancy:**
-   ```php
-   // ❌ BAD - Manual filtering everywhere
-   Document::where('tenant_id', auth()->user()->tenant_id)->get();
-
-   // ✅ GOOD - Global scope enforces tenant filtering
-   static::addGlobalScope('tenant', function ($builder) {
-       $builder->where('tenant_id', auth()->user()->tenant_id);
-   });
-   ```
-
-6. **Allowing parent_id without hierarchy validation:**
-   ```php
-   // ❌ BAD - Users can create circular references
-   protected $fillable = ['name', 'parent_id'];
-   Category::create(['name' => 'A', 'parent_id' => 999]);
-
-   // ✅ GOOD - Validate parent exists and no circular reference
-   public function rules() {
-       return [
-           'name' => 'required',
-           'parent_id' => 'nullable|exists:categories,id|not_in:' . $this->id,
-       ];
-   }
-   ```
-
 ## References
 
 - [Laravel Mass Assignment Documentation](https://laravel.com/docs/eloquent#mass-assignment)
@@ -315,7 +241,6 @@ return [
 
 ## Related Analyzers
 
-- [Mass Assignment Protection](/analyzers/security/mass-assignment) - Validates $fillable/$guarded configuration
-- [Authorization Policies](/analyzers/security/authorization) - Checks for proper authorization
-- [Multi-Tenancy Security](/analyzers/security/multi-tenancy) - Validates tenant isolation
-- [Model Security](/analyzers/security/model-security) - Comprehensive model security checks
+- [Mass Assignment Vulnerability Analyzer](/analyzers/security/mass-assignment) - Validates $fillable/$guarded configuration
+- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Checks for proper authorization
+- [Unguarded Models Analyzer](/analyzers/security/unguarded-models) - Detects Model::unguard() usage

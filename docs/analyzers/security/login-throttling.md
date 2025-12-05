@@ -234,100 +234,6 @@ protected function sendFailedLoginResponse(Request $request)
 }
 ```
 
-## Common Mistakes to Avoid
-
-1. **Not throttling by email AND IP:**
-   ```php
-   // ❌ BAD - Only throttles by IP (attacker can rotate IPs)
-   RateLimiter::for('login', function (Request $request) {
-       return Limit::perMinute(5)->by($request->ip());
-   });
-
-   // ✅ GOOD - Throttle by both email and IP
-   RateLimiter::for('login', function (Request $request) {
-       return [
-           Limit::perMinute(5)->by($request->input('email')),
-           Limit::perHour(20)->by($request->ip()),
-       ];
-   });
-   ```
-
-2. **Setting limits too high:**
-   ```php
-   // ❌ BAD - 100 attempts per minute is too generous
-   ->middleware('throttle:100,1')
-
-   // ✅ GOOD - 5 attempts per minute is reasonable
-   ->middleware('throttle:5,1')
-
-   // Even better - progressive throttling
-   RateLimiter::for('login', function ($request) {
-       return [
-           Limit::perMinute(3),      // First tier
-           Limit::perMinutes(10, 5), // Second tier
-           Limit::perHour(10),       // Third tier
-       ];
-   });
-   ```
-
-3. **Forgetting to throttle all auth endpoints:**
-   ```php
-   // ❌ BAD - Only throttling login, forgot password reset
-   Route::post('/login', [LoginController::class, 'login'])
-        ->middleware('throttle:5,1');
-   Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLink']);
-
-   // ✅ GOOD - Throttle all authentication endpoints
-   Route::middleware(['throttle:5,1'])->group(function () {
-       Route::post('/login', [LoginController::class, 'login']);
-       Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLink']);
-       Route::post('/password/reset', [ResetPasswordController::class, 'reset']);
-   });
-   ```
-
-4. **Not clearing rate limiter on successful login:**
-   ```php
-   // ❌ BAD - User stays locked out even after correct password
-   if (Auth::attempt($credentials)) {
-       return redirect('/dashboard');
-   }
-
-   // ✅ GOOD - Clear lockout on successful login
-   if (Auth::attempt($credentials)) {
-       RateLimiter::clear('login.' . $request->input('email'));
-       return redirect('/dashboard');
-   }
-   ```
-
-5. **Applying throttle middleware globally:**
-   ```php
-   // ❌ BAD - Throttles ALL routes including static assets
-   // app/Http/Kernel.php
-   protected $middleware = [
-       \Illuminate\Routing\Middleware\ThrottleRequests::class,
-   ];
-
-   // ✅ GOOD - Only throttle specific route groups
-   // routes/web.php
-   Route::middleware(['throttle:60,1'])->group(function () {
-       // Only auth routes
-   });
-   ```
-
-6. **No user feedback during lockout:**
-   ```php
-   // ❌ BAD - Generic error message
-   return back()->withErrors(['email' => 'Invalid credentials']);
-
-   // ✅ GOOD - Tell user how long to wait
-   $seconds = RateLimiter::availableIn($key);
-   $minutes = ceil($seconds / 60);
-
-   return back()->withErrors([
-       'email' => "Too many attempts. Please try again in {$minutes} minute(s)."
-   ]);
-   ```
-
 ## References
 
 - [Laravel Routing - Rate Limiting](https://laravel.com/docs/routing#rate-limiting)
@@ -339,7 +245,7 @@ protected function sendFailedLoginResponse(Request $request)
 
 ## Related Analyzers
 
-- [CSRF Protection](/analyzers/security/csrf-protection) - Prevents cross-site request forgery
-- [Session Security](/analyzers/security/session-security) - Validates secure session configuration
-- [Password Hashing](/analyzers/security/password-hashing) - Ensures strong password storage
-- [Multi-Factor Authentication](/analyzers/security/mfa) - Adds second authentication factor
+- [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Prevents cross-site request forgery
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates secure session cookie configuration
+- [Password Hashing Strength Analyzer](/analyzers/security/hashing-strength) - Ensures strong password storage
+- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates authentication implementation

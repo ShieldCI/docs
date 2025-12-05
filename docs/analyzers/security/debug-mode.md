@@ -1,11 +1,11 @@
 ---
-title: Debug Mode Security
+title: Debug Mode Analyzer
 description: Detects debug mode configurations and debugging functions that expose sensitive information in production environments
 icon: alert-triangle
 outline: [2, 3]
 ---
 
-# Debug Mode Security
+# Debug Mode Analyzer
 
 | Analyzer ID  | Category     | Severity   | Time To Fix  |
 | -------------| :----------: |:----------:| ------------:|
@@ -226,90 +226,6 @@ php artisan config:cache
 // Should be true
 ```
 
-## Common Mistakes to Avoid
-
-1. **Hardcoding debug mode in config files:**
-   ```php
-   // ❌ BAD - config/app.php
-   'debug' => true,  // Hardcoded!
-
-   // ✅ GOOD - config/app.php
-   'debug' => env('APP_DEBUG', false),  // Environment-based
-   ```
-
-2. **Debug mode enabled without variable protection:**
-   ```php
-   // ❌ BAD - No protection when debug enabled
-   'debug' => env('APP_DEBUG', true),
-   // Missing debug_hide!
-
-   // ✅ GOOD - Hide sensitive data
-   'debug' => env('APP_DEBUG', false),
-   'debug_hide' => [
-       'APP_KEY',
-       'DB_PASSWORD',
-       'AWS_SECRET_ACCESS_KEY',
-   ],
-   ```
-
-3. **Leaving debug functions in production code:**
-   ```php
-   // ❌ BAD - In app/Http/Controllers/PaymentController.php
-   public function process($order) {
-       dd($order);  // Forgotten from debugging!
-       return $this->gateway->charge($order);
-   }
-
-   // ✅ GOOD - Proper logging
-   public function process($order) {
-       Log::info('Processing payment', ['order_id' => $order->id]);
-       return $this->gateway->charge($order);
-   }
-   ```
-
-4. **Debug packages in production dependencies:**
-   ```json
-   // ❌ BAD - composer.json
-   {
-       "require": {
-           "laravel/framework": "^10.0",
-           "barryvdh/laravel-debugbar": "^3.8"
-       }
-   }
-
-   // ✅ GOOD - composer.json
-   {
-       "require": {
-           "laravel/framework": "^10.0"
-       },
-       "require-dev": {
-           "barryvdh/laravel-debugbar": "^3.8"
-       }
-   }
-   ```
-
-5. **Using error display configurations:**
-   ```php
-   // ❌ BAD - bootstrap/app.php
-   ini_set('display_errors', 1);
-   error_reporting(E_ALL);
-
-   // ✅ GOOD - Let Laravel handle error display
-   // Remove these lines - Laravel automatically manages
-   // error display based on APP_DEBUG
-   ```
-
-6. **Different debug settings across production servers:**
-   ```ini
-   # ❌ BAD - Inconsistent settings
-   production-server-1/.env: APP_DEBUG=false
-   production-server-2/.env: APP_DEBUG=true  # Forgot to update!
-
-   # ✅ GOOD - Consistent settings
-   production-server-1/.env: APP_DEBUG=false
-   production-server-2/.env: APP_DEBUG=false
-   ```
-
 ## References
 
 - [Laravel Error Handling Documentation](https://laravel.com/docs/errors)
@@ -319,7 +235,7 @@ php artisan config:cache
 
 ## Related Analyzers
 
-- [Environment File Security](/analyzers/security/env-file-security) - Protects .env files from exposure
-- [App Key Security](/analyzers/security/app-key-security) - Validates encryption key configuration
+- [Environment File Security Analyzer](/analyzers/security/env-file-security) - Protects .env files from exposure
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key configuration
 - [Debug Log Level](/analyzers/performance/debug-log-level) - Checks logging performance impact
-- [Error Handling](/analyzers/security/error-handling) - Validates exception handling patterns
+- [Custom Error Pages](/analyzers/reliability/custom-error-pages) - Validates exception handling patterns

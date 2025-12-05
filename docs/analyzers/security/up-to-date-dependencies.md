@@ -1,11 +1,11 @@
 ---
-title: Up-to-Date Dependency Analyzer
+title: Up-to-Date Dependencies Analyzer
 description: Detects pending dependency updates within declared version constraints using composer install --dry-run
 icon: package
 outline: [2, 3]
 ---
 
-# Up-to-Date Dependency Analyzer
+# Up-to-Date Dependencies Analyzer
 
 | Analyzer ID               | Category     | Severity   | Time To Fix  |
 | --------------------------| :----------: |:----------:| ------------:|
@@ -51,13 +51,6 @@ composer update
 4. **Combine with security scanning**: run `composer audit` or a SaaS scanner (like ShieldCI’s own vulnerable dependency analyzer) immediately after updating.
 5. **Automate notifications**: if this analyzer reports failures, wire it into Slack/Email so the team can act quickly.
 
-## Common Mistakes to Avoid
-
-- Relying solely on `composer outdated`; it ignores what `composer install` will actually do given your constraints.
-- Deleting `composer.lock` entirely when conflicts arise—instead, resolve the conflict and keep the lock file committed.
-- Forgetting to update dev tools because they “don’t ship to production”; outdated linters/tests produce false positives or miss regressions.
-- Running updates locally but never committing the lock file, causing CI to pull stale packages.
-
 ## References
 
 - [Composer install vs update](https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies)
@@ -66,6 +59,6 @@ composer update
 
 ## Related Analyzers
 
-- [Stable Dependency Analyzer](../security/stable-dependencies.md) — ensures you stick to stable tagged releases.
-- [Frontend Vulnerable Dependencies Analyzer](../security/frontend-vulnerable-dependencies.md) — keeps npm/yarn packages patched.
-- [Vulnerable Dependency Analyzer](../security/frontend-vulnerable-dependencies.md) — scans composer.lock for known CVEs.
+- [Stable Dependency Analyzer](/analyzers/security/stable-dependencies) — ensures you stick to stable tagged releases.
+- [Frontend Vulnerable Dependency Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — keeps npm/yarn packages patched.
+- [Vulnerable Dependency Analyzer](/analyzers/security/vulnerable-dependencies) — scans composer.lock for known CVEs.

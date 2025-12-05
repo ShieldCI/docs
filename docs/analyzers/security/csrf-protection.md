@@ -1,11 +1,11 @@
 ---
-title: CSRF Protection
+title: CSRF Protection Analyzer
 description: Detects missing or weak Cross-Site Request Forgery (CSRF) protection in Laravel applications
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# CSRF Protection
+# CSRF Protection Analyzer
 
 | Analyzer ID       | Category     | Severity   | Time To Fix  |
 | ------------------| :----------: |:----------:| ------------:|
@@ -249,74 +249,6 @@ axios.interceptors.response.use(
 );
 ```
 
-## Common Mistakes to Avoid
-
-1. **Using wildcard CSRF exceptions:**
-   ```php
-   // ❌ BAD - Disables ALL protection
-   protected $except = ['*'];
-
-   // ✅ GOOD - Specific endpoints only
-   protected $except = ['webhooks/stripe', 'webhooks/github'];
-   ```
-
-2. **Forgetting @csrf in forms:**
-   ```blade
-   <!-- ❌ BAD - No CSRF token -->
-   <form method="POST" action="/update">
-       <input name="email">
-   </form>
-
-   <!-- ✅ GOOD - Token included -->
-   <form method="POST" action="/update">
-       @csrf
-       <input name="email">
-   </form>
-   ```
-
-3. **Missing CSRF header in AJAX:**
-   ```javascript
-   // ❌ BAD - No X-CSRF-TOKEN header
-   $.ajax({ url: '/api/users', method: 'POST' });
-
-   // ✅ GOOD - Header included
-   $.ajax({
-       url: '/api/users',
-       method: 'POST',
-       headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
-   });
-   ```
-
-4. **Broad middleware exception patterns:**
-   ```php
-   // ❌ BAD - Exposes all admin routes
-   protected $except = ['admin/*'];
-
-   // ✅ GOOD - Only specific admin endpoint
-   protected $except = ['admin/webhook-receiver'];
-   ```
-
-5. **Commenting out VerifyCsrfToken middleware:**
-   ```php
-   // ❌ BAD - Protection disabled
-   // \App\Http\Middleware\VerifyCsrfToken::class,
-
-   // ✅ GOOD - Protection enabled
-   \App\Http\Middleware\VerifyCsrfToken::class,
-   ```
-
-6. **Not including meta tag in layout:**
-   ```blade
-   <!-- ❌ BAD - No meta tag -->
-   <head><title>App</title></head>
-
-   <!-- ✅ GOOD - Meta tag present -->
-   <head>
-       <meta name="csrf-token" content="{{ csrf_token() }}">
-       <title>App</title>
-   </head>
-   ```
-
 ## References
 
 - [Laravel CSRF Protection Documentation](https://laravel.com/docs/csrf)
@@ -326,7 +258,7 @@ axios.interceptors.response.use(
 
 ## Related Analyzers
 
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
-- [XSS Protection](/analyzers/security/xss-protection) - Prevents cross-site scripting
-- [App Key Security](/analyzers/security/app-key-security) - Validates encryption key security
-- [Authentication](/analyzers/security/authentication) - Validates authentication implementation
+- [Cookie Security Analyzer](/analyzers/security/cookie-security) - Validates session cookie security configuration
+- [XSS Vulnerability Analyzer](/analyzers/security/xss-detection) - Prevents cross-site scripting
+- [Application Key Security Analyzer](/analyzers/security/app-key-security) - Validates encryption key security
+- [Authentication & Authorization Protection Analyzer](/analyzers/security/authentication-protection) - Validates authentication implementation
