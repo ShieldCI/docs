@@ -149,12 +149,7 @@ export function getSidebar() {
   }
   
   // Analyzers section
-  const analyzersItems: SidebarItem[] = [
-    {
-      text: 'Overview',
-      link: '/analyzers/overview'
-    }
-  ]
+  const analyzersItems: SidebarItem[] = []
   
   if (analyzersSecurity.length > 0) {
     analyzersItems.push({
@@ -201,9 +196,10 @@ export function getSidebar() {
     })
   }
   
-  if (analyzersItems.length > 1) {
+  if (analyzersItems.length > 0) {
     allItems.push({
       text: 'Analyzers',
+      link: '/analyzers/',
       collapsed: false,
       items: analyzersItems
     })
