@@ -1,11 +1,11 @@
 ---
-title: Session Driver Configuration
+title: Session Driver Configuration Analyzer
 description: Validates that Laravel's session driver is appropriate for production scalability - Redis or database for multi-server setups
 icon: zap
 outline: [2, 3]
 ---
 
-# Session Driver Configuration
+# Session Driver Configuration Analyzer
 
 | Analyzer ID      | Category       | Severity   | Time To Fix  |
 | -----------------| :------------: |:----------:| ------------:|
@@ -77,5 +77,5 @@ SESSION_CONNECTION=default
 
 ## Related Analyzers
 
-- [Cache Driver](/analyzers/performance/cache-driver)
-- [Queue Driver](/analyzers/performance/queue-driver)
+- [Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver) - Ensures a proper cache driver configuration for optimal performance
+- [Queue Driver Configuration Analyzer](/analyzers/performance/queue-driver) - Ensures a proper queue driver configuration for optimal performance and reliability

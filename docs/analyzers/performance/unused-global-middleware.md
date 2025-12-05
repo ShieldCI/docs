@@ -1,11 +1,11 @@
 ---
-title: Unused Global Middleware
+title: Unused Global Middleware Analyzer
 description: Detects global middleware that runs on every request but may not be needed, impacting performance
 icon: alert-circle
 outline: [2, 3]
 ---
 
-# Unused Global Middleware
+# Unused Global Middleware Analyzer
 
 | Analyzer ID                | Category       | Severity  | Time To Fix  |
 | ---------------------------| :------------: |:---------:| ------------:|
@@ -37,7 +37,7 @@ protected $middleware = [
 ];
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (10 minutes)
 
 **Audit Middleware:**
 1. Review each global middleware
@@ -58,4 +58,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 ## Related Analyzers
 
-- [Route Caching](/analyzers/performance/route-caching)
+- [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures route caching is properly configured

@@ -1,11 +1,11 @@
 ---
-title: View Caching
+title: View Caching Analyzer
 description: Validates that Blade templates are properly precompiled and cached in production/staging environments for optimal performance
 icon: zap
 outline: [2, 3]
 ---
 
-# View Caching
+# View Caching Analyzer
 
 | Analyzer ID    | Category       | Severity  | Time To Fix  |
 | ---------------| :------------: |:---------:| ------------:|
@@ -25,14 +25,14 @@ Blade templates must be compiled to PHP before execution. Without caching, Larav
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (1 minute)
 
 ```bash
 # Precompile all Blade views
 php artisan view:cache
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 Add view caching to your deployment workflow:
 
@@ -61,22 +61,31 @@ environments:
       - 'php artisan view:cache'
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Caching views in development:**
-   ```bash
-   # ❌ Don't cache in local
-   php artisan view:cache
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-   # ✅ Keep views uncached
-   php artisan view:clear
-   ```
+**Why skip in CI and development?**
+- View caching checks are not applicable in CI
+- Local/Development/Testing environments may have views uncached for easier debugging, which is acceptable
+- Production and staging should have views precompiled for optimal performance
 
-2. **Not recaching after view changes:**
-   ```bash
-   # After modifying Blade templates
-   php artisan view:cache  # ✅ Recache
-   ```
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 
@@ -85,5 +94,5 @@ environments:
 
 ## Related Analyzers
 
-- [Route Caching](/analyzers/performance/route-caching)
-- [Configuration Caching](/analyzers/performance/config-caching)
+- [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures route caching is properly configured
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production

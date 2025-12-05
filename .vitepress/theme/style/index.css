@@ -126,3 +126,23 @@ code {
     @apply border-b-0;
 }
 
+.VPDoc.has-aside .content-container {
+  max-width: none !important;
+}
+
+@media (min-width: 960px) {
+  .VPDoc.has-aside .container > .content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+@media (max-width: 959px) {
+  .container {
+    max-width: 100% !important;
+  }
+  
+  .VPDoc.has-aside .container {
+    margin: 0 !important;
+  }
+}

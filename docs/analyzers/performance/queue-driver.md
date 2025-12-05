@@ -1,11 +1,11 @@
 ---
-title: Queue Driver Configuration
+title: Queue Driver Configuration Analyzer
 description: Ensures Laravel's queue driver is configured for reliability and performance - Redis or SQS for production
 icon: zap
 outline: [2, 3]
 ---
 
-# Queue Driver Configuration
+# Queue Driver Configuration Analyzer
 
 | Analyzer ID    | Category       | Severity   | Time To Fix  |
 | ---------------| :------------: |:----------:| ------------:|
@@ -58,23 +58,6 @@ SQS_QUEUE=your-queue-url
 php artisan queue:work redis --tries=3
 ```
 
-## Common Mistakes to Avoid
-
-1. **Sync driver in production:**
-   ```ini
-   # ❌ Blocks requests
-   QUEUE_CONNECTION=sync
-
-   # ✅ Async processing
-   QUEUE_CONNECTION=redis
-   ```
-
-2. **No queue workers running:**
-   ```bash
-   # Start workers with supervisor
-   sudo supervisorctl start laravel-worker:*
-   ```
-
 ## References
 
 - [Laravel Queues](https://laravel.com/docs/queues)
@@ -83,5 +66,5 @@ php artisan queue:work redis --tries=3
 
 ## Related Analyzers
 
-- [Cache Driver](/analyzers/performance/cache-driver)
-- [Horizon Suggestion](/analyzers/performance/horizon-suggestion)
+- [Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver) - Ensures a proper cache driver configuration for optimal performance
+- [Horizon Suggestion Analyzer](/analyzers/performance/horizon-suggestion) - Recommends using Laravel Horizon when Redis queues are configured

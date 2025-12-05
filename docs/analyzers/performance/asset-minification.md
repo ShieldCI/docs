@@ -1,11 +1,11 @@
 ---
-title: Asset Minification
+title: Asset Minification Analyzer
 description: Validates that JavaScript and CSS assets are minified for production deployment
 icon: zap
 outline: [2, 3]
 ---
 
-# Asset Minification
+# Asset Minification Analyzer
 
 | Analyzer ID          | Category       | Severity   | Time To Fix  |
 | ---------------------| :------------: |:----------:| ------------:|
@@ -35,7 +35,7 @@ npm run production
 npm run build
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 **Laravel Mix (legacy):**
 ```js
@@ -65,6 +65,32 @@ export default defineConfig({
 });
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- Asset minification checks require compiled assets, not applicable in CI
+- Local/Development/Testing environments may have unminified assets for debugging, which is acceptable
+- Production and staging should have minified assets for optimal performance
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
 ## References
 
 - [Laravel Vite](https://laravel.com/docs/vite)
@@ -72,4 +98,4 @@ export default defineConfig({
 
 ## Related Analyzers
 
-- [Cache Headers](/analyzers/performance/cache-header)
+- [Asset Cache Headers Analyzer](/analyzers/performance/cache-header) - Ensures compiled assets have appropriate cache headers for optimal browser caching

@@ -1,11 +1,11 @@
 ---
-title: Composer Autoloader Optimization
+title: Composer Autoloader Optimization Analyzer
 description: Validates that Composer's autoloader is optimized for production performance by checking for classmap optimization
 icon: zap
 outline: [2, 3]
 ---
 
-# Composer Autoloader Optimization
+# Composer Autoloader Optimization Analyzer
 
 | Analyzer ID               | Category       | Severity   | Time To Fix  |
 | --------------------------| :------------: |:----------:| ------------:|
@@ -25,7 +25,7 @@ Laravel applications with many classes benefit the most from autoloader optimiza
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (2 minutes)
 
 Run the optimization command during deployment:
 
@@ -44,7 +44,7 @@ composer install --optimize-autoloader
 composer dump-autoload -o
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 For maximum performance, implement authoritative classmap mode in your deployment pipeline:
 
@@ -93,38 +93,31 @@ if (app()->environment('production', 'staging')) {
 }
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Running optimization in development:** Don't optimize autoloader locally - it makes development harder as class changes won't be picked up
-   ```bash
-   # DON'T do this in local development
-   composer dump-autoload -o  # ❌
-   ```
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-2. **Forgetting to run after class changes:** When adding new classes in production, remember to regenerate
-   ```bash
-   # After adding new classes in production
-   composer dump-autoload --classmap-authoritative  # ✅
-   ```
+**Why skip in CI and development?**
+- Autoloader optimization checks are not applicable in CI
+- Local/Development/Testing environments don't need optimized autoloader (developers work with unoptimized for easier debugging)
+- Production and staging should have optimized autoloader for performance
 
-3. **Not using authoritative mode:** Regular optimization (`-o`) is good, but authoritative mode is better
-   ```bash
-   composer dump-autoload -o                        # Good ⚠️
-   composer dump-autoload --classmap-authoritative  # Better ✅
-   ```
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
 
-4. **Mixing PSR-4 and classmap incorrectly:** Ensure your composer.json autoload section is properly configured
-   ```json
-   {
-       "autoload": {
-           "psr-4": {
-               "App\\": "app/",
-               "Database\\Factories\\": "database/factories/",
-               "Database\\Seeders\\": "database/seeders/"
-           }
-       }
-   }
-   ```
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 
@@ -134,6 +127,6 @@ if (app()->environment('production', 'staging')) {
 
 ## Related Analyzers
 
-- [Configuration Caching](/analyzers/performance/config-caching) - Cache configuration for faster bootstrap
-- [Route Caching](/analyzers/performance/route-caching) - Optimize route loading
-- [OPcache Enabled](/analyzers/performance/opcache-enabled) - PHP bytecode caching
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures route caching is properly configured
+- [OPcache Enabled Analyzer](/analyzers/performance/opcache-enabled) - Ensures OPcache is enabled for PHP bytecode caching

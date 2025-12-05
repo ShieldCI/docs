@@ -1,11 +1,11 @@
 ---
-title: Route Caching
+title: Route Caching Analyzer
 description: Validates that Laravel's route caching is properly configured - enabled in production for performance
 icon: zap
 outline: [2, 3]
 ---
 
-# Route Caching
+# Route Caching Analyzer
 
 | Analyzer ID     | Category       | Severity   | Time To Fix  |
 | ----------------| :------------: |:----------:| ------------:|
@@ -25,7 +25,7 @@ Laravel applications typically have hundreds or thousands of routes across multi
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (2 minutes)
 
 **Scenario 1: Production without Route Cache**
 
@@ -41,7 +41,7 @@ php artisan route:cache
 php artisan route:clear
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 Implement environment-aware route caching in your deployment workflow:
 
@@ -263,66 +263,6 @@ php artisan make:controller ProfileController
 # Move logic from route closure to controller method
 ```
 
-## Common Mistakes to Avoid
-
-1. **Caching in development and wondering why route changes don't work:**
-   ```bash
-   # ❌ DON'T cache routes in local development
-   php artisan route:cache
-
-   # ✅ DO keep routes uncached for flexibility
-   php artisan route:clear
-   ```
-
-2. **Forgetting to recache after adding routes:**
-   ```bash
-   # After adding/modifying routes in production:
-   php artisan route:cache  # ✅ Must recache
-
-   # Or clear and let it rebuild naturally
-   php artisan route:clear  # ⚠️ Will hurt performance until recached
-   ```
-
-3. **Not caching routes in production:**
-   ```bash
-   # ❌ BAD - No route caching
-   git pull && composer install
-
-   # ✅ GOOD - Cache as part of deployment
-   git pull && composer install && php artisan route:cache
-   ```
-
-4. **Using closure routes (can't be cached):**
-   ```php
-   // ❌ BAD - Closures can't be serialized
-   Route::get('/user', function () { ... });
-
-   # ✅ GOOD - Controller actions can be cached
-   Route::get('/user', [UserController::class, 'index']);
-   ```
-
-5. **Not verifying cache in deployment pipeline:**
-   ```bash
-   # After deployment, verify cache exists
-   ls -lh bootstrap/cache/routes-v7.php
-
-   # Check it's recent (not stale)
-   stat bootstrap/cache/routes-v7.php
-
-   # View cached routes
-   php artisan route:list --compact
-   ```
-
-6. **Mixing cached and uncached across servers:**
-   ```bash
-   # ❌ BAD - Inconsistent across load-balanced servers
-   server1: routes cached
-   server2: routes not cached
-
-   # ✅ GOOD - Consistent deployment
-   # Ensure ALL servers run same deployment script
-   ```
-
 ## References
 
 - [Laravel Route Caching Documentation](https://laravel.com/docs/routing#route-caching)
@@ -331,6 +271,6 @@ php artisan make:controller ProfileController
 
 ## Related Analyzers
 
-- [Configuration Caching](/analyzers/performance/config-caching) - Cache config files
-- [View Caching](/analyzers/performance/view-caching) - Precompile Blade templates
-- [Autoloader Optimization](/analyzers/performance/autoloader-optimization) - Optimize Composer autoloader
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [View Caching Analyzer](/analyzers/performance/view-caching) - Ensures Blade views are properly compiled
+- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance

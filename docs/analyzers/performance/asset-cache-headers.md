@@ -1,11 +1,11 @@
 ---
-title: Asset Cache Headers
+title: Asset Cache Headers Analyzer
 description: Validates that proper HTTP cache headers are configured for static assets and responses
 icon: zap
 outline: [2, 3]
 ---
 
-# Asset Cache Headers
+# Asset Cache Headers Analyzer
 
 | Analyzer ID           | Category       | Severity   | Time To Fix  |
 | ----------------------| :------------: |:----------:| ------------:|
@@ -25,7 +25,7 @@ Without cache headers, browsers re-download assets on every page load, wasting b
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Proper Fix (30 minutes)
 
 Add cache headers in `.htaccess` or Nginx config:
 
@@ -50,6 +50,32 @@ location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
 }
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- HTTP cache header checks require a live web server, not applicable in CI
+- Local/Development/Testing environments may not have cache headers configured, which is acceptable
+- Production and staging should have proper cache headers for optimal browser caching
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
 ## References
 
 - [HTTP Caching](https://web.dev/http-cache/)
@@ -57,4 +83,4 @@ location ~* \.(jpg|jpeg|png|gif|ico|css|js)$ {
 
 ## Related Analyzers
 
-- [Minification](/analyzers/performance/minification)
+- [Asset Minification Analyzer](/analyzers/performance/minification) - Ensures JavaScript and CSS assets are minified for production

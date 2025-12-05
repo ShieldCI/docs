@@ -17,40 +17,40 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 ### Caching & Optimization
 
-- **[Autoloader Optimization](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
-- **[Configuration Caching](/analyzers/performance/config-caching)** - Ensures configuration caching is properly configured for each environment
-- **[Route Caching](/analyzers/performance/route-caching)** - Ensures route caching is properly configured for optimal performance
-- **[View Caching](/analyzers/performance/view-caching)** - Ensures Blade views are properly compiled and cached for optimal performance
-- **[OPcache Enabled](/analyzers/performance/opcache-enabled)** - Ensures OPcache is enabled for PHP bytecode caching and performance
+- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
+- **[Configuration Caching Analyzer](/analyzers/performance/config-caching)** - Ensures configuration caching is properly configured for each environment
+- **[Route Caching Analyzer](/analyzers/performance/route-caching)** - Ensures route caching is properly configured for optimal performance
+- **[View Caching Analyzer](/analyzers/performance/view-caching)** - Ensures Blade views are properly compiled and cached for optimal performance
+- **[OPcache Enabled Analyzer](/analyzers/performance/opcache-enabled)** - Ensures OPcache is enabled for PHP bytecode caching and performance
 
 ### Cache & Session Configuration
 
-- **[Cache Driver Configuration](/analyzers/performance/cache-driver)** - Ensures a proper cache driver is configured for optimal performance
-- **[Cache Headers](/analyzers/performance/cache-header)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
-- **[Shared Cache Lock Store](/analyzers/performance/shared-cache-lock)** - Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed
-- **[Session Driver Configuration](/analyzers/performance/session-driver)** - Ensures a proper session driver is configured for scalability and performance
+- **[Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver)** - Ensures a proper cache driver is configured for optimal performance
+- **[Asset Cache Headers Analyzer](/analyzers/performance/cache-header)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
+- **[Shared Cache Lock Store Analyzer](/analyzers/performance/shared-cache-lock)** - Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed
+- **[Session Driver Configuration Analyzer](/analyzers/performance/session-driver)** - Ensures a proper session driver is configured for scalability and performance
 
 ### Queue & Background Jobs
 
-- **[Queue Driver Configuration](/analyzers/performance/queue-driver)** - Ensures a proper queue driver is configured for optimal performance and reliability
-- **[Horizon Suggestion](/analyzers/performance/horizon-suggestion)** - Recommends using Laravel Horizon when Redis queues are configured
+- **[Queue Driver Configuration Analyzer](/analyzers/performance/queue-driver)** - Ensures a proper queue driver is configured for optimal performance and reliability
+- **[Horizon Suggestion Analyzer](/analyzers/performance/horizon-suggestion)** - Recommends using Laravel Horizon when Redis queues are configured
 
 ### Database & Queries
 
-- **[MySQL Single Server Optimization](/analyzers/performance/mysql-single-server)** - Ensures MySQL is configured optimally for single-server setups using Unix sockets
-- **[Collection Call Optimization](/analyzers/performance/collection-call)** - Detects inefficient collection operations that should be performed at the database query level
+- **[MySQL Single Server Optimization Analyzer](/analyzers/performance/mysql-single-server)** - Ensures MySQL is configured optimally for single-server setups using Unix sockets
+- **[Collection Call Optimization Analyzer](/analyzers/performance/collection-call)** - Detects inefficient collection operations that should be performed at the database query level
 
 ### Assets & Frontend
 
-- **[Asset Minification](/analyzers/performance/minification)** - Ensures JavaScript and CSS assets are minified in production
-- **[Asset Cache Headers](/analyzers/performance/cache-header)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
+- **[Asset Minification Analyzer](/analyzers/performance/minification)** - Ensures JavaScript and CSS assets are minified in production
+- **[Asset Cache Headers Analyzer](/analyzers/performance/cache-header)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
 
 ### Configuration & Environment
 
-- **[Debug Log Level](/analyzers/performance/debug-log)** - Ensures log level is not set to debug in production for optimal performance
-- **[Env Calls Outside Config](/analyzers/performance/env-call)** - Detects env() function calls outside configuration files that break when config is cached
-- **[Dev Dependencies in Production](/analyzers/performance/dev-dependency)** - Detects if development dependencies are installed in production environment
-- **[Unused Global Middleware](/analyzers/performance/unused-global-middleware)** - Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead on every request
+- **[Debug Log Level Analyzer](/analyzers/performance/debug-log)** - Ensures log level is not set to debug in production for optimal performance
+- **[Env Calls Outside Config Analyzer](/analyzers/performance/env-call)** - Detects env() function calls outside configuration files that break when config is cached
+- **[Dev Dependencies in Production Analyzer](/analyzers/performance/dev-dependency)** - Detects if development dependencies are installed in production environment
+- **[Unused Global Middleware Analyzer](/analyzers/performance/unused-global-middleware)** - Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead on every request
 
 ## How They Work
 
@@ -139,6 +139,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security/overview)** - Prevent security vulnerabilities
-- **[Reliability Analyzers](/analyzers/reliability/overview)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices/overview)** - Follow Laravel conventions
+- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards

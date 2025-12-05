@@ -1,11 +1,11 @@
 ---
-title: Env Call Analyzer
+title: Env Calls Outside Config Analyzer
 description: Detects direct env() calls outside config files, which breaks config caching and causes unpredictable behavior
 icon: alert-circle
 outline: [2, 3]
 ---
 
-# Env Call Analyzer
+# Env Calls Outside Config Analyzer
 
 | Analyzer ID               | Category       | Severity   | Time To Fix  |
 | --------------------------| :------------: |:----------:| ------------:|
@@ -79,26 +79,6 @@ if (config('myapp.enabled')) {
 }
 ```
 
-## Common Mistakes to Avoid
-
-1. **env() in controllers/services:**
-   ```php
-   // ❌ Breaks with config:cache
-   $key = env('API_KEY');
-
-   # ✅ Always works
-   $key = config('services.api.key');
-   ```
-
-2. **Forgetting config defaults:**
-   ```php
-   // ❌ No default
-   'key' => env('API_KEY'),
-
-   // ✅ With default
-   'key' => env('API_KEY', 'default-value'),
-   ```
-
 ## References
 
 - [Laravel Configuration](https://laravel.com/docs/configuration)
@@ -106,4 +86,4 @@ if (config('myapp.enabled')) {
 
 ## Related Analyzers
 
-- [Configuration Caching](/analyzers/performance/config-caching)
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production

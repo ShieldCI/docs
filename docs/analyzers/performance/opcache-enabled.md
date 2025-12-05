@@ -1,11 +1,11 @@
 ---
-title: OPcache Enabled
+title: OPcache Enabled Analyzer
 description: Validates that PHP's OPcache extension is installed, enabled, and properly configured for production performance
 icon: zap
 outline: [2, 3]
 ---
 
-# OPcache Enabled
+# OPcache Enabled Analyzer
 
 | Analyzer ID       | Category       | Severity   | Time To Fix  |
 | ------------------| :------------: |:----------:| ------------:|
@@ -64,7 +64,7 @@ sudo systemctl restart php-fpm
 brew services restart php@8.1
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 Implement production-optimized OPcache configuration:
 
@@ -195,52 +195,31 @@ curl https://yoursite.com/opcache-reset.php
 php -r "print_r(opcache_get_status());" | grep hit_rate
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Not disabling timestamp validation in production:**
-   ```ini
-   ; ❌ BAD for production (checks files on every request)
-   opcache.validate_timestamps=1
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-   ; ✅ GOOD for production (maximum performance)
-   opcache.validate_timestamps=0
-   ```
+**Why skip in CI and development?**
+- OPcache configuration is not applicable in CI
+- Local/Development/Testing environments may have OPcache disabled or with validation enabled for debugging, which is acceptable
+- Production and staging should have OPcache enabled and optimized for maximum performance
 
-2. **Forgetting to reset OPcache after deployment:**
-   ```bash
-   # After deploying code changes
-   sudo systemctl restart php8.1-fpm  # ✅ Required!
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
 
-   # Or use opcache_reset() via web endpoint
-   curl https://yoursite.com/opcache-reset.php  # ✅ Alternative
-   ```
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
 
-3. **Setting memory too low:**
-   ```ini
-   ; ❌ Too small for Laravel apps
-   opcache.memory_consumption=64
-
-   ; ✅ Adequate for most Laravel apps
-   opcache.memory_consumption=256
-   ```
-
-4. **Setting max_accelerated_files too low:**
-   ```ini
-   ; ❌ Not enough for Laravel (has 10,000+ files with vendor)
-   opcache.max_accelerated_files=4000
-
-   ; ✅ Adequate for Laravel applications
-   opcache.max_accelerated_files=20000
-   ```
-
-5. **Enabling OPcache for CLI unnecessarily:**
-   ```ini
-   ; ❌ Wastes memory for artisan commands
-   opcache.enable_cli=1
-
-   ; ✅ Only cache web requests
-   opcache.enable_cli=0
-   ```
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 
@@ -251,6 +230,6 @@ php -r "print_r(opcache_get_status());" | grep hit_rate
 
 ## Related Analyzers
 
-- [Autoloader Optimization](/analyzers/performance/autoloader-optimization) - Optimize Composer class loading
-- [Configuration Caching](/analyzers/performance/config-caching) - Cache Laravel config files
-- [Debug Log](/analyzers/performance/debug-log) - Ensure debug mode is disabled in production
+- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [Debug Log Level Analyzer](/analyzers/performance/debug-log) - Ensure debug mode is disabled in production

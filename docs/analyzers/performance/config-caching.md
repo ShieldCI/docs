@@ -1,11 +1,11 @@
 ---
-title: Configuration Caching
+title: Configuration Caching Analyzer
 description: Verifies that Laravel's configuration caching is properly configured for each environment
 icon: zap
 outline: [2, 3]
 ---
 
-# Configuration Caching
+# Configuration Caching Analyzer
 
 | Analyzer ID      | Category       | Severity   | Time To Fix  |
 | -----------------| :------------: |:----------:| ------------:|
@@ -25,7 +25,7 @@ Every Laravel request loads configuration from multiple files (`config/app.php`,
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (2 minutes)
 
 **Scenario 1: Production without cache (Performance Issue)**
 
@@ -41,7 +41,7 @@ php artisan config:cache
 php artisan config:clear
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 Implement environment-aware configuration caching in your deployment workflow:
 
@@ -169,60 +169,6 @@ development-clear:
 # make development-clear     # On local development
 ```
 
-## Common Mistakes to Avoid
-
-1. **Caching in development and wondering why config changes don't work:**
-   ```bash
-   # DON'T cache config in local/development
-   php artisan config:cache  # ❌ in development
-
-   # DO keep it clear for flexibility
-   php artisan config:clear  # ✅ in development
-   ```
-
-2. **Forgetting to recache after changing .env:**
-   ```bash
-   # After changing .env in production
-   php artisan config:cache  # ✅ Must recache
-
-   # Or clear and let it rebuild naturally
-   php artisan config:clear  # ⚠️ Will hurt performance until recached
-   ```
-
-3. **Not caching in production:**
-   ```bash
-   # DON'T deploy without caching
-   git pull && composer install  # ❌ No caching
-
-   # DO cache as part of deployment
-   git pull && composer install && php artisan config:cache  # ✅
-   ```
-
-4. **Mixing cached and uncached configs:**
-   ```php
-   // ❌ DON'T use env() in config files (except in config/ itself)
-   // app/Services/PaymentService.php
-   $apiKey = env('STRIPE_KEY');  // ❌ Won't work with cached config
-
-   // ✅ DO use config() helper
-   // app/Services/PaymentService.php
-   $apiKey = config('services.stripe.key');  // ✅ Works with cached config
-
-   // config/services.php - env() is OK here
-   'stripe' => [
-       'key' => env('STRIPE_KEY'),  // ✅ This is the right place
-   ],
-   ```
-
-5. **Not verifying cache in production:**
-   ```bash
-   # After deployment, verify cache exists
-   ls -lh bootstrap/cache/config.php
-
-   # Check file is recent (not stale)
-   stat bootstrap/cache/config.php
-   ```
-
 ## References
 
 - [Laravel Configuration Caching Documentation](https://laravel.com/docs/configuration#configuration-caching)
@@ -231,6 +177,6 @@ development-clear:
 
 ## Related Analyzers
 
-- [Autoloader Optimization](/analyzers/performance/autoloader-optimization) - Optimize Composer's class loading
-- [Route Caching](/analyzers/performance/route-caching) - Cache route definitions
-- [View Caching](/analyzers/performance/view-caching) - Precompile Blade templates
+- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
+- [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures route caching is properly configured
+- [View Caching Analyzer](/analyzers/performance/view-caching) - Ensures Blade views are properly compiled

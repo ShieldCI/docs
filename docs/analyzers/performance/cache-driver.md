@@ -1,11 +1,11 @@
 ---
-title: Cache Driver Configuration
+title: Cache Driver Configuration Analyzer
 description: Validates that your Laravel application uses an appropriate cache driver for the current environment
 icon: zap
 outline: [2, 3]
 ---
 
-# Cache Driver Configuration
+# Cache Driver Configuration Analyzer
 
 | Analyzer ID    | Category       | Severity   | Time To Fix  |
 | ---------------| :------------: |:----------:| ------------:|
@@ -27,21 +27,7 @@ The cache driver determines where Laravel stores cached data. Using `file` or `d
 
 ### Quick Fix (5 minutes)
 
-**Scenario 1: Null or Array Driver in Production**
-
-```bash
-# Set Redis as cache driver in .env
-CACHE_DRIVER=redis
-
-# Or Memcached
-CACHE_DRIVER=memcached
-
-# Clear config cache
-php artisan config:clear
-php artisan config:cache
-```
-
-**Scenario 2: File Driver in Production**
+**Scenario: File Driver in Production**
 
 ```bash
 # Install Redis (Ubuntu/Debian)
@@ -57,7 +43,7 @@ REDIS_PASSWORD=null
 REDIS_PORT=6379
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (60 minutes)
 
 Implement production-grade caching with Redis or Memcached:
 
@@ -245,62 +231,6 @@ php artisan tinker
 >>> cache()->store('redis')->getRedis()->info('stats')
 ```
 
-## Common Mistakes to Avoid
-
-1. **Using file driver in load-balanced production:**
-   ```ini
-   # ❌ BAD - Cache not shared between servers
-   CACHE_DRIVER=file
-
-   # ✅ GOOD - Redis shares cache across all servers
-   CACHE_DRIVER=redis
-   ```
-
-2. **Using database driver (defeats caching purpose):**
-   ```ini
-   # ❌ BAD - Adds load to database
-   CACHE_DRIVER=database
-
-   # ✅ GOOD - Offloads from database
-   CACHE_DRIVER=redis
-   ```
-
-3. **Using array driver in production:**
-   ```ini
-   # ❌ BAD - Cache lost after each request
-   CACHE_DRIVER=array  # Only for testing!
-
-   # ✅ GOOD - Persistent cache
-   CACHE_DRIVER=redis
-   ```
-
-4. **Not configuring Redis password in production:**
-   ```ini
-   # ❌ BAD - No authentication
-   REDIS_PASSWORD=null
-
-   # ✅ GOOD - Secure Redis
-   REDIS_PASSWORD=your-strong-password
-   ```
-
-5. **Using APCu in containerized environments:**
-   ```ini
-   # ❌ BAD - Each container has separate cache
-   CACHE_DRIVER=apc
-
-   # ✅ GOOD - Shared cache across containers
-   CACHE_DRIVER=redis
-   ```
-
-6. **Forgetting to install Redis PHP extension:**
-   ```bash
-   # Check if Redis extension is loaded
-   php -m | grep redis
-
-   # If not found, install it
-   sudo apt-get install php8.1-redis
-   ```
-
 ## References
 
 - [Laravel Cache Documentation](https://laravel.com/docs/cache)
@@ -310,7 +240,7 @@ php artisan tinker
 
 ## Related Analyzers
 
-- [Configuration Caching](/analyzers/performance/config-caching) - Cache config files
-- [Session Driver](/analyzers/performance/session-driver) - Session storage optimization
-- [Queue Driver](/analyzers/performance/queue-driver) - Queue backend configuration
-- [Shared Cache Lock](/analyzers/performance/shared-cache-lock) - Atomic lock configuration
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
+- [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session driver for scalability
+- [Queue Driver Configuration Analyzer](/analyzers/performance/queue-driver) - Ensures a proper queue driver configuration for optimal performance and reliability
+- [Shared Cache Lock Store Analyzer](/analyzers/performance/shared-cache-lock) - Detects cache lock usage on the default cache store

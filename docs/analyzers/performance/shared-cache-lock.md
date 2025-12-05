@@ -1,11 +1,11 @@
 ---
-title: Shared Cache Lock Configuration
+title: Shared Cache Lock Store Analyzer
 description: Validates that atomic locks use a shared backend (Redis/Memcached) in load-balanced environments
 icon: zap
 outline: [2, 3]
 ---
 
-# Shared Cache Lock Configuration
+# Shared Cache Lock Store Analyzer
 
 | Analyzer ID         | Category       | Severity  | Time To Fix  |
 | --------------------| :------------: |:---------:| ------------:|
@@ -25,15 +25,7 @@ File locks don't work across multiple servers, allowing concurrent operations th
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
-
-```php
-// config/cache.php
-'default' => env('CACHE_DRIVER', 'redis'),
-'lock_connection' => 'redis',
-```
-
-### Proper Fix (30 minutes)
+### Proper Fix (20 minutes)
 
 **Configure Lock Store:**
 ```php
@@ -62,4 +54,4 @@ Cache::lock('process-invoice')->get(function () {
 
 ## Related Analyzers
 
-- [Cache Driver](/analyzers/performance/cache-driver)
+- [Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver) - Ensures a proper cache driver configuration for optimal performance

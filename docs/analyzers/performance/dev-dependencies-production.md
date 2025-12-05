@@ -1,11 +1,11 @@
 ---
-title: Development Dependencies Check
+title: Dev Dependencies in Production Analyzer
 description: Ensures development dependencies are not installed in production environments
 icon: alert-circle
 outline: [2, 3]
 ---
 
-# Development Dependencies Check
+# Dev Dependencies in Production Analyzer
 
 | Analyzer ID                   | Category       | Severity   | Time To Fix  |
 | ------------------------------| :------------: |:----------:| ------------:|
@@ -32,7 +32,7 @@ Development packages like PHPUnit, testing tools, and debug bars should never be
 composer install --no-dev --optimize-autoloader
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (10 minutes)
 
 **Update Deployment Script:**
 ```bash
@@ -46,16 +46,31 @@ composer install --no-interaction --no-dev --optimize-autoloader --classmap-auth
 RUN composer install --no-dev --optimize-autoloader
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **Installing dev dependencies in production:**
-   ```bash
-   # ❌ Includes dev packages
-   composer install
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-   # ✅ Production only
-   composer install --no-dev
-   ```
+**Why skip in CI and development?**
+- Dev dependency checks are not applicable in CI
+- Local/Development/Testing environments need dev dependencies (PHPUnit, debug tools, etc.)
+- Production and staging should not have dev dependencies installed
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 
@@ -63,4 +78,4 @@ RUN composer install --no-dev --optimize-autoloader
 
 ## Related Analyzers
 
-- [Autoloader Optimization](/analyzers/performance/autoloader-optimization)
+- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance

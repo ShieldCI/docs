@@ -1,11 +1,11 @@
 ---
-title: Collection Call Optimization
+title: Collection Call Optimization Analyzer
 description: Detects inefficient collection operations that could be optimized for better performance
 icon: zap
 outline: [2, 3]
 ---
 
-# Collection Call Optimization
+# Collection Call Optimization Analyzer
 
 | Analyzer ID                    | Category       | Severity   | Time To Fix  |
 | -------------------------------| :------------: |:----------:| ------------:|
@@ -25,7 +25,7 @@ Using raw PHP loops instead of collection methods often leads to slower, less re
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Proper Fix (45 minutes)
 
 **Before:**
 ```php
@@ -46,4 +46,4 @@ $total = $users->sum('points');
 
 ## Related Analyzers
 
-- [Database Query Optimization](/analyzers/performance/database-query)
+- [MySQL Single Server Optimization Analyzer](/analyzers/performance/mysql-single-server-optimization) - Detects MySQL read/write configuration on single server

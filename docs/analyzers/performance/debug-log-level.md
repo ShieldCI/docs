@@ -25,14 +25,14 @@ Debug-level logging captures every framework operation. In production, this crea
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (1 minute)
 
 ```ini
 # .env
 LOG_LEVEL=warning
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 **Configure Log Levels per Environment:**
 
@@ -75,26 +75,6 @@ Log::warning('API rate limit approaching');
 Log::info('User registered', ['id' => $user->id]);
 ```
 
-## Common Mistakes to Avoid
-
-1. **Debug logging in production:**
-   ```ini
-   # ❌ Too verbose
-   LOG_LEVEL=debug
-
-   # ✅ Errors only
-   LOG_LEVEL=error
-   ```
-
-2. **Not rotating logs:**
-   ```php
-   // config/logging.php
-   'daily' => [
-       'driver' => 'daily',
-       'days' => 14,  // Keep 2 weeks
-   ],
-   ```
-
 ## References
 
 - [Laravel Logging](https://laravel.com/docs/logging)
@@ -102,4 +82,4 @@ Log::info('User registered', ['id' => $user->id]);
 
 ## Related Analyzers
 
-- [Debug Mode](/analyzers/security/debug-mode)
+- [Debug Mode](/analyzers/security/debug-mode) - Ensures debug mode is disabled in production
