@@ -27,7 +27,7 @@ outline: [2, 3]
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (15 minutes)
 
 1. Update production dependencies only:
 
@@ -43,7 +43,7 @@ composer update
 
 3. Commit the updated `composer.lock` so teammates and CI run with the same versions.
 
-### Proper Fix (30 minutes)
+### Proper Fix (60 minutes)
 
 1. **Schedule regular updates**: add a weekly/biweekly task (or CI pipeline) that runs `composer update` and opens a PR with the diff.
 2. **Review the changelog**: before merging, skim release notes for breaking changes or manual migration steps.
@@ -67,5 +67,5 @@ composer update
 ## Related Analyzers
 
 - [Stable Dependency Analyzer](../security/stable-dependencies.md) — ensures you stick to stable tagged releases.
-- [Frontend Vulnerable Dependencies](../security/frontend-vulnerable-dependencies.md) — keeps npm/yarn packages patched.
+- [Frontend Vulnerable Dependencies Analyzer](../security/frontend-vulnerable-dependencies.md) — keeps npm/yarn packages patched.
 - [Vulnerable Dependency Analyzer](../security/frontend-vulnerable-dependencies.md) — scans composer.lock for known CVEs.

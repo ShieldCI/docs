@@ -27,7 +27,7 @@ outline: [2, 3]
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (15 minutes)
 
 1. Run Composer’s audit locally for details:
 
@@ -43,7 +43,7 @@ composer update vendor/package
 
 3. If the package is abandoned, follow the recommendation to replace it and commit the updated `composer.lock`.
 
-### Proper Fix (30 minutes)
+### Proper Fix (60 minutes)
 
 1. **Review each advisory**: read the linked CVE/advisory summary to confirm impact and any manual remediation steps.
 2. **Pin patched versions**: adjust `composer.json` constraints so patched releases remain within your allowed range (e.g., `^3.2.1`).

@@ -79,7 +79,7 @@ protected $middlewareGroups = [
 ];
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (20 minutes)
 
 Implement comprehensive CSRF protection across your application:
 

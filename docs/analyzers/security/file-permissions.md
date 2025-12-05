@@ -74,7 +74,7 @@ ls -la .env
 # Should show: -rw------- 1 www-data www-data
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 Implement comprehensive file permission security:
 

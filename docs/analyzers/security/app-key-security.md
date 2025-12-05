@@ -30,7 +30,7 @@ The `APP_KEY` is the foundation of Laravel's security. A compromised, missing, o
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (1 minute)
 
 **Scenario 1: Missing or Empty APP_KEY**
 
@@ -59,7 +59,7 @@ php artisan config:clear
 php artisan config:cache
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 Implement comprehensive APP_KEY security across all environments:
 
@@ -262,4 +262,4 @@ cat bootstrap/cache/config.php | grep 'key'
 - [Environment File Security](/analyzers/security/env-file-security) - Checks .env file permissions and .gitignore
 - [Configuration Caching](/analyzers/performance/config-caching) - Ensures config is cached in production
 - [Debug Mode](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
-- [Session Security](/analyzers/security/session-security) - Validates session configuration
+- [Session Driver Configuration](/analyzers/performance/session-driver) - Validates session configuration

@@ -1,11 +1,11 @@
 ---
-title: XSS Vulnerability Detector
+title: XSS Vulnerability Analyzer
 description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output and missing Content-Security-Policy headers
 icon: shield-alert
 outline: [2, 3]
 ---
 
-# XSS Vulnerability Detector
+# XSS Vulnerability Analyzer
 
 | Analyzer ID     | Category     | Severity   | Time To Fix  |
 | ----------------| :----------: |:----------:| ------------:|

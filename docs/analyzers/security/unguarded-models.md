@@ -1,5 +1,5 @@
 ---
-title: Unguarded Models Analyzer
+title: Unguarded Models
 description: Scans for Model::unguard() calls that disable Laravel's mass-assignment protection
 icon: shield-alert
 outline: [2, 3]
@@ -48,7 +48,7 @@ User::forceCreate($payload);
 Model::reguard();
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (20 minutes)
 
 1. **Audit every unguard**: search for `::unguard` and confirm why it exists; remove it entirely for HTTP-facing code.
 2. **Use `$fillable` / `$guarded`** on each model so only trusted attributes can be mass-assigned.

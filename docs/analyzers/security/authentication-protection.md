@@ -89,7 +89,7 @@ public function show()
 }
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (25 minutes)
 
 Implement comprehensive authentication and authorization across your application:
 

@@ -72,7 +72,7 @@ protected $middleware = [
 ];
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 Implement comprehensive cookie security across your application:
 

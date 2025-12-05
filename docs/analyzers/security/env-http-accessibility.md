@@ -102,7 +102,7 @@ RewriteCond %{THE_REQUEST} \.\./
 RewriteRule .* - [F,L]
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (20 minutes)
 
 Implement comprehensive web server hardening to prevent `.env` exposure:
 

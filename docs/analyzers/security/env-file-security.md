@@ -73,7 +73,7 @@ chown www-data:www-data .env
 chmod 600 .env
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (10 minutes)
 
 Implement comprehensive environment file security:
 

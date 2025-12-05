@@ -106,7 +106,7 @@ class Document extends Model
 }
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 **1. Audit All Models for Foreign Keys**
 

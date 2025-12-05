@@ -94,7 +94,7 @@ Restrict file access to your application directory:
 open_basedir = /var/www/html:/tmp
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 Implement comprehensive PHP security hardening:
 
@@ -281,115 +281,6 @@ COPY docker/php.ini /usr/local/etc/php/php.ini
 RUN php -r "exit(ini_get('allow_url_include') === 'Off' ? 0 : 1);" \
     || (echo "❌ Insecure PHP configuration!" && exit 1)
 ```
-
-## Common Mistakes to Avoid
-
-1. **Using the same php.ini for all environments:**
-   ```ini
-   # ❌ BAD - Using development settings in production
-   # Production php.ini
-   display_errors = On          # Leaks sensitive info!
-   error_reporting = E_ALL      # Too verbose!
-
-   # ✅ GOOD - Environment-specific settings
-   # Production php.ini
-   display_errors = Off
-   log_errors = On
-   error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
-   ```
-
-2. **Disabling all functions (breaking legitimate use cases):**
-   ```ini
-   # ❌ BAD - Disabling too many functions
-   disable_functions = exec,system,...,file_get_contents,fopen
-   # This breaks Laravel's file operations!
-
-   # ✅ GOOD - Only disable command execution functions
-   disable_functions = exec,passthru,shell_exec,system,proc_open,popen
-   # File functions like fopen, file_get_contents are safe and needed
-   ```
-
-3. **Forgetting to restart PHP after changes:**
-   ```bash
-   # ❌ BAD - Editing php.ini without restart
-   vim /etc/php/8.1/fpm/php.ini
-   # Changes won't take effect!
-
-   # ✅ GOOD - Always restart PHP service
-   vim /etc/php/8.1/fpm/php.ini
-   sudo systemctl restart php8.1-fpm
-
-   # Verify changes
-   php -r "echo ini_get('display_errors');"
-   ```
-
-4. **Hardcoding paths in open_basedir:**
-   ```ini
-   # ❌ BAD - Hardcoded paths that don't exist on server
-   open_basedir = /Users/dev/myapp:/tmp
-   # This works locally but breaks on production!
-
-   # ✅ GOOD - Use actual deployment paths
-   open_basedir = /var/www/html:/var/lib/php/sessions:/tmp
-   ```
-
-5. **Exposing phpinfo() in production:**
-   ```php
-   // ❌ BAD - phpinfo() accessible in production
-   // routes/web.php
-   Route::get('/info', function () {
-       phpinfo();  // NEVER do this in production!
-   });
-
-   // ✅ GOOD - Remove phpinfo() or protect it
-   // Remove the route entirely, OR:
-   Route::get('/info', function () {
-       if (app()->environment('local')) {
-           phpinfo();
-       }
-       abort(404);
-   })->middleware('auth');
-   ```
-
-6. **Confusing php.ini locations (CLI vs FPM):**
-   ```bash
-   # ❌ BAD - Editing wrong php.ini
-   # You edit CLI php.ini but web uses FPM php.ini
-   vim /etc/php/8.1/cli/php.ini
-   # Web requests still use insecure FPM config!
-
-   # ✅ GOOD - Know which php.ini is loaded
-   php --ini                    # CLI version
-   <?php phpinfo(); ?>          # Web version (check in browser)
-
-   # Edit the correct one:
-   vim /etc/php/8.1/fpm/php.ini  # For web requests
-   vim /etc/php/8.1/cli/php.ini  # For CLI/artisan commands
-   ```
-
-7. **Not logging errors when display_errors is off:**
-   ```ini
-   # ❌ BAD - Hiding errors without logging them
-   display_errors = Off
-   log_errors = Off
-   # You'll never know when errors occur!
-
-   # ✅ GOOD - Log errors instead of displaying them
-   display_errors = Off
-   log_errors = On
-   error_log = /var/log/php/error.log
-   ```
-
-8. **Overly restrictive open_basedir breaking sessions:**
-   ```ini
-   # ❌ BAD - Forgot to include session directory
-   open_basedir = /var/www/html
-   # Sessions fail: "open_basedir restriction in effect"
-
-   # ✅ GOOD - Include all necessary directories
-   open_basedir = /var/www/html:/var/lib/php/sessions:/tmp
-   # Application + Sessions + Temp files
-   ```
 
 ## References
 

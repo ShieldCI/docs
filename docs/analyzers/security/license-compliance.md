@@ -33,7 +33,7 @@ GPL (General Public License) and AGPL (Affero GPL) are "copyleft" licenses that 
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (30 minutes)
 
 **Scenario 1: GPL/AGPL Package Found**
 
@@ -73,7 +73,7 @@ return [
 ];
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (120 minutes)
 
 **1. Audit All Dependencies**
 

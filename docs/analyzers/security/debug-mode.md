@@ -32,7 +32,7 @@ Debug mode enabled in production is one of the most dangerous misconfigurations 
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (1 minute)
 
 **Scenario 1: APP_DEBUG=true in Production**
 
@@ -72,7 +72,7 @@ composer require --dev spatie/laravel-ray
 composer install --no-dev --optimize-autoloader
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (5 minutes)
 
 Implement comprehensive debug mode security across all environments:
 

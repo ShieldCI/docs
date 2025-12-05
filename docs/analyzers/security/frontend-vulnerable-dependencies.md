@@ -71,7 +71,7 @@ git add yarn.lock
 git commit -m "Add yarn lock file"
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (60 minutes)
 
 Implement comprehensive dependency security management:
 

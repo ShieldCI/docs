@@ -89,7 +89,7 @@ return [
 ];
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (10 minutes)
 
 **1. Gradual max-age Rollout**
 

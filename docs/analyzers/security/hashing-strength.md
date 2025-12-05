@@ -59,7 +59,7 @@ $user->password = Hash::make($request->password);
 ]
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 Implement comprehensive password hashing security across your application:
 

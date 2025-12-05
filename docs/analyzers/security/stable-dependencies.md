@@ -1,5 +1,5 @@
 ---
-title: Stable Dependency Analyzer
+title: Stable Dependency
 description: Ensures composer.json enforces stable dependencies and scans for unstable package constraints
 icon: package
 outline: [2, 3]
@@ -90,5 +90,5 @@ composer update --prefer-stable
 
 ## Related Analyzers
 
-- [Frontend Vulnerable Dependencies](../security/frontend-vulnerable-dependencies.md) — scans npm/yarn lock files for known CVEs.
+- [Frontend Vulnerable Dependencies Analyzer](../security/frontend-vulnerable-dependencies.md) — scans npm/yarn lock files for known CVEs.
 - [License Compliance Analyzer](../security/license-compliance.md) — validates OSS license requirements for all dependencies.
