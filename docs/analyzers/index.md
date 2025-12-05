@@ -1,21 +1,21 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 103 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's 95 analyzers across 5 categories
 icon: shield-check
 outline: [2, 3]
 ---
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 103 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 95 analyzers across all categories.
 
 ## Categories
 
-### [Security](/analyzers/security/overview)
-**30+ analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
+### [Security](/analyzers/security)
+**22 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 **Critical Analyzers:**
-- SQL Injection Detection
+- SQL Injection Detection 
 - Cross-Site Scripting (XSS) Prevention
 - CSRF Protection Validation
 - Authentication & Authorization Issues
@@ -23,7 +23,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Application Key Security
 - Environment File Security
 
-### [Performance](/analyzers/performance/overview)
+### [Performance](/analyzers/performance)
 **18 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
 
 **Key Analyzers:**
@@ -34,7 +34,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Database Query Optimization
 - View Compilation
 
-### [Reliability](/analyzers/reliability/overview)
+### [Reliability](/analyzers/reliability)
 **25 analyzers** ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
@@ -44,16 +44,19 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Backup Strategy
 - Monitoring Setup
 
-### [Code Quality](/analyzers/code-quality/overview)
-**15 analyzers** maintaining clean, maintainable code following Laravel conventions.
+### [Code Quality](/analyzers/code-quality)
+**7 analyzers** maintaining clean, maintainable code following Laravel conventions.
 
 **Key Analyzers:**
-- Coding Standards (PSR-12)
-- Dead Code Detection
-- Code Complexity
-- Documentation Coverage
+- Nesting Depth
+- Method Length
+- Naming Conventions
+- Magic Numbers
+- Todo Comments
+- Commented Code
+- Missing DocBlocks
 
-### [Best Practices](/analyzers/best-practices/overview)
+### [Best Practices](/analyzers/best-practices)
 **23 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 **Key Analyzers:**
@@ -63,13 +66,13 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 
 ## Analyzer Package
 
-### Free Package (103 Analyzers)
+### Free Package (95 Analyzers)
 The open-source package includes comprehensive analyzers across all categories:
 
 - ✅ All 22 security analyzers
 - ✅ All 18 performance analyzers
 - ✅ All 25 reliability analyzers
-- ✅ All 15 code quality analyzers
+- ✅ All 7 code quality analyzers
 - ✅ All 23 best practices analyzers
 
 All analyzers are available in the free package.
@@ -99,15 +102,29 @@ Many analyzers are environment-aware and only run when relevant:
 
 ```php
 // Production/Staging only
-- Autoloader Optimization
-- OPcache Configuration
-- Configuration Caching
-
-// All environments
-- Security Vulnerabilities
-- SQL Injection Detection
-- XSS Prevention
+- Asset Cache Headers Analyzer
+- Asset Minification Analyzer
+- Composer Autoloader Optimization Analyzer
+- Dev Dependencies in Production Analyzer
+- Missing Error Tracking Analyzer
+- MySQL Single Server Optimization Analyzer
+- OPcache Configuration Analyzer
+- PHP Configuration Security Analyzer
+- View Caching Analyzer
 ```
+
+**Environment Mapping:**
+If you use custom environment names (e.g., `production-us`, `production-blue`, `staging-preview`), configure environment mapping in `config/shieldci.php`:
+
+```php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+Analyzers use standard environment names (`production`, `staging`) in their configuration, and custom environment names are automatically mapped via the `environment_mapping` configuration.
 
 ## Configuring Analyzers
 
@@ -165,7 +182,7 @@ php artisan shield:analyze --analyzer=sql-injection
 
 # Multiple analyzers (run separately)
 php artisan shield:analyze --analyzer=sql-injection
-php artisan shield:analyze --analyzer=xss-detection
+php artisan shield:analyze --analyzer=xss-vulnerabilities
 ```
 
 ## Understanding Results
@@ -199,8 +216,6 @@ Time: 2.1 seconds
 For CI/CD integration:
 
 ```bash
-php artisan shield:analyze --format=json > results.json
-# Or save directly
 php artisan shield:analyze --format=json --output=results.json
 ```
 
