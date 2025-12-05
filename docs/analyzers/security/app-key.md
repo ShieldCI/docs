@@ -205,4 +205,4 @@ This analyzer is automatically skipped in CI environments.
 - [Environment File Analyzer](/analyzers/security/env-file) - Checks .env file permissions and .gitignore
 - [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Validates debug mode is disabled in production
-- [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session configuration
+- [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session driver for scalability

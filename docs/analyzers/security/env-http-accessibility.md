@@ -300,4 +300,4 @@ This analyzer is automatically skipped in CI environments.
 - [Environment File Analyzer](/analyzers/security/env-file) - Checks file permissions and .gitignore
 - [Application Key Analyzer](/analyzers/security/app-key) - Validates encryption key security
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode disabled in production
-- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Validates production config caching
+- [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
