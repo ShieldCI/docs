@@ -286,6 +286,7 @@ php artisan shield:analyze --analyzer=eloquent-n-plus-one,missing-database-trans
 
 ## Related Categories
 
-- **[Code Quality Analyzers](/analyzers/code-quality/overview)** - Maintain code quality standards
-- **[Reliability Analyzers](/analyzers/reliability/overview)** - Prevent runtime errors
-- **[Performance Analyzers](/analyzers/performance/overview)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
+- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
+- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance

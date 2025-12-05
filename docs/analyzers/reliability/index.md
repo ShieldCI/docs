@@ -115,6 +115,7 @@ php artisan shield:analyze --analyzer=undefined-variable,undefined-constant,inva
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security/overview)** - Prevent security vulnerabilities
-- **[Performance Analyzers](/analyzers/performance/overview)** - Optimize application performance
-- **[Code Quality Analyzers](/analyzers/code-quality/overview)** - Maintain code quality standards
+- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
+- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions

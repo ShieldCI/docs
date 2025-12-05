@@ -282,6 +282,7 @@ return [
 
 ## Related Categories
 
-- **[Reliability Analyzers](/analyzers/reliability/overview)** - Prevent runtime errors
-- **[Best Practices Analyzers](/analyzers/best-practices/overview)** - Follow Laravel conventions
-- **[Performance Analyzers](/analyzers/performance/overview)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
+- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
+- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
