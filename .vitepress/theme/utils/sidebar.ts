@@ -134,7 +134,7 @@ export function getSidebar() {
   if (introduction.length > 0) {
     allItems.push({
       text: 'Introduction',
-      collapsed: false,
+      collapsed: true,
       items: introduction
     })
   }
@@ -143,7 +143,7 @@ export function getSidebar() {
   if (gettingStarted.length > 0) {
     allItems.push({
       text: 'Getting Started',
-      collapsed: false,
+      collapsed: true,
       items: gettingStarted
     })
   }
@@ -160,7 +160,7 @@ export function getSidebar() {
     analyzersItems.push({
       text: 'Security',
       link: '/analyzers/security/',
-      collapsed: false,
+      collapsed: true,
       items: analyzersSecurity
     })
   }
@@ -169,7 +169,7 @@ export function getSidebar() {
     analyzersItems.push({
       text: 'Performance',
       link: '/analyzers/performance/',
-      collapsed: false,
+      collapsed: true,
       items: analyzersPerformance
     })
   }
@@ -178,7 +178,7 @@ export function getSidebar() {
     analyzersItems.push({
       text: 'Reliability',
       link: '/analyzers/reliability/',
-      collapsed: false,
+      collapsed: true,
       items: analyzersReliability
     })
   }
@@ -187,7 +187,7 @@ export function getSidebar() {
     analyzersItems.push({
       text: 'Code Quality',
       link: '/analyzers/code-quality/',
-      collapsed: false,
+      collapsed: true,
       items: analyzersCodeQuality
     })
   }
@@ -196,7 +196,7 @@ export function getSidebar() {
     analyzersItems.push({
       text: 'Best Practices',
       link: '/analyzers/best-practices/',
-      collapsed: false,
+      collapsed: true,
       items: analyzersBestPractices
     })
   }
