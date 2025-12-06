@@ -143,16 +143,6 @@ These variables were added during recent feature development."
 git push origin main
 ```
 
-## Common Mistakes to Avoid
-
-- **Copying real values** - Use placeholders in `.env.example`, never real secrets!
-- **Forgetting to commit .env.example** - Team members won't see the changes
-- **Not adding comments** - Explain what each variable is for and where to get it
-- **Using vague placeholders** - `NEW_VAR=value` is less helpful than `NEW_VAR=your_api_key_from_dashboard`
-- **Not grouping related variables** - Keep related configs together with section headers
-- **Ignoring the analyzer warning** - "It's just documentation" → leads to team confusion
-- **Not updating after feature development** - Document variables as you add them, not later
-
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)

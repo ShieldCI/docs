@@ -180,18 +180,6 @@ EOF
 php artisan key:generate
 ```
 
-## Common Mistakes to Avoid
-
-- **Committing `.env` to Git** - This exposes secrets! Always add `.env` to `.gitignore` and only commit `.env.example`
-- **Using `.env.example` directly** - Copy it to `.env` first, never use the example file directly
-- **Forgetting to run `php artisan key:generate`** - Without this, your sessions and encryption won't work
-- **Wrong file permissions** - `.env` should be readable (644) but not world-writable (never use 777)
-- **Blank `APP_KEY`** - Application won't start without a generated key
-- **Using production credentials in development** - Always use environment-specific values
-- **Not updating `.env.example`** - When adding new env variables, document them in `.env.example` for your team
-- **Assuming `.env` exists in CI/CD** - Always create `.env` in your CI pipeline or use environment variables
-- **Broken symlinks in deployment** - Verify symlink targets exist before deploying
-
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)

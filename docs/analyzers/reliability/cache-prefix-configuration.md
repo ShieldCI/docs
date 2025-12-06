@@ -54,13 +54,6 @@ outline: [2, 3]
 4. **Test**: Write integration tests ensuring different `.env` configurations yield different cache keys (e.g., store and retrieve a known key)
 5. **Monitor**: Consider namespacing keys (e.g., `myapp:prod:`) for easier debugging in Redis CLI
 
-## Common Mistakes to Avoid
-
-- Leaving the default `laravel_cache` prefix on Redis/Aurora clusters shared with other projects
-- Assuming the `array` cache driver requires a prefix—this analyzer skips non-shared drivers
-- Forgetting to override `stores.redis.prefix` when using multiple Redis stores; the global `prefix` alone isn’t enough
-- Hard-coding prefixes in code instead of referencing config/env values
-
 ## References
 
 - [Laravel Cache Configuration](https://laravel.com/docs/cache#configuration)

@@ -41,6 +41,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific invalid property access error:
 
 ```php
@@ -278,34 +284,6 @@ echo $logger->message;  // Property not readable
 $logger->message = 'Error occurred';  // Just set it
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect invalid property access:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=invalid-property-access
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for invalid property access
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array offset access
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-- [Invalid Method Overrides Analyzer](/analyzers/reliability/invalid-method-overrides) - Detects invalid method overrides
-
 ## References
 
 - [PHP Properties](https://www.php.net/manual/en/language.oop5.properties.php)
@@ -314,3 +292,10 @@ vendor/bin/phpstan analyse app --level=5
 - [PHP Readonly Properties](https://www.php.net/manual/en/language.oop5.properties.php#language.oop5.properties.readonly-properties)
 - [PHP Nullsafe Operator](https://www.php.net/manual/en/language.oop5.basic.php#language.oop5.basic.nullsafe)
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
+
+## Related Analyzers
+
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array offset access
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
+- [Invalid Method Overrides Analyzer](/analyzers/reliability/invalid-method-overrides) - Detects invalid method overrides

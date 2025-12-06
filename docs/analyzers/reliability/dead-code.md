@@ -9,7 +9,7 @@ outline: [2, 3]
 
 | Analyzer ID | Category       | Severity | Time To Fix |
 | ------------| :------------: |:--------:| -----------:|
-| `dead-code` | ✅ Reliability | Medium   | 5 minutes   |
+| `dead-code` | ✅ Reliability | Medium   | 15 minutes   |
 
 ## What This Checks
 
@@ -32,12 +32,12 @@ outline: [2, 3]
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Proper Fix (15 minutes)
 
 1. Run  locally to see the specific issues:
 
 ```bash
-vendor/bin/ analyse app --level=5
+vendor/bin/phpstan analyse app --level=5
 ```
 
 2. For each dead code issue, apply the appropriate fix:
@@ -132,49 +132,11 @@ try {
 }
 ```
 
-### Proper Fix (30 minutes)
-
-1. **Install  in your project** if not already present:
-
-```bash
-composer require --dev /
-```
-
-2. **Configure  baseline** for existing dead code you want to track separately:
-
-```bash
-vendor/bin/ analyse --generate-baseline
-```
-
-3. **Add  to CI/CD** to prevent new dead code:
-
-```yaml
-# .github/workflows/ci.yml
-- name:  Static Analysis
-  run: vendor/bin/ analyse --level=5 --no-progress
-```
-
-4. **Set up pre-commit hooks** to catch dead code before pushing:
-
-```bash
-# .git/hooks/pre-commit
-#!/bin/bash
-vendor/bin/ analyse app --level=5 --no-progress
-```
-
-5. **Refactor systematically**:
+**Refactor systematically**:
    - Start with unused variables (easiest to fix)
    - Move to unreachable statements (may reveal logic bugs)
    - Address redundant conditions (often indicates over-defensive coding)
    - Remove dead catches last (may require rethinking error handling)
-
-## Common Mistakes to Avoid
-
-- Removing "dead code" that's actually defensive programming for edge cases (verify with tests first)
-- Deleting code that's temporarily disabled during debugging (use feature flags or comments instead)
-- Ignoring  errors because "the code works fine" (dead code indicates logic problems)
-- Keeping unused parameters "for consistency" across method signatures (use `@-ignore-line` if intentional)
-- Adding variables just to silence  without using them meaningfully
 
 ## References
 
@@ -185,6 +147,6 @@ vendor/bin/ analyse app --level=5 --no-progress
 ## Related Analyzers
 
 - [Deprecated Code Analyzer](/analyzers/reliability/deprecated-code) - Detects usage of deprecated methods, classes, and functions
-- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls in application code
+- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
 - [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements in methods and functions
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements

@@ -38,6 +38,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific missing return error:
 
 ```php
@@ -411,34 +417,6 @@ public function logActivity(User $user, string $action): bool
 }
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect missing return statements:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=missing-return-statement
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for missing return statements
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects calls to undefined methods
-- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-- [Missing Model Relations Analyzer](/analyzers/reliability/missing-model-relation) - Detects missing Eloquent relations
-
 ## References
 
 - [PHP Return Type Declarations](https://www.php.net/manual/en/functions.returning-values.php)
@@ -446,3 +424,10 @@ vendor/bin/phpstan analyse app --level=5
 - [Laravel Collections](https://laravel.com/docs/collections)
 - [PHP 8 Match Expression](https://www.php.net/manual/en/control-structures.match.php)
 - [Clean Code: Functions](https://github.com/ryanmcdermott/clean-code-javascript#functions)
+
+## Related Analyzers
+
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
+- [Missing Model Relations Analyzer](/analyzers/reliability/missing-model-relation) - Detects missing Eloquent relations

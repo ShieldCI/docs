@@ -62,7 +62,7 @@ php artisan tinker
 >>> DB::connection()->getPdo();
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 1. **Verify all connection details** in `config/database.php`:
 
@@ -137,36 +137,6 @@ telnet 127.0.0.1 3306
 # Check if firewall is blocking
 sudo ufw status
 ```
-
-### Common Error Messages
-
-**"Access denied for user"**
-- Wrong username or password in `.env`
-- User doesn't have privileges on the database
-- Fix: Update credentials or grant proper permissions
-
-**"Connection refused"**
-- Database server is not running
-- Wrong host or port in configuration
-- Firewall blocking connection
-- Fix: Start database server, verify host/port, check firewall rules
-
-**"Unknown database"**
-- Database doesn't exist
-- Typo in database name
-- Fix: Create the database or correct the name in `.env`
-
-**"could not find driver"**
-- PHP PDO extension not installed
-- Fix: Install the appropriate PHP extension (pdo_mysql, pdo_pgsql, etc.)
-
-## Common Mistakes to Avoid
-
-- Using `localhost` instead of `127.0.0.1` when Unix sockets are misconfigured; always test with IP addresses first
-- Forgetting to restart PHP-FPM/Apache after installing database extensions
-- Not checking multiple database connections; ShieldCI only validates the default connection unless you configure `shieldci.database.connections`
-- Hardcoding credentials in `config/database.php` instead of using environment variables
-- Not creating the database before running migrations; Laravel assumes it exists
 
 ## References
 

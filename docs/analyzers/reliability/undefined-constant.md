@@ -38,6 +38,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific undefined constant error:
 
 ```php
@@ -304,34 +310,6 @@ class ApiClient
 $url = ApiClient::getBaseUrl();
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect undefined constants:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=undefined-constant
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for undefined constants
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing returns in methods
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-
 ## References
 
 - [PHP Constants](https://www.php.net/manual/en/language.constants.php)
@@ -339,3 +317,10 @@ vendor/bin/phpstan analyse app --level=5
 - [Laravel Configuration](https://laravel.com/docs/configuration)
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Class Constants](https://www.php.net/manual/en/language.oop5.constants.php)
+
+## Related Analyzers
+
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables

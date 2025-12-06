@@ -41,6 +41,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific invalid method override error:
 
 ```php
@@ -243,80 +249,6 @@ class StripeProcessor extends PaymentProcessor {
 }
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect invalid method overrides:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=invalid-method-overrides
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for invalid method overrides
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Understanding Variance
-
-### Covariance (Return Types)
-Return types are **covariant** - child methods can return more specific types:
-
-```
-Animal (parent)
-   ↓ Can return
-Dog (child) ✅ More specific OK
-   ↓ Cannot return
-Animal (parent) ❌ Less specific NOT OK
-```
-
-### Contravariance (Parameter Types)
-Parameter types are **contravariant** - child methods can accept less specific types:
-
-```
-Dog (parent accepts this)
-   ↓ Can accept
-Animal (child) ✅ Less specific OK (accepts more)
-   ↓ Cannot accept
-Poodle (child) ❌ More specific NOT OK (accepts less)
-```
-
-### Why This Matters
-
-```php
-// Consider this code that depends on parent type:
-function processAnimal(Animal $animal): Dog
-{
-    return $animal->reproduce();  // Expects Dog
-}
-
-// If child breaks covariance:
-class Cat extends Animal
-{
-    public function reproduce(): Animal  // Returns Animal, not Dog!
-    {
-        return new Cat();
-    }
-}
-
-$cat = new Cat();
-processAnimal($cat);  // Runtime error! Expected Dog, got Cat
-```
-
-## Related Analyzers
-
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-
 ## References
 
 - [PHP Method Overriding](https://www.php.net/manual/en/language.oop5.basic.php#language.oop5.basic.extends)
@@ -325,3 +257,10 @@ processAnimal($cat);  // Runtime error! Expected Dog, got Cat
 - [PHPStan Covariance Rules](https://phpstan.org/blog/whats-up-with-template-covariant)
 - [PHP Visibility](https://www.php.net/manual/en/language.oop5.visibility.php)
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID)
+
+## Related Analyzers
+
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables

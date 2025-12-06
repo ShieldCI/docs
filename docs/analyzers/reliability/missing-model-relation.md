@@ -39,6 +39,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific missing relation error:
 
 ```php
@@ -277,34 +283,6 @@ Schema::create('role_user', function (Blueprint $table) {
 });
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect missing relations:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=missing-model-relation
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for missing model relations
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
-- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array access
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-
 ## References
 
 - [Laravel Eloquent Relationships](https://laravel.com/docs/eloquent-relationships)
@@ -312,3 +290,10 @@ vendor/bin/phpstan analyse app --level=5
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Laravel IDE Helper](https://github.com/barryvdh/laravel-ide-helper)
 - [Eloquent: Collections](https://laravel.com/docs/eloquent-collections)
+
+## Related Analyzers
+
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
+- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array access
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables

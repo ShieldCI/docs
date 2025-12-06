@@ -45,19 +45,13 @@ redis-cli ping
 
 3. Deploy updated `.env` values (`REDIS_HOST`, `REDIS_PASSWORD`, etc.)
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 1. **Add monitoring**: Use a health endpoint or Laravel Pulse to confirm cache availability continuously
 2. **Graceful degradation**: Add fallbacks (`Cache::remember()` with local defaults) for critical flows
 3. **Automate testing**: Include a smoke test in CI/CD that boots the app and runs `php artisan cache:table`/`php artisan config:cache`
 4. **Secure credentials**: Ensure secrets are injected securely (Vault/Parameter Store) so deployments don’t reference outdated hosts
 5. **Document recovery steps**: Standardize how to restart Redis/Memcached, flush keys, or switch to the `array` driver temporarily
-
-## Common Mistakes to Avoid
-
-- Mocking/overriding the Cache facade in production while the analyzer runs; always disable mocks before running ShieldCI
-- Assuming the `array` driver is production-safe; it isn’t persistent and loses data on redeploy
-- Forgetting to flush health-check keys; this analyzer cleans up its test key, but your manual tests should as well
 
 ## References
 

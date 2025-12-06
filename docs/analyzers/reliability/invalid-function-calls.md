@@ -37,6 +37,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific invalid function call error:
 
 ```php
@@ -124,34 +130,6 @@ if (!function_exists('imagecreate')) {
 }
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect invalid function calls:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=invalid-function-calls
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for invalid function calls
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls on objects
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
-- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array access
-
 ## References
 
 - [PHP Function Reference](https://www.php.net/manual/en/funcref.php)
@@ -160,3 +138,11 @@ vendor/bin/phpstan analyse app --level=5
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Composer Autoloading](https://getcomposer.org/doc/04-schema.md#autoload)
 - [PHP Extensions List](https://www.php.net/manual/en/extensions.php)
+
+
+## Related Analyzers
+
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
+- [Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access) - Detects invalid array access

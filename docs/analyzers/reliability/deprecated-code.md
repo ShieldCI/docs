@@ -33,7 +33,7 @@ outline: [2, 3]
 
 ## How to Fix
 
-### Quick Fix (15 minutes)
+### Proper Fix (15 minutes)
 
 1. Run PHPStan locally to see the specific deprecated code issues:
 
@@ -127,66 +127,19 @@ public function isActive(): bool
 }
 ```
 
-### Proper Fix (30 minutes)
-
-1. **Install PHPStan in your project** if not already present:
-
-```bash
-composer require --dev phpstan/phpstan
-```
-
-2. **Enable deprecation rules** in your PHPStan configuration:
-
-```yaml
-# phpstan.neon
-parameters:
-    level: 5
-    paths:
-        - app
-    reportUnmatchedIgnoredErrors: false
-
-    # Enable strict deprecation detection
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-```
-
-3. **Create a baseline** for existing deprecated code you can't fix immediately:
-
-```bash
-vendor/bin/phpstan analyse --generate-baseline
-```
-
-4. **Add PHPStan to CI/CD** to prevent new deprecated code usage:
-
-```yaml
-# .github/workflows/ci.yml
-- name: PHPStan Static Analysis
-  run: vendor/bin/phpstan analyse --level=5 --no-progress
-```
-
-5. **Set up automated migration checklist**:
+**Set up automated migration checklist**:
    - Identify all deprecated code in your codebase
    - Prioritize by deprecation timeline (what's being removed soonest)
    - Check library changelogs for migration guides
    - Test each migration thoroughly with feature tests
    - Update documentation to reflect new APIs
 
-6. **Systematic refactoring approach**:
+**Systematic refactoring approach**:
    - Start with deprecated constants (easiest to find/replace)
    - Move to deprecated functions (may need signature updates)
    - Address deprecated methods (might require logic changes)
    - Tackle deprecated classes (often requires architectural changes)
    - Remove deprecated property access (may need data migration)
-
-## Common Mistakes to Avoid
-
-- Ignoring deprecation warnings because "it still works" (technical debt accumulates fast)
-- Mass find/replace without understanding why code was deprecated (may miss important changes)
-- Not reading migration guides before replacing deprecated code (can introduce bugs)
-- Keeping deprecated code to avoid "breaking changes" in your own API (delays inevitable migration)
-- Using `@phpstan-ignore-line` to silence deprecation warnings instead of fixing them
-- Not testing after migrating from deprecated APIs (subtle behavior changes can occur)
-- Upgrading multiple major versions at once without handling deprecations incrementally
 
 ## References
 
@@ -199,6 +152,6 @@ vendor/bin/phpstan analyse --generate-baseline
 ## Related Analyzers
 
 - [Dead Code Analyzer](/analyzers/reliability/dead-code) - Detects unreachable code, unused variables, and statements with no effect
-- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls in application code
+- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
 - [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements in methods and functions
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements

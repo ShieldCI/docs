@@ -483,20 +483,26 @@ php artisan db:seed
 echo "✅ Installation complete!"
 ```
 
-
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments:
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-```php
-// Analyzer configuration
-public static bool $runInCI = false;
-```
-
-**Why skip in CI?**
+**Why skip in CI and development?**
 - Migration status is deployment/environment-specific
 - CI databases are often fresh for each run
 - Prevents false failures in CI pipelines
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
 
 **Run manually if needed:**
 

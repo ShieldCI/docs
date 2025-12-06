@@ -38,6 +38,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific undefined variable error:
 
 ```php
@@ -412,221 +418,6 @@ Log::channel('daily')->info('Variable state', [
 vendor/bin/phpstan analyse app --level=5
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect undefined variables:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=undefined-variable
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for undefined variables
-vendor/bin/phpstan analyse app --level=5
-
-# Generate baseline to ignore existing issues
-vendor/bin/phpstan analyse app --level=5 --generate-baseline
-
-# Check with baseline
-vendor/bin/phpstan analyse app --level=5 --configuration=phpstan.neon
-```
-
-### PHPStan Configuration File
-
-```yaml
-# phpstan.neon
-parameters:
-    level: 5
-    paths:
-        - app
-    excludePaths:
-        - app/Legacy/*
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
-```
-
-## Common Mistakes to Avoid
-
-### Mistake #1: Assuming Variables from Previous Requests
-
-```php
-// ❌ Wrong: Assuming session variable exists
-$userId = $_SESSION['user_id']; // Might not be set
-
-// ✅ Correct: Check if exists
-$userId = $_SESSION['user_id'] ?? null;
-
-// ✅ Better: Use Laravel session helper
-$userId = session('user_id');
-```
-
-### Mistake #2: Not Initializing Loop Accumulators
-
-```php
-// ❌ Wrong: Accumulator not initialized
-foreach ($items as $item) {
-    $sum += $item->value; // Undefined: $sum
-}
-
-// ✅ Correct: Initialize before loop
-$sum = 0;
-foreach ($items as $item) {
-    $sum += $item->value;
-}
-```
-
-### Mistake #3: Conditional Definition Without Default
-
-```php
-// ❌ Wrong: No default value
-if ($condition) {
-    $message = 'Success';
-}
-return $message; // Might not be defined
-
-// ✅ Correct: Provide default
-$message = 'Default';
-if ($condition) {
-    $message = 'Success';
-}
-return $message;
-```
-
-### Mistake #4: Using Compact() With Undefined Variables
-
-```php
-// ❌ Wrong: Variable might not exist
-return view('profile', compact('user', 'stats', 'preferences'));
-// If $preferences is not defined, causes error
-
-// ✅ Correct: Ensure all variables exist
-$preferences = $preferences ?? [];
-return view('profile', compact('user', 'stats', 'preferences'));
-
-// ✅ Better: Use explicit array
-return view('profile', [
-    'user' => $user,
-    'stats' => $stats,
-    'preferences' => $preferences ?? [],
-]);
-```
-
-### Mistake #5: Relying on Register Globals (Legacy Code)
-
-```php
-// ❌ Wrong: Assuming variable from query string
-// Old PHP with register_globals enabled: ?name=John creates $name
-echo $name; // Undefined variable
-
-// ✅ Correct: Get from request explicitly
-$name = request('name');
-
-// ✅ Better: Validate and provide default
-$name = request('name', 'Guest');
-```
-
-## Best Practices
-
-### 1. Always Initialize Variables
-
-```php
-// ✅ Good practice
-$total = 0;
-$count = 0;
-$result = [];
-
-foreach ($items as $item) {
-    $total += $item->price;
-    $count++;
-    $result[] = $item->process();
-}
-```
-
-### 2. Use Type Hints and Defaults
-
-```php
-// ✅ Good practice
-function processData(
-    array $data = [],
-    ?string $format = null,
-    int $limit = 10
-): array {
-    // All parameters have defaults or are nullable
-    return array_slice($data, 0, $limit);
-}
-```
-
-### 3. Use Null Coalescing Operator
-
-```php
-// ✅ Good practice
-$name = $user->name ?? 'Guest';
-$email = $data['email'] ?? $user->email ?? 'no-reply@example.com';
-```
-
-### 4. Use Static Analysis in CI/CD
-
-```yaml
-# .github/workflows/static-analysis.yml
-name: Static Analysis
-
-on: [push, pull_request]
-
-jobs:
-  phpstan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-
-      - name: Install dependencies
-        run: composer install --no-dev
-
-      - name: Run ShieldCI
-        run: |
-          php artisan shield:analyze \
-            --analyzer=undefined-variable \
-            --fail-on=high
-```
-
-### 5. Enable Strict Types
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App\Services;
-
-class UserService
-{
-    // Strict types catch more errors at compile time
-    public function getUser(int $id): ?User
-    {
-        return User::find($id);
-    }
-}
-```
-
-## Related Analyzers
-
-- [Undefined Constant Usage Analyzer](/analyzers/reliability/undefined-constant) - Detects undefined constants
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing returns
-
 ## References
 
 - [PHP Variables](https://www.php.net/manual/en/language.variables.php)
@@ -634,3 +425,10 @@ class UserService
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Laravel Debugging](https://laravel.com/docs/debugging)
 - [PHP Type Declarations](https://www.php.net/manual/en/language.types.declarations.php)
+
+## Related Analyzers
+
+- [Undefined Constant Usage Analyzer](/analyzers/reliability/undefined-constant) - Detects undefined constants
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements

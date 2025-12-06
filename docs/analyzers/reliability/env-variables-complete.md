@@ -111,16 +111,6 @@ echo "NEW_API_KEY=your_api_key_here" >> .env.example
 echo "NEW_SERVICE_URL=https://example.com" >> .env.example
 ```
 
-## Common Mistakes to Avoid
-
-- **Copying placeholder values from .env.example** - Replace `your_password_here` with real values!
-- **Skipping "optional" variables** - Even optional variables should be in `.env` (empty is fine: `VAR=`)
-- **Not updating .env.example** - When you add variables to `.env`, document them in `.env.example`
-- **Using different variable names** - Keep variable names consistent between files
-- **Forgetting about CI/CD** - Your CI pipeline needs these variables too (via secrets or .env)
-- **Committing .env to Git** - Never commit `.env` - only commit `.env.example`
-- **Different variables per environment** - Use different **values**, not different **variables**
-
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)

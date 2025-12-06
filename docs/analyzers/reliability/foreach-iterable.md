@@ -37,6 +37,11 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
 If you have a specific foreach error:
 
 ```php
@@ -144,34 +149,6 @@ foreach (getResults() ?? [] as $result) {
 }
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect foreach issues:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=foreach-iterable
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for foreach iterable issues
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
-- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
-- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
-
 ## References
 
 - [PHP foreach Documentation](https://www.php.net/manual/en/control-structures.foreach.php)
@@ -180,3 +157,11 @@ vendor/bin/phpstan analyse app --level=5
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Laravel Collections](https://laravel.com/docs/collections)
 - [PHP Generators](https://www.php.net/manual/en/language.generators.overview.php)
+
+
+## Related Analyzers
+
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
+- [Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls) - Detects invalid method calls
+- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements

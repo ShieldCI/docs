@@ -41,6 +41,12 @@ outline: [2, 3]
 
 ### Quick Fix (5 minutes)
 
+Run locally to see the specific issues:
+
+```bash
+vendor/bin/phpstan analyse app --level=5
+```
+
 If you have a specific invalid method call error:
 
 ```php
@@ -189,34 +195,6 @@ class Logger {
 $success = $logger->log('Error occurred');
 ```
 
-## PHPStan Integration
-
-This analyzer uses PHPStan Level 5 (included with ShieldCI) to detect invalid method calls:
-
-```bash
-# Run ShieldCI analysis
-php artisan shield:analyze --analyzer=invalid-method-calls
-
-# Or run all reliability analyzers
-php artisan shield:analyze --category=reliability
-```
-
-### PHPStan Configuration
-
-PHPStan is included as a required dependency in ShieldCI. If you want to run PHPStan directly:
-
-```bash
-# Check for invalid method calls
-vendor/bin/phpstan analyse app --level=5
-```
-
-## Related Analyzers
-
-- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
-- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects undefined variables
-- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
-- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access
-
 ## References
 
 - [PHP Method Visibility](https://www.php.net/manual/en/language.oop5.visibility.php)
@@ -225,3 +203,10 @@ vendor/bin/phpstan analyse app --level=5
 - [PHPStan Documentation](https://phpstan.org/user-guide/getting-started)
 - [Static vs Instance Methods](https://www.php.net/manual/en/language.oop5.static.php)
 - [Magic Methods](https://www.php.net/manual/en/language.oop5.magic.php)
+
+## Related Analyzers
+
+- [Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls) - Detects invalid function calls
+- [Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable) - Detects references to undefined variables
+- [Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement) - Detects missing return statements
+- [Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access) - Detects invalid property access

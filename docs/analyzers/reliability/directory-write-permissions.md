@@ -154,16 +154,6 @@ php_admin_value[umask] = 0002
 ],
 ```
 
-## Common Mistakes to Avoid
-
-- Using `chmod 777` (world-writable) - major security risk, use 775 instead
-- Forgetting to set permissions after deployment - automate it in your CI/CD
-- Not setting group ownership (`chown -R user:group`) - causes permission issues with multiple processes
-- Ignoring SELinux contexts on RHEL/CentOS - use `chcon -R -t httpd_sys_rw_content_t storage`
-- Setting permissions on production using your user account instead of the web server user
-- Not checking permissions in Docker containers - containers often run as different users
-- Assuming Git preserves file permissions - it doesn't, always set them post-deployment
-
 ## References
 
 - [Laravel Installation - Directory Permissions](https://laravel.com/docs/installation#directory-permissions)

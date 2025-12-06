@@ -44,12 +44,6 @@ php artisan vendor:publish --tag=laravel-errors
 4. **Automate tests**: Write feature tests to assert the custom templates render for 404/500 responses
 5. **Namespace sharing**: If you ship a design system package, register an `errors` view namespace and keep templates centralized
 
-## Common Mistakes to Avoid
-
-- Only customizing 404s—500 and 503 are equally important
-- Forgetting to update view caches (`php artisan view:clear`) after publishing new templates
-- Serving JSON APIs: avoid forcing HTML error pages for API responses; this analyzer skips stateless apps but confirm your middleware setup
-
 ## References
 
 - [Laravel Error Pages](https://laravel.com/docs/errors)

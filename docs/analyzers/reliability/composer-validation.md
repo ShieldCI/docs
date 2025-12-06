@@ -9,7 +9,7 @@ outline: [2, 3]
 
 | Analyzer ID           | Category       | Severity  | Time To Fix  |
 | ----------------------| :------------: |:---------:| ------------:|
-| `composer-validation` | ✅ Reliability | Critical  | 60 minutes   |
+| `composer-validation` | ✅ Reliability | Critical  | 10 minutes   |
 
 ## What This Checks
 
@@ -38,20 +38,13 @@ composer validate --no-check-publish
 
 3. Re-run the analyzer to confirm it passes.
 
-### Proper Fix (30 minutes)
+### Proper Fix (10 minutes)
 
 1. **Schema compliance**: Keep `composer.json` minimal and documented; remove unused packages
 2. **Automate**: Add `composer validate` to CI before building artifacts
 3. **Lockfile hygiene**: Pair validation with `composer update --lock` to ensure lock and JSON stay in sync
 4. **Tooling**: Consider `composer normalize` to standardize ordering and improve diff readability
 5. **Documentation**: Record dependency policy (allowed licenses, stability flags) so contributors adhere to standards
-
-## Common Mistakes to Avoid
-
-- Forgetting to commit `composer.lock` after editing `composer.json`
-- Leaving trailing commas or comments in JSON (composer doesn’t allow them)
-- Using wildcards (`*`) for version constraints in production packages
-- Running `composer validate` from the wrong working directory (this analyzer uses your project root)
 
 ## References
 
