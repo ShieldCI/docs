@@ -17,41 +17,40 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 
 ### Configuration & Environment
 
-- **[Cache Prefix Configuration](/analyzers/reliability/cache-prefix-configuration)** - Ensures cache prefix is set to avoid collisions
-- **[Cache Status](/analyzers/reliability/cache-status)** - Validates cache connectivity and functionality
-- **[Composer Validation](/analyzers/reliability/composer-validation)** - Ensures composer.json is valid and follows best practices
-- **[Database Status](/analyzers/reliability/database-status)** - Ensures database connections are accessible and functioning
-- **[Directory Write Permissions](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions
-- **[Environment File Existence](/analyzers/reliability/env-file-exists)** - Ensures .env file exists, is readable, not empty, and checks for broken symlinks
-- **[Environment Variables Complete](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables from .env.example are defined in .env
-- **[Environment Example Documentation](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
-- **[Maintenance Mode Status](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
+- **[Cache Prefix Configuration Analyzer](/analyzers/reliability/cache-prefix-configuration)** - Ensures cache prefix is set to avoid collisions
+- **[Cache Status Analyzer](/analyzers/reliability/cache-status)** - Validates cache connectivity and functionality
+- **[Composer Validation Analyzer](/analyzers/reliability/composer-validation)** - Ensures composer.json is valid and follows best practices
+- **[Database Status Analyzer](/analyzers/reliability/database-status)** - Ensures database connections are accessible and functioning
+- **[Directory Write Permissions Analyzer](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions
+- **[Environment File Existence Analyzer](/analyzers/reliability/env-file-exists)** - Ensures .env file exists, is readable, not empty, and checks for broken symlinks
+- **[Environment Variables Complete Analyzer](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables from .env.example are defined in .env
+- **[Environment Example Documentation Analyzer](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
+- **[Maintenance Mode Status Analyzer](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
 
 ### Code Quality & Static Analysis
 
-- **[Dead Code Detection](/analyzers/reliability/dead-code)** - Detects unreachable code, unused variables, and statements with no effect
-- **[Deprecated Code Usage](/analyzers/reliability/deprecated-code)** - Detects usage of deprecated methods, classes, and functions
-- **[Foreach Iterable Validation](/analyzers/reliability/foreach-iterable)** - Detects invalid foreach usage with non-iterable values
-- **[Invalid Function Calls](/analyzers/reliability/invalid-function-calls)** - Detects invalid function calls in application code
-- **[Invalid Imports](/analyzers/reliability/invalid-imports)** - Detects invalid imports and use statements for non-existent classes
-- **[Invalid Method Calls](/analyzers/reliability/invalid-method-calls)** - Detects invalid method calls in application code
-- **[Invalid Method Overrides](/analyzers/reliability/invalid-method-overrides)** - Detects incompatible method overrides with incorrect signatures
-- **[Invalid Offset Access](/analyzers/reliability/invalid-offset-access)** - Detects invalid array offset access and type mismatches
-- **[Invalid Property Access](/analyzers/reliability/invalid-property-access)** - Detects invalid property access and visibility violations
-- **[Missing Model Relations](/analyzers/reliability/missing-model-relation)** - Detects references to non-existent Eloquent model relations
-- **[Missing Return Statements](/analyzers/reliability/missing-return-statement)** - Detects missing return statements in methods and functions
-- **[Undefined Constant Usage](/analyzers/reliability/undefined-constant)** - Detects references to undefined constants
-- **[Undefined Variable Usage](/analyzers/reliability/undefined-variable)** - Detects references to undefined variables
+- **[Dead Code Analyzer](/analyzers/reliability/dead-code)** - Detects unreachable code, unused variables, and statements with no effect
+- **[Deprecated Code Analyzer](/analyzers/reliability/deprecated-code)** - Detects usage of deprecated methods, classes, and functions
+- **[Foreach Iterable Analyzer](/analyzers/reliability/foreach-iterable)** - Detects invalid foreach usage with non-iterable values
+- **[Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls)** - Detects invalid function calls in application code
+- **[Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls)** - Detects invalid method calls in application code
+- **[Invalid Method Overrides Analyzer](/analyzers/reliability/invalid-method-overrides)** - Detects incompatible method overrides with incorrect signatures
+- **[Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access)** - Detects invalid array offset access and type mismatches
+- **[Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access)** - Detects invalid property access and visibility violations
+- **[Missing Model Relations Analyzer](/analyzers/reliability/missing-model-relation)** - Detects references to non-existent Eloquent model relations
+- **[Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement)** - Detects missing return statements in methods and functions
+- **[Undefined Constant Usage Analyzer](/analyzers/reliability/undefined-constant)** - Detects references to undefined constants
+- **[Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable)** - Detects references to undefined variables
 
 ### Infrastructure & Permissions
 
-- **[Custom Error Pages](/analyzers/reliability/custom-error-pages)** - Ensures custom error pages are configured to prevent framework fingerprinting
-- **[Directory Write Permissions](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories have proper write permissions
+- **[Custom Error Pages Analyzer](/analyzers/reliability/custom-error-pages)** - Ensures custom error pages are configured to prevent framework fingerprinting
+- **[Directory Write Permissions Analyzer](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories have proper write permissions
 
 ### Queue & Database
 
-- **[Queue Timeout Configuration](/analyzers/reliability/queue-timeout-configuration)** - Ensures queue timeout and retry_after values are properly configured
-- **[Up-to-Date Migrations](/analyzers/reliability/up-to-date-migrations)** - Ensures all database migrations are up to date and have been executed
+- **[Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration)** - Ensures queue timeout and retry_after values are properly configured
+- **[Up-to-Date Migrations Analyzer](/analyzers/reliability/up-to-date-migrations)** - Ensures all database migrations are up to date and have been executed
 
 ## How They Work
 

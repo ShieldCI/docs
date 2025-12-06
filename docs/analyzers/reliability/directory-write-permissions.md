@@ -1,0 +1,177 @@
+---
+title: Directory Write Permissions Analyzer
+description: Ensures critical Laravel directories have proper write permissions for logs, cache, sessions, and compiled views
+icon: folder-lock
+outline: [2, 3]
+---
+
+# Directory Write Permissions Analyzer
+
+| Analyzer ID                   | Category       | Severity | Time To Fix |
+| ------------------------------| :------------: |:--------:| -----------:|
+| `directory-write-permissions` | ✅ Reliability | Critical | 10 minutes  |
+
+## What This Checks
+
+- Verifies that `storage/` directory is writable
+- Verifies that `bootstrap/cache/` directory is writable
+- Checks custom directories specified in `config/shieldci.php`
+- Tests actual write permissions, not just existence
+- Validates both relative and absolute paths from configuration
+- Reports all failed directories with actionable fix commands
+- Supports symlinked directories
+
+## Why It Matters
+
+- **Application crashes**: Laravel requires writable storage for logs, sessions, cache, and compiled views - without it, your app will fail
+- **Silent failures**: Missing write permissions can cause intermittent errors that are hard to debug in production
+- **Security logs**: Without writable storage, security events and errors won't be logged, hiding potential attacks
+- **Performance degradation**: Cache and compiled views require write access - without it, your app runs significantly slower
+- **Session management**: User sessions require writable storage - login/authentication will fail without it
+- **File uploads**: User file uploads to `storage/` will fail silently or with cryptic errors
+- **Deployment issues**: Fresh deployments often fail due to incorrect directory permissions, especially in Docker/CI environments
+
+## How to Fix
+
+### Quick Fix (5 minutes)
+
+1. Identify which directories are not writable:
+
+```bash
+# Check current permissions
+ls -la storage/
+ls -la bootstrap/cache/
+```
+
+2. Fix permissions based on your environment:
+
+**Development (Local Machine)**:
+
+```bash
+# Make directories writable
+chmod -R 775 storage bootstrap/cache
+```
+
+**Production (Linux Server with www-data user)**:
+
+```bash
+# Set correct owner and permissions
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
+```
+
+**Docker Container**:
+
+```bash
+# In your Dockerfile
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+```
+
+**Windows**:
+
+```powershell
+# Right-click folders → Properties → Security tab
+# Grant "Full Control" to your web server user
+# Or run as Administrator:
+icacls storage /grant Users:F /t
+icacls bootstrap\cache /grant Users:F /t
+```
+
+### Proper Fix (10 minutes)
+
+1. **Configure deployment automation** to set permissions:
+
+```yaml
+# .github/workflows/deploy.yml
+- name: Set Directory Permissions
+  run: |
+    chmod -R 775 storage bootstrap/cache
+    chown -R www-data:www-data storage bootstrap/cache
+```
+
+2. **Add post-deployment script**:
+
+```bash
+#!/bin/bash
+# deploy/fix-permissions.sh
+
+# Set ownership
+chown -R www-data:www-data storage bootstrap/cache
+
+# Set directory permissions (775 = rwxrwxr-x)
+chmod -R 775 storage bootstrap/cache
+
+# Ensure new files inherit correct permissions
+chmod g+s storage bootstrap/cache
+
+echo "✓ Directory permissions configured"
+```
+
+3. **Configure umask in your web server**:
+
+**Nginx + PHP-FPM** (`/etc/php/8.1/fpm/pool.d/www.conf`):
+
+```ini
+; Set umask so new files are group-writable
+php_admin_value[umask] = 0002
+```
+
+**Apache** (`.htaccess` or VirtualHost):
+
+```apache
+<IfModule mod_php.c>
+    php_value umask 0002
+</IfModule>
+```
+
+4. **Update your `.gitignore`** to exclude storage files:
+
+```
+/storage/*.key
+/storage/app/*
+!/storage/app/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+```
+
+5. **Configure custom writable directories** in `config/shieldci.php`:
+
+```php
+'writable_directories' => [
+    'storage',
+    'bootstrap/cache',
+    'public/uploads',      // If you store uploads here
+    'resources/compiled',  // Custom compiled assets
+],
+```
+
+## Common Mistakes to Avoid
+
+- Using `chmod 777` (world-writable) - major security risk, use 775 instead
+- Forgetting to set permissions after deployment - automate it in your CI/CD
+- Not setting group ownership (`chown -R user:group`) - causes permission issues with multiple processes
+- Ignoring SELinux contexts on RHEL/CentOS - use `chcon -R -t httpd_sys_rw_content_t storage`
+- Setting permissions on production using your user account instead of the web server user
+- Not checking permissions in Docker containers - containers often run as different users
+- Assuming Git preserves file permissions - it doesn't, always set them post-deployment
+
+## References
+
+- [Laravel Installation - Directory Permissions](https://laravel.com/docs/installation#directory-permissions)
+- [Linux File Permissions Guide](https://www.linux.com/training-tutorials/understanding-linux-file-permissions/)
+- [Docker Security Best Practices](https://docs.docker.com/develop/security-best-practices/)
+- [Nginx + PHP-FPM Configuration](https://www.nginx.com/resources/wiki/start/topics/examples/phpfcgi/)
+
+## Related Analyzers
+
+- [Environment File Existence Analyzer](/analyzers/reliability/env-file-exists) - Ensures .env file exists and is readable
+- [Cache Status Analyzer](/analyzers/reliability/cache-status) - Validates cache connectivity and functionality
