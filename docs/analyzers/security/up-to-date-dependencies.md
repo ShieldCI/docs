@@ -3,6 +3,7 @@ title: Up-to-Date Dependencies Analyzer
 description: Detects pending dependency updates within declared version constraints using composer install --dry-run
 icon: package
 outline: [2, 3]
+tags: dependencies,composer,updates,maintenance,security-patches
 ---
 
 # Up-to-Date Dependencies Analyzer

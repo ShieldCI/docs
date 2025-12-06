@@ -3,6 +3,7 @@ title: Mass Assignment Vulnerabilities Analyzer
 description: Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders
 icon: shield-alert
 outline: [2, 3]
+tags: mass-assignment,eloquent,security,models,sql-injection
 ---
 
 # Mass Assignment Vulnerabilities Analyzer

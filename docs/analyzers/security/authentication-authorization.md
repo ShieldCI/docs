@@ -3,6 +3,7 @@ title: Authentication & Authorization Analyzer
 description: Detects missing authentication and authorization protection throughout your Laravel application
 icon: lock
 outline: [2, 3]
+tags: authentication,authorization,security,middleware
 ---
 
 # Authentication & Authorization Analyzer

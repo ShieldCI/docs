@@ -3,6 +3,7 @@ title: Environment File HTTP Accessibility Analyzer
 description: Performs runtime HTTP checks to verify that .env files cannot be accessed via web requests
 icon: shield-alert
 outline: [2, 3]
+tags: env,http,security,runtime,web-server,deployment
 ---
 
 # Environment File HTTP Accessibility Analyzer

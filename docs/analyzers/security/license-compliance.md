@@ -3,6 +3,7 @@ title: Dependency License Compliance Analyzer
 description: Validates that all dependencies use legally acceptable licenses for your application type
 icon: file-text
 outline: [2, 3]
+tags: licenses,legal,compliance,dependencies,gpl,commercial
 ---
 
 # Dependency License Compliance Analyzer

@@ -3,6 +3,7 @@ title: Unguarded Models Analyzer
 description: Scans for Model::unguard() calls that disable Laravel's mass-assignment protection
 icon: shield-alert
 outline: [2, 3]
+tags: eloquent,mass-assignment,models,security,unguard
 ---
 
 # Unguarded Models Analyzer

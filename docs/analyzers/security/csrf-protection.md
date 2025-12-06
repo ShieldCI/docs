@@ -3,6 +3,7 @@ title: CSRF Protection Analyzer
 description: Detects missing or weak Cross-Site Request Forgery (CSRF) protection in Laravel applications
 icon: shield-alert
 outline: [2, 3]
+tags: csrf,cross-site-request-forgery,security,forms
 ---
 
 # CSRF Protection Analyzer

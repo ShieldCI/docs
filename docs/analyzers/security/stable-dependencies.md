@@ -3,6 +3,7 @@ title: Stable Dependencies Analyzer
 description: Ensures composer.json enforces stable dependencies and scans for unstable package constraints
 icon: package
 outline: [2, 3]
+tags: dependencies,composer,stability,versions,production
 ---
 
 # Stable Dependencies Analyzer

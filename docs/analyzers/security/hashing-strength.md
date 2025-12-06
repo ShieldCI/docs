@@ -3,6 +3,7 @@ title: Password Hashing Strength Analyzer
 description: Validates that your Laravel application uses secure password hashing algorithms with appropriate security parameters
 icon: lock
 outline: [2, 3]
+tags: hashing,passwords,bcrypt,argon2,security
 ---
 
 # Password Hashing Strength Analyzer

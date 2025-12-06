@@ -3,6 +3,7 @@ title: Fillable Foreign Key Analyzer
 description: Detects foreign key fields in Eloquent models' fillable arrays that could allow unauthorized relationship manipulation
 icon: shield-alert
 outline: [2, 3]
+tags: mass-assignment,foreign-keys,eloquent,security,relationships
 ---
 
 # Fillable Foreign Key Analyzer

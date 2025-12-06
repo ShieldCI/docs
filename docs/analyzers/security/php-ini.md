@@ -3,6 +3,7 @@ title: PHP Configuration Analyzer
 description: Validates that PHP ini settings are configured securely for production environments
 icon: cog
 outline: [2, 3]
+tags: php,configuration,ini,security,server
 ---
 
 # PHP Configuration Analyzer

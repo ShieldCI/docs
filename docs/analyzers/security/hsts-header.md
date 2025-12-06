@@ -3,6 +3,7 @@ title: HSTS Header Analyzer
 description: Validates that HTTPS-only applications properly implement HTTP Strict Transport Security (HSTS) headers
 icon: shield-check
 outline: [2, 3]
+tags: hsts,https,headers,security,ssl,tls
 ---
 
 # HSTS Header Analyzer

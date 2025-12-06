@@ -3,6 +3,7 @@ title: Environment File Analyzer
 description: Validates that Laravel environment files are properly secured against exposure and credential leaks
 icon: lock
 outline: [2, 3]
+tags: env,environment,secrets,security,configuration
 ---
 
 # Environment File Analyzer

@@ -3,6 +3,7 @@ title: Debug Mode Analyzer
 description: Detects debug mode configurations and debugging functions that expose sensitive information in production environments
 icon: alert-triangle
 outline: [2, 3]
+tags: debug,information-disclosure,security,configuration
 ---
 
 # Debug Mode Analyzer

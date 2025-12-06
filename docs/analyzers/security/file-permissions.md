@@ -3,6 +3,7 @@ title: File Permissions Analyzer
 description: Validates that your Laravel application's files and directories use secure Unix permissions
 icon: lock
 outline: [2, 3]
+tags: permissions,file-security,security,access-control
 ---
 
 # File Permissions Analyzer

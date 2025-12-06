@@ -3,6 +3,7 @@ title: XSS Vulnerabilities Analyzer
 description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output and missing Content-Security-Policy headers
 icon: shield-alert
 outline: [2, 3]
+tags: xss,cross-site-scripting,security,blade,csp,headers
 ---
 
 # XSS Vulnerabilities Analyzer

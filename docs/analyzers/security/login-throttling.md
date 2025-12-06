@@ -3,6 +3,7 @@ title: Login Throttling Analyzer
 description: Detects missing rate limiting on authentication endpoints to prevent brute force attacks
 icon: shield-alert
 outline: [2, 3]
+tags: authentication,rate-limiting,brute-force,security,throttling
 ---
 
 # Login Throttling Analyzer

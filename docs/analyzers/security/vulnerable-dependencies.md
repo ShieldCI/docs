@@ -3,6 +3,7 @@ title: Vulnerable Dependencies Analyzer
 description: Detects vulnerable Composer packages with CVEs and abandoned dependencies using OSV API
 icon: package
 outline: [2, 3]
+tags: dependencies,composer,vulnerabilities,cve,security
 ---
 
 # Vulnerable Dependencies Analyzer

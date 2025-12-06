@@ -3,6 +3,7 @@ title: SQL Injection Analyzer
 description: Detects potential SQL injection vulnerabilities by identifying unsafe database query patterns in Laravel applications
 icon: shield-alert
 outline: [2, 3]
+tags: sql,injection,database,security
 ---
 
 # SQL Injection Analyzer
