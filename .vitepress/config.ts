@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { getSidebar } from './theme/utils/sidebar'
 import tailwindcss from '@tailwindcss/vite'
+import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
     title: 'ShieldCI',
@@ -86,7 +87,10 @@ export default defineConfig({
     },
 
     vite: {
-        plugins: [tailwindcss()],
+        plugins: [
+            tailwindcss(),
+            llmstxt({ignoreFiles: ['index.md']})
+        ],
     },
 })
 
