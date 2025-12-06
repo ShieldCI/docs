@@ -41,7 +41,13 @@ export default defineConfig({
 
         // Search
         search: {
-            provider: 'local',
+            provider: 'algolia',
+            options: {
+                appId: 'XVN8IXORZF',
+                apiKey: '86f0c3b09d78172f3cc3cac991c10af0',
+                indexName: 'shieldCI_docs',
+                askAi: "vm0ybu30QDS3"
+            }
         },
 
         // Social links
