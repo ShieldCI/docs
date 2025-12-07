@@ -33,6 +33,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **[Deprecated Code Analyzer](/analyzers/reliability/deprecated-code)** - Detects usage of deprecated methods, classes, and functions
 - **[Foreach Iterable Analyzer](/analyzers/reliability/foreach-iterable)** - Detects invalid foreach usage with non-iterable values
 - **[Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls)** - Detects invalid function calls in application code
+- **[Invalid Imports Analyzer](/analyzers/reliability/invalid-imports)** - Detects invalid imports and use statements for non-existent classes
 - **[Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls)** - Detects invalid method calls in application code
 - **[Invalid Method Overrides Analyzer](/analyzers/reliability/invalid-method-overrides)** - Detects incompatible method overrides with incorrect signatures
 - **[Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access)** - Detects invalid array offset access and type mismatches
