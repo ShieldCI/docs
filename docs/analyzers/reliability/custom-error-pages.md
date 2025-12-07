@@ -3,6 +3,7 @@ title: Custom Error Pages Analyzer
 description: Ensure user-friendly, non-fingerprinting error pages are in place
 icon: alert-triangle
 outline: [2, 3]
+tags: errors,ux,reliability,security,fingerprinting
 ---
 
 # Custom Error Pages Analyzer

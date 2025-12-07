@@ -3,6 +3,7 @@ title: Queue Timeout Configuration Analyzer
 description: Ensures queue timeout and retry_after values are properly configured to prevent job duplication and queue worker crashes
 icon: alert-triangle
 outline: [2, 3]
+tags: queue,configuration,reliability,jobs
 ---
 
 # Queue Timeout Configuration Analyzer

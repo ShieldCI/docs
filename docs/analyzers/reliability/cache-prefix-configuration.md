@@ -3,6 +3,7 @@ title: Cache Prefix Configuration Analyzer
 description: Ensure shared cache backends use unique prefixes to prevent collisions across applications
 icon: hash
 outline: [2, 3]
+tags: cache,configuration,reliability,multi-tenant
 ---
 
 # Cache Prefix Configuration Analyzer

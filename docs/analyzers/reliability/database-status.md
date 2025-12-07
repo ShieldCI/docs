@@ -3,6 +3,7 @@ title: Database Status Analyzer
 description: Ensure your database connections are accessible and functioning properly
 icon: database
 outline: [2, 3]
+tags: database,infrastructure,reliability,availability
 ---
 
 # Database Status Analyzer

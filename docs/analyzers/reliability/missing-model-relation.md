@@ -3,6 +3,7 @@ title: Missing Model Relations Analyzer
 description: Detects references to non-existent Eloquent model relations including typos, missing relationship methods, and invalid relation calls using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,eloquent,relations,models
 ---
 
 # Missing Model Relations Analyzer

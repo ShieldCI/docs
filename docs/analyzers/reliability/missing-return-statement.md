@@ -3,6 +3,7 @@ title: Missing Return Statements Analyzer
 description: Detects methods and functions with return types that don't return values in all code paths using PHPStan Level 5 static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,return-types,type-safety
 ---
 
 # Missing Return Statements Analyzer

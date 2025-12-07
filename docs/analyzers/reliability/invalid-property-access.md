@@ -3,6 +3,7 @@ title: Invalid Property Access Analyzer
 description: Detects invalid property access including undefined properties, visibility violations, property access on non-objects, and type mismatches using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,properties,type-safety
 ---
 
 # Invalid Property Access Analyzer

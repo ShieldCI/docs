@@ -3,6 +3,7 @@ title: Cache Status Analyzer
 description: Verify your cache driver can write, read, and clean up entries without errors
 icon: database
 outline: [2, 3]
+tags: cache,infrastructure,reliability,availability
 ---
 
 # Cache Status Analyzer

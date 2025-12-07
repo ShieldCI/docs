@@ -3,6 +3,7 @@ title: Invalid Function Calls Analyzer
 description: Detects invalid function calls including undefined functions, wrong parameter types, and incorrect function signatures using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,functions,type-safety
 ---
 
 # Invalid Function Calls Analyzer

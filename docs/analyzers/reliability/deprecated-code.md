@@ -3,6 +3,7 @@ title: Deprecated Code Analyzer
 description: Detect usage of deprecated methods, classes, functions, and constants using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,deprecated,compatibility
 ---
 
 # Deprecated Code Analyzer

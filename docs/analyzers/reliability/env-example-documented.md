@@ -3,6 +3,7 @@ title: Environment Example Documentation Analyzer
 description: Ensures all environment variables used in .env are documented in .env.example for proper team onboarding and deployment
 icon: book-open
 outline: [2, 3]
+tags: environment,configuration,documentation,team-collaboration
 ---
 
 # Environment Example Documentation Analyzer

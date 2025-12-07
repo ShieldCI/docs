@@ -3,6 +3,7 @@ title: Environment File Existence Analyzer
 description: Ensures .env file exists and is properly configured for Laravel to load application configuration
 icon: file-cog
 outline: [2, 3]
+tags: environment,configuration,deployment
 ---
 
 # Environment File Existence Analyzer

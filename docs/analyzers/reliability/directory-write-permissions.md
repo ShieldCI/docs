@@ -3,6 +3,7 @@ title: Directory Write Permissions Analyzer
 description: Ensures critical Laravel directories have proper write permissions for logs, cache, sessions, and compiled views
 icon: folder-lock
 outline: [2, 3]
+tags: permissions,filesystem,reliability,deployment
 ---
 
 # Directory Write Permissions Analyzer

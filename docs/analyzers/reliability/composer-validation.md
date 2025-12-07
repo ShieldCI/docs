@@ -3,6 +3,7 @@ title: Composer Validation Analyzer
 description: Ensure composer.json is syntactically correct and passes `composer validate`
 icon: code
 outline: [2, 3]
+tags: composer,dependencies,reliability,configuration
 ---
 
 # Composer Validation Analyzer

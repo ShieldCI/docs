@@ -3,6 +3,7 @@ title: Foreach Iterable Analyzer
 description: Detects invalid foreach usage with non-iterable values using PHPStan static analysis to prevent runtime errors
 icon: repeat
 outline: [2, 3]
+tags: phpstan,static-analysis,foreach,type-safety
 ---
 
 # Foreach Iterable Analyzer

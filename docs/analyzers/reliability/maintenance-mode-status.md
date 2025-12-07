@@ -3,6 +3,7 @@ title: Maintenance Mode Status Analyzer
 description: Detects when your Laravel application is currently in maintenance mode, alerting you to potential downtime and ensuring maintenance mode is intentional
 icon: alert-triangle
 outline: [2, 3]
+tags: maintenance,availability,reliability,downtime
 ---
 
 # Maintenance Mode Status Analyzer

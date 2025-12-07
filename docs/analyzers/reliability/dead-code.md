@@ -3,6 +3,7 @@ title: Dead Code Analyzer
 description: Detect unreachable code, unused variables, and statements that have no effect using  static analysis
 icon: code
 outline: [2, 3]
+tags: phpstan,static-analysis,dead-code,code-quality
 ---
 
 # Dead Code Analyzer

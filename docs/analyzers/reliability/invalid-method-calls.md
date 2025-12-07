@@ -3,6 +3,7 @@ title: Invalid Method Calls Analyzer
 description: Detects invalid method calls including undefined methods, wrong parameter types, visibility violations, and incorrect method signatures using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,methods,type-safety
 ---
 
 # Invalid Method Calls Analyzer

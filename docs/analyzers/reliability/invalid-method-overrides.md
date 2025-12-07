@@ -3,6 +3,7 @@ title: Invalid Method Overrides Analyzer
 description: Detects incompatible method overrides with incorrect signatures, return type mismatches, parameter type violations, and visibility issues using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,inheritance,type-safety
 ---
 
 # Invalid Method Overrides Analyzer

@@ -3,6 +3,7 @@ title: Invalid Offset Access Analyzer
 description: Detects invalid array offset access including non-existent keys, wrong offset types, offset access on non-arrays, and type mismatches using PHPStan static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,arrays,type-safety
 ---
 
 # Invalid Offset Access Analyzer

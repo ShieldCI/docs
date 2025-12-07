@@ -3,6 +3,7 @@ title: Undefined Constant Usage Analyzer
 description: Detects references to undefined constants including global constants, class constants used outside scope, and constants on unknown classes using PHPStan Level 5 static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,constants,type-safety
 ---
 
 # Undefined Constant Usage Analyzer

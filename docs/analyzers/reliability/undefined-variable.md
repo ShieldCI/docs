@@ -3,6 +3,7 @@ title: Undefined Variable Usage Analyzer
 description: Detects references to undefined variables, variables that might not be defined in all code paths, and unnecessary isset() checks using PHPStan Level 5 static analysis
 icon: alert-triangle
 outline: [2, 3]
+tags: phpstan,static-analysis,variables,type-safety
 ---
 
 # Undefined Variable Usage Analyzer

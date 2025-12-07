@@ -3,6 +3,7 @@ title: Environment Variables Complete Analyzer
 description: Ensures all required environment variables from .env.example are defined in .env to prevent missing configuration errors
 icon: list-checks
 outline: [2, 3]
+tags: environment,configuration,reliability,deployment
 ---
 
 # Environment Variables Complete Analyzer

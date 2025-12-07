@@ -3,6 +3,7 @@ title: Up-to-Date Migrations Analyzer
 description: Ensures all database migrations are up to date and have been executed in your Laravel application to prevent data inconsistencies and deployment issues
 icon: database
 outline: [2, 3]
+tags: database,migrations,reliability,deployment
 ---
 
 # Up-to-Date Migrations Analyzer
