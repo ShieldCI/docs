@@ -3,6 +3,7 @@ title: MySQL Single Server Optimization Analyzer
 description: Detects MySQL read/write configuration on single server, suggesting optimization opportunities
 icon: zap
 outline: [2, 3]
+tags: mysql,database,performance,sockets,optimization
 ---
 
 # MySQL Single Server Optimization Analyzer

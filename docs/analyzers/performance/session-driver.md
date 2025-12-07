@@ -3,6 +3,7 @@ title: Session Driver Configuration Analyzer
 description: Validates that Laravel's session driver is appropriate for production scalability - Redis or database for multi-server setups
 icon: zap
 outline: [2, 3]
+tags: session,performance,configuration,redis,scalability
 ---
 
 # Session Driver Configuration Analyzer

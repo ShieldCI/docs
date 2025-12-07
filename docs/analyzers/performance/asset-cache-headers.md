@@ -3,6 +3,7 @@ title: Asset Cache Headers Analyzer
 description: Validates that proper HTTP cache headers are configured for static assets and responses
 icon: zap
 outline: [2, 3]
+tags: cache,assets,performance,headers,browser-cache
 ---
 
 # Asset Cache Headers Analyzer

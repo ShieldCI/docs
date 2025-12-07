@@ -3,6 +3,7 @@ title: Debug Log Level Analyzer
 description: Detects excessive debug logging in production that degrades performance and fills disk space
 icon: alert-circle
 outline: [2, 3]
+tags: logging,performance,configuration
 ---
 
 # Debug Log Level Analyzer

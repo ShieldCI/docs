@@ -3,6 +3,7 @@ title: Collection Call Optimization Analyzer
 description: Detects inefficient collection operations that could be optimized for better performance
 icon: zap
 outline: [2, 3]
+tags: database,collection,performance,n+1,optimization,phpstan
 ---
 
 # Collection Call Optimization Analyzer

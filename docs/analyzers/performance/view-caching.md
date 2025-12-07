@@ -3,6 +3,7 @@ title: View Caching Analyzer
 description: Validates that Blade templates are properly precompiled and cached in production/staging environments for optimal performance
 icon: zap
 outline: [2, 3]
+tags: cache,views,blade,performance,optimization
 ---
 
 # View Caching Analyzer

@@ -3,6 +3,7 @@ title: Cache Driver Configuration Analyzer
 description: Validates that your Laravel application uses an appropriate cache driver for the current environment
 icon: zap
 outline: [2, 3]
+tags: cache,performance,configuration,redis,memcached
 ---
 
 # Cache Driver Configuration Analyzer

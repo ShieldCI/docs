@@ -3,6 +3,7 @@ title: Asset Minification Analyzer
 description: Validates that JavaScript and CSS assets are minified for production deployment
 icon: zap
 outline: [2, 3]
+tags: assets,minification,performance,javascript,css
 ---
 
 # Asset Minification Analyzer

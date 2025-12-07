@@ -3,6 +3,7 @@ title: Dev Dependencies in Production Analyzer
 description: Ensures development dependencies are not installed in production environments
 icon: alert-circle
 outline: [2, 3]
+tags: composer,dependencies,performance,memory,production
 ---
 
 # Dev Dependencies in Production Analyzer

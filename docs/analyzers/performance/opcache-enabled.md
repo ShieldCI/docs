@@ -3,6 +3,7 @@ title: OPcache Enabled Analyzer
 description: Validates that PHP's OPcache extension is installed, enabled, and properly configured for production performance
 icon: zap
 outline: [2, 3]
+tags: php,opcache,performance,optimization,bytecode
 ---
 
 # OPcache Enabled Analyzer

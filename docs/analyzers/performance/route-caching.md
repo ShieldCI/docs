@@ -3,6 +3,7 @@ title: Route Caching Analyzer
 description: Validates that Laravel's route caching is properly configured - enabled in production for performance
 icon: zap
 outline: [2, 3]
+tags: cache,routes,performance,optimization
 ---
 
 # Route Caching Analyzer

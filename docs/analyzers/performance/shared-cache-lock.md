@@ -3,6 +3,7 @@ title: Shared Cache Lock Store Analyzer
 description: Validates that atomic locks use a shared backend (Redis/Memcached) in load-balanced environments
 icon: zap
 outline: [2, 3]
+tags: performance,cache,locks,redis,reliability
 ---
 
 # Shared Cache Lock Store Analyzer

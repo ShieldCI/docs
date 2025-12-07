@@ -3,6 +3,7 @@ title: Composer Autoloader Optimization Analyzer
 description: Validates that Composer's autoloader is optimized for production performance by checking for classmap optimization
 icon: zap
 outline: [2, 3]
+tags: composer,autoloader,performance,optimization
 ---
 
 # Composer Autoloader Optimization Analyzer

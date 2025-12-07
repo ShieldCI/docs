@@ -3,6 +3,7 @@ title: Configuration Caching Analyzer
 description: Verifies that Laravel's configuration caching is properly configured for each environment
 icon: zap
 outline: [2, 3]
+tags: cache,configuration,performance,optimization
 ---
 
 # Configuration Caching Analyzer

@@ -3,6 +3,7 @@ title: Env Calls Outside Config Analyzer
 description: Detects direct env() calls outside config files, which breaks config caching and causes unpredictable behavior
 icon: alert-circle
 outline: [2, 3]
+tags: configuration,cache,performance,env
 ---
 
 # Env Calls Outside Config Analyzer

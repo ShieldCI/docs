@@ -3,6 +3,7 @@ title: Unused Global Middleware Analyzer
 description: Detects global middleware that runs on every request but may not be needed, impacting performance
 icon: alert-circle
 outline: [2, 3]
+tags: performance,middleware,optimization,http
 ---
 
 # Unused Global Middleware Analyzer

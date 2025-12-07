@@ -3,6 +3,7 @@ title: Queue Driver Configuration Analyzer
 description: Ensures Laravel's queue driver is configured for reliability and performance - Redis or SQS for production
 icon: zap
 outline: [2, 3]
+tags: queue,performance,configuration,redis,sqs
 ---
 
 # Queue Driver Configuration Analyzer
