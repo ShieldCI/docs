@@ -67,11 +67,21 @@ return [
     | Enable or disable analyzer categories
     */
     'analyzers' => [
-        'security' => true,
-        'performance' => true,
-        'reliability' => true,
-        'code_quality' => true,
-        'best_practices' => true,
+        'security' => [
+            'enabled' => true,
+        ],
+        'performance' => [
+            'enabled' => true,
+        ],
+        'reliability' => [
+            'enabled' => true,
+        ],
+        'code_quality' => [
+            'enabled' => true,
+        ],
+        'best_practices' => [
+            'enabled' => true,
+        ],
     ],
 
     /*
@@ -114,11 +124,26 @@ return [
 **Run specific categories:**
 ```php
 'analyzers' => [
-    'security' => true,      // Run all 22 security analyzers
-    'performance' => true,   // Run all 18 performance analyzers
-    'reliability' => false,  // Skip reliability analyzers
-    'code_quality' => false,
-    'best_practices' => false,
+    // Run all security analyzers
+    'security' => [
+        'enabled' => true
+    ],
+    // Run all performance analyzers
+    'performance' => [
+        'enabled' => true
+    ],
+    // Skip reliability analyzers
+    'reliability' => [
+        'enabled' => false
+    ],
+    // Run all code quality analyzers
+    'code_quality' => [
+        'enabled' => true
+    ],
+    // Run all best practices analyzers
+    'best_practices' => [
+        'enabled' => true
+    ],
 ],
 ```
 
@@ -399,11 +424,21 @@ Future runs with `--baseline` flag only report **new** issues introduced after b
 ```php
 return [
     'analyzers' => [
-        'security' => true,
-        'performance' => true,
-        'reliability' => env('APP_ENV') !== 'production',
-        'code_quality' => env('APP_ENV') !== 'production',
-        'best_practices' => env('APP_ENV') !== 'production',
+        'security' => [
+            'enabled' => true,
+        ],
+        'performance' => [
+            'enabled' => true,
+        ],
+        'reliability' => [
+            'enabled' => env('APP_ENV') !== 'production',
+        ],
+        'code_quality' => [
+            'enabled' => env('APP_ENV') !== 'production',
+        ],
+        'best_practices' => [
+            'enabled' => env('APP_ENV') !== 'production',
+        ],
     ],
 
     'fail_on' => env('SHIELDCI_FAIL_ON', 'critical'),
@@ -419,44 +454,6 @@ SHIELDCI_FAIL_ON=medium
 SHIELDCI_FAIL_ON=critical
 ```
 
-### Staged Rollout
-
-**Phase 1: Security only**
-```php
-'analyzers' => [
-    'security' => true,
-    'performance' => false,
-    'reliability' => false,
-    'code_quality' => false,
-    'best_practices' => false,
-],
-'fail_on' => 'critical',
-```
-
-**Phase 2: Add performance**
-```php
-'analyzers' => [
-    'security' => true,
-    'performance' => true,
-    'reliability' => false,
-    'code_quality' => false,
-    'best_practices' => false,
-],
-'fail_on' => 'high',
-```
-
-**Phase 3: Full analysis**
-```php
-'analyzers' => [
-    'security' => true,
-    'performance' => true,
-    'reliability' => true,
-    'code_quality' => true,
-    'best_practices' => true,
-],
-'fail_on' => 'medium',
-```
-
 ## Reporting Configuration
 
 **Configure report format and output:**
@@ -469,75 +466,6 @@ SHIELDCI_FAIL_ON=critical
     'max_issues_per_check' => 5,  // Limit displayed issues per analyzer
 ],
 ```
-
-## Example Configurations
-
-### Minimum Security Check (Fast)
-
-```php
-return [
-    'analyzers' => [
-        'security' => true,
-        'performance' => false,
-        'reliability' => false,
-        'code_quality' => false,
-        'best_practices' => false,
-    ],
-    'fail_on' => 'critical',
-];
-```
-
-**Run specific security analyzers:**
-```bash
-php artisan shield:analyze --category=security
-```
-
-**Duration:** ~10-15 seconds
-
-### Comprehensive Analysis (Thorough)
-
-```php
-return [
-    'analyzers' => [
-        'security' => true,
-        'performance' => true,
-        'reliability' => true,
-        'code_quality' => true,
-        'best_practices' => true,
-    ],
-    'fail_on' => 'medium',
-];
-```
-
-**Duration:** ~60 seconds
-
-### CI/CD Optimized
-
-```php
-return [
-    'analyzers' => [
-        'security' => true,
-        'reliability' => true,
-    ],
-    'report' => [
-        'format' => 'json',
-    ],
-    'fail_on' => 'high',
-    'ci_mode' => true,
-];
-```
-
-**Duration:** ~15-20 seconds
-
-## Configuration Validation
-
-**Test your configuration:**
-Run the analysis command to validate your configuration:
-```bash
-php artisan shield:analyze
-```
-
-If there are configuration errors, they will be displayed in the output.
 
 ## Next Steps
 

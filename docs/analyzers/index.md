@@ -136,11 +136,21 @@ Configure which analyzers to run in `config/shieldci.php`:
 return [
     'analyzers' => [
         // Enable/disable categories
-        'security' => true,
-        'performance' => true,
-        'reliability' => true,
-        'code_quality' => true,
-        'best_practices' => true,
+        'security' => [
+            'enabled' => true,
+        ],
+        'performance' => [
+            'enabled' => true,
+        ],
+        'reliability' => [
+            'enabled' => true,
+        ],
+        'code_quality' => [
+            'enabled' => true,
+        ],
+        'best_practices' => [
+            'enabled' => true,
+        ],
     ],
 
     // Disable specific analyzers

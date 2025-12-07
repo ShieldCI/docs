@@ -140,11 +140,21 @@ return [
      * Analyzers to run (all enabled by default)
      */
     'analyzers' => [
-        'security' => true,
-        'performance' => true,
-        'reliability' => true,
-        'code_quality' => true,
-        'best_practices' => true,
+        'security' => [
+            'enabled' => true,
+        ],
+        'performance' => [
+            'enabled' => true,
+        ],
+        'reliability' => [
+            'enabled' => true,
+        ],
+        'code_quality' => [
+            'enabled' => true,
+        ],
+        'best_practices' => [
+            'enabled' => true,
+        ],
     ],
 
     /*
