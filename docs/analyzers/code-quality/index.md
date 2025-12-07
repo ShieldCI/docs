@@ -1,13 +1,13 @@
 ---
 title: Code Quality Analyzers
-description: 15 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: 7 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
 icon: code
 outline: [2, 3]
 ---
 
 # Code Quality Analyzers
 
-**15 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
+**7 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
 
 ## Overview
 
@@ -15,32 +15,21 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 
 ## Key Analyzers
 
-### Complexity Analysis
+### Complexity & Structure
 
-- **[Cognitive Complexity](/analyzers/code-quality/cognitive-complexity)** - Measures how difficult code is to understand mentally
-- **[Cyclomatic Complexity](/analyzers/code-quality/cyclomatic-complexity)** - Measures the number of linearly independent paths through code
-- **[Complex Conditional](/analyzers/code-quality/complex-conditional)** - Detects overly complex conditional statements
-- **[Nesting Depth](/analyzers/code-quality/nesting-depth)** - Detects excessive code nesting levels
-
-### Code Structure
-
-- **[Class Length](/analyzers/code-quality/class-length)** - Detects classes that exceed recommended length limits
-- **[Method Length](/analyzers/code-quality/method-length)** - Detects methods that exceed recommended length limits
-- **[Long Parameter List](/analyzers/code-quality/long-parameter-list)** - Detects methods with too many parameters
-- **[Parameter Count](/analyzers/code-quality/parameter-count)** - Validates parameter count against best practices
+- **[Nesting Depth Analyzer](/analyzers/code-quality/nesting-depth)** - Detects excessive code nesting levels that reduce readability
+- **[Method Length Analyzer](/analyzers/code-quality/method-length)** - Flags methods exceeding recommended line count for better maintainability
 
 ### Code Smells
 
-- **[Commented Code](/analyzers/code-quality/commented-code)** - Detects commented-out code that should be removed
-- **[Duplicate Code](/analyzers/code-quality/duplicate-code)** - Detects code duplication that should be refactored
-- **[Magic Number](/analyzers/code-quality/magic-number)** - Detects magic numbers that should be constants
-- **[Todo Comment](/analyzers/code-quality/todo-comment)** - Tracks TODO comments that need attention
+- **[Commented Code Analyzer](/analyzers/code-quality/commented-code)** - Detects commented-out code that should be removed in favor of version control
+- **[Magic Number Analyzer](/analyzers/code-quality/magic-number)** - Detects hard-coded numbers that should be named constants
+- **[Todo Comment Analyzer](/analyzers/code-quality/todo-comment)** - Finds TODO/FIXME/HACK comments that should be addressed or tracked in issue tracker
 
 ### Documentation & Naming
 
-- **[Missing DocBlock](/analyzers/code-quality/missing-docblock)** - Ensures methods and classes have proper documentation
-- **[Naming Convention](/analyzers/code-quality/naming-convention)** - Validates naming follows PSR and Laravel conventions
-- **[Inconsistent Naming](/analyzers/code-quality/inconsistent-naming)** - Detects inconsistent naming patterns across codebase
+- **[Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock)** - Flags public methods without proper PHPDoc documentation
+- **[Naming Convention Analyzer](/analyzers/code-quality/naming-convention)** - Validates PSR and Laravel naming standards for better code consistency
 
 ## How They Work
 
@@ -232,15 +221,15 @@ php artisan shield:analyze --category=code-quality
 ### Run Specific Analyzer
 
 ```bash
-php artisan shield:analyze --analyzer=cognitive-complexity
-php artisan shield:analyze --analyzer=duplicate-code
+php artisan shield:analyze --analyzer=nesting-depth
+php artisan shield:analyze --analyzer=method-length
 php artisan shield:analyze --analyzer=missing-docblock
 ```
 
 ### Run Multiple Analyzers
 
 ```bash
-php artisan shield:analyze --analyzer=cognitive-complexity,cyclomatic-complexity,method-length
+php artisan shield:analyze --analyzer=nesting-depth,method-length,magic-number
 ```
 
 ## Best Practices
@@ -263,22 +252,6 @@ php artisan shield:analyze --analyzer=cognitive-complexity,cyclomatic-complexity
 - Document naming conventions and coding standards
 - Use code quality metrics to track improvement over time
 
-## Configuration
-
-Configure code quality thresholds in `config/shieldci.php`:
-
-```php
-return [
-    'analyzers' => [
-        'code-quality' => [
-            'max_complexity' => 10,
-            'max_method_length' => 50,
-            'max_class_length' => 500,
-            'max_nesting_depth' => 4,
-        ],
-    ],
-];
-```
 
 ## Related Categories
 
