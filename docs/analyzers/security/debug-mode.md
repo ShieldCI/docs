@@ -10,11 +10,17 @@ tags: debug,information-disclosure,security,configuration
 
 | Analyzer ID  | Category     | Severity   | Time To Fix  |
 | -------------| :----------: |:----------:| ------------:|
-| `debug-mode` | 🛡️ Security  | High       | 5 minutes   |
+| `debug-mode` | 🛡️ Security  | Critical   | 5 minutes   |
 
 ## What This Checks
 
-Detects debug mode configurations and debugging functions that expose sensitive information in production environments. Scans for `APP_DEBUG=true`, hardcoded debug settings, debug functions (`dd()`, `dump()`, `ray()`), error display configurations, and debug packages in production dependencies that can leak application internals, credentials, and stack traces to attackers.
+Detects debug mode configurations and debugging functions that expose sensitive information. Checks:
+
+- **`.env` file**: `APP_DEBUG=true` or variants (`1`, `yes`, `"true"`)
+- **`config/app.php`**: Hardcoded `debug => true` (should use `env()`)
+- **PHP code**: Debug functions like `dd()`, `dump()`, `var_dump()`, `ray()`
+- **Error handling**: `ini_set('display_errors')`, `error_reporting(E_ALL)`
+- **Dependencies**: Debug packages in `require` section (should be `require-dev`)
 
 ## Why It Matters
 
@@ -31,17 +37,32 @@ Debug mode enabled in production is one of the most dangerous misconfigurations 
 - Framework versions helping attackers find known vulnerabilities
 - File system paths assisting in directory traversal attacks
 
+::: info Environment-Aware Analysis
+This analyzer is **smart about development vs. production environments**:
+
+- ✅ **Development/Local**: `APP_DEBUG=true` with `APP_ENV=local` or `development` will **pass** - this is the correct configuration for local development
+- ⚠️ **Production/Staging**: `APP_DEBUG=true` with `APP_ENV=production` or `staging` triggers **Critical** severity - this is extremely dangerous
+
+The analyzer reads `APP_ENV` from your `.env` file to intelligently determine if debug mode is appropriate for your environment.
+:::
+
 ## How to Fix
 
 ### Quick Fix (1 minute)
 
-**Scenario 1: APP_DEBUG=true in Production**
+**Scenario 1: APP_DEBUG=true in Production/Staging**
 
 ```bash
-# Edit .env.production file
+# For production/staging environments:
+# Edit your .env file
 APP_DEBUG=false
 APP_ENV=production
 LOG_LEVEL=error
+
+# For development environments (already correct):
+APP_DEBUG=true
+APP_ENV=local
+LOG_LEVEL=debug
 
 # Clear configuration cache
 php artisan config:clear
@@ -85,33 +106,18 @@ return [
     'debug' => env('APP_DEBUG', false), // Default to false
     'env' => env('APP_ENV', 'production'),
 
-    // Hide sensitive variables from debug output
-    'debug_hide' => [
-        '_TOKEN',
-        '_SESSION',
-        'APP_KEY',
-        'DB_PASSWORD',
-        'DB_USERNAME',
-        'REDIS_PASSWORD',
-        'MAIL_PASSWORD',
-        'AWS_ACCESS_KEY_ID',
-        'AWS_SECRET_ACCESS_KEY',
-        'PUSHER_APP_KEY',
-        'PUSHER_APP_SECRET',
-        'STRIPE_SECRET',
-    ],
 ];
 ```
 
 **2. Set Correct Environment Variables**
 
 ```ini
-# .env.local (development)
+# .env (development - APP_DEBUG=true is SAFE here)
 APP_DEBUG=true
 APP_ENV=local
 LOG_LEVEL=debug
 
-# .env.production (production)
+# .env (production - APP_DEBUG=true is DANGEROUS here)
 APP_DEBUG=false
 APP_ENV=production
 LOG_LEVEL=error
@@ -188,16 +194,17 @@ protected function renderApiError(Throwable $exception): JsonResponse
 # .git/hooks/pre-commit
 #!/bin/bash
 
-# Check for debug functions
-if git diff --cached | grep -E '(dd\(|dump\(|var_dump\(|ray\()'; then
+# Check for debug functions in PHP files
+if git diff --cached --name-only | grep '\.php$' | xargs grep -E '(dd\(|dump\(|var_dump\(|ray\()' 2>/dev/null; then
     echo "Error: Debug function found in staged files"
     echo "Remove dd(), dump(), var_dump(), or ray() before committing"
     exit 1
 fi
 
-# Check for APP_DEBUG=true in production files
-if git diff --cached .env.production | grep -E 'APP_DEBUG\s*=\s*true'; then
-    echo "Error: APP_DEBUG=true found in .env.production"
+# Check for debug packages in require section
+if git diff --cached composer.json | grep -A 1 '"require"' | grep -E '(debugbar|telescope|ray|dump-server)'; then
+    echo "Error: Debug package found in 'require' section"
+    echo "Move debug packages to 'require-dev'"
     exit 1
 fi
 ```
