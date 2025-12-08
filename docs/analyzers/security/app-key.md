@@ -1,6 +1,6 @@
 ---
 title: Application Key Analyzer
-description: Validates that Laravel's APP_KEY encryption key is properly configured, secure, and consistent across environment files
+description: Validates that Laravel's APP_KEY encryption key is properly configured and secure in your .env file
 icon: lock
 outline: [2, 3]
 tags: encryption,app-key,security,configuration
@@ -14,7 +14,15 @@ tags: encryption,app-key,security,configuration
 
 ## What This Checks
 
-Validates that Laravel's `APP_KEY` encryption key is properly configured, secure, and consistent across environment files. Checks for missing keys, placeholder values, weak formats, duplicate definitions, cached configurations, and cross-environment inconsistencies.
+Validates that Laravel's `APP_KEY` encryption key is properly configured and secure in your `.env` file and `config/app.php`. Checks for:
+
+- Missing or empty APP_KEY in `.env`
+- Placeholder/example values (e.g., "your-key-here")
+- Weak key formats (too short or improperly encoded)
+- Duplicate APP_KEY definitions in `.env`
+- Hardcoded keys in `config/app.php` (should use `env()`)
+- Insecure cipher algorithms
+- Cached configuration that prevents `.env` changes from taking effect
 
 ## Why It Matters
 
@@ -22,12 +30,6 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured, secure
 - **Data Loss:** If APP_KEY changes, all encrypted data becomes permanently unreadable
 - **Session Security:** Weak or default keys allow attackers to forge sessions and impersonate users
 - **CSRF Protection:** Laravel's CSRF tokens depend on APP_KEY for cryptographic signing
-
-The `APP_KEY` is the foundation of Laravel's security. A compromised, missing, or inconsistent key can lead to:
-- Session hijacking and user impersonation
-- Encrypted database fields becoming unreadable
-- Cookie tampering and authentication bypasses
-- Complete security compromise of the application
 
 ## How to Fix
 
@@ -79,24 +81,19 @@ php artisan key:generate
 # - Or use encrypted .env files
 ```
 
-**2. Consistent Keys Across Environments (Important!)**
+**2. Environment-Specific Key Management**
 
 ```bash
-# Production and staging MUST use the SAME key
-# Otherwise encrypted data won't work between environments
+# Development (.env) - Use a unique key for local development
+APP_KEY=base64:LOCAL_DEV_KEY_HERE
 
-# Option A: Share the key between environments
-# .env (local)
-APP_KEY=base64:LOCAL_KEY_FOR_DEVELOPMENT
+# Production/Staging - Manage through deployment process
+# - Use CI/CD environment variables
+# - Use secrets managers (AWS Secrets Manager, Vault, etc.)
+# - Use platform environment config (Laravel Forge, Vapor, etc.)
 
-# .env.production (production)
-APP_KEY=base64:SAME_KEY_AS_STAGING
-
-# .env.staging (staging)
-APP_KEY=base64:SAME_KEY_AS_PRODUCTION
-
-# Option B: Use separate keys but re-encrypt data when promoting
-# This is more secure but complex - only for advanced use cases
+# Important: Production and staging should typically use the SAME key
+# if you share encrypted data between them (e.g., database backups)
 ```
 
 **3. Never Commit Real Keys to Git**
@@ -186,12 +183,18 @@ cat bootstrap/cache/config.php | grep 'key'
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI environments typically use test keys that differ from production
-- Prevents false failures in CI pipelines
-- Should be checked in staging/production environments where real keys are used
+- CI environments typically use test/placeholder keys for running tests
+- Real production keys should never be in the repository or CI environment
+- Prevents false failures in CI pipelines where placeholder keys are expected
+- The analyzer should run in actual deployment environments (staging, production) where real keys are configured
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures developers have proper keys configured
+- ✅ **Staging/Production servers**: Validates environment-specific keys are secure
+- ❌ **CI/CD pipelines**: Skipped automatically (test keys are expected)
 
 ## References
 
