@@ -379,7 +379,7 @@ ShieldCI provides two mechanisms for handling issues: `ignore_errors` (completel
 
 Issues matching `ignore_errors` rules are **completely removed** from the report and do not appear in console/JSON output.
 
-**Ignore specific file and message:**
+**Ignore exact file and exact message:**
 ```php
 'ignore_errors' => [
     'sql-injection' => [
@@ -391,13 +391,13 @@ Issues matching `ignore_errors` rules are **completely removed** from the report
 ],
 ```
 
-**Ignore by pattern:**
+**Ignore using patterns:**
 ```php
 'ignore_errors' => [
     'xss-vulnerabilities' => [
         [
             'path_pattern' => 'app/Legacy/*.php',
-            'message_pattern' => '*XSS*',
+            'message_pattern' => 'Potential XSS*',
         ],
     ],
 ],
@@ -416,7 +416,7 @@ Issues matching `ignore_errors` rules are **completely removed** from the report
 ```php
 'ignore_errors' => [
     'debug-mode' => [
-        ['message_pattern' => '*Ray debugging*'],
+        ['message_pattern' => 'Ray debugging*'],
     ],
 ],
 ```
@@ -433,12 +433,14 @@ Issues matching `ignore_errors` rules are **completely removed** from the report
 ```
 
 **Matching Rules:**
-- Path matching is case-sensitive on case-sensitive filesystems
-- Message matching is case-sensitive for exact matches
-- Patterns use Laravel `Str::is()` (supports `*`, `?`, `[abc]`)
+
+- `path`: Exact match only (normalized for Windows/Unix compatibility)
+- `path_pattern`: Glob pattern using fnmatch (supports wildcards and globstars)
+- `message`: Exact match only (case-sensitive)
+- `message_pattern`: Laravel `Str::is()` wildcards (supports `*`, `?`, `[abc]`)
 - Both path AND message must match if both are specified
-- If only path is specified, all issues in that path are ignored
-- If only message is specified, all issues with that message are ignored
+- If only path criteria specified: matches ANY message in that path
+- If only message criteria specified: matches ANY path with that message
 
 #### Don't Report (Informational Only)
 
@@ -478,7 +480,9 @@ ShieldCI validates your `ignore_errors` configuration and displays warnings for:
 - Unknown analyzer IDs
 - Invalid rule structure
 - Empty rules (missing matching criteria)
-- Potentially invalid glob patterns
+- Conflicting keys (both `path` and `path_pattern` in same rule)
+- Conflicting keys (both `message` and `message_pattern` in same rule)
+- Invalid glob patterns (e.g., `**` without `/`)
 
 These warnings don't block execution but help you fix configuration issues.
 :::
