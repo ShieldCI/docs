@@ -202,40 +202,6 @@ Set `SHIELDCI_ENABLED=false` in your `.env` to completely disable ShieldCI.
 php artisan shield:analyze --analyzer=sql-injection
 ```
 
-### Ignoring Issues
-
-**Ignore specific errors:**
-```php
-'ignore_errors' => [
-    'sql-injection' => [
-        [
-            'path' => 'app/Legacy/OldController.php',
-            'message' => 'Potential SQL injection vulnerability',
-        ],
-    ],
-],
-```
-
-**Ignore by pattern:**
-```php
-'ignore_errors' => [
-    'xss-detection' => [
-        [
-            'path_pattern' => 'app/Legacy/*.php',
-            'message_pattern' => '*XSS*',
-        ],
-    ],
-],
-```
-
-**Don't report specific analyzers:**
-```php
-'dont_report' => [
-    'missing-error-tracking',  // Run but don't affect exit code
-    'select-asterisk',
-],
-```
-
 ## Path Configuration
 
 ### Custom Analysis Paths
@@ -405,9 +371,15 @@ Or configure baseline file location:
 
 Future runs with `--baseline` flag only report **new** issues introduced after baseline creation.
 
-### Ignore Specific Issues
+### Ignoring Issues
 
-**By file and message:**
+ShieldCI provides two mechanisms for handling issues: `ignore_errors` (completely removes issues from reports) and `dont_report` (shows issues but doesn't fail CI).
+
+#### Ignore Errors (Complete Suppression)
+
+Issues matching `ignore_errors` rules are **completely removed** from the report and do not appear in console/JSON output.
+
+**Ignore specific file and message:**
 ```php
 'ignore_errors' => [
     'sql-injection' => [
@@ -419,10 +391,10 @@ Future runs with `--baseline` flag only report **new** issues introduced after b
 ],
 ```
 
-**By pattern:**
+**Ignore by pattern:**
 ```php
 'ignore_errors' => [
-    'xss-detection' => [
+    'xss-vulnerabilities' => [
         [
             'path_pattern' => 'app/Legacy/*.php',
             'message_pattern' => '*XSS*',
@@ -431,12 +403,85 @@ Future runs with `--baseline` flag only report **new** issues introduced after b
 ],
 ```
 
-**Disable analyzers:**
+**Ignore all issues in a specific file:**
 ```php
-'disabled_analyzers' => [
-    'license-compliance',  // Never run this analyzer
+'ignore_errors' => [
+    'sql-injection' => [
+        ['path' => 'app/Models/OldModel.php'],
+    ],
 ],
 ```
+
+**Ignore specific message across all files:**
+```php
+'ignore_errors' => [
+    'debug-mode' => [
+        ['message_pattern' => '*Ray debugging*'],
+    ],
+],
+```
+
+**Multiple rules for same analyzer:**
+```php
+'ignore_errors' => [
+    'xss-vulnerabilities' => [
+        ['path_pattern' => 'app/Legacy/*.php'],
+        ['path_pattern' => 'app/Admin/Old*.php'],
+        ['message' => 'Known safe usage in template'],
+    ],
+],
+```
+
+**Matching Rules:**
+- Path matching is case-sensitive on case-sensitive filesystems
+- Message matching is case-sensitive for exact matches
+- Patterns use Laravel `Str::is()` (supports `*`, `?`, `[abc]`)
+- Both path AND message must match if both are specified
+- If only path is specified, all issues in that path are ignored
+- If only message is specified, all issues with that message are ignored
+
+#### Don't Report (Informational Only)
+
+Analyzers in `dont_report` run normally and show in the report, but **don't affect the exit code**. Useful for gradual adoption or informational checks.
+
+```php
+'dont_report' => [
+    'missing-error-tracking',  // Shows in report but doesn't fail CI
+    'select-asterisk',         // Shows in report but doesn't fail CI
+],
+```
+
+**Behavior:**
+- Analyzers run normally and show in report output
+- Issues are displayed in console/JSON output
+- Exit code is not affected (won't fail CI/CD)
+- Can be auto-populated by `php artisan shield:baseline`
+- Merged with baseline's `dont_report` when using `--baseline` flag
+
+#### Comparison: ignore_errors vs dont_report vs disabled_analyzers
+
+| Feature | `ignore_errors` | `dont_report` | `disabled_analyzers` |
+|---------|----------------|---------------|---------------------|
+| Analyzer runs? | ✅ Yes | ✅ Yes | ❌ No |
+| Shows in report? | ❌ No (filtered out) | ✅ Yes | ❌ No |
+| Affects exit code? | ❌ No | ❌ No | ❌ No |
+| Granularity | Per-issue (file/message) | Per-analyzer | Per-analyzer |
+| Use case | Known false positives | Gradual adoption | Not applicable to project |
+
+**When to use each:**
+- **`ignore_errors`**: You've reviewed specific issues and determined they're false positives or acceptable risks
+- **`dont_report`**: You want visibility into issues but don't want them to fail CI (yet)
+- **`disabled_analyzers`**: The analyzer doesn't apply to your project at all
+
+::: tip Configuration Validation
+ShieldCI validates your `ignore_errors` configuration and displays warnings for:
+- Unknown analyzer IDs
+- Invalid rule structure
+- Empty rules (missing matching criteria)
+- Potentially invalid glob patterns
+
+These warnings don't block execution but help you fix configuration issues.
+:::
 
 ### Inline Suppression
 
@@ -594,8 +639,8 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `ci_mode_exclude_analyzers` | array | `[]` | Blacklist of analyzers to exclude in CI mode |
 | `environment_mapping` | array | `[]` | Map custom environment names to standard types |
 | `analyzers` | array | All `enabled: true` | Enable/disable analyzer categories and configure analyzer-specific settings |
-| `disabled_analyzers` | array | `[]` | Disable specific analyzers by ID |
-| `dont_report` | array | `[]` | Analyzers to run but not affect exit code |
+| `disabled_analyzers` | array | `[]` | Disable specific analyzers by ID (never run) |
+| `dont_report` | array | `[]` | Analyzers to run but not affect exit code (shows in report) |
 | `paths.analyze` | array | `['app', 'config', ...]` | Directories to analyze |
 | `excluded_paths` | array | `['vendor/*', ...]` | Paths to skip (glob patterns) |
 | `build_path` | string | `public_path()` | Path where compiled assets are located |
@@ -606,7 +651,7 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `report.show_code_snippets` | bool | `true` | Show code snippets in output |
 | `report.max_issues_per_check` | int | `5` | Limit displayed issues per analyzer |
 | `baseline_file` | string | `.shieldci-baseline.json` | Baseline file path |
-| `ignore_errors` | array | `[]` | Ignore specific errors by analyzer |
+| `ignore_errors` | array | `[]` | Ignore specific errors by analyzer (completely removes from report) |
 | `guest_url` | string\|null | `null` | Guest URL for HTTP-based analyzers |
 | `fail_on` | string | `'critical'` | Failure threshold for CI (never, critical, high, medium, low) |
 | `fail_threshold` | int\|null | `null` | Minimum score to pass (0-100) |
