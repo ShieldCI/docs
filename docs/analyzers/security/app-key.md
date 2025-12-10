@@ -22,7 +22,6 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 - Duplicate APP_KEY definitions in `.env`
 - Hardcoded keys in `config/app.php` (should use `env()`)
 - Insecure cipher algorithms
-- Cached configuration that prevents `.env` changes from taking effect
 
 ## Why It Matters
 
