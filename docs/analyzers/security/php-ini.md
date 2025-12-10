@@ -20,30 +20,22 @@ Checks include:
 
 - **Dangerous settings disabled**: `allow_url_fopen`, `allow_url_include`, `expose_php`
 - **Error handling**: `display_errors` disabled, `log_errors` enabled
-- **Dangerous functions**: Functions like `exec`, `shell_exec`, `system` are disabled
-- **File access restrictions**: `open_basedir` configured to limit file access
-- **Error reporting**: Proper verbosity levels (not too verbose for production)
 
 ## Why It Matters
 
-- **Remote Code Execution (RCE)**: Functions like `exec()` and `system()` allow attackers to execute arbitrary system commands
 - **Information Disclosure**: `display_errors` and `expose_php` leak sensitive information about your application
 - **Remote File Inclusion (RFI)**: `allow_url_include` enables attackers to include malicious remote files
 - **Local File Inclusion (LFI)**: `allow_url_fopen` with weak code can expose sensitive files
-- **Directory Traversal**: Missing `open_basedir` allows reading files outside application directory
 
 Misconfigured PHP settings are consistently in OWASP Top 10 (A05:2021 – Security Misconfiguration). Common attack vectors include:
 
-1. **RCE via exec()**: `exec($_GET['cmd'])` → Full server compromise
-2. **Error disclosure**: Stack traces reveal file paths, database credentials, API keys
-3. **RFI attacks**: `include($_GET['page'])` with `allow_url_include=On` → Remote shell
-4. **Version fingerprinting**: `expose_php=On` → `X-Powered-By: PHP/8.1.0` helps attackers target known vulnerabilities
+1. **Error disclosure**: Stack traces reveal file paths, database credentials, API keys
+2. **RFI attacks**: `include($_GET['page'])` with `allow_url_include=On` → Remote shell
+3. **Version fingerprinting**: `expose_php=On` → `X-Powered-By: PHP/8.1.0` helps attackers target known vulnerabilities
 
 ## How to Fix
 
 ### Quick Fix (5 minutes)
-
-**Scenario 1: Dangerous Settings Enabled**
 
 Find your `php.ini` file location:
 ```bash
@@ -82,21 +74,6 @@ sudo systemctl restart nginx
 sudo systemctl restart php8.1-fpm
 ```
 
-**Scenario 2: Dangerous Functions Still Enabled**
-
-Add to your `php.ini`:
-```ini
-disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
-```
-
-**Scenario 3: Missing open_basedir Restriction**
-
-Restrict file access to your application directory:
-```ini
-# Replace with your actual application path
-open_basedir = /var/www/html:/tmp
-```
-
 ### Proper Fix (15 minutes)
 
 Implement comprehensive PHP security hardening:
@@ -124,18 +101,11 @@ display_startup_errors = Off
 ; Enable error logging instead
 log_errors = On
 error_log = /var/log/php/error.log
-error_reporting = E_ALL & ~E_DEPRECATED & ~E_STRICT
-
-; Disable dangerous functions
-disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source,phpinfo
 
 ; File upload restrictions
 file_uploads = On
 upload_max_filesize = 2M
 max_file_uploads = 5
-
-; Restrict file access to application directory
-open_basedir = /var/www/html:/var/lib/php/sessions:/tmp
 
 ; Session security
 session.cookie_httponly = 1
@@ -187,14 +157,6 @@ foreach ($securityChecks as $setting => $config) {
 
     echo "{$status} {$setting}: {$value} (expected: {$config['expected']}) [{$config['severity']}]\n";
 }
-
-echo "\nDisabled Functions:\n";
-$disabled = ini_get('disable_functions');
-echo !empty($disabled) ? "✅ {$disabled}\n" : "❌ None disabled\n";
-
-echo "\nopen_basedir:\n";
-$basedir = ini_get('open_basedir');
-echo !empty($basedir) ? "✅ {$basedir}\n" : "❌ Not configured\n";
 ```
 
 Run the validation:
@@ -230,27 +192,7 @@ return [
             'display_errors' => false,
             'display_startup_errors' => false,
             'log_errors' => true,
-        ],
-
-        // Custom dangerous functions to check
-        'dangerous_functions' => [
-            'exec',
-            'passthru',
-            'shell_exec',
-            'system',
-            'proc_open',
-            'popen',
-            'curl_exec',
-            'curl_multi_exec',
-            'parse_ini_file',
-            'show_source',
-            'phpinfo',  // Add phpinfo as dangerous
-        ],
-
-        // Error reporting validation
-        'error_reporting' => [
-            'disallowed_values' => [E_ALL, -1],  // Don't allow E_ALL
-            'forbidden_flags' => ['E_STRICT', 'E_DEPRECATED'],
+            'ignore_repeated_errors' => false,
         ],
     ],
 ];
@@ -315,11 +257,6 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 ],
 ```
 
-**Examples:**
-- `APP_ENV=production` → Runs (no mapping needed)
-- `APP_ENV=production-us` → Maps to `production` → Runs
-- `APP_ENV=local` → Skipped (not production/staging)
-
 ## References
 
 - [PHP Security Configuration](https://www.php.net/manual/en/security.php)
@@ -327,8 +264,6 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - [OWASP PHP Configuration Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/PHP_Configuration_Cheat_Sheet.html)
 - [CWE-16: Configuration](https://cwe.mitre.org/data/definitions/16.html)
 - [CWE-209: Information Exposure Through Error Messages](https://cwe.mitre.org/data/definitions/209.html)
-- [PHP disable_functions Documentation](https://www.php.net/manual/en/ini.core.php#ini.disable-functions)
-- [PHP open_basedir Documentation](https://www.php.net/manual/en/ini.core.php#ini.open-basedir)
 
 ## Related Analyzers
 
