@@ -225,7 +225,6 @@ if ($user?->isActive() && $user->hasRole('admin')) {
 ## Related Analyzers
 
 - [Method Length Analyzer](/analyzers/code-quality/method-length) - Detects methods that are too long
-- [Magic Number Analyzer](/analyzers/code-quality/magic-number) - Detects hard-coded numbers
 - [Commented Code Analyzer](/analyzers/code-quality/commented-code) - Detects commented-out code
 - [Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock) - Ensures proper documentation
 

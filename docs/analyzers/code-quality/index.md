@@ -1,13 +1,13 @@
 ---
 title: Code Quality Analyzers
-description: 7 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: 5 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
 icon: code
 outline: [2, 3]
 ---
 
 # Code Quality Analyzers
 
-**7 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
+**5 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
 
 ## Overview
 
@@ -23,8 +23,6 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 ### Code Smells
 
 - **[Commented Code Analyzer](/analyzers/code-quality/commented-code)** - Detects commented-out code that should be removed in favor of version control
-- **[Magic Number Analyzer](/analyzers/code-quality/magic-number)** - Detects hard-coded numbers that should be named constants
-- **[Todo Comment Analyzer](/analyzers/code-quality/todo-comment)** - Finds TODO/FIXME/HACK comments that should be addressed or tracked in issue tracker
 
 ### Documentation & Naming
 
@@ -106,22 +104,6 @@ if (!$user->canAccess($resource)) {
 ```
 
 ### Code Smells
-
-**Magic Numbers:**
-```php
-// ❌ BAD - Magic numbers
-if ($age > 18 && $age < 65) {
-    // ...
-}
-
-// ✅ GOOD - Named constants
-const MIN_AGE = 18;
-const MAX_AGE = 65;
-
-if ($age > MIN_AGE && $age < MAX_AGE) {
-    // ...
-}
-```
 
 **Commented Code:**
 ```php
@@ -229,7 +211,7 @@ php artisan shield:analyze --analyzer=missing-docblock
 ### Run Multiple Analyzers
 
 ```bash
-php artisan shield:analyze --analyzer=nesting-depth,method-length,magic-number
+php artisan shield:analyze --analyzer=nesting-depth,method-length
 ```
 
 ## Best Practices

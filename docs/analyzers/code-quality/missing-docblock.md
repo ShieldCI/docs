@@ -234,6 +234,5 @@ public function getUserStats(int $userId): array
 
 - [Naming Convention Analyzer](/analyzers/code-quality/naming-convention) - Validates naming standards
 - [Method Length Analyzer](/analyzers/code-quality/method-length) - Detects methods that are too long
-- [Todo Comment Analyzer](/analyzers/code-quality/todo-comment) - Detects TODO/FIXME comments
 - [Commented Code Analyzer](/analyzers/code-quality/commented-code) - Detects commented-out code
 

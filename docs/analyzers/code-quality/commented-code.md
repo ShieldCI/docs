@@ -185,7 +185,6 @@ return $this->paymentProcessor->process($order);
 
 ## Related Analyzers
 
-- [Todo Comment Analyzer](/analyzers/code-quality/todo-comment) - Detects TODO/FIXME comments
 - [Dead Code Analyzer](/analyzers/reliability/dead-code) - Detects unreachable code
 - [Method Length Analyzer](/analyzers/code-quality/method-length) - Detects methods that are too long
 - [Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock) - Ensures proper documentation
