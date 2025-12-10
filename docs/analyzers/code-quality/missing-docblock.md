@@ -15,11 +15,13 @@ tags: documentation,maintainability,code-quality,readability
 ## What This Checks
 
 - Detects public methods missing PHPDoc comments
-- Requires `@param` tags for all parameters
-- Requires `@return` tag for return values
+- Requires `@param` tags for parameters with **generic types** (array, iterable, object, mixed, callable) or no type hints
+- Requires `@return` tag for **generic return types** or class names (not needed for scalar types like void, string, int, bool, float)
 - Requires `@throws` tags for exceptions (when applicable)
 - Excludes simple getter/setter methods (get*, set*, is*, has*)
 - Reports exact file location and line number of each issue
+
+**Follows PSR-2 conventions**: `@param` and `@return` tags are redundant for non-generic native types but required for generic types to specify their structure.
 
 ## Why It Matters
 
@@ -45,18 +47,19 @@ public function calculateTotal($items)
     return array_sum(array_column($items, 'price'));
 }
 
-// ✅ After: Basic DocBlock
+// ✅ After: DocBlock with generic type documentation
 /**
  * Calculate the total price of items.
  *
- * @param  array  $items
- * @return float
+ * @param  array<int, array{price: float}>  $items  Array of items with price field
  */
 public function calculateTotal(array $items): float
 {
     return array_sum(array_column($items, 'price'));
 }
 ```
+
+**Note**: The `@return float` tag is omitted because `float` is a scalar type (self-documenting). The `@param` tag is required because `array` is a generic type that needs structure specification.
 
 ### Proper Fix (15 minutes)
 
@@ -69,13 +72,12 @@ public function processOrder(Order $order, User $user, bool $sendEmail)
     // Implementation
 }
 
-// ✅ After: Complete DocBlock
+// ✅ After: Complete DocBlock (class types documented, scalar types omitted)
 /**
  * Process an order for a user.
  *
  * @param  \App\Models\Order  $order  The order to process
  * @param  \App\Models\User  $user  The user placing the order
- * @param  bool  $sendEmail  Whether to send confirmation email
  * @return \App\Models\Order
  * @throws \App\Exceptions\InvalidOrderException
  * @throws \App\Exceptions\PaymentFailedException
@@ -86,20 +88,21 @@ public function processOrder(Order $order, User $user, bool $sendEmail): Order
 }
 ```
 
-#### Fix #2: Document Return Types
+**Note**: The `bool $sendEmail` parameter doesn't need a `@param` tag because `bool` is a scalar type (self-documenting). If you want to document what it does, you can optionally include it, but it's not required by this analyzer.
+
+#### Fix #2: Document Generic Return Types
 
 ```php
-// ❌ Before: Missing return documentation
+// ❌ Before: Missing return documentation for Collection (generic type)
 public function getUserOrders(int $userId)
 {
     return User::find($userId)->orders;
 }
 
-// ✅ After: Document return type
+// ✅ After: Document generic collection return type
 /**
  * Get all orders for a user.
  *
- * @param  int  $userId
  * @return \Illuminate\Database\Eloquent\Collection<\App\Models\Order>
  */
 public function getUserOrders(int $userId)
@@ -107,6 +110,8 @@ public function getUserOrders(int $userId)
     return User::find($userId)->orders;
 }
 ```
+
+**Note**: The `int $userId` parameter doesn't need a `@param` tag because `int` is a scalar type (self-documenting). The `@return` tag IS required because `Collection` is a generic type that needs to specify what it contains.
 
 #### Fix #3: Document Exceptions
 
@@ -117,21 +122,19 @@ public function chargePayment(Order $order, float $amount)
     if ($amount <= 0) {
         throw new InvalidAmountException();
     }
-    
+
     if (!$order->canBeCharged()) {
         throw new PaymentFailedException();
     }
-    
+
     // Charge payment
 }
 
-// ✅ After: Document all exceptions
+// ✅ After: Document all exceptions (class param and exceptions only)
 /**
  * Charge a payment for an order.
  *
- * @param  \App\Models\Order  $order
- * @param  float  $amount
- * @return void
+ * @param  \App\Models\Order  $order  The order to charge
  * @throws \App\Exceptions\InvalidAmountException  When amount is invalid
  * @throws \App\Exceptions\PaymentFailedException  When payment cannot be processed
  */
@@ -140,30 +143,31 @@ public function chargePayment(Order $order, float $amount): void
     if ($amount <= 0) {
         throw new InvalidAmountException();
     }
-    
+
     if (!$order->canBeCharged()) {
         throw new PaymentFailedException();
     }
-    
+
     // Charge payment
 }
 ```
 
+**Note**: Both `float $amount` and `: void` don't need documentation because they're scalar types (self-documenting).
+
 #### Fix #4: Document Complex Parameters
 
 ```php
-// ❌ Before: Unclear parameter documentation
+// ❌ Before: Missing documentation for array parameter (generic type)
 public function searchUsers(array $filters, int $limit = 10)
 {
     // Implementation
 }
 
-// ✅ After: Detailed parameter documentation
+// ✅ After: Document array structure and generic return type
 /**
  * Search users with filters.
  *
  * @param  array<string, mixed>  $filters  Search filters (e.g., ['name' => 'John', 'status' => 'active'])
- * @param  int  $limit  Maximum number of results (default: 10)
  * @return \Illuminate\Database\Eloquent\Collection<\App\Models\User>
  */
 public function searchUsers(array $filters, int $limit = 10)
@@ -172,20 +176,21 @@ public function searchUsers(array $filters, int $limit = 10)
 }
 ```
 
-#### Fix #5: Document Nullable Returns
+**Note**: The `int $limit` parameter doesn't need a `@param` tag because `int` is a scalar type. The `array $filters` parameter DOES need documentation because `array` is a generic type that needs structure specification.
+
+#### Fix #5: Document Nullable Class Returns
 
 ```php
-// ❌ Before: Missing nullable documentation
+// ❌ Before: Missing documentation for nullable class return
 public function findUserByEmail(string $email)
 {
     return User::where('email', $email)->first();
 }
 
-// ✅ After: Document nullable return
+// ✅ After: Document nullable class return type
 /**
  * Find a user by email address.
  *
- * @param  string  $email
  * @return \App\Models\User|null
  */
 public function findUserByEmail(string $email): ?User
@@ -194,11 +199,13 @@ public function findUserByEmail(string $email): ?User
 }
 ```
 
+**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag IS required because `User` is a class name (even when nullable).
+
 #### Fix #6: Document Array Shapes
 
 ```php
-// ❌ Before: Unclear array structure
-public function getUserStats(int $userId)
+// ❌ Before: Missing documentation for array return (generic type)
+public function getUserStats(int $userId): array
 {
     return [
         'total_orders' => 10,
@@ -207,11 +214,10 @@ public function getUserStats(int $userId)
     ];
 }
 
-// ✅ After: Document array shape
+// ✅ After: Document array shape with precise structure
 /**
  * Get user statistics.
  *
- * @param  int  $userId
  * @return array{total_orders: int, total_spent: float, last_order_date: string|null}
  */
 public function getUserStats(int $userId): array
@@ -224,11 +230,14 @@ public function getUserStats(int $userId): array
 }
 ```
 
+**Note**: The `int $userId` parameter doesn't need a `@param` tag because `int` is a scalar type. The `@return` tag IS required because `array` is a generic type that needs its shape documented.
+
 ## References
 
-- [PSR-5 PHPDoc Standard](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md)
-- [PHP DocBlock Documentation](https://docs.phpdoc.org/3.0/guide/getting-started/what-is-a-docblock.html)
-- [PHPDoc Types](https://docs.phpdoc.org/3.0/guide/guides/types.html)
+- [PSR-2 Coding Style Guide](https://www.php-fig.org/psr/psr-2/) - Laravel follows PSR-2 conventions
+- [PSR-5 PHPDoc Standard](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) - PHPDoc documentation standard
+- [PHP DocBlock Documentation](https://docs.phpdoc.org/3.0/guide/getting-started/what-is-a-docblock.html) - Complete DocBlock guide
+- [PHPDoc Types](https://docs.phpdoc.org/3.0/guide/guides/types.html) - Type annotation reference
 
 ## Related Analyzers
 
