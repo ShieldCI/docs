@@ -57,7 +57,7 @@ class UserController {
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Class Names (PascalCase)
+#### 1: Class Names (PascalCase)
 
 ```php
 // ❌ Before: Wrong class naming
@@ -71,7 +71,7 @@ class OrderProcessor {}
 class PaymentGateway {}
 ```
 
-#### Fix #2: Method Names (camelCase)
+#### 2: Method Names (camelCase)
 
 ```php
 // ❌ Before: Wrong method naming
@@ -89,7 +89,7 @@ class UserController {
 }
 ```
 
-#### Fix #3: Property Names (camelCase)
+#### 3: Property Names (camelCase)
 
 ```php
 // ❌ Before: Wrong property naming
@@ -107,7 +107,7 @@ class User {
 }
 ```
 
-#### Fix #4: Constant Names (SCREAMING_SNAKE_CASE)
+#### 4: Constant Names (SCREAMING_SNAKE_CASE)
 
 ```php
 // ❌ Before: Wrong constant naming
@@ -125,7 +125,7 @@ class Config {
 }
 ```
 
-#### Fix #5: Laravel Model Conventions
+#### 5: Laravel Model Conventions
 
 ```php
 // ❌ Before: Wrong model/table naming
@@ -140,7 +140,7 @@ class User extends Model {
 }
 ```
 
-#### Fix #6: Controller Naming
+#### 6: Controller Naming
 
 ```php
 // ❌ Before: Wrong controller naming
@@ -154,7 +154,7 @@ class UserController extends Controller {
 }
 ```
 
-#### Fix #7: Service Class Naming
+#### 7: Service Class Naming
 
 ```php
 // ❌ Before: Inconsistent service naming
@@ -168,7 +168,7 @@ class PaymentService {}
 class UserManagement {}
 ```
 
-#### Fix #8: Boolean Method Names
+#### 8: Boolean Method Names
 
 ```php
 // ❌ Before: Wrong boolean naming

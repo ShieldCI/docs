@@ -63,7 +63,7 @@ public function calculateTotal(array $items): float
 
 ### Proper Fix (15 minutes)
 
-#### Fix #1: Complete DocBlock with Parameters
+#### 1: Complete DocBlock with Parameters
 
 ```php
 // ❌ Before: Missing or incomplete DocBlock
@@ -90,7 +90,7 @@ public function processOrder(Order $order, User $user, bool $sendEmail): Order
 
 **Note**: The `bool $sendEmail` parameter doesn't need a `@param` tag because `bool` is a scalar type (self-documenting). If you want to document what it does, you can optionally include it, but it's not required by this analyzer.
 
-#### Fix #2: Document Generic Return Types
+#### 2: Document Generic Return Types
 
 ```php
 // ❌ Before: Missing return documentation for Collection (generic type)
@@ -113,7 +113,7 @@ public function getUserOrders(int $userId)
 
 **Note**: The `int $userId` parameter doesn't need a `@param` tag because `int` is a scalar type (self-documenting). The `@return` tag IS required because `Collection` is a generic type that needs to specify what it contains.
 
-#### Fix #3: Document Exceptions
+#### 3: Document Exceptions
 
 ```php
 // ❌ Before: Missing exception documentation
@@ -154,7 +154,7 @@ public function chargePayment(Order $order, float $amount): void
 
 **Note**: Both `float $amount` and `: void` don't need documentation because they're scalar types (self-documenting).
 
-#### Fix #4: Document Complex Parameters
+#### 4: Document Complex Parameters
 
 ```php
 // ❌ Before: Missing documentation for array parameter (generic type)
@@ -178,7 +178,7 @@ public function searchUsers(array $filters, int $limit = 10)
 
 **Note**: The `int $limit` parameter doesn't need a `@param` tag because `int` is a scalar type. The `array $filters` parameter DOES need documentation because `array` is a generic type that needs structure specification.
 
-#### Fix #5: Document Nullable Class Returns
+#### 5: Document Nullable Class Returns
 
 ```php
 // ❌ Before: Missing documentation for nullable class return
@@ -201,7 +201,7 @@ public function findUserByEmail(string $email): ?User
 
 **Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag IS required because `User` is a class name (even when nullable).
 
-#### Fix #6: Document Array Shapes
+#### 6: Document Array Shapes
 
 ```php
 // ❌ Before: Missing documentation for array return (generic type)

@@ -70,7 +70,7 @@ public function getStatus(): string
 
 ### Proper Fix (10 minutes)
 
-#### Fix #1: Complete All Conditional Branches
+#### 1: Complete All Conditional Branches
 
 Ensure every if/else branch returns a value:
 
@@ -123,7 +123,7 @@ public function calculateDiscount(User $user): float
 }
 ```
 
-#### Fix #2: Handle All Switch Cases
+#### 2: Handle All Switch Cases
 
 Ensure switch statements have default cases or return in all cases:
 
@@ -180,7 +180,7 @@ public function getStatusColor(string $status): string
 }
 ```
 
-#### Fix #3: Return After Exceptions
+#### 3: Return After Exceptions
 
 If code throws exceptions, ensure returns exist for non-exception paths:
 
@@ -218,7 +218,7 @@ public function processPayment(Order $order): PaymentResult
 }
 ```
 
-#### Fix #4: Early Returns in Complex Logic
+#### 4: Early Returns in Complex Logic
 
 Use early returns to simplify logic and ensure all paths return:
 
@@ -279,7 +279,7 @@ private function calculateDiscount(User $user): float
 }
 ```
 
-#### Fix #5: Null Object Pattern
+#### 5: Null Object Pattern
 
 Instead of returning null, return a null object:
 
@@ -332,7 +332,7 @@ public function findUser(int $id): User
 }
 ```
 
-#### Fix #6: Try-Catch Blocks
+#### 6: Try-Catch Blocks
 
 Ensure try-catch blocks return in all scenarios:
 
@@ -374,7 +374,7 @@ public function fetchUserData(int $userId): array
 }
 ```
 
-#### Fix #7: Change Return Type to Void
+#### 7: Change Return Type to Void
 
 If a method shouldn't return a value, declare it void:
 

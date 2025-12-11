@@ -65,7 +65,7 @@ class User extends Model
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Define Missing Relations
+#### 1: Define Missing Relations
 
 Always define relationship methods in your Eloquent models:
 
@@ -104,7 +104,7 @@ $user->profile;
 $user->roles;
 ```
 
-#### Fix #2: Fix Typos in Relation Names
+#### 2: Fix Typos in Relation Names
 
 Ensure relation names match exactly:
 
@@ -131,7 +131,7 @@ $user->posts;  // Correct
 $user->posts;  // IDE will suggest correct property
 ```
 
-#### Fix #3: Check for Case Sensitivity
+#### 3: Check for Case Sensitivity
 
 Relation names are case-sensitive:
 
@@ -155,7 +155,7 @@ $user->blogPosts;  // Correct camelCase
 $user->blog_posts;  // Laravel converts to blogPosts()
 ```
 
-#### Fix #4: Inverse Relations
+#### 4: Inverse Relations
 
 Ensure both sides of relationships are defined:
 
@@ -198,7 +198,7 @@ $post->author;  // Works
 $user->posts;   // Works
 ```
 
-#### Fix #5: Polymorphic Relations
+#### 5: Polymorphic Relations
 
 Ensure polymorphic relations are properly defined:
 
@@ -241,7 +241,7 @@ $comment->commentable;  // Returns Post or Video
 $post->comments;        // Returns comments for post
 ```
 
-#### Fix #6: Many-to-Many Relations
+#### 6: Many-to-Many Relations
 
 Define pivot table relations correctly:
 

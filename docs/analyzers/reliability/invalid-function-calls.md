@@ -56,7 +56,7 @@ $result = custom_function($data); // Fixed typo
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Undefined Function - Check for Typos
+#### 1: Undefined Function - Check for Typos
 
 ```php
 // ❌ Before: Typo in function name
@@ -70,7 +70,7 @@ $total = calculteTotal($items); // Typo: calculte
 $total = calculateTotal($items);
 ```
 
-#### Fix #2: Wrong Parameter Count
+#### 2: Wrong Parameter Count
 
 ```php
 // ❌ Before: Missing required parameter
@@ -80,7 +80,7 @@ $substring = substr('Hello World'); // Missing start parameter
 $substring = substr('Hello World', 0, 5); // 'Hello'
 ```
 
-#### Fix #3: Wrong Parameter Type
+#### 3: Wrong Parameter Type
 
 ```php
 // ❌ Before: Wrong type passed
@@ -96,7 +96,7 @@ processName((string) 123); // Cast to string
 processName('John'); // Pass string directly
 ```
 
-#### Fix #4: Void Function Return Usage
+#### 4: Void Function Return Usage
 
 ```php
 // ❌ Before: Using return value from void function
@@ -111,7 +111,7 @@ logMessage('Error occurred');
 $result = null; // Or just remove the assignment
 ```
 
-#### Fix #5: Missing PHP Extension
+#### 5: Missing PHP Extension
 
 ```php
 // ❌ Before: Function from missing extension

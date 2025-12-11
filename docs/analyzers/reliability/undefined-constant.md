@@ -63,7 +63,7 @@ if (APP_DEBUG) {
 
 ### Proper Fix (10 minutes)
 
-#### Fix #1: Define Missing Global Constants
+#### 1: Define Missing Global Constants
 
 Always define constants before use:
 
@@ -91,7 +91,7 @@ if (config('app.api_version') === 2) {
 }
 ```
 
-#### Fix #2: Fix Class Constant Scope Issues
+#### 2: Fix Class Constant Scope Issues
 
 Use fully qualified class name when accessing constants outside class:
 
@@ -121,7 +121,7 @@ if ($role === UserRole::ADMIN) {
 }
 ```
 
-#### Fix #3: Define Missing Class Constants
+#### 3: Define Missing Class Constants
 
 Ensure all class constants are defined:
 
@@ -158,7 +158,7 @@ enum OrderStatus: string
 $order->status = OrderStatus::PENDING->value;
 ```
 
-#### Fix #4: Fix Constants on Unknown Classes
+#### 4: Fix Constants on Unknown Classes
 
 Ensure classes exist before accessing their constants:
 
@@ -200,7 +200,7 @@ return [
 $timeout = config('api.timeout');
 ```
 
-#### Fix #5: Use Laravel Config Instead of Constants
+#### 5: Use Laravel Config Instead of Constants
 
 Prefer Laravel's config system over global constants:
 
@@ -234,7 +234,7 @@ if (filesize($file) > config('uploads.max_size')) {
 // - IDE autocomplete
 ```
 
-#### Fix #6: Convert to PHP 8.1 Enums
+#### 6: Convert to PHP 8.1 Enums
 
 Use enums for better type safety:
 
@@ -273,7 +273,7 @@ $user->role = UserRole::ADMIN; // Type-safe
 // - Built-in methods
 ```
 
-#### Fix #7: Fix Visibility and Access Issues
+#### 7: Fix Visibility and Access Issues
 
 Ensure constants have correct visibility:
 

@@ -72,7 +72,7 @@ class User extends Model
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Non-Covariant Return Type
+#### 1: Non-Covariant Return Type
 
 Return types must be covariant - the child method's return type must be the same as or more specific than the parent's:
 
@@ -104,7 +104,7 @@ class Dog extends Animal {
 }
 ```
 
-#### Fix #2: Non-Contravariant Parameter Type
+#### 2: Non-Contravariant Parameter Type
 
 Parameter types must be contravariant - the child method's parameter types must be the same as or less specific than the parent's:
 
@@ -136,7 +136,7 @@ class UserController extends BaseController {
 }
 ```
 
-#### Fix #3: Missing Parameter in Override
+#### 3: Missing Parameter in Override
 
 Overridden methods must include all required parameters from the parent:
 
@@ -162,7 +162,7 @@ class UserService extends BaseService {
 }
 ```
 
-#### Fix #4: Visibility Violation (Narrowing)
+#### 4: Visibility Violation (Narrowing)
 
 You cannot narrow visibility when overriding (public → protected → private):
 
@@ -188,7 +188,7 @@ class AdminController extends BaseController {
 }
 ```
 
-#### Fix #5: Deprecated Method Override
+#### 5: Deprecated Method Override
 
 Avoid overriding deprecated parent methods - update to new methods instead:
 
@@ -222,7 +222,7 @@ class User extends BaseModel {
 }
 ```
 
-#### Fix #6: Incompatible Method Signature
+#### 6: Incompatible Method Signature
 
 Ensure the entire method signature is compatible:
 

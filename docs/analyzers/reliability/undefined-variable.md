@@ -63,7 +63,7 @@ if ($isAuthenticated) {
 
 ### Proper Fix (10 minutes)
 
-#### Fix #1: Initialize Variables Before Use
+#### 1: Initialize Variables Before Use
 
 Always define variables before using them:
 
@@ -96,7 +96,7 @@ function calculateTotal($items)
 }
 ```
 
-#### Fix #2: Define Variables in All Code Paths
+#### 2: Define Variables in All Code Paths
 
 Ensure variables are defined in all possible execution paths:
 
@@ -139,7 +139,7 @@ function getUserRole($user)
 }
 ```
 
-#### Fix #3: Handle Optional Variables Properly
+#### 3: Handle Optional Variables Properly
 
 Use null coalescing or conditional checks for optional variables:
 
@@ -187,7 +187,7 @@ function processOrder($orderId, $couponCode = null)
 }
 ```
 
-#### Fix #4: Fix Loop Variable Issues
+#### 4: Fix Loop Variable Issues
 
 Initialize accumulator variables before loops:
 
@@ -215,7 +215,7 @@ $activeCount = count(array_filter($users, fn($user) => $user->isActive()));
 $activeCount = collect($users)->filter(fn($user) => $user->isActive())->count();
 ```
 
-#### Fix #5: Handle Try-Catch Variable Scope
+#### 5: Handle Try-Catch Variable Scope
 
 Ensure variables defined in try blocks are accessible:
 
@@ -249,7 +249,7 @@ try {
 }
 ```
 
-#### Fix #6: Remove Unnecessary isset() Checks
+#### 6: Remove Unnecessary isset() Checks
 
 Remove redundant isset() checks on variables guaranteed to exist:
 
@@ -293,7 +293,7 @@ function processUser(User $user)
 }
 ```
 
-#### Fix #7: Fix Variable Typos
+#### 7: Fix Variable Typos
 
 Check for typos in variable names:
 
@@ -320,7 +320,7 @@ function calculatePrice($quantity, $unitPrice)
 // Most IDEs will suggest existing variable names
 ```
 
-#### Fix #8: Handle Conditional Assignments
+#### 8: Handle Conditional Assignments
 
 Ensure variables assigned conditionally are always defined:
 
@@ -352,7 +352,7 @@ $finalPrice = $basePrice * (1 - $discountRate);
 $finalPrice = $basePrice * (1 - ($user->hasDiscount() ? $user->getDiscountRate() : 0));
 ```
 
-#### Fix #9: Fix Extract Variable Issues
+#### 9: Fix Extract Variable Issues
 
 Be careful with extract() - it can create undefined variable situations:
 
@@ -392,7 +392,7 @@ function renderTemplate($data)
 // {{ $title ?? 'Untitled' }} - {{ $description ?? '' }} by {{ $author ?? 'Unknown' }}
 ```
 
-#### Fix #10: Use Strict Variable Checking
+#### 10: Use Strict Variable Checking
 
 Enable strict checking and fix all warnings:
 

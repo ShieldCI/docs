@@ -63,7 +63,7 @@ if (is_iterable($items)) {
 
 ### Proper Fix (10 minutes)
 
-#### Fix #1: Add Type Hints
+#### 1: Add Type Hints
 
 ```php
 // ❌ Before: No type hint, PHPStan can't verify
@@ -85,7 +85,7 @@ foreach (getItems() as $item) {
 }
 ```
 
-#### Fix #2: Use Guard Clauses
+#### 2: Use Guard Clauses
 
 ```php
 // ❌ Before: Assumes $data is always iterable
@@ -109,7 +109,7 @@ public function processData($data): void
 }
 ```
 
-#### Fix #3: Fix Function Return Types
+#### 3: Fix Function Return Types
 
 ```php
 // ❌ Before: Returns string on error
@@ -131,7 +131,7 @@ public function getUserIds(): array
 }
 ```
 
-#### Fix #4: Use Null Coalescing
+#### 4: Use Null Coalescing
 
 ```php
 // ❌ Before: Can be null

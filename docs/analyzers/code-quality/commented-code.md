@@ -57,7 +57,7 @@ function calculatePrice($product)
 
 ### Proper Fix (5 minutes)
 
-#### Fix #1: Remove Old Implementation
+#### 1: Remove Old Implementation
 
 ```php
 // ❌ Before: Old implementation commented out
@@ -80,7 +80,7 @@ public function processOrder(Order $order)
 }
 ```
 
-#### Fix #2: Use Git for History
+#### 2: Use Git for History
 
 ```php
 // ❌ Before: Keeping old code for reference
@@ -102,7 +102,7 @@ $request->validate(['email' => 'required|email']);
 // git log -p app/Http/Controllers/UserController.php
 ```
 
-#### Fix #3: Extract to Documentation
+#### 3: Extract to Documentation
 
 ```php
 // ❌ Before: Commented code with explanation
@@ -123,7 +123,7 @@ $discount = $this->discountCalculator->calculate($order);
 $discount = $this->discountCalculator->calculate($order);
 ```
 
-#### Fix #4: Remove Debug Code
+#### 4: Remove Debug Code
 
 ```php
 // ❌ Before: Commented debug code
@@ -144,7 +144,7 @@ public function processOrder(Order $order)
 }
 ```
 
-#### Fix #5: Remove Alternative Implementations
+#### 5: Remove Alternative Implementations
 
 ```php
 // ❌ Before: Multiple commented alternatives
@@ -161,7 +161,7 @@ $users = $this->userRepository->getActiveUsers();
 $users = $this->userRepository->getActiveUsers();
 ```
 
-#### Fix #6: Remove Conditional Code Blocks
+#### 6: Remove Conditional Code Blocks
 
 ```php
 // ❌ Before: Commented conditional logic

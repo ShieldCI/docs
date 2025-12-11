@@ -63,7 +63,7 @@ $email = isset($user['email']) ? $user['email'] : 'no-email@example.com';
 
 ### Proper Fix (15 minutes)
 
-#### Fix #1: Access to Non-Existent Array Keys
+#### 1: Access to Non-Existent Array Keys
 
 Always check if array keys exist before accessing them:
 
@@ -86,7 +86,7 @@ if (array_key_exists('cache', $config)) {
 }
 ```
 
-#### Fix #2: Offset Access on Non-Array Types
+#### 2: Offset Access on Non-Array Types
 
 Ensure you're using array offset syntax only on arrays or ArrayAccess objects:
 
@@ -110,7 +110,7 @@ $name = $user['name'];  // Cannot access offset 'name' on stdClass
 $name = $user->name;
 ```
 
-#### Fix #3: Wrong Offset Types
+#### 3: Wrong Offset Types
 
 Ensure offset types match the array structure:
 
@@ -130,7 +130,7 @@ $name = $user[0];  // Offset 0 does not exist
 $name = $user['name'];
 ```
 
-#### Fix #4: Offsets That Might Not Exist
+#### 4: Offsets That Might Not Exist
 
 Handle conditional array keys properly:
 
@@ -165,7 +165,7 @@ function processUser(array $data): void
 }
 ```
 
-#### Fix #5: Cannot Assign Offset
+#### 5: Cannot Assign Offset
 
 Only assign offsets to arrays or ArrayAccess objects:
 
@@ -186,7 +186,7 @@ $text[0] = 'J';  // Cannot assign string offset
 $text = 'J' . substr($text, 1);  // "Jello"
 ```
 
-#### Fix #6: ArrayAccess Type Mismatches
+#### 6: ArrayAccess Type Mismatches
 
 Ensure offset types match ArrayAccess expectations:
 

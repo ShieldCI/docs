@@ -70,7 +70,7 @@ return $resource->process();
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Extract Methods
+#### 1: Extract Methods
 
 ```php
 // ❌ Before: Deep nesting in single method
@@ -122,7 +122,7 @@ private function processOrderItems(Order $order): void
 }
 ```
 
-#### Fix #2: Use Guard Clauses
+#### 2: Use Guard Clauses
 
 ```php
 // ❌ Before: Nested conditions
@@ -157,7 +157,7 @@ public function calculatePrice(Product $product, User $user, int $quantity): flo
 }
 ```
 
-#### Fix #3: Use Strategy Pattern for Complex Conditions
+#### 3: Use Strategy Pattern for Complex Conditions
 
 ```php
 // ❌ Before: Deep nesting with multiple conditions
@@ -197,7 +197,7 @@ private function getPaymentProcessor(PaymentMethod $method): PaymentProcessor
 }
 ```
 
-#### Fix #4: Combine Conditions
+#### 4: Combine Conditions
 
 ```php
 // ❌ Before: Multiple nested ifs

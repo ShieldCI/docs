@@ -61,7 +61,7 @@ $name = $user->getName(); // Fixed method name
 
 ### Proper Fix (20 minutes)
 
-#### Fix #1: Undefined Method - Check for Typos
+#### 1: Undefined Method - Check for Typos
 
 ```php
 // ❌ Before: Typo in method name
@@ -78,7 +78,7 @@ $name = $user->getname(); // Wrong case
 $name = $user->getName();
 ```
 
-#### Fix #2: Wrong Parameter Count
+#### 2: Wrong Parameter Count
 
 ```php
 // ❌ Before: Missing required parameter
@@ -95,7 +95,7 @@ $service->processOrder($order); // Missing $user parameter
 $service->processOrder($order, $currentUser);
 ```
 
-#### Fix #3: Wrong Parameter Type
+#### 3: Wrong Parameter Type
 
 ```php
 // ❌ Before: Wrong type passed
@@ -114,7 +114,7 @@ $service->charge(100.00); // Float
 $service->charge((float) $amount);
 ```
 
-#### Fix #4: Visibility Violation - Private Method
+#### 4: Visibility Violation - Private Method
 
 ```php
 // ❌ Before: Calling private method outside class
@@ -144,7 +144,7 @@ class UserController extends BaseController {
 }
 ```
 
-#### Fix #5: Static Call to Instance Method
+#### 5: Static Call to Instance Method
 
 ```php
 // ❌ Before: Calling instance method statically
@@ -171,7 +171,7 @@ class UserService {
 $user = UserService::getUser(1);
 ```
 
-#### Fix #6: Using Void Method Return Value
+#### 6: Using Void Method Return Value
 
 ```php
 // ❌ Before: Using return value from void method

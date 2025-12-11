@@ -66,7 +66,7 @@ If you have a timeout configuration error:
 
 ### Proper Fix (10 minutes)
 
-#### Fix #1: Configure retry_after for Standard Queue Workers
+#### 1: Configure retry_after for Standard Queue Workers
 
 Set `retry_after` to be at least 30 seconds more than your worker timeout:
 
@@ -108,7 +108,7 @@ php artisan queue:work --timeout=120
 # For timeout=120, set retry_after=150 in config
 ```
 
-#### Fix #2: Configure with Laravel Horizon
+#### 2: Configure with Laravel Horizon
 
 For applications using Horizon, configure timeouts in `config/horizon.php`:
 
@@ -160,7 +160,7 @@ return [
 ];
 ```
 
-#### Fix #3: Per-Job Timeout Configuration
+#### 3: Per-Job Timeout Configuration
 
 For jobs with varying execution times, configure per-job timeouts:
 
@@ -207,7 +207,7 @@ class ProcessLargeReport implements ShouldQueue
 ],
 ```
 
-#### Fix #4: Multiple Queue Connections with Different Timeouts
+#### 4: Multiple Queue Connections with Different Timeouts
 
 Use separate connections for jobs with different timeout requirements:
 
@@ -250,7 +250,7 @@ php artisan queue:work redis-fast --timeout=60
 php artisan queue:work redis-slow --timeout=300
 ```
 
-#### Fix #5: Environment-Specific Configuration
+#### 5: Environment-Specific Configuration
 
 Use environment variables for flexible timeout configuration:
 
@@ -281,7 +281,7 @@ QUEUE_RETRY_AFTER=330  # Higher for production workloads
 QUEUE_TIMEOUT=300
 ```
 
-#### Fix #6: Horizon with Multiple Supervisors
+#### 6: Horizon with Multiple Supervisors
 
 For complex Horizon setups with multiple supervisors:
 
@@ -331,7 +331,7 @@ return [
 ],
 ```
 
-#### Fix #7: Database Queue Configuration
+#### 7: Database Queue Configuration
 
 For database driver queues:
 

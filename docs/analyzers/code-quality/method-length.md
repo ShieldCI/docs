@@ -62,7 +62,7 @@ private function updateOrderStatus(Order $order, string $status): void
 
 ### Proper Fix (30 minutes)
 
-#### Fix #1: Extract Related Logic
+#### 1: Extract Related Logic
 
 ```php
 // ❌ Before: Long method with multiple responsibilities
@@ -135,7 +135,7 @@ private function updateOrderStatus(Order $order, string $status): void
 }
 ```
 
-#### Fix #2: Extract Complex Algorithms
+#### 2: Extract Complex Algorithms
 
 ```php
 // ❌ Before: Long method with complex calculation
@@ -197,7 +197,7 @@ private function getDiscountMultiplier(Order $order): float
 }
 ```
 
-#### Fix #3: Use Service Classes
+#### 3: Use Service Classes
 
 ```php
 // ❌ Before: Long controller method
@@ -254,7 +254,7 @@ class OrderService
 }
 ```
 
-#### Fix #4: Extract Conditional Logic
+#### 4: Extract Conditional Logic
 
 ```php
 // ❌ Before: Long method with many conditionals

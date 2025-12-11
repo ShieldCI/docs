@@ -65,7 +65,7 @@ class User {
 
 ### Proper Fix (15 minutes)
 
-#### Fix #1: Access to Undefined Properties
+#### 1: Access to Undefined Properties
 
 Always ensure properties are defined before accessing them:
 
@@ -108,7 +108,7 @@ class User {
 }
 ```
 
-#### Fix #2: Visibility Violations (Private/Protected Access)
+#### 2: Visibility Violations (Private/Protected Access)
 
 Respect property visibility or provide public accessors:
 
@@ -148,7 +148,7 @@ class User {
 }
 ```
 
-#### Fix #3: Property Access on Non-Objects
+#### 3: Property Access on Non-Objects
 
 Ensure variables are objects before accessing properties:
 
@@ -185,7 +185,7 @@ $data->property = "value";
 echo $data->property;
 ```
 
-#### Fix #4: Property Type Mismatches
+#### 4: Property Type Mismatches
 
 Ensure assigned values match property types:
 
@@ -216,7 +216,7 @@ $order->customer = "John Doe";  // String assigned to User property
 $order->customer = new User('John Doe');
 ```
 
-#### Fix #5: Static Property Access Issues
+#### 5: Static Property Access Issues
 
 Ensure static properties exist and are accessed correctly:
 
@@ -248,7 +248,7 @@ $user = new User();
 echo $user->name;
 ```
 
-#### Fix #6: Read-Only and Write-Only Properties
+#### 6: Read-Only and Write-Only Properties
 
 Respect property access modes:
 
