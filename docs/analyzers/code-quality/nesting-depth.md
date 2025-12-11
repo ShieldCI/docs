@@ -215,6 +215,26 @@ if ($user?->isActive() && $user->hasRole('admin')) {
 }
 ```
 
+## Configuration
+
+You can customize the nesting depth threshold in your `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'code_quality' => [
+        'enabled' => true,
+        
+        'nesting-depth' => [
+            'threshold' => 4,  // Default: 4 levels
+        ],
+    ],
+],
+```
+
+::: tip
+The default threshold of 4 is based on industry best practices. Code with deeper nesting becomes significantly harder to understand and maintain.
+:::
+
 ## References
 
 - [Clean Code: Reducing Nesting](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882)

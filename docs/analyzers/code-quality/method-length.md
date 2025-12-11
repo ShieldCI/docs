@@ -287,6 +287,31 @@ private function getUserProcessor(User $user): UserProcessor
 }
 ```
 
+## Configuration
+
+You can customize the method length threshold and excluded patterns in your `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'code_quality' => [
+        'enabled' => true,
+        
+        'method-length' => [
+            'threshold' => 50,  // Default: 50 lines
+            'exclude_patterns' => ['get*', 'set*', 'is*', 'has*'],  // Patterns to exclude
+        ],
+    ],
+],
+```
+
+::: tip
+The default threshold of 50 lines is based on industry best practices. Methods longer than this become harder to test and understand. Consider extracting logic into smaller, focused methods.
+:::
+
+::: info Excluded Patterns
+Simple getter/setter methods are excluded by default as they typically don't benefit from length restrictions. You can customize this list based on your project's conventions.
+:::
+
 ## References
 
 - [Refactoring: Extract Method](https://refactoring.com/catalog/extractMethod.html)
