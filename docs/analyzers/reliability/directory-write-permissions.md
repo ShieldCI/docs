@@ -16,7 +16,7 @@ tags: permissions,filesystem,reliability,deployment
 
 - Verifies that `storage/` directory is writable
 - Verifies that `bootstrap/cache/` directory is writable
-- Checks custom directories specified in `config/shieldci.php`
+- Checks custom directories if configured (via published config file)
 - Tests actual write permissions, not just existence
 - Validates both relative and absolute paths from configuration
 - Reports all failed directories with actionable fix commands
@@ -144,7 +144,15 @@ php_admin_value[umask] = 0002
 !/storage/logs/.gitignore
 ```
 
-5. **Configure custom writable directories** in `config/shieldci.php`:
+5. **Configure custom writable directories** (optional):
+
+If you need to check additional directories beyond the defaults (`storage` and `bootstrap/cache`), publish the ShieldCI config and add them:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
 'writable_directories' => [
@@ -154,6 +162,10 @@ php_admin_value[umask] = 0002
     'resources/compiled',  // Custom compiled assets
 ],
 ```
+
+::: tip
+By default, the analyzer checks `storage` and `bootstrap/cache` directories. You only need to publish the config if you want to check additional directories.
+:::
 
 ## References
 
