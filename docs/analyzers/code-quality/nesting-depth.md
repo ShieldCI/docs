@@ -215,7 +215,7 @@ if ($user?->isActive() && $user->hasRole('admin')) {
 }
 ```
 
-## Configuration
+## ShieldCI Configuration
 
 You can customize the nesting depth threshold in your `config/shieldci.php`:
 

@@ -287,7 +287,7 @@ private function getUserProcessor(User $user): UserProcessor
 }
 ```
 
-## Configuration
+## ShieldCI Configuration
 
 You can customize the method length threshold and excluded patterns in your `config/shieldci.php`:
 
