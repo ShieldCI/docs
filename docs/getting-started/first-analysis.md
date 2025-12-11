@@ -126,10 +126,10 @@ php artisan shield:analyze
   46 │
 
   Fix:
-  1. Set APP_DEBUG=false in .env.production
+  1. Set APP_DEBUG=false in .env
   2. Configure proper error logging:
 
-     # .env.production
+     # .env
      APP_DEBUG=false
      LOG_LEVEL=error
      LOG_CHANNEL=stack
@@ -272,7 +272,7 @@ APP_DEBUG=true  # ❌ Debug enabled
 
 **1. Update production environment file:**
 ```bash
-# Edit .env (or .env.production)
+# Edit .env
 nano .env
 ```
 
@@ -317,7 +317,7 @@ No issues found in config/app.php
 'debug' => env('APP_DEBUG', false),  // ✅ Defaults to false
 ```
 
-**.env.production:**
+**.env:**
 ```ini
 APP_DEBUG=false  # ✅ Debug disabled
 LOG_LEVEL=error

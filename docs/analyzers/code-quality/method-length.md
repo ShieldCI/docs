@@ -287,9 +287,15 @@ private function getUserProcessor(User $user): UserProcessor
 }
 ```
 
-## ShieldCI Configuration
+#### 5: Customize ShieldCI Custom Settings (Optional)
 
-You can customize the method length threshold and excluded patterns in your `config/shieldci.php`:
+To customize the method length threshold and excluded patterns, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [

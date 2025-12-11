@@ -178,26 +178,34 @@ npm uninstall unused-package
 npm audit
 ```
 
-**6. Configure ShieldCI Exceptions (if needed)**
+**6. Configure Exceptions:**
+
+If you need to ignore specific packages or advisories (e.g., false positives, accepted risks), publish the config and add them:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
-
-return [
-    'frontend_vulnerable_dependencies' => [
-        // Packages to ignore (document why!)
-        'ignored_packages' => [
-            'legacy-package', // Can't update due to compatibility
-        ],
-
-        // Advisory IDs to ignore
-        'ignored_advisories' => [
-            'GHSA-xxxx-yyyy-zzzz', // False positive - doesn't affect our usage
-            'CVE-2020-1234',       // Risk accepted and documented
-        ],
+'frontend_vulnerable_dependencies' => [
+    // Packages to ignore (document why!)
+    'ignored_packages' => [
+        'legacy-package', // Can't update due to compatibility
     ],
-];
+
+    // Advisory IDs to ignore
+    'ignored_advisories' => [
+        'GHSA-xxxx-yyyy-zzzz', // False positive - doesn't affect our usage
+        'CVE-2020-1234',       // Risk accepted and documented
+    ],
+],
 ```
+
+::: warning Document Exceptions
+Always document why you're ignoring vulnerabilities. This helps during security audits and prevents accidental exposure to known risks.
+:::
 
 ## References
 

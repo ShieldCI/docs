@@ -49,10 +49,10 @@ Without proper cookie security, a single XSS vulnerability becomes a complete ac
 // config/session.php
 'secure' => env('SESSION_SECURE_COOKIE', true),
 
-// .env.production
+// .env - Production
 SESSION_SECURE_COOKIE=true
 
-// .env (local development without HTTPS)
+// .env - Local/Development without HTTPS)
 SESSION_SECURE_COOKIE=false
 ```
 
@@ -276,11 +276,11 @@ return [
     'same_site' => env('SESSION_SAME_SITE', 'lax'),
 ];
 
-// .env.production
+// .env - Production
 SESSION_SECURE_COOKIE=true
 SESSION_SAME_SITE=lax
 
-// .env (local without HTTPS)
+// .env - Local/Development without HTTPS)
 SESSION_SECURE_COOKIE=false
 SESSION_SAME_SITE=lax
 ```

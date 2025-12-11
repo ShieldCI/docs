@@ -167,38 +167,36 @@ rm check-php-config.php  # DELETE after validation!
 
 **4. Configure ShieldCI Custom Settings (Optional)**
 
-Customize the analyzer in your Laravel config:
+By default, the analyzer checks standard security settings (disable `allow_url_include`, `expose_php`, `display_errors`, etc.). To customize which settings are validated or adjust thresholds, publish the config:
 
-```php
-// config/shieldci.php
-
-return [
-    // Map custom environment names to standard types (if needed)
-    'environment_mapping' => [
-        'production-us' => 'production',
-        'production-eu' => 'production',
-        'staging-preview' => 'staging',
-    ],
-
-    'php_configuration' => [
-        // Path to your php.ini file (auto-detected if not set)
-        'ini_path' => null,
-
-        // Custom secure settings to validate
-        'secure_settings' => [
-            'allow_url_fopen' => false,
-            'allow_url_include' => false,
-            'expose_php' => false,
-            'display_errors' => false,
-            'display_startup_errors' => false,
-            'log_errors' => true,
-            'ignore_repeated_errors' => false,
-        ],
-    ],
-];
+```bash
+php artisan vendor:publish --tag=shieldci-config
 ```
 
-**Note:** If you use custom environment names (e.g., `production-us`, `production-blue`), configure `environment_mapping` so the analyzer recognizes them as production/staging environments.
+Then in `config/shieldci.php`:
+
+```php
+'php_configuration' => [
+    // Path to your php.ini file (auto-detected if not set)
+    'ini_path' => null,
+
+    // Custom secure settings to validate
+    'secure_settings' => [
+        'allow_url_fopen' => false,
+        'allow_url_include' => false,
+        'expose_php' => false,
+        'display_errors' => false,
+        'display_startup_errors' => false,
+        'log_errors' => true,
+        'ignore_repeated_errors' => false,
+        // Add your organization's requirements
+    ],
+],
+```
+
+::: tip
+The analyzer auto-detects your `php.ini` location. You only need to configure `ini_path` if you have a non-standard setup.
+:::
 
 **5. Monitor PHP Configuration in CI/CD**
 
@@ -256,6 +254,11 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
     'staging-preview' => 'staging',
 ],
 ```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 

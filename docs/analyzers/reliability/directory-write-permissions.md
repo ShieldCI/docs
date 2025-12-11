@@ -146,7 +146,7 @@ php_admin_value[umask] = 0002
 
 5. **Configure custom writable directories** (optional):
 
-If you need to check additional directories beyond the defaults (`storage` and `bootstrap/cache`), publish the ShieldCI config and add them:
+If you need to check additional directories beyond the defaults (`storage` and `bootstrap/cache`), publish the config:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config

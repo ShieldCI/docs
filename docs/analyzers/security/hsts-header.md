@@ -152,25 +152,36 @@ return [
 ];
 ```
 
-**5. Configure for Different Environments**
+**5. Configure Requirements (Optional)**
+
+By default, the analyzer requires a minimum max-age of 6 months and `includeSubDomains` directive. To customize these requirements, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
-return [
-    'hsts_header' => [
-        'min_max_age' => env('HSTS_MIN_MAX_AGE', 15768000),  // 6 months
-        'require_include_subdomains' => env('HSTS_REQUIRE_SUBDOMAINS', true),
-        'require_preload' => env('HSTS_REQUIRE_PRELOAD', false),
-        'check_session_secure' => true,
-    ],
-];
-
-// .env.production
-HSTS_MIN_MAX_AGE=31536000  // 1 year
-
-// .env.staging
-HSTS_MIN_MAX_AGE=604800  // 1 week for testing
+'hsts_header' => [
+    'min_max_age' => env('HSTS_MIN_MAX_AGE', 15768000),  // 6 months default
+    'require_include_subdomains' => env('HSTS_REQUIRE_SUBDOMAINS', true),
+    'require_preload' => env('HSTS_REQUIRE_PRELOAD', false),
+    'check_session_secure' => true,
+    'ignored_middleware' => [],  // Middleware files to skip
+],
 ```
+
+Environment-specific settings:
+
+```ini
+# .env
+HSTS_MIN_MAX_AGE=31536000  # 1 year
+```
+
+::: tip
+The default settings follow OWASP recommendations. Only customize if you have specific security requirements or are gradually rolling out HSTS.
+:::
 
 ## ShieldCI Configuration
 

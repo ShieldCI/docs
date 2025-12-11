@@ -580,7 +580,7 @@ return [
   Time to Fix: 5 minutes
 
   APP_DEBUG=true exposes sensitive information in production.
-  Set APP_DEBUG=false in .env.production
+  Set APP_DEBUG=false in .env
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -607,7 +607,7 @@ return [
         "file": "config/app.php",
         "line": 46
       },
-      "recommendation": "Set APP_DEBUG=false in .env.production"
+      "recommendation": "Set APP_DEBUG=false in .env"
     }
   ]
 }

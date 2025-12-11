@@ -188,7 +188,6 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - CI environments typically use test/placeholder keys for running tests
 - Real production keys should never be in the repository or CI environment
 - Prevents false failures in CI pipelines where placeholder keys are expected
-- The analyzer should run in actual deployment environments (staging, production) where real keys are configured
 
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures developers have proper keys configured

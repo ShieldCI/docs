@@ -215,23 +215,30 @@ public function store(Request $request)
 
 **5. Configure Analyzer to Ignore Legitimate Cases**
 
-```php
-// config/shieldci.php
-return [
-    'fillable_foreign_key' => [
-        // Allow specific foreign keys (use with caution!)
-        'allowed_fillable_foreign_keys' => [
-            'Post' => ['category_id'],  // Users can set category
-            'Comment' => ['parent_id'],  // Allow threaded comments
-        ],
 
-        // Ignore specific models
-        'ignored_models' => [
-            'App\Models\AdminLog',  // Admin-only model
-        ],
-    ],
-];
+If you have legitimate use cases for certain foreign keys in `$fillable` or need to customize which patterns are flagged, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
 ```
+
+Then in `config/shieldci.php`:
+
+```php
+'fillable_foreign_key' => [
+    // Customize dangerous patterns (defaults: user_id, owner_id, tenant_id, etc.)
+    'dangerous_patterns' => [
+        'user_id' => 'user ownership',
+        'admin_id' => 'admin relationship',
+        'tenant_id' => 'tenant isolation',
+        // Add your critical patterns
+    ],
+],
+```
+
+::: warning Use with Caution
+The default dangerous patterns (`user_id`, `owner_id`, `tenant_id`, etc.) are based on common security vulnerabilities. Only customize this if you have a specific, well-documented reason.
+:::
 
 ## References
 

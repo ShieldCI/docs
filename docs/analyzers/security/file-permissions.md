@@ -123,7 +123,38 @@ chmod 600 .env .env.* 2>/dev/null || true
 chmod 755 artisan
 ```
 
-**3. Create Post-Deployment Script**
+**3. Customize File Permissions**
+
+By default, the analyzer checks common Laravel files and directories with recommended permissions. If you need to customize which files are checked or adjust permission thresholds, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'file_permissions' => [
+    // Add custom files/directories to check
+    'custom/sensitive/file.php' => [
+        'type' => 'file',
+        'max' => octdec('644'),
+        'recommended' => octdec('600'),
+        'critical' => true,
+    ],
+    'custom/writable/dir' => [
+        'type' => 'directory',
+        'max' => octdec('775'),
+        'recommended' => octdec('775'),
+    ],
+],
+```
+
+::: tip
+The analyzer comes with sensible defaults for Laravel applications. You only need to publish the config if you have custom files/directories with specific permission requirements.
+:::
+
+**4. Create Post-Deployment Script**
 
 ```bash
 #!/bin/bash
@@ -156,7 +187,7 @@ chmod 755 artisan
 echo "Permissions applied successfully"
 ```
 
-**4. Dockerfile with Proper Permissions**
+**5. Dockerfile with Proper Permissions**
 
 ```dockerfile
 FROM php:8.1-fpm
@@ -176,7 +207,7 @@ COPY --chown=www-data:www-data --chmod=600 .env.example /var/www/html/.env
 WORKDIR /var/www/html
 ```
 
-**5. Laravel Envoy Deployment**
+**6. Laravel Envoy Deployment**
 
 ```php
 @servers(['web' => 'user@server.com'])
@@ -201,7 +232,7 @@ WORKDIR /var/www/html
 @endtask
 ```
 
-**6. GitHub Actions CI/CD**
+**7. GitHub Actions CI/CD**
 
 ```yaml
 name: Security Checks

@@ -143,13 +143,10 @@ public function login(Request $request)
 **4. Use Environment-Specific Settings**
 
 ```php
-// .env.testing - Fast hashing for tests
+// .env - Fast hashing for tests
 BCRYPT_ROUNDS=4
 
-// .env.staging - Match production
-BCRYPT_ROUNDS=12
-
-// .env.production - Secure settings
+// .env - Production/Staging Secure settings
 BCRYPT_ROUNDS=12
 ```
 
@@ -168,22 +165,42 @@ php artisan tinker
 >>> echo (microtime(true) - $start) * 1000 . ' ms';
 ```
 
-**6. Configure Legitimate MD5 Usage**
+**6. Configure Legitimate MD5 Usage (Optional)**
+
+If you use MD5/SHA1 for non-password purposes (cache keys, checksums, ETags), publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php - Allow non-password MD5 usage
 'hashing_strength' => [
+    // Minimum security parameters
+    'bcrypt_min_rounds' => 12,
+    'argon2_min_memory' => 65536,
+    'argon2_min_time' => 2,
+    'argon2_min_threads' => 2,
+    
+    // Allow weak hashing for non-password use cases
     'allowed_weak_hash_patterns' => [
         'cache',        // md5($data . '_cache')
         'fingerprint',  // md5($file . '_fingerprint')
         'checksum',     // md5($data . '_checksum')
         'etag',         // md5($content . '_etag')
     ],
+    
+    // Ignore specific files
     'ignored_paths' => [
         'app/Utilities/CacheKeyGenerator.php',
     ],
 ],
 ```
+
+::: tip
+MD5 and SHA1 are acceptable for non-cryptographic purposes like cache keys and checksums. The analyzer only flags them when used for password hashing.
+:::
 
 ## ShieldCI Configuration
 

@@ -505,6 +505,11 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 ],
 ```
 
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
 **Run manually if needed:**
 
 ```bash

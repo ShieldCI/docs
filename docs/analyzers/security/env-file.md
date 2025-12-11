@@ -51,8 +51,6 @@ curl https://yoursite.com/.env
 ```bash
 # Add .env to .gitignore
 echo ".env" >> .gitignore
-echo ".env.backup" >> .gitignore
-echo ".env.production" >> .gitignore
 
 # Verify
 git check-ignore .env
@@ -223,7 +221,7 @@ location ~ /\. {
 set -e
 
 # Copy environment template
-cp .env.production .env
+cp .env.example .env
 
 # Set secure permissions BEFORE adding secrets
 chmod 600 .env

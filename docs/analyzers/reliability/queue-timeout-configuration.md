@@ -276,7 +276,7 @@ QUEUE_TIMEOUT=60
 **Production environment:**
 
 ```bash
-# .env.production
+# .env
 QUEUE_RETRY_AFTER=330  # Higher for production workloads
 QUEUE_TIMEOUT=300
 ```

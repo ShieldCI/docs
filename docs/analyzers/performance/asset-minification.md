@@ -92,6 +92,32 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
 
+**Build Path (Optional)**
+
+By default, the analyzer checks the `public` directory for compiled assets. If your build output is in a different location, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'build_path' => env('SHIELDCI_BUILD_PATH', public_path('dist')),
+```
+
+Or via environment variable:
+
+```ini
+# .env
+SHIELDCI_BUILD_PATH=/var/www/html/public/build
+```
+
+::: tip
+By default, the analyzer checks the `public` directory. You only need to configure `build_path` if your assets are compiled to a different location (e.g., `public/dist`, `public/build`).
+:::
+
+
 ## References
 
 - [Laravel Vite](https://laravel.com/docs/vite)

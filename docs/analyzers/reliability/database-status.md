@@ -87,7 +87,6 @@ php artisan tinker
 ],
 ```
 
-2. **Configure additional connections** in ShieldCI config:
 
 ```php
 // config/shieldci.php

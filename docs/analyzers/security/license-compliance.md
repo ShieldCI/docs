@@ -102,34 +102,51 @@ composer require dompdf/dompdf  // LGPL-2.1 (acceptable)
 composer require mpdf/mpdf  // GPL-2.0 (use only if open-source app)
 ```
 
-**3. Configure License Whitelist**
+**3. Configure License Policy (Optional)**
+
+By default, the analyzer uses a standard whitelist of permissive licenses (MIT, Apache-2.0, BSD, etc.) and flags GPL/AGPL as restrictive. To customize for your organization's legal requirements, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
-return [
-    'license_compliance' => [
-        // Add licenses your legal team approves
-        'whitelisted_licenses' => [
-            'MIT',
-            'Apache-2.0',
-            'BSD-3-Clause',
-            'ISC',
-            'LGPL-2.1',  // Lesser GPL is usually acceptable
-            'LGPL-3.0',
-            'CC0-1.0',
-            // Add your approved licenses
-        ],
-
-        // Customize restrictive licenses
-        'restrictive_licenses' => [
-            'GPL-2.0',
-            'GPL-3.0',
-            'AGPL-3.0',
-            // Add licenses your legal team flags
-        ],
+'license_compliance' => [
+    // Add licenses your legal team approves
+    'whitelisted_licenses' => [
+        'MIT',
+        'Apache-2.0',
+        'BSD-2-Clause',
+        'BSD-3-Clause',
+        'ISC',
+        'LGPL-2.1',  // Lesser GPL is usually acceptable
+        'LGPL-3.0',
+        'CC0-1.0',
+        'Unlicense',
+        // Add your organization's approved licenses
     ],
-];
+
+    // Customize restrictive licenses
+    'restrictive_licenses' => [
+        'GPL-2.0',
+        'GPL-2.0-only',
+        'GPL-2.0-or-later',
+        'GPL-3.0',
+        'GPL-3.0-only',
+        'GPL-3.0-or-later',
+        'AGPL-3.0',
+        'AGPL-3.0-only',
+        'AGPL-3.0-or-later',
+        // Add licenses your legal team flags
+    ],
+],
 ```
+
+::: tip
+Consult with your legal team before modifying the license lists. The defaults are based on common commercial software requirements.
+:::
 
 **4. Handle Dual-Licensed Packages**
 

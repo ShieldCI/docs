@@ -55,13 +55,13 @@ LOG_LEVEL=warning
 ```
 
 ```ini
-# .env.production
+# .env - Production
 LOG_LEVEL=error
 
-# .env.staging
+# .env - Staging
 LOG_LEVEL=warning
 
-# .env.local
+# .env - Local/Development
 LOG_LEVEL=debug
 ```
 

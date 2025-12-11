@@ -215,9 +215,15 @@ if ($user?->isActive() && $user->hasRole('admin')) {
 }
 ```
 
-## ShieldCI Configuration
+#### 5: Customize ShieldCI Custom Settings (Optional)
 
-You can customize the nesting depth threshold in your `config/shieldci.php`:
+To customize the nesting depth threshold, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [

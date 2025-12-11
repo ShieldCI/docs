@@ -177,10 +177,10 @@ APP_DEBUG=true in production exposes sensitive information including:
 - API keys and secrets in exception dumps
 
 Fix:
-1. Set APP_DEBUG=false in .env.production
+1. Set APP_DEBUG=false in .env
 2. Configure proper error logging:
 
-   # .env.production
+   # .env
    APP_DEBUG=false
    LOG_LEVEL=error
    LOG_CHANNEL=stack
