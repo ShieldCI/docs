@@ -259,27 +259,6 @@ grep ".env" .gitignore
 # Should include .env (but not .env.example)
 ```
 
-**6. Configure ShieldCI Testing**
-
-```php
-// config/shieldci.php
-return [
-    'guest_url' => env('SHIELDCI_GUEST_URL'),
-];
-
-// .env.staging
-SHIELDCI_GUEST_URL=https://staging.yourapp.com
-
-// .env.production
-SHIELDCI_GUEST_URL=https://yourapp.com
-```
-
-**Test against staging:**
-```bash
-SHIELDCI_GUEST_URL=https://staging.yourapp.com \
-    php artisan shield:analyze --analyzer=env-http-accessibility
-```
-
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments.
@@ -288,6 +267,41 @@ This analyzer is automatically skipped in CI environments.
 - HTTP checks require a live web server, not applicable in CI
 - CI environments typically don't have a publicly accessible web server
 - Requires actual HTTP requests to test .env file accessibility
+
+**Customization:**
+
+By default, ShieldCI auto-discovers your application's login URL for HTTP testing. If you need to specify a custom URL, you can configure it:
+
+```bash
+# Test against staging
+SHIELDCI_GUEST_URL=https://staging.yourapp.com \
+    php artisan shield:analyze --analyzer=env-http-accessibility
+
+# Or configure in published config file
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'guest_url' => env('SHIELDCI_GUEST_URL'),
+```
+
+And in your `.env`:
+
+```ini
+# .env
+SHIELDCI_GUEST_URL=https://yourapp.com
+```
+
+::: tip
+ShieldCI automatically discovers your application's URL by checking:
+1. Named 'login' route
+2. Any route with 'guest' middleware
+3. Fallback to root URL '/'
+
+You only need to configure `guest_url` if the auto-discovery doesn't work for your setup.
+:::
 
 ## References
 
