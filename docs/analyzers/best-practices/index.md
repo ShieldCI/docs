@@ -7,7 +7,7 @@ outline: [2, 3]
 
 # Best Practices Analyzers
 
-**21 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 ## Overview
 
@@ -40,7 +40,6 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 
 ### Error Handling & Logging
 
-- **[Generic Exception Catch Detector](/analyzers/best-practices/generic-exception-catch)** - Detects overly broad exception catching
 - **[Silent Failure Detector](/analyzers/best-practices/silent-failure)** - Detects operations that fail silently
 - **[Missing Error Tracking Detector](/analyzers/best-practices/missing-error-tracking)** - Ensures error tracking is configured
 
@@ -65,7 +64,7 @@ Best Practices analyzers use:
 | Severity | Description | Examples |
 |----------|-------------|----------|
 | **High** | Issues that violate core Laravel principles | Logic in routes, N+1 queries, missing transactions |
-| **Medium** | Issues that reduce maintainability | Fat models, hardcoded paths, generic exception catching |
+| **Medium** | Issues that reduce maintainability | Fat models, hardcoded paths |
 | **Low** | Best practice violations | Helper function abuse, missing scopes, environment checks |
 
 ## Common Issues
@@ -209,25 +208,6 @@ $activeAdmins = User::active()->where('role', 'admin')->get();
 ```
 
 ### Error Handling
-
-**Generic Exception Catching:**
-```php
-// ❌ BAD - Catches everything
-try {
-    $this->processOrder($order);
-} catch (\Exception $e) {
-    Log::error('Error processing order');
-}
-
-// ✅ GOOD - Catch specific exceptions
-try {
-    $this->processOrder($order);
-} catch (PaymentException $e) {
-    return $this->handlePaymentError($e);
-} catch (InventoryException $e) {
-    return $this->handleInventoryError($e);
-}
-```
 
 **Silent Failures:**
 ```php

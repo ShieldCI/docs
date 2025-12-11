@@ -55,7 +55,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Missing DocBlocks
 
 ### [Best Practices](/analyzers/best-practices)
-**23 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 **Key Analyzers:**
 - Laravel Conventions
@@ -71,7 +71,7 @@ The open-source package includes comprehensive analyzers across all categories:
 - ✅ All 18 performance analyzers
 - ✅ All 25 reliability analyzers
 - ✅ All 5 code quality analyzers
-- ✅ All 21 best practices analyzers
+- ✅ All 20 best practices analyzers
 
 All analyzers are available in the free package.
 
