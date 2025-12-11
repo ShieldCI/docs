@@ -87,16 +87,26 @@ php artisan tinker
 ],
 ```
 
+2. **Configure additional connections**
+
+By default, the analyzer checks only your default database connection. If you need to check additional connections (e.g., multi-tenancy, read replicas), publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
-return [
-    'database' => [
-        // Check both default and tenant database
-        'connections' => ['mysql', 'tenant_db'],
-    ],
-];
+'database' => [
+    // Check both default and tenant database
+    'connections' => ['mysql', 'tenant_db'],
+],
 ```
+
+::: tip
+By default, only the default database connection is checked. You only need to configure additional connections if your application uses multiple databases.
+:::
 
 3. **Install missing PHP extensions**:
 
