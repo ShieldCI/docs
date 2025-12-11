@@ -581,41 +581,6 @@ This allows analyzers that check for `production` or `staging` environments to w
 
 ## Additional Configuration Options
 
-### Build Path
-
-**Configure where compiled assets are located:**
-```php
-'build_path' => env('SHIELDCI_BUILD_PATH', public_path()),
-```
-
-Used by analyzers like Asset Minification to check for minified JavaScript and CSS files.
-
-### Writable Directories
-
-**Configure directories that must be writable:**
-```php
-'writable_directories' => [
-    'storage',
-    'bootstrap/cache',
-],
-```
-
-Used by the Directory Write Permissions analyzer to verify critical directories have proper write permissions.
-
-### Guest URL
-
-**Configure guest URL for HTTP-based analyzers:**
-```php
-'guest_url' => env('SHIELDCI_GUEST_URL', null),
-```
-
-If not set, ShieldCI automatically tries to find a suitable route:
-1. Named 'login' route
-2. Any route with 'guest' middleware
-3. Fallback to root URL '/'
-
-Example: `/login`, `/register`, `/forgot-password`
-
 ### Fail Threshold
 
 **Set minimum score to pass (0-100):**
@@ -647,8 +612,6 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `dont_report` | array | `[]` | Analyzers to run but not affect exit code (shows in report) |
 | `paths.analyze` | array | `['app', 'config', ...]` | Directories to analyze |
 | `excluded_paths` | array | `['vendor/*', ...]` | Paths to skip (glob patterns) |
-| `build_path` | string | `public_path()` | Path where compiled assets are located |
-| `writable_directories` | array | `['storage', 'bootstrap/cache']` | Directories that must be writable |
 | `report.format` | string | `'console'` | Output format (console, json) |
 | `report.output_file` | string\|null | `null` | Save report to file |
 | `report.show_recommendations` | bool | `true` | Show recommendations in output |
@@ -656,6 +619,5 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `report.max_issues_per_check` | int | `5` | Limit displayed issues per analyzer |
 | `baseline_file` | string | `.shieldci-baseline.json` | Baseline file path |
 | `ignore_errors` | array | `[]` | Ignore specific errors by analyzer (completely removes from report) |
-| `guest_url` | string\|null | `null` | Guest URL for HTTP-based analyzers |
 | `fail_on` | string | `'critical'` | Failure threshold for CI (never, critical, high, medium, low) |
 | `fail_threshold` | int\|null | `null` | Minimum score to pass (0-100) |
