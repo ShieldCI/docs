@@ -1,13 +1,13 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 93 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's 91 analyzers across 5 categories
 icon: shield-check
 outline: [2, 3]
 ---
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 93 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 91 analyzers across all categories.
 
 ## Categories
 
@@ -64,14 +64,14 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 
 ## Analyzer Package
 
-### Free Package (93 Analyzers)
+### Free Package (91 Analyzers)
 The open-source package includes comprehensive analyzers across all categories:
 
 - ✅ All 22 security analyzers
 - ✅ All 18 performance analyzers
 - ✅ All 25 reliability analyzers
 - ✅ All 5 code quality analyzers
-- ✅ All 23 best practices analyzers
+- ✅ All 21 best practices analyzers
 
 All analyzers are available in the free package.
 

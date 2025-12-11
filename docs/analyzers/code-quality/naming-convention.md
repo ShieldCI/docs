@@ -196,6 +196,5 @@ class User {
 
 - [Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock) - Ensures proper documentation
 - [Method Length Analyzer](/analyzers/code-quality/method-length) - Detects methods that are too long
-- [Magic Number Analyzer](/analyzers/code-quality/magic-number) - Detects hard-coded numbers
 - [Nesting Depth Analyzer](/analyzers/code-quality/nesting-depth) - Detects excessive code nesting
 

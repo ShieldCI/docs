@@ -1,13 +1,13 @@
 ---
 title: Best Practices Analyzers
-description: 23 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
+description: 21 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
 icon: puzzle
 outline: [2, 3]
 ---
 
 # Best Practices Analyzers
 
-**23 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**21 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 ## Overview
 
@@ -34,9 +34,8 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 
 ### Code Organization
 
-- **[Fat Model Detector](/analyzers/best-practices/fat-model)** - Detects models with too much responsibility
+- **[Fat Model](/analyzers/best-practices/fat-model)** - Detects models with too much business logic that violate Single Responsibility Principle
 - **[Missing Model Scope Detector](/analyzers/best-practices/missing-model-scope)** - Suggests using model scopes for common queries
-- **[Facade Usage](/analyzers/best-practices/facade-usage)** - Validates appropriate facade usage
 - **[Service Container Resolution](/analyzers/best-practices/service-container-resolution)** - Ensures proper dependency injection
 
 ### Error Handling & Logging
@@ -50,8 +49,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 - **[Helper Function Abuse](/analyzers/best-practices/helper-function-abuse)** - Detects overuse of global helper functions
 - **[Hardcoded Storage Paths Detector](/analyzers/best-practices/hardcoded-storage-paths)** - Detects hardcoded file paths
 - **[PHP-Side Data Filtering Detector](/analyzers/best-practices/php-side-filtering)** - Detects filtering that should be done in database
-- **[Environment Check Code Smell Detector](/analyzers/best-practices/environment-check-smell)** - Detects environment checks in business logic
-- **[Framework Override Detector](/analyzers/best-practices/framework-override)** - Detects unnecessary framework overrides
+- **[Framework Override](/analyzers/best-practices/framework-override)** - Detects dangerous extensions of Laravel core classes that break during framework upgrades
 
 ## How They Work
 

@@ -297,6 +297,5 @@ private function getUserProcessor(User $user): UserProcessor
 
 - [Nesting Depth Analyzer](/analyzers/code-quality/nesting-depth) - Detects excessive code nesting
 - [Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock) - Ensures proper documentation
-- [Magic Number Analyzer](/analyzers/code-quality/magic-number) - Detects hard-coded numbers
 - [Commented Code Analyzer](/analyzers/code-quality/commented-code) - Detects commented-out code
 
