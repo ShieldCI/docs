@@ -575,9 +575,123 @@ This allows analyzers that check for `production` or `staging` environments to w
     'output_file' => null,  // Set to save report automatically
     'show_recommendations' => env('SHIELDCI_SHOW_RECOMMENDATIONS', true),
     'show_code_snippets' => env('SHIELDCI_SHOW_CODE_SNIPPETS', true),
+    'snippet_context_lines' => env('SHIELDCI_SNIPPET_CONTEXT_LINES', 8),
+    'snippet_plain_mode' => env('SHIELDCI_SNIPPET_PLAIN_MODE', false),
+    'snippet_syntax_highlighting' => env('SHIELDCI_SNIPPET_SYNTAX_HIGHLIGHTING', true),
     'max_issues_per_check' => env('SHIELDCI_MAX_ISSUES', 5),  // Limit displayed issues per analyzer
 ],
 ```
+
+### Code Snippet Display
+
+ShieldCI can display code snippets around detected issues for better context and faster understanding.
+
+**Enable/Disable Code Snippets:**
+```php
+'report' => [
+    'show_code_snippets' => true,  // Master switch
+],
+```
+
+**Configure Context Lines:**
+```php
+'report' => [
+    'snippet_context_lines' => 8,  // Lines before/after the issue (default: 8)
+],
+```
+
+The default of 8 lines provides good context while maintaining readable output. Adjust based on your needs:
+- **5 lines**: Minimal context, cleaner output
+- **8 lines**: Balanced (recommended)
+- **10 lines**: Maximum context for complex issues
+
+**Plain Text Mode (Copy-Paste Friendly):**
+```php
+'report' => [
+    'snippet_plain_mode' => false,  // Default: false (colors enabled)
+],
+```
+
+When enabled, code snippets are displayed without ANSI color codes, making them perfect for:
+- Copying to GitHub issues
+- Documentation
+- Bug reports
+- Slack/Discord messages
+- CI/CD logs
+
+**Syntax Highlighting:**
+```php
+'report' => [
+    'snippet_syntax_highlighting' => true,  // Default: true
+],
+```
+
+When enabled, PHP code is syntax-highlighted with colors:
+- **Keywords** (cyan): `public`, `function`, `class`, `if`, `return`
+- **Variables** (green): `$user`, `$data`, `$request`
+- **Strings** (yellow): `'hello'`, `"world"`
+- **Numbers** (magenta): `42`, `3.14`
+- **Comments** (gray): `// comment`, `/* block */`
+
+**Example Output (With Highlighting):**
+
+```
+At app/Http/Controllers/UserController.php:45.
+
+  Code Preview:
+    37    class UserController extends Controller
+    38    {
+    39        public function update(Request $request, User $user)
+    40        {
+    ...
+    43            $data = $request->all();
+    44            $user = auth()->user();
+    45 →          return $user->update($data);  // Mass assignment!
+    46            return redirect()->back();
+    47        }
+```
+
+**Smart Context Expansion:**
+
+ShieldCI automatically detects and includes method/class signatures when an issue occurs inside a method, even if the signature is outside the normal context window. This provides crucial context about WHERE the issue occurs.
+
+Detection patterns:
+- Class, interface, trait, enum declarations
+- Public, protected, private method signatures
+- Searches up to 15 lines above the issue
+
+::: tip Code Snippet Performance
+Code snippets add minimal overhead (~10ms per analyzer). They only read the necessary lines from files and are cached per issue. The performance impact is negligible compared to analyzer execution time.
+:::
+
+::: info Smart Features
+- **Auto-expansion**: Automatically includes method/class signatures for context
+- **Line truncation**: Long lines are truncated to 250 characters to prevent wrapping
+- **Lazy loading**: Snippets are only generated when needed
+- **JSON support**: Code snippets are automatically included in JSON output
+:::
+
+### Output Control
+
+**Limit Displayed Issues:**
+```php
+'report' => [
+    'max_issues_per_check' => 5,  // Show max 5 issues per analyzer
+],
+```
+
+When an analyzer finds more issues than this limit, only the first N issues are displayed with a "... and X more issue(s)" message. The full list is always available in JSON output.
+
+**Note:** Code snippets are shown for the first `max_issues_per_check` issues only. This prevents overwhelming output while maintaining useful context.
+
+**Output Size Estimates:**
+
+| Config | Lines per Issue | Lines per Analyzer (5 issues) |
+|--------|----------------|-------------------------------|
+| No snippets | ~1 line | ~5 lines |
+| 5 context lines | ~12 lines | ~60 lines |
+| 8 context lines (default) | ~18 lines | ~90 lines |
+| 10 context lines | ~22 lines | ~110 lines |
 
 ## Additional Configuration Options
 
@@ -616,6 +730,9 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `report.output_file` | string\|null | `null` | Save report to file |
 | `report.show_recommendations` | bool | `true` | Show recommendations in output |
 | `report.show_code_snippets` | bool | `true` | Show code snippets in output |
+| `report.snippet_context_lines` | int | `8` | Lines before/after issue in snippets |
+| `report.snippet_plain_mode` | bool | `false` | Plain text mode (no ANSI colors) |
+| `report.snippet_syntax_highlighting` | bool | `true` | PHP syntax highlighting in snippets |
 | `report.max_issues_per_check` | int | `5` | Limit displayed issues per analyzer |
 | `baseline_file` | string | `.shieldci-baseline.json` | Baseline file path |
 | `ignore_errors` | array | `[]` | Ignore specific errors by analyzer (completely removes from report) |
