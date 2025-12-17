@@ -70,12 +70,11 @@ Security analyzers use a combination of:
 
 ## Severity Levels
 
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Critical** | Severe security vulnerabilities that can lead to data breaches | SQL injection, XSS, missing authentication, exposed secrets |
-| **High** | Significant security risks that need immediate attention | Mass assignment, unguarded models, vulnerable dependencies |
-| **Medium** | Security concerns that should be addressed | Missing CSRF protection, weak password hashing, insecure cookies |
-| **Low** | Best practice violations and minor security improvements | Missing HSTS headers, license compliance, file permissions |
+| Severity | Description | Examples                                                                             |
+|----------|-------------|--------------------------------------------------------------------------------------|
+| **Critical** | Severe security vulnerabilities that can lead to data breaches | SQL injection, XSS, missing authentication, exposed secrets, vulnerable dependencies |
+| **High** | Significant security risks that need immediate attention | Mass assignment, unguarded models                                                    |
+| **Low** | Best practice violations and minor security improvements | Up-to-date dependencies                                                              |
 
 ## Running Security Analyzers
 
