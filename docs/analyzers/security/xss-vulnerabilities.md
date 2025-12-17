@@ -8,9 +8,9 @@ tags: xss,cross-site-scripting,security,blade,csp,headers
 
 # XSS Vulnerabilities Analyzer
 
-| Analyzer ID           | Category     | Severity   | Time To Fix  |
-| ----------------------| :----------: |:----------:| ------------:|
-| `xss-vulnerabilities` | 🛡️ Security  | High       | 30 minutes   |
+| Analyzer ID           | Category     | Severity | Time To Fix  |
+| ----------------------| :----------: |:--------:| ------------:|
+| `xss-vulnerabilities` | 🛡️ Security  | Critical | 30 minutes   |
 
 
 ## What This Checks

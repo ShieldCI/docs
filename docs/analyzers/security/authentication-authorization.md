@@ -8,9 +8,9 @@ tags: authentication,authorization,security,middleware
 
 # Authentication & Authorization Analyzer
 
-| Analyzer ID                 | Category     | Severity   | Time To Fix  |
-| ----------------------------| :----------: |:----------:| ------------:|
-| `authentication-authorization` | 🛡️ Security  | High       | 25 minutes   |
+| Analyzer ID                     | Category     | Severity | Time To Fix  |
+|---------------------------------| :----------: |:--------:| ------------:|
+| `authentication-authorization`  | 🛡️ Security  | Critical | 25 minutes   |
 
 ## What This Checks
 
