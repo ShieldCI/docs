@@ -486,36 +486,17 @@ echo "✅ Installation complete!"
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
-**Why skip in CI and development?**
-- Migration status is deployment/environment-specific
-- CI databases are often fresh for each run
-- Prevents false failures in CI pipelines
+**Why skip in CI?**
+- CI databases are often fresh for each run, making migration status checks irrelevant
+- Migration status is deployment/environment-specific, not code-quality related
+- Prevents false failures in CI pipelines where databases are reset between runs
 
-**Environment Detection:**
-The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
-
-```php
-// config/shieldci.php
-'environment_mapping' => [
-    'production-us' => 'production',
-    'production-blue' => 'production',
-    'staging-preview' => 'staging',
-],
-```
-
-**Examples:**
-- `APP_ENV=production` → Runs (no mapping needed)
-- `APP_ENV=production-us` → Maps to `production` → Runs
-- `APP_ENV=local` → Skipped (not production/staging)
-
-**Run manually if needed:**
-
-```bash
-# Check migration status locally
-php artisan shield:analyze --analyzer=up-to-date-migrations
-```
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures your local database is in sync before development work
+- ✅ **Staging/Production servers**: Validates migrations are up to date after deployment
+- ❌ **CI/CD pipelines**: Skipped automatically (fresh databases for each test run)
 
 ## References
 

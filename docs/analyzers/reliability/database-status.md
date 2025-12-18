@@ -87,28 +87,7 @@ php artisan tinker
 ],
 ```
 
-2. **Configure additional connections**
-
-By default, the analyzer checks only your default database connection. If you need to check additional connections (e.g., multi-tenancy, read replicas), publish the config:
-
-```bash
-php artisan vendor:publish --tag=shieldci-config
-```
-
-Then in `config/shieldci.php`:
-
-```php
-'database' => [
-    // Check both default and tenant database
-    'connections' => ['mysql', 'tenant_db'],
-],
-```
-
-::: tip
-By default, only the default database connection is checked. You only need to configure additional connections if your application uses multiple databases.
-:::
-
-3. **Install missing PHP extensions**:
+2. **Install missing PHP extensions**:
 
 ```bash
 # For MySQL
@@ -126,7 +105,7 @@ sudo apt-get install php8.2-pgsql
 sudo service apache2 restart
 ```
 
-4. **Create missing databases**:
+3. **Create missing databases**:
 
 ```sql
 -- MySQL
@@ -138,7 +117,7 @@ CREATE DATABASE my_application;
 GRANT ALL PRIVILEGES ON DATABASE my_application TO postgres;
 ```
 
-5. **Check firewall/network access**:
+4. **Check firewall/network access**:
 
 ```bash
 # Test if database port is reachable
@@ -146,6 +125,35 @@ telnet 127.0.0.1 3306
 
 # Check if firewall is blocking
 sudo ufw status
+```
+
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- Database backends may not be available in CI pipelines
+- CI environments often use different database configurations (SQLite in-memory) than production
+- Prevents false failures when production database credentials aren't configured in CI
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures your database is properly configured during development
+- ✅ **Staging/Production servers**: Confirms database connections are accessible
+- ✅ **Deployment verification**: Run after deploying database configuration changes
+- ❌ **CI/CD pipelines**: Skipped automatically (database services typically unavailable)
+
+**Check additional database connections:**
+
+By default, only the default connection is checked. To verify multiple connections (e.g., read replicas, multi-tenancy):
+
+```php
+// config/shieldci.php
+'database' => [
+    'connections' => ['mysql', 'tenant_db', 'analytics'],
+
+    // Or as comma-separated string
+    'connections' => 'mysql,tenant_db,analytics',
+],
 ```
 
 ## References

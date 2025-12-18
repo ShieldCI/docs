@@ -54,6 +54,20 @@ redis-cli ping
 4. **Secure credentials**: Ensure secrets are injected securely (Vault/Parameter Store) so deployments don’t reference outdated hosts
 5. **Document recovery steps**: Standardize how to restart Redis/Memcached, flush keys, or switch to the `array` driver temporarily
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- Cache backends (Redis, Memcached) may not be available in CI pipelines
+- CI environments often use different cache configurations (array/file) than production
+- Prevents false failures when external cache services aren't configured in CI
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures your cache is properly configured during development
+- ✅ **Staging/Production servers**: Confirms cache is accessible and functioning
+- ❌ **CI/CD pipelines**: Skipped automatically (cache services typically unavailable)
+
 ## References
 
 - [Laravel Cache Docs](https://laravel.com/docs/cache)

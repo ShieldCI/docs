@@ -76,6 +76,37 @@ Log::warning('API rate limit approaching');
 Log::info('User registered', ['id' => $user->id]);
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- CI environments typically use debug logging for detailed test output
+- Local/development environments need verbose logging for debugging
+- Prevents false failures when debug logging is intentionally used during development
+
+**When to run this analyzer:**
+- ✅ **Staging/Production servers**: Ensures debug logging is disabled in production
+- ❌ **Local/Testing development**: Skipped automatically (debug logging acceptable)
+- ❌ **CI/CD pipelines**: Skipped automatically (deployment-specific check)
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
 ## References
 
 - [Laravel Logging](https://laravel.com/docs/logging)

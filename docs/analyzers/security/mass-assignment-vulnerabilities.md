@@ -266,19 +266,12 @@ php artisan tinker
 
 ## References
 
-### Laravel Documentation
 - [Eloquent: Mass Assignment](https://laravel.com/docs/eloquent#mass-assignment)
 - [Validation: Form Request Validation](https://laravel.com/docs/validation#form-request-validation)
-- [Request: Retrieving Input](https://laravel.com/docs/requests#retrieving-input)
-
-### Security Resources
 - [OWASP: Mass Assignment Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html)
 - [CWE-915: Improperly Controlled Modification of Dynamically-Determined Object Attributes](https://cwe.mitre.org/data/definitions/915.html)
 - [GitHub Mass Assignment Incident (2012)](https://github.blog/2012-03-04-public-key-security-vulnerability-and-mitigation/)
-
-### Additional Reading
 - [Mass Assignment: A New Software Vulnerability (OWASP PDF)](https://owasp.org/www-pdf-archive/Mass_Assignment_-_OWASP_AppSecUSA2012.pdf)
-- [Laravel Security Best Practices](https://laravel-news.com/laravel-security-best-practices)
 
 ## Related Analyzers
 

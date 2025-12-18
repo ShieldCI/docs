@@ -114,6 +114,55 @@ public function searchUsers(Request $request)
 }
 ```
 
+## ShieldCI Configuration
+
+The analyzer can be customized to recognize additional native database functions specific to your application. To configure them, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'sql-injection' => [
+            // Custom MySQLi functions to check for SQL injection
+            'mysqli_functions' => [
+                'mysqli_query',
+                'mysqli_real_query',
+                'mysqli_multi_query',
+                'mysqli_prepare',
+                // Add any custom mysqli wrapper functions
+                'custom_db_query',
+            ],
+
+            // Custom PostgreSQL functions to check
+            'postgres_functions' => [
+                'pg_query',
+                'pg_query_params',
+                'pg_send_query',
+                'pg_prepare',
+                // Add any custom pg wrapper functions
+                'custom_pg_execute',
+            ],
+        ],
+    ],
+],
+```
+
+::: tip When to Customize
+Only customize the function lists if you:
+- Have custom database wrapper functions
+- Use legacy database libraries with non-standard function names
+- Need to check additional native PHP database functions
+
+The default lists cover standard MySQLi and PostgreSQL functions used in most Laravel applications.
+:::
+
 ## References
 
 - [OWASP SQL Injection](https://owasp.org/www-community/attacks/SQL_Injection)

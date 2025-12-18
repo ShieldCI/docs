@@ -17,6 +17,7 @@ tags: errors,ux,reliability,security,fingerprinting
 - Verifies that 404, 500, and 503 templates exist under `resources/views/errors` (or the `errors` namespace)
 - Detects missing templates that would fall back to Laravel’s default branding
 - Skips stateless/API-only apps (no session middleware) where HTML error pages aren’t relevant
+- Skips automatically in CI (where web server may not be available)
 - Reports which templates are missing and which view paths were inspected
 
 ## Why It Matters
@@ -44,6 +45,29 @@ php artisan vendor:publish --tag=laravel-errors
 3. **Localize**: Provide translated error messages if your app is multilingual
 4. **Automate tests**: Write feature tests to assert the custom templates render for 404/500 responses
 5. **Namespace sharing**: If you ship a design system package, register an `errors` view namespace and keep templates centralized
+
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and for stateless/API-only applications.
+
+**Why skip in CI?**
+- Custom error page checks require a web server context
+- CI environments may not have full web rendering available
+- Error page rendering is a deployment/runtime concern, not a code quality check
+- Prevents false failures in headless CI environments
+
+**Why skip for stateless/API-only apps?**
+- API-only applications return JSON error responses, not HTML pages
+- Stateless apps (no session middleware) don't serve traditional web pages
+- Custom HTML error pages aren't relevant for pure API applications
+
+**When to run this analyzer:**
+- ✅ **Web applications with sessions**: Full-stack Laravel apps serving HTML
+- ✅ **Hybrid apps**: Applications with both web and API routes
+- ✅ **Local development**: Ensures error pages are configured before deployment
+- ✅ **Staging/Production servers**: Validates custom error pages are in place
+- ❌ **CI/CD pipelines**: Skipped automatically (no web server context)
+- ❌ **API-only applications**: Skipped automatically (no session middleware detected)
 
 ## References
 

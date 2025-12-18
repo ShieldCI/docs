@@ -264,6 +264,20 @@ php artisan make:controller ProfileController
 # Move logic from route closure to controller method
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI environments often use different caching strategies than production
+- CI pipelines may run with uncached routes for test flexibility
+- Prevents false failures when CI environments legitimately skip route caching
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures you haven't accidentally cached routes locally
+- ✅ **Staging/Production servers**: Validates route caching is properly enabled
+- ❌ **CI/CD pipelines**: Skipped automatically (deployment-specific check)
+
 ## References
 
 - [Laravel Route Caching Documentation](https://laravel.com/docs/routing#route-caching)
