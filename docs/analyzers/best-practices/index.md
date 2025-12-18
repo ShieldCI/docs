@@ -1,13 +1,13 @@
 ---
 title: Best Practices Analyzers
-description: 21 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
+description: 15 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
 icon: puzzle
 outline: [2, 3]
 ---
 
 # Best Practices Analyzers
 
-**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**15 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 ## Overview
 
@@ -17,38 +17,33 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 
 ### Laravel Conventions
 
-- **[MVC Structure Violation Detector](/analyzers/best-practices/mvc-structure-violation)** - Ensures code follows MVC architecture patterns
-- **[Logic in Routes Detector](/analyzers/best-practices/logic-in-routes)** - Detects business logic in route files
-- **[Logic in Blade Detector](/analyzers/best-practices/logic-in-blade)** - Detects complex logic in Blade templates
-- **[Query Builder in Controller](/analyzers/best-practices/query-builder-in-controller)** - Detects query builder usage in controllers
-- **[Hardcoded Configuration Detector](/analyzers/best-practices/config-outside-config)** - Detects configuration values outside config files
+- **[Logic in Routes Analyzer](/analyzers/best-practices/logic-in-routes)** - Detects business logic in route files
+- **[Logic in Blade Analyzer](/analyzers/best-practices/logic-in-blade)** - Detects complex logic in Blade templates
+- **[Hardcoded Configuration Analyzer](/analyzers/best-practices/config-outside-config)** - Detects configuration values outside config files
 
 ### Eloquent & Database
 
-- **[Eloquent N+1 Query](/analyzers/best-practices/eloquent-n-plus-one)** - Detects N+1 query problems
-- **[Missing Chunk Detector](/analyzers/best-practices/chunk-missing)** - Detects missing chunk() calls for large datasets
-- **[Missing Database Transactions Detector](/analyzers/best-practices/missing-database-transactions)** - Detects operations that should use database transactions
-- **[Select Asterisk Detector](/analyzers/best-practices/select-asterisk)** - Detects SELECT * queries
-- **[Unnecessary Raw SQL Detector](/analyzers/best-practices/raw-eloquent-avoidance)** - Detects raw SQL that could use Eloquent
-- **[Mixed Query Builder and Eloquent Detector](/analyzers/best-practices/mixed-query-builder-eloquent)** - Detects inconsistent query building patterns
+- **[Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one)** - Detects N+1 query problems
+- **[Missing Chunk Analyzer](/analyzers/best-practices/chunk-missing)** - Detects missing chunk() calls for large datasets
+- **[Missing Database Transactions Analyzer](/analyzers/best-practices/missing-database-transactions)** - Detects operations that should use database transactions
+- **[Mixed Query Builder and Eloquent Analyzer](/analyzers/best-practices/mixed-query-builder-eloquent)** - Detects inconsistent query building patterns
 
 ### Code Organization
 
-- **[Fat Model](/analyzers/best-practices/fat-model)** - Detects models with too much business logic that violate Single Responsibility Principle
-- **[Missing Model Scope Detector](/analyzers/best-practices/missing-model-scope)** - Suggests using model scopes for common queries
-- **[Service Container Resolution](/analyzers/best-practices/service-container-resolution)** - Ensures proper dependency injection
+- **[Fat Model Analyzer](/analyzers/best-practices/fat-model)** - Detects models with too much business logic that violate Single Responsibility Principle
+- **[Service Container Resolution Analyzer](/analyzers/best-practices/service-container-resolution)** - Detects manual service container resolution and recommends constructor dependency injection
 
 ### Error Handling & Logging
 
-- **[Silent Failure Detector](/analyzers/best-practices/silent-failure)** - Detects operations that fail silently
-- **[Missing Error Tracking Detector](/analyzers/best-practices/missing-error-tracking)** - Ensures error tracking is configured
+- **[Silent Failure Analyzer](/analyzers/best-practices/silent-failure)** - Detects empty catch blocks and error suppression that hide failures
+- **[Missing Error Tracking Analyzer](/analyzers/best-practices/missing-error-tracking)** - Ensures error tracking is configured
 
 ### Anti-Patterns
 
-- **[Helper Function Abuse](/analyzers/best-practices/helper-function-abuse)** - Detects overuse of global helper functions
-- **[Hardcoded Storage Paths Detector](/analyzers/best-practices/hardcoded-storage-paths)** - Detects hardcoded file paths
-- **[PHP-Side Data Filtering Detector](/analyzers/best-practices/php-side-filtering)** - Detects filtering that should be done in database
-- **[Framework Override](/analyzers/best-practices/framework-override)** - Detects dangerous extensions of Laravel core classes that break during framework upgrades
+- **[Helper Function Abuse Analyzer](/analyzers/best-practices/helper-function-abuse)** - Detects overuse of global helper functions
+- **[Hardcoded Storage Paths Analyzer](/analyzers/best-practices/hardcoded-storage-paths)** - Detects hardcoded file paths
+- **[PHP-Side Data Filtering Analyzer](/analyzers/best-practices/php-side-filtering)** - Detects filtering that should be done in database
+- **[Framework Override Analyzer](/analyzers/best-practices/framework-override)** - Detects dangerous extensions of Laravel core classes that break during framework upgrades
 
 ## How They Work
 
@@ -65,7 +60,7 @@ Best Practices analyzers use:
 |----------|-------------|----------|
 | **High** | Issues that violate core Laravel principles | Logic in routes, N+1 queries, missing transactions |
 | **Medium** | Issues that reduce maintainability | Fat models, hardcoded paths |
-| **Low** | Best practice violations | Helper function abuse, missing scopes, environment checks |
+| **Low** | Best practice violations | Helper function abuse |
 
 ## Common Issues
 
@@ -155,17 +150,6 @@ DB::transaction(function () use ($order, $inventory, $payment) {
 });
 ```
 
-**SELECT * Queries:**
-```php
-// ❌ BAD - Selects all columns
-$users = DB::table('users')->get();
-
-// ✅ GOOD - Select only needed columns
-$users = DB::table('users')
-    ->select('id', 'name', 'email')
-    ->get();
-```
-
 ### Code Organization
 
 **Fat Model:**
@@ -190,32 +174,32 @@ class UserService {
 }
 ```
 
-**Missing Model Scopes:**
-```php
-// ❌ BAD - Repeated query logic
-$activeUsers = User::where('status', 'active')->where('verified', true)->get();
-$activeAdmins = User::where('status', 'active')->where('verified', true)->where('role', 'admin')->get();
-
-// ✅ GOOD - Use scopes
-class User extends Model {
-    public function scopeActive($query) {
-        return $query->where('status', 'active')->where('verified', true);
-    }
-}
-
-$activeUsers = User::active()->get();
-$activeAdmins = User::active()->where('role', 'admin')->get();
-```
-
 ### Error Handling
 
 **Silent Failures:**
 ```php
-// ❌ BAD - Fails silently
+// ❌ BAD - Empty catch block swallows exceptions
+try {
+    $payment = $gateway->charge($amount);
+} catch (Exception $e) {
+    // Silent failure - no logging, no error tracking
+}
+
+// ❌ BAD - Error suppression hides errors
 @file_put_contents($path, $content);
 
-// ✅ GOOD - Handle errors explicitly
+// ✅ GOOD - Proper error handling with logging
+try {
+    $payment = $gateway->charge($amount);
+} catch (Exception $e) {
+    Log::error('Payment failed', ['amount' => $amount, 'error' => $e->getMessage()]);
+    report($e);
+    throw $e;
+}
+
+// ✅ GOOD - Explicit error handling
 if (file_put_contents($path, $content) === false) {
+    Log::error('File write failed', ['path' => $path]);
     throw new FileWriteException("Failed to write to {$path}");
 }
 ```
