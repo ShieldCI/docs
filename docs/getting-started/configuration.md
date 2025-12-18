@@ -89,10 +89,10 @@ return [
         'reliability' => [
             'enabled' => env('SHIELDCI_RELIABILITY_ANALYZERS', true),
         ],
-        'code_quality' => [
+        'code-quality' => [
             'enabled' => env('SHIELDCI_CODE_QUALITY_ANALYZERS', true),
         ],
-        'best_practices' => [
+        'best-practices' => [
             'enabled' => env('SHIELDCI_BEST_PRACTICES_ANALYZERS', true),
         ],
     ],
@@ -161,11 +161,11 @@ Set `SHIELDCI_ENABLED=false` in your `.env` to completely disable ShieldCI.
         'enabled' => env('SHIELDCI_RELIABILITY_ANALYZERS', false),
     ],
     // Run all code quality analyzers
-    'code_quality' => [
+    'code-quality' => [
         'enabled' => env('SHIELDCI_CODE_QUALITY_ANALYZERS', true),
     ],
     // Run all best practices analyzers
-    'best_practices' => [
+    'best-practices' => [
         'enabled' => env('SHIELDCI_BEST_PRACTICES_ANALYZERS', true),
     ],
 ],
@@ -174,7 +174,7 @@ Set `SHIELDCI_ENABLED=false` in your `.env` to completely disable ShieldCI.
 **Configure category-specific analyzer settings:**
 ```php
 'analyzers' => [
-    'code_quality' => [
+    'code-quality' => [
         'enabled' => env('SHIELDCI_CODE_QUALITY_ANALYZERS', true),
         // Configure method length analyzer
         'method_length' => [
@@ -524,10 +524,10 @@ return [
         'reliability' => [
             'enabled' => env('APP_ENV') !== 'production',
         ],
-        'code_quality' => [
+        'code-quality' => [
             'enabled' => env('APP_ENV') !== 'production',
         ],
-        'best_practices' => [
+        'best-practices' => [
             'enabled' => env('APP_ENV') !== 'production',
         ],
     ],

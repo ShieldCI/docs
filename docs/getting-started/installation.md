@@ -149,10 +149,10 @@ return [
         'reliability' => [
             'enabled' => true,
         ],
-        'code_quality' => [
+        'code-quality' => [
             'enabled' => true,
         ],
-        'best_practices' => [
+        'best-practices' => [
             'enabled' => true,
         ],
     ],

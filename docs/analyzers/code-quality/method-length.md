@@ -299,7 +299,7 @@ Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [
-    'code_quality' => [
+    'code-quality' => [
         'enabled' => true,
         
         'method-length' => [

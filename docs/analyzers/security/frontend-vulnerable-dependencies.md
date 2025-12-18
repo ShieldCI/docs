@@ -189,16 +189,22 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'frontend_vulnerable_dependencies' => [
-    // Packages to ignore (document why!)
-    'ignored_packages' => [
-        'legacy-package', // Can't update due to compatibility
-    ],
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
 
-    // Advisory IDs to ignore
-    'ignored_advisories' => [
-        'GHSA-xxxx-yyyy-zzzz', // False positive - doesn't affect our usage
-        'CVE-2020-1234',       // Risk accepted and documented
+        'frontend-vulnerable-dependencies' => [
+            // Packages to ignore (document why!)
+            'ignored_packages' => [
+                'legacy-package', // Can't update due to compatibility
+            ],
+        
+            // Advisory IDs to ignore
+            'ignored_advisories' => [
+                'GHSA-xxxx-yyyy-zzzz', // False positive - doesn't affect our usage
+                'CVE-2020-1234',       // Risk accepted and documented
+            ],
+        ],
     ],
 ],
 ```

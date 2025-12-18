@@ -225,13 +225,19 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'fillable_foreign_key' => [
-    // Customize dangerous patterns (defaults: user_id, owner_id, tenant_id, etc.)
-    'dangerous_patterns' => [
-        'user_id' => 'user ownership',
-        'admin_id' => 'admin relationship',
-        'tenant_id' => 'tenant isolation',
-        // Add your critical patterns
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'fillable-foreign-key' => [
+            // Customize dangerous patterns (defaults: user_id, owner_id, tenant_id, etc.)
+            'dangerous_patterns' => [
+                'user_id' => 'user ownership',
+                'admin_id' => 'admin relationship',
+                'tenant_id' => 'tenant isolation',
+                // Add your critical patterns
+            ],
+        ],
     ],
 ],
 ```
