@@ -426,7 +426,7 @@ Then in `config/shieldci.php`:
 ```php
 return [
     'analyzers' => [
-        'best_practices' => [
+        'best-practices' => [
             'enabled' => true,
 
             'framework-override' => [

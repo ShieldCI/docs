@@ -249,7 +249,7 @@ Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [
-    'best_practices' => [
+    'best-practices' => [
         'enabled' => true,
         
         'logic-in-routes' => [

@@ -323,7 +323,7 @@ Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [
-    'best_practices' => [
+    'best-practices' => [
         'enabled' => true,
         
         'missing-database-transactions' => [

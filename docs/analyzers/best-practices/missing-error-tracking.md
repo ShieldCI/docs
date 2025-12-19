@@ -258,7 +258,7 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 ```php
 'analyzers' => [
-    'best_practices' => [
+    'best-practices' => [
         'enabled' => true,
         
         'missing-error-tracking' => [
