@@ -169,7 +169,9 @@ fetch('/api/users', {
 
 **5. Configure Middleware Exceptions Carefully**
 
-Only exclude routes from CSRF protection when absolutely necessary (webhooks, third-party integrations, API routes). The analyzer intelligently evaluates exception patterns:
+Only exclude routes from CSRF protection when absolutely necessary (webhooks, third-party integrations, API routes). The analyzer intelligently evaluates exception patterns.
+
+**Laravel 9/10 - Using Middleware $except Array:**
 
 ```php
 // app/Http/Middleware/VerifyCsrfToken.php
@@ -211,7 +213,58 @@ class VerifyCsrfToken extends Middleware
 }
 ```
 
-**Exception Pattern Rules:**
+**Laravel 11+ - Using validateCsrfTokens() in bootstrap/app.php:**
+
+In Laravel 11+, `ValidateCsrfToken` is included globally by default. Configure exceptions in `bootstrap/app.php`:
+
+```php
+// bootstrap/app.php
+use Illuminate\Foundation\Application;
+
+->withMiddleware(function (Middleware $middleware) {
+    // Exclude specific URIs from CSRF protection
+    $middleware->validateCsrfTokens(except: [
+        // ✅ ALLOWED - Known webhook/integration services
+        'stripe/*',           // Stripe webhooks
+        'mailslurp/*',        // MailSlurp webhooks
+        'twilio/*',           // Twilio webhooks
+        'github/*',           // GitHub webhooks
+
+        // ✅ ALLOWED - Multi-segment patterns (2+ segments)
+        '/clock/switch/*',          // Clock switching endpoints
+        'api/external/callback/*',  // External API callbacks
+
+        // ✅ ALLOWED - API routes
+        'api/*',
+
+        // ✅ ALLOWED - Specific exact routes
+        '/clock/in',
+        '/clock/out',
+        '/admin/email-templates/upload',
+
+        // ❌ CRITICAL - Never exclude all routes
+        // '*',              // Disables ALL CSRF protection
+        // '/*',             // Same as above
+
+        // ❌ HIGH SEVERITY - Too broad
+        // 'admin/*',        // Entire admin area unprotected
+        // 'dashboard/*',    // Entire dashboard unprotected
+    ]);
+})
+```
+
+**⚠️ Important for Laravel 11+:**
+
+CSRF protection (`ValidateCsrfToken`) is **enabled by default** globally. The analyzer detects these common misconfigurations:
+
+1. **Removing from web group**: `$middleware->web(remove: [ValidateCsrfToken::class])` - Disables CSRF for all web routes
+2. **Removing entirely**: `$middleware->remove(ValidateCsrfToken::class)` - Disables CSRF for all routes
+3. **Missing from manual stack**: When using `$middleware->use([...])` to customize the global middleware stack, you **must** include `ValidateCsrfToken::class`
+4. **Wildcard exceptions**: `validateCsrfTokens(except: ['*'])` - Disables CSRF for all routes
+
+**Only use `validateCsrfTokens(except: [...])` for legitimate exceptions** like webhooks and third-party integrations.
+
+**Exception Pattern Rules (Both Versions):**
 - **Critical Issue**: `'*'` or `'/*'` - Disables CSRF for all routes
 - **High Severity**: Single-segment wildcards like `'admin/*'`, `'dashboard/*'` (unless recognized webhook service)
 - **Allowed**: Multi-segment patterns like `'/clock/switch/*'`, `'api/external/callback/*'`
@@ -220,8 +273,9 @@ class VerifyCsrfToken extends Middleware
 
 **6. Verify Middleware Registration**
 
+**Laravel 9/10 - app/Http/Kernel.php:**
+
 ```php
-// Laravel 10 and below - app/Http/Kernel.php
 protected $middlewareGroups = [
     'web' => [
         \App\Http\Middleware\EncryptCookies::class,
@@ -232,14 +286,48 @@ protected $middlewareGroups = [
         \Illuminate\Routing\Middleware\SubstituteBindings::class,
     ],
 ];
+```
 
-// Laravel 11+ - bootstrap/app.php
-// CSRF protection enabled by default, don't disable it
-return Application::configure(basePath: dirname(__DIR__))
-    ->withMiddleware(function (Middleware $middleware) {
-        // CSRF protection is automatic
-    })
-    ->create();
+**Laravel 11+ - bootstrap/app.php:**
+
+```php
+// ✅ CORRECT - CSRF protection is enabled globally by default
+->withMiddleware(function (Middleware $middleware) {
+    // ValidateCsrfToken is automatically included
+    // No action needed unless excluding specific URIs
+})
+
+// ❌ WRONG - Removing CSRF from web middleware group
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(remove: [
+        \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
+    ]);
+})
+
+// ❌ WRONG - Manual middleware stack missing ValidateCsrfToken
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->use([
+        \Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class,
+        \Illuminate\Http\Middleware\TrustProxies::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        // Missing ValidateCsrfToken::class - CSRF protection disabled!
+    ]);
+})
+
+// ✅ CORRECT - Manual middleware stack with ValidateCsrfToken
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->use([
+        \Illuminate\Foundation\Http\Middleware\InvokeDeferredCallbacks::class,
+        \Illuminate\Http\Middleware\TrustProxies::class,
+        \Illuminate\Http\Middleware\HandleCors::class,
+        \Illuminate\Foundation\Http\Middleware\PreventRequestsDuringMaintenance::class,
+        \Illuminate\Http\Middleware\ValidatePostSize::class,
+        \Illuminate\Foundation\Http\Middleware\TrimStrings::class,
+        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,  // ✓ CSRF enabled
+    ]);
+})
 ```
 
 **7. Test Protection Works**
