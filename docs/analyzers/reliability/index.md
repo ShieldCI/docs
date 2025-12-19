@@ -1,13 +1,13 @@
 ---
 title: Reliability Analyzers
-description: 25 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
+description: 13 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
 icon: check-circle
 outline: [2, 3]
 ---
 
 # Reliability Analyzers
 
-**25 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
+**13 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
 
 ## Overview
 
@@ -27,21 +27,22 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **[Environment Example Documentation Analyzer](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
 - **[Maintenance Mode Status Analyzer](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
 
-### Code Quality & Static Analysis
+### Static Analysis (PHPStan)
 
-- **[Dead Code Analyzer](/analyzers/reliability/dead-code)** - Detects unreachable code, unused variables, and statements with no effect
-- **[Deprecated Code Analyzer](/analyzers/reliability/deprecated-code)** - Detects usage of deprecated methods, classes, and functions
-- **[Foreach Iterable Analyzer](/analyzers/reliability/foreach-iterable)** - Detects invalid foreach usage with non-iterable values
-- **[Invalid Function Calls Analyzer](/analyzers/reliability/invalid-function-calls)** - Detects invalid function calls in application code
-- **[Invalid Imports Analyzer](/analyzers/reliability/invalid-imports)** - Detects invalid imports and use statements for non-existent classes
-- **[Invalid Method Calls Analyzer](/analyzers/reliability/invalid-method-calls)** - Detects invalid method calls in application code
-- **[Invalid Method Overrides Analyzer](/analyzers/reliability/invalid-method-overrides)** - Detects incompatible method overrides with incorrect signatures
-- **[Invalid Offset Access Analyzer](/analyzers/reliability/invalid-offset-access)** - Detects invalid array offset access and type mismatches
-- **[Invalid Property Access Analyzer](/analyzers/reliability/invalid-property-access)** - Detects invalid property access and visibility violations
-- **[Missing Model Relations Analyzer](/analyzers/reliability/missing-model-relation)** - Detects references to non-existent Eloquent model relations
-- **[Missing Return Statements Analyzer](/analyzers/reliability/missing-return-statement)** - Detects missing return statements in methods and functions
-- **[Undefined Constant Usage Analyzer](/analyzers/reliability/undefined-constant)** - Detects references to undefined constants
-- **[Undefined Variable Usage Analyzer](/analyzers/reliability/undefined-variable)** - Detects references to undefined variables
+- **[PHPStan Static Analysis Analyzer](/analyzers/reliability/phpstan)** - Comprehensive static analysis detecting 13 categories of code reliability issues:
+  - **Dead Code** - Unreachable statements, unused variables, and code with no effect
+  - **Deprecated Code** - Usage of deprecated methods, classes, and functions
+  - **Foreach Iterable** - Invalid foreach usage with non-iterable values
+  - **Invalid Function Calls** - Calls to undefined or incorrectly parameterized functions
+  - **Invalid Imports** - Invalid use statements for non-existent classes
+  - **Invalid Method Calls** - Calls to undefined or incorrectly parameterized methods
+  - **Invalid Method Overrides** - Incompatible method signature overrides
+  - **Invalid Offset Access** - Invalid array offset access and type mismatches
+  - **Invalid Property Access** - Access to undefined or inaccessible properties
+  - **Missing Model Relations** - References to non-existent Eloquent relations
+  - **Missing Return Statements** - Methods with missing return statements
+  - **Undefined Constants** - References to undefined constants
+  - **Undefined Variables** - References to undefined variables
 
 ### Infrastructure & Permissions
 
@@ -82,7 +83,7 @@ php artisan shield:analyze --category=reliability
 ### Run Specific Analyzer
 
 ```bash
-php artisan shield:analyze --analyzer=undefined-variable
+php artisan shield:analyze --analyzer=database-status
 php artisan shield:analyze --analyzer=up-to-date-migrations
 php artisan shield:analyze --analyzer=cache-status
 ```
@@ -90,7 +91,7 @@ php artisan shield:analyze --analyzer=cache-status
 ### Run Multiple Analyzers
 
 ```bash
-php artisan shield:analyze --analyzer=undefined-variable,undefined-constant,invalid-method-calls
+php artisan shield:analyze --analyzer=composer-validation,queue-timeout-configuration,maintenance-mode-status
 ```
 
 ## Best Practices

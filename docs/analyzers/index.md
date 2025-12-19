@@ -1,13 +1,13 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 91 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's 73 analyzers across 5 categories
 icon: shield-check
 outline: [2, 3]
 ---
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 91 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 73 analyzers across all categories.
 
 ## Categories
 
@@ -35,14 +35,14 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - View Compilation
 
 ### [Reliability](/analyzers/reliability)
-**25 analyzers** ensuring your application handles errors gracefully and maintains uptime.
+**13 analyzers** ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
-- Error Handling Patterns
-- Logging Configuration
+- PHPStan Static Analysis (13 categories consolidated)
+- Configuration & Environment Validation
+- Cache & Database Connectivity
 - Queue Reliability
-- Backup Strategy
-- Monitoring Setup
+- File Permissions & Structure
 
 ### [Code Quality](/analyzers/code-quality)
 **5 analyzers** maintaining clean, maintainable code following Laravel conventions.
@@ -55,7 +55,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Missing DocBlocks
 
 ### [Best Practices](/analyzers/best-practices)
-**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**15 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 **Key Analyzers:**
 - Laravel Conventions
@@ -64,14 +64,14 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 
 ## Analyzer Package
 
-### Free Package (91 Analyzers)
+### Free Package (73 Analyzers)
 The open-source package includes comprehensive analyzers across all categories:
 
 - ✅ All 22 security analyzers
 - ✅ All 18 performance analyzers
-- ✅ All 25 reliability analyzers
+- ✅ All 13 reliability analyzers
 - ✅ All 5 code quality analyzers
-- ✅ All 20 best practices analyzers
+- ✅ All 15 best practices analyzers
 
 All analyzers are available in the free package.
 
