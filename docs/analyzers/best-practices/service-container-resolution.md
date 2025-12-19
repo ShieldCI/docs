@@ -194,11 +194,12 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'best-practices' => [
         'enabled' => true,
-        
+
         'service-container-resolution' => [
             // Directories to skip
             'whitelist_dirs' => [
                 'tests',                // Tests legitimately resolve services
+                'database/migrations',  // Migrations don't support constructor DI
                 'database/seeders',     // Seeders need to resolve factories
                 'database/factories',   // Factories may resolve services
             ],
