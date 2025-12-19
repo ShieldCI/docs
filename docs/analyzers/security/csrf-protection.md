@@ -8,9 +8,9 @@ tags: csrf,cross-site-request-forgery,security,forms
 
 # CSRF Protection Analyzer
 
-| Analyzer ID       | Category     | Severity   | Time To Fix  |
-| ------------------| :----------: |:----------:| ------------:|
-| `csrf-protection` | 🛡️ Security  | High       | 20 minutes   |
+| Analyzer ID       | Category     | Severity | Time To Fix  |
+| ------------------| :----------: |:--------:| ------------:|
+| `csrf-protection` | 🛡️ Security  | Critical | 20 minutes   |
 
 ## What This Checks
 
@@ -169,27 +169,54 @@ fetch('/api/users', {
 
 **5. Configure Middleware Exceptions Carefully**
 
+Only exclude routes from CSRF protection when absolutely necessary (webhooks, third-party integrations, API routes). The analyzer intelligently evaluates exception patterns:
+
 ```php
 // app/Http/Middleware/VerifyCsrfToken.php
 class VerifyCsrfToken extends Middleware
 {
     protected $except = [
-        // ✅ GOOD - Specific webhook endpoints
-        'webhooks/stripe',
-        'webhooks/github',
+        // ✅ ALLOWED - Known webhook/integration services
+        // Single-segment patterns are allowed for recognized services:
+        'stripe/*',           // Stripe webhooks
+        'mailgun/*',          // Mailgun webhooks
+        'mailslurp/*',        // MailSlurp webhooks
+        'twilio/*',           // Twilio webhooks
+        'github/*',           // GitHub webhooks
+        'paddle/*',           // Paddle webhooks
 
-        // ✅ GOOD - API routes (use token auth instead)
+        // ✅ ALLOWED - Multi-segment patterns (2+ segments)
+        // Patterns with 2+ segments are considered specific enough:
+        '/clock/switch/*',          // Clock switching endpoints
+        '/admin/webhooks/stripe',   // Admin webhook handling
+        'api/external/callback/*',  // External API callbacks
+
+        // ✅ ALLOWED - API routes (typically use token authentication)
         'api/*',
 
-        // ❌ BAD - Never use wildcards
-        // '*',
-        // '/*',
+        // ✅ ALLOWED - Specific exact routes
+        '/clock/in',
+        '/clock/out',
+        '/admin/email-templates/upload',
 
-        // ❌ BAD - Too broad
-        // 'admin/*',
+        // ❌ CRITICAL - Never exclude all routes
+        // '*',              // Disables ALL CSRF protection
+        // '/*',             // Same as above
+
+        // ❌ HIGH SEVERITY - Too broad (single segment, non-recognized service)
+        // 'admin/*',        // Entire admin area unprotected
+        // 'dashboard/*',    // Entire dashboard unprotected
+        // 'webhooks/*',     // Generic webhooks - be more specific
     ];
 }
 ```
+
+**Exception Pattern Rules:**
+- **Critical Issue**: `'*'` or `'/*'` - Disables CSRF for all routes
+- **High Severity**: Single-segment wildcards like `'admin/*'`, `'dashboard/*'` (unless recognized webhook service)
+- **Allowed**: Multi-segment patterns like `'/clock/switch/*'`, `'api/external/callback/*'`
+- **Allowed**: Known webhook services like `'stripe/*'`, `'mailslurp/*'`, `'twilio/*'`
+- **Best Practice**: Use exact routes when possible instead of wildcards
 
 **6. Verify Middleware Registration**
 
