@@ -8,9 +8,9 @@ tags: licenses,legal,compliance,dependencies,gpl,commercial
 
 # Dependency License Compliance Analyzer
 
-| Analyzer ID          | Category     | Severity   | Time To Fix  |
-| ---------------------| :----------: |:----------:| ------------:|
-| `license-compliance` | 🛡️ Security  | Critical   | 120 minutes   |
+| Analyzer ID          | Category     | Severity | Time To Fix  |
+| ---------------------| :----------: |:--------:| ------------:|
+| `license-compliance` | 🛡️ Security  |   High   | 120 minutes   |
 
 ## What This Checks
 
@@ -18,7 +18,7 @@ Validates that all dependencies use legally acceptable licenses for your applica
 
 ## Why It Matters
 
-- **Security Risk:** CRITICAL - Using GPL/AGPL packages in proprietary software may require releasing your entire codebase as open source
+- **Security Risk:** High - Using GPL/AGPL packages in proprietary software may require releasing your entire codebase as open source
 - **Legal Liability:** License violations can result in lawsuits, forced code disclosure, and financial penalties
 - **Commercial Impact:** GPL contamination requires either open-sourcing your product or removing the dependency
 - **Due Diligence:** Investors and acquirers scrutinize license compliance during audits

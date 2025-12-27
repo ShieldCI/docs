@@ -14,7 +14,22 @@ tags: sql,injection,database,security
 
 ## What This Checks
 
-This analyzer detects potential SQL injection vulnerabilities in your Laravel application by identifying unsafe database query patterns, including string concatenation in raw SQL methods, variable interpolation in queries, use of `DB::unprepared()`, and native PHP database functions that bypass Laravel's query protections.
+This analyzer detects potential SQL injection vulnerabilities in your Laravel application by identifying unsafe SQL query construction patterns:
+
+- **String concatenation** in SQL queries (e.g., `"WHERE id = " . $id`)
+- **Variable interpolation** in SQL queries (e.g., `"WHERE name = '$name'"`)
+- **Missing parameter bindings** when user input is present
+- **Unsafe usage** of `DB::raw()`, `whereRaw()`, `selectRaw()`, and similar methods
+- **DB::unprepared()** usage (inherently unsafe)
+- **Native query functions** (`mysqli_query`, `pg_query`) with concatenation/interpolation
+
+::: tip What's NOT Flagged
+The analyzer correctly recognizes these as **safe**:
+- PDO/mysqli instantiation (`new PDO()`, `new mysqli()`) - just connection setup
+- Prepared statement functions (`mysqli_prepare()`, `pg_prepare()`) - secure by design
+- Parameter binding (`DB::select('WHERE id = ?', [$id])`) - the recommended safe pattern
+- Static queries without variables (`DB::select('SELECT * FROM users')`)
+:::
 
 ## Why It Matters
 
@@ -128,25 +143,23 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'security' => [
         'enabled' => true,
-        
+
         'sql-injection' => [
-            // Custom MySQLi functions to check for SQL injection
+            // MySQLi query execution functions to check for SQL injection
+            // Only functions that execute queries are checked (not prepare/connect/fetch)
             'mysqli_functions' => [
-                'mysqli_query',
-                'mysqli_real_query',
-                'mysqli_multi_query',
-                'mysqli_prepare',
-                // Add any custom mysqli wrapper functions
+                'mysqli_query',        // Default
+                'mysqli_real_query',   // Default
+                'mysqli_multi_query',  // Default
+                // Add any custom mysqli wrapper functions that execute queries
                 'custom_db_query',
             ],
 
-            // Custom PostgreSQL functions to check
+            // PostgreSQL query execution functions to check
             'postgres_functions' => [
-                'pg_query',
-                'pg_query_params',
-                'pg_send_query',
-                'pg_prepare',
-                // Add any custom pg wrapper functions
+                'pg_query',       // Default
+                'pg_send_query',  // Default
+                // Add any custom pg wrapper functions that execute queries
                 'custom_pg_execute',
             ],
         ],
@@ -155,12 +168,19 @@ Then in `config/shieldci.php`:
 ```
 
 ::: tip When to Customize
-Only customize the function lists if you:
-- Have custom database wrapper functions
-- Use legacy database libraries with non-standard function names
-- Need to check additional native PHP database functions
+Only customize the function lists if you have **custom query execution functions** in your codebase.
 
-The default lists cover standard MySQLi and PostgreSQL functions used in most Laravel applications.
+**Important**: The analyzer only flags functions when SQL queries have concatenation or interpolation. Safe usage patterns are not flagged:
+
+```php
+// ✅ NOT flagged - no concatenation
+mysqli_query($conn, "SELECT * FROM users WHERE id = 1");
+
+// ❌ FLAGGED - has concatenation
+mysqli_query($conn, "SELECT * FROM users WHERE id = " . $userId);
+```
+
+The default lists cover standard MySQLi and PostgreSQL query execution functions. You typically don't need to customize unless you have wrapper functions like `custom_execute_query()` or `legacy_db_run()`.
 :::
 
 ## References
