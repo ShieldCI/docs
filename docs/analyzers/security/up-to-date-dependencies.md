@@ -8,9 +8,9 @@ tags: dependencies,composer,updates,maintenance,security-patches
 
 # Up-to-Date Dependencies Analyzer
 
-| Analyzer ID               | Category     | Severity   | Time To Fix  |
-| --------------------------| :----------: |:----------:| ------------:|
-| `up-to-date-dependencies` | 🛡️ Security  | Low        | 60 minutes   |
+| Analyzer ID               | Category     | Severity | Time To Fix  |
+| --------------------------| :----------: |:--------:| ------------:|
+| `up-to-date-dependencies` | 🛡️ Security  |  Medium  | 60 minutes   |
 
 ## What This Checks
 
