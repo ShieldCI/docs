@@ -215,7 +215,7 @@ if ($user?->isActive() && $user->hasRole('admin')) {
 }
 ```
 
-#### 5: Customize ShieldCI Custom Settings (Optional)
+#### 5: Customize ShieldCI Settings (Optional)
 
 To customize the nesting depth threshold, publish the config:
 
