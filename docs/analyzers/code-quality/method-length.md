@@ -14,9 +14,10 @@ tags: complexity,maintainability,code-quality,readability
 
 ## What This Checks
 
-- Detects methods exceeding recommended line count (default threshold: 50 lines)
-- Counts physical lines (from method declaration to closing brace)
-- Excludes simple getter/setter methods (get*, set*, is*, has*)
+- Detects methods and functions exceeding recommended line count (default threshold: 50 lines)
+- Counts physical lines (from declaration to closing brace)
+- Excludes **only simple** getter/setter methods (get*, set*, is*, has*) that are ≤ 10 lines
+- Large methods matching exclude patterns are still flagged (prevents hiding real problems)
 - Reports exact file location and line number of each issue
 
 ## Why It Matters
@@ -314,8 +315,39 @@ Then in `config/shieldci.php`:
 The analyzer counts **physical lines** - the actual number of lines you see in your editor from the method declaration to the closing brace. This includes blank lines, comments, and code within the method body. The default threshold of 50 lines is based on industry best practices. Methods longer than this become harder to test and understand. Consider extracting logic into smaller, focused methods.
 :::
 
-::: info Excluded Patterns
-Simple getter/setter methods are excluded by default as they typically don't benefit from length restrictions. You can customize this list based on your project's conventions.
+::: info Smart Getter/Setter Exclusion
+
+ShieldCI uses **smart exclusion** to prevent false positives while catching real problems:
+
+**✅ Excluded (Simple Accessors ≤ 10 lines):**
+```php
+public function getUser() {
+    return $this->user;
+}
+
+public function setEmail($email) {
+    $this->email = $email;
+}
+
+public function isActive() {
+    return $this->status === 'active';
+}
+```
+
+**❌ NOT Excluded (Large Methods > 10 lines):**
+```php
+public function getUsersWithComplexFiltering() {
+    // ... 60 lines of filtering logic ...
+    // This WILL be flagged even though it starts with "get"
+}
+
+public function setConfigurationFromMultipleSources($sources) {
+    // ... 50 lines of configuration logic ...
+    // This WILL be flagged even though it starts with "set"
+}
+```
+
+This prevents hiding legitimate problems behind broad pattern matching. You can customize the excluded patterns in your configuration.
 :::
 
 ## References
