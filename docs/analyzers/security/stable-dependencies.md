@@ -144,6 +144,8 @@ Then in `config/shieldci.php`:
 ```php
 'analyzers' => [
     'security' => [
+        'enabled' => true,
+
         'stable-dependencies' => [
             'enforce_explicit_minimum_stability' => true,
         ],

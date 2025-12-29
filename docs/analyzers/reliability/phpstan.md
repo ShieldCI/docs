@@ -81,6 +81,8 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
 // config/shieldci.php
 'analyzers' => [
     'reliability' => [
+        'enabled' => true,
+
         'phpstan' => [
             'level' => 5, // 0-9, higher is stricter
 
@@ -223,6 +225,8 @@ You can enable/disable specific categories:
 ```php
 'analyzers' => [
     'reliability' => [
+        'enabled' => true,
+        
         'phpstan' => [
             'paths' => ['app', 'routes'], // Only analyze these directories
         ],
