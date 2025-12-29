@@ -306,6 +306,7 @@ Then in `config/shieldci.php`:
         'method-length' => [
             'threshold' => 50,  // Default: 50 physical lines (method declaration to closing brace)
             'exclude_patterns' => ['get*', 'set*', 'is*', 'has*'],  // Patterns to exclude
+            'simple_accessor_max_lines' => 10,  // Default: 10 lines - max size for simple accessors
         ],
     ],
 ],
@@ -347,7 +348,25 @@ public function setConfigurationFromMultipleSources($sources) {
 }
 ```
 
-This prevents hiding legitimate problems behind broad pattern matching. You can customize the excluded patterns in your configuration.
+This prevents hiding legitimate problems behind broad pattern matching. You can customize:
+- **excluded patterns** (`exclude_patterns`) - Which method name patterns to check (default: `get*`, `set*`, `is*`, `has*`)
+- **simple accessor threshold** (`simple_accessor_max_lines`) - Maximum lines for a method to be considered "simple" (default: 10 lines)
+
+For example, if your team considers accessors up to 15 lines as "simple", you can increase the threshold:
+
+```php
+'method-length' => [
+    'simple_accessor_max_lines' => 15,  // More lenient: allow larger accessors
+],
+```
+
+Or make it stricter:
+
+```php
+'method-length' => [
+    'simple_accessor_max_lines' => 5,  // Stricter: only very small accessors excluded
+],
+```
 :::
 
 ## References
