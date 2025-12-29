@@ -15,7 +15,7 @@ tags: complexity,maintainability,code-quality,readability
 ## What This Checks
 
 - Detects methods exceeding recommended line count (default threshold: 50 lines)
-- Counts logical lines (excluding comments and whitespace)
+- Counts physical lines (from method declaration to closing brace)
 - Excludes simple getter/setter methods (get*, set*, is*, has*)
 - Reports exact file location and line number of each issue
 
@@ -303,15 +303,15 @@ Then in `config/shieldci.php`:
         'enabled' => true,
         
         'method-length' => [
-            'threshold' => 50,  // Default: 50 lines
+            'threshold' => 50,  // Default: 50 physical lines (method declaration to closing brace)
             'exclude_patterns' => ['get*', 'set*', 'is*', 'has*'],  // Patterns to exclude
         ],
     ],
 ],
 ```
 
-::: tip
-The default threshold of 50 lines is based on industry best practices. Methods longer than this become harder to test and understand. Consider extracting logic into smaller, focused methods.
+::: tip Line Counting Method
+The analyzer counts **physical lines** - the actual number of lines you see in your editor from the method declaration to the closing brace. This includes blank lines, comments, and code within the method body. The default threshold of 50 lines is based on industry best practices. Methods longer than this become harder to test and understand. Consider extracting logic into smaller, focused methods.
 :::
 
 ::: info Excluded Patterns
