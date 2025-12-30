@@ -294,52 +294,6 @@ public function handle(Request $request, Closure $next)
 }
 ```
 
-## X-Frame-Options Values
-
-The `X-Frame-Options` header accepts three values:
-
-| Value | Description | Use Case |
-|-------|-------------|----------|
-| `DENY` | Prevents all framing, even from same origin | Maximum security - no iframes at all |
-| `SAMEORIGIN` | Allows framing only from same origin | Recommended - allows internal iframes |
-| ~~`ALLOW-FROM uri`~~ | **Deprecated** - Allows framing from specific URI | Not supported by modern browsers |
-
-**⚠️ ALLOW-FROM is Deprecated:**
-
-```php
-// ❌ WRONG - Deprecated, not supported in modern browsers
-$response->headers->set('X-Frame-Options', 'ALLOW-FROM https://trusted-site.com');
-
-// ✅ CORRECT - Use CSP frame-ancestors instead
-$csp = "frame-ancestors 'self' https://trusted-site.com";
-$response->headers->set('Content-Security-Policy', $csp);
-```
-
-## CSP frame-ancestors Directive
-
-The `frame-ancestors` CSP directive is the modern replacement for `X-Frame-Options`:
-
-```php
-// Deny all framing
-"frame-ancestors 'none'"
-
-// Allow same origin only
-"frame-ancestors 'self'"
-
-// Allow specific domains
-"frame-ancestors 'self' https://trusted-partner.com"
-
-// Allow multiple domains
-"frame-ancestors 'self' https://partner1.com https://partner2.com"
-```
-
-**Benefits of CSP over X-Frame-Options:**
-
-- More flexible - can specify multiple allowed origins
-- More granular control
-- Part of modern Content Security Policy standard
-- Better browser support for complex scenarios
-
 ## Advanced Configuration
 
 **Allowing Specific Trusted Partners:**
