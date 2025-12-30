@@ -7,7 +7,7 @@ outline: [2, 3]
 
 # Security Analyzers
 
-**24 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more.
+**25 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more.
 
 ## Overview
 
@@ -18,6 +18,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 ### Critical Vulnerabilities
 
 - **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
+- **[Column Name SQL Injection Analyzer](/analyzers/security/column-name-sql-injection)** - Detects SQL injection vulnerabilities where user input controls column names
 - **[XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
 - **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
 - **[Arbitrary File Upload Analyzer](/analyzers/security/arbitrary-file-upload)** - Detects file upload vulnerabilities that could lead to remote code execution
