@@ -1,13 +1,13 @@
 ---
 title: Security Analyzers
-description: 24 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more
+description: 22 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
 icon: lock
 outline: [2, 3]
 ---
 
 # Security Analyzers
 
-**24 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more.
+**22 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 ## Overview
 
@@ -20,7 +20,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 - **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
 - **[XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
 - **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
-- **[Arbitrary File Upload Analyzer](/analyzers/security/arbitrary-file-upload)** - Detects file upload vulnerabilities that could lead to remote code execution
 - **[Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
 - **[Unguarded Models Analyzer](/analyzers/security/unguarded-models)** - Detects Model::unguard() usage that disables mass assignment protection
 
@@ -45,7 +44,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 ### HTTP Security
 
-- **[Clickjacking Protection Analyzer](/analyzers/security/clickjacking)** - Detects missing clickjacking protection via X-Frame-Options or CSP frame-ancestors
 - **[HSTS Header Analyzer](/analyzers/security/hsts-header)** - Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications
 
 ### Dependencies & Updates
@@ -139,11 +137,8 @@ Before deploying to production, ensure:
 - ✅ File permissions are secure (644 for files, 755 for directories)
 - ✅ All routes have proper authentication/authorization
 - ✅ CSRF protection is enabled on all forms
-- ✅ Clickjacking protection enabled (X-Frame-Options or CSP frame-ancestors)
 - ✅ SQL injection protection (use Eloquent/parameter binding)
 - ✅ XSS protection (escape all user input)
-- ✅ File uploads have MIME type, extension, and size validation
-- ✅ Uploaded files stored in private directories (not publicly executable)
 - ✅ Mass assignment protection (use $fillable/$guarded)
 - ✅ Password hashing uses strong algorithms (bcrypt 12+ rounds or Argon2id)
 - ✅ Dependencies are up-to-date and vulnerability-free
