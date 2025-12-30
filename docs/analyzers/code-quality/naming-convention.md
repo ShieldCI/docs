@@ -14,13 +14,20 @@ tags: conventions,psr,code-quality,readability
 
 ## What This Checks
 
-- Validates class names follow PascalCase (e.g., `UserController`, `OrderService`)
+- Validates class, interface, trait, and enum names follow PascalCase (e.g., `UserController`, `OrderService`)
 - Ensures method names follow camelCase (e.g., `getUserById`, `processPayment`)
 - Validates property names follow camelCase (e.g., `firstName`, `isActive`)
-- Checks constant names follow SCREAMING_SNAKE_CASE (e.g., `MAX_LOGIN_ATTEMPTS`)
-- Verifies Laravel conventions (e.g., table names plural, model names singular)
+- Checks public constant names follow SCREAMING_SNAKE_CASE (e.g., `MAX_LOGIN_ATTEMPTS`)
+- Allows private/protected constants to use camelCase (modern PHP convention)
+- Validates Laravel `protected $table` properties are plural snake_case (e.g., `users`, `order_items`)
+- Skips magic methods (e.g., `__construct`, `__toString`)
 - Reports exact file location and line number of each violation
 - Provides suggestions for correct naming
+
+**What's NOT Checked** (to avoid excessive noise):
+- Local variables (e.g., `$user_id`, `$is_active`)
+- Function parameters (e.g., `function process($user_name)`)
+- Closure variables
 
 ## Why It Matters
 
@@ -107,66 +114,114 @@ class User {
 }
 ```
 
-#### 4: Constant Names (SCREAMING_SNAKE_CASE)
+#### 4: Constant Names
+
+**PSR-12 Convention**: Only public constants require SCREAMING_SNAKE_CASE. Private and protected constants may use camelCase (modern PHP convention).
 
 ```php
-// ❌ Before: Wrong constant naming
+// ❌ Before: Wrong public constant naming
 class Config {
-    const maxLoginAttempts = 5;
-    const DEFAULT_TIMEOUT = 30;
-    const api_key = 'secret';
+    public const maxLoginAttempts = 5;  // Public must be SCREAMING_SNAKE_CASE
+    public const api_key = 'secret';    // Public must be SCREAMING_SNAKE_CASE
 }
 
-// ✅ After: SCREAMING_SNAKE_CASE
+// ✅ After: Correct public constant naming
 class Config {
-    const MAX_LOGIN_ATTEMPTS = 5;
-    const DEFAULT_TIMEOUT = 30;
-    const API_KEY = 'secret';
+    public const MAX_LOGIN_ATTEMPTS = 5;
+    public const API_KEY = 'secret';
+
+    // Private/protected constants can use camelCase (modern PHP)
+    private const maxRetries = 3;
+    protected const defaultTimeout = 30;
+    private const cachePrefix = 'app_';
 }
 ```
 
-#### 5: Laravel Model Conventions
+**Why the difference?**
+- Public constants are part of the public API and should follow strict PSR-12 conventions
+- Private/protected constants are internal implementation details
+- Modern PHP codebases often use camelCase for internal constants for consistency with properties
+
+#### 5: Interface and Trait Naming
 
 ```php
-// ❌ Before: Wrong model/table naming
-class Users extends Model {
-    protected $table = 'user'; // Should be plural
+// ❌ Before: Wrong naming
+interface user_repository {}
+trait has_timestamps {}
+
+// ✅ After: PascalCase
+interface UserRepository {}
+trait HasTimestamps {}
+```
+
+#### 6: Enum Naming (PHP 8.1+)
+
+```php
+// ❌ Before: Wrong enum naming
+enum user_status {
+    case ACTIVE;
+    case INACTIVE;
 }
 
-// ✅ After: Laravel conventions
+// ✅ After: PascalCase
+enum UserStatus {
+    case ACTIVE;
+    case INACTIVE;
+}
+```
+
+#### 7: Laravel Table Names
+
+**Laravel Convention**: Table names in `protected $table` should be plural snake_case.
+
+```php
+// ❌ Before: Wrong table naming
 class User extends Model {
-    // Table name automatically inferred as 'users' (plural)
-    // Model name is singular
+    protected $table = 'user';  // Should be plural
+}
+
+class OrderItem extends Model {
+    protected $table = 'OrderItems';  // Should be snake_case
+}
+
+class Person extends Model {
+    protected $table = 'person';  // Should be 'people' (irregular plural)
+}
+
+class Category extends Model {
+    protected $table = 'category';  // Should be 'categories'
+}
+
+// ✅ After: Correct Laravel table naming
+class User extends Model {
+    protected $table = 'users';  // Plural snake_case
+}
+
+class OrderItem extends Model {
+    protected $table = 'order_items';  // Plural snake_case
+}
+
+class Person extends Model {
+    protected $table = 'people';  // Irregular plural
+}
+
+class Category extends Model {
+    protected $table = 'categories';  // -y becomes -ies
 }
 ```
 
-#### 6: Controller Naming
+**Pluralization Engine**:
 
-```php
-// ❌ Before: Wrong controller naming
-class UsersController extends Controller {
-    // Should be UserController (singular model name)
-}
+This analyzer uses **Laravel's `Str::plural()` and `Str::singular()`** methods - the same robust pluralization engine that powers Laravel's Eloquent ORM. This automatically handles:
 
-// ✅ After: Laravel conventions
-class UserController extends Controller {
-    // Controller for User model
-}
-```
+- Regular plurals: `user` → `users`, `product` → `products`
+- Words ending in -y: `category` → `categories`
+- Words ending in -s/-x/-ch/-sh: `class` → `classes`, `box` → `boxes`
+- Irregular plurals: `person` → `people`, `child` → `children`
+- Uncountable words: `sheep`, `fish`, `equipment`
+- Complex compound words: `order_item` → `order_items`
 
-#### 7: Service Class Naming
-
-```php
-// ❌ Before: Inconsistent service naming
-class order_processing_service {}
-class PaymentService {}
-class user_management {}
-
-// ✅ After: Consistent PascalCase
-class OrderProcessingService {}
-class PaymentService {}
-class UserManagement {}
-```
+**Note**: Only `protected $table` is checked. Public or private table properties are not validated for Laravel conventions.
 
 #### 8: Boolean Method Names
 
