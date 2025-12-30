@@ -227,11 +227,6 @@ For CI/CD integration:
 php artisan shield:analyze --format=json --output=results.json
 ```
 
-### Platform Dashboard
-
-View rich visualizations, trends, and team collaboration at:
-https://app.shieldci.com
-
 ## Best Practices
 
 ### Local Development
