@@ -16,12 +16,16 @@ tags: sql-injection,column-names,security,database,pdo
 
 Detects SQL injection vulnerabilities where user input controls column names in Laravel database queries. PDO does not support binding column names, only values, making column name injection a unique and dangerous vulnerability.
 
-Vulnerable query builder methods:
-- `orderBy`, `orderByDesc`, `orderByRaw`
-- `select`, `selectRaw`, `addSelect`
-- `groupBy`, `groupByRaw`
-- `having`, `havingRaw`
-- `pluck`, `value`
+**Covered methods (6 total):**
+- `orderBy`, `orderByDesc` - Position-aware detection (only flags 1st argument)
+- `select`, `addSelect` - Any request usage flagged
+- `groupBy` - Any request usage flagged
+- `pluck` - Any request usage flagged
+
+**Excluded from detection:**
+- `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`) - Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
+- `having()`, `havingRaw()` - Often operate on aggregates (COUNT, SUM), high false-positive rate
+- `value()` - Typically uses hardcoded column names, low real-world risk
 
 ## Why It Matters
 
