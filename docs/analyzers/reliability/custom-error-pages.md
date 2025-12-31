@@ -15,9 +15,9 @@ tags: errors,ux,reliability,security,fingerprinting
 ## What This Checks
 
 - Verifies that 404, 500, and 503 templates exist under `resources/views/errors` (or the `errors` namespace)
-- Detects missing templates that would fall back to Laravel’s default branding
-- Skips stateless/API-only apps (no session middleware) where HTML error pages aren’t relevant
-- Skips automatically in CI (where web server may not be available)
+- Performs filesystem checks to detect missing templates that would fall back to Laravel's default branding
+- Checks all configured view paths and custom error view namespaces
+- Skips stateless/API-only apps (no session middleware) where HTML error pages aren't relevant
 - Reports which templates are missing and which view paths were inspected
 
 ## Why It Matters
@@ -48,13 +48,8 @@ php artisan vendor:publish --tag=laravel-errors
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`) and for stateless/API-only applications.
+This analyzer is automatically skipped for stateless/API-only applications.
 
-**Why skip in CI?**
-- Custom error page checks require a web server context
-- CI environments may not have full web rendering available
-- Error page rendering is a deployment/runtime concern, not a code quality check
-- Prevents false failures in headless CI environments
 
 **Why skip for stateless/API-only apps?**
 - API-only applications return JSON error responses, not HTML pages
