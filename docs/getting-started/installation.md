@@ -108,69 +108,7 @@ Generate a configuration file to customize analyzer behavior:
 php artisan vendor:publish --tag=shieldci-config
 ```
 
-This creates `config/shieldci.php` with default settings:
-
-```php
-<?php
-
-return [
-    /*
-     * Paths to analyze (relative to project root)
-     */
-    'paths' => [
-        'analyze' => [
-            'app',
-            'config',
-            'database',
-            'routes',
-        ],
-    ],
-
-    /*
-     * Paths to exclude from analysis
-     */
-    'excluded_paths' => [
-        'vendor/*',
-        'node_modules/*',
-        'storage/*',
-        'bootstrap/cache/*',
-    ],
-
-    /*
-     * Analyzers to run (all enabled by default)
-     */
-    'analyzers' => [
-        'security' => [
-            'enabled' => true,
-        ],
-        'performance' => [
-            'enabled' => true,
-        ],
-        'reliability' => [
-            'enabled' => true,
-        ],
-        'code-quality' => [
-            'enabled' => true,
-        ],
-        'best-practices' => [
-            'enabled' => true,
-        ],
-    ],
-
-    /*
-     * Reporting configuration
-     */
-    'report' => [
-        'format' => 'console',  // console or json
-        'output_file' => null,
-    ],
-
-    /*
-     * Fail CI/CD on issues of this severity or higher
-     */
-    'fail_on' => 'critical',  // never, critical, high, medium, low
-];
-```
+This creates `config/shieldci.php` with default settings.
 
 ### Step 2: Verify Installation
 
@@ -193,7 +131,7 @@ php artisan shield:analyze
 This will:
 1. Discover your Laravel project structure
 2. Parse PHP files into ASTs
-3. Run all 103 analyzers
+3. Run all analyzers
 4. Generate a detailed report
 
 **Expected duration:** 30-60 seconds for typical Laravel apps
@@ -334,104 +272,6 @@ Parse error: syntax error, unexpected token "match" in OldController.php
    ],
    ```
 
-## Advanced Installation
-
-### Laravel Sail
-
-Add ShieldCI to your Sail environment:
-
-```yaml
-# docker-compose.yml
-services:
-  laravel.test:
-    build:
-      context: ./vendor/laravel/sail/runtimes/8.1
-      dockerfile: Dockerfile
-    extra_hosts:
-      - 'host.docker.internal:host-gateway'
-    ports:
-      - '${APP_PORT:-80}:80'
-    environment:
-      # ... existing environment variables
-    volumes:
-      - '.:/var/www/html'
-    networks:
-      - sail
-```
-
-**Run analysis in Sail:**
-```bash
-sail artisan shield:analyze
-```
-
-### Homestead
-
-ShieldCI works out-of-the-box with Homestead:
-
-```bash
-# SSH into Homestead VM
-vagrant ssh
-
-# Navigate to project
-cd /home/vagrant/code/your-app
-
-# Run analysis
-php artisan shield:analyze
-```
-
-### Custom Autoloading
-
-If you have custom autoloading requirements:
-
-```json
-// composer.json
-{
-    "autoload-dev": {
-        "psr-4": {
-            "App\\Analyzers\\": "app/Analyzers/"
-        }
-    }
-}
-```
-
-**Regenerate autoload:**
-```bash
-composer dump-autoload
-```
-
-## Environment-Specific Installation
-
-### Production (Not Recommended)
-
-While ShieldCI is a dev tool, you can install in production if needed:
-
-```bash
-composer require shieldci/laravel
-```
-
-**Security consideration:** ShieldCI reads your codebase but never modifies it. However, it's best practice to keep analysis tools in development only.
-
-### Staging
-
-Install in staging for pre-deployment checks:
-
-```bash
-# Install on staging server
-composer install --no-dev=false  # Include dev dependencies
-
-# Run analysis before deployment
-php artisan shield:analyze --format=json
-```
-
-### CI/CD Environments
-
-See [CI/CD Integration](/integrations/ci-cd) for detailed setup guides:
-- GitHub Actions
-- GitLab CI
-- Bitbucket Pipelines
-- Jenkins
-- CircleCI
-
 ## Upgrading
 
 ### From Previous ShieldCI Versions
@@ -449,33 +289,6 @@ php artisan vendor:publish --tag=shieldci-config --force
 ```
 
 **Breaking changes:** See [CHANGELOG.md](https://github.com/shieldci/laravel/blob/main/CHANGELOG.md)
-
-## License Activation (Pro Version)
-
-### Free Version
-
-No activation required. Install and start analyzing immediately.
-
-### Pro Version
-
-**Step 1: Purchase License**
-Visit [shieldci.com/pricing](https://shieldci.com/pricing) to purchase a Pro license.
-
-**Step 2: Install Pro Package**
-```bash
-composer require shieldci/laravel-pro
-```
-
-**Step 3: Activate License**
-
-Set your license key in your environment:
-
-```ini
-# .env
-SHIELDCI_LICENSE_KEY=YOUR-LICENSE-KEY
-```
-
-The Pro package will automatically detect and use the license key from your environment.
 
 ## Uninstallation
 
@@ -497,10 +310,8 @@ php artisan cache:clear
 
 - **[First Analysis](/getting-started/first-analysis)** - Run your first security scan
 - **[Configuration](/getting-started/configuration)** - Customize analyzer behavior
-- **[CI/CD Integration](/integrations/ci-cd)** - Automate security checks
 
 ## Getting Help
 
 - **Documentation:** [docs.shieldci.com](https://docs.shieldci.com)
 - **GitHub Issues:** [github.com/shieldci/laravel/issues](https://github.com/shieldci/laravel/issues)
-- **Email Support:** support@shieldci.com (Pro customers)

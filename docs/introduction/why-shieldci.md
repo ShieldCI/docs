@@ -75,45 +75,6 @@ public function index()
 - Detects vulnerabilities that generic scanners miss
 - Actionable recommendations specific to Laravel
 
-### Comprehensive Coverage
-
-**103 Analyzers Across 5 Categories:**
-
-1. **Security (22 analyzers)**
-   - OWASP Top 10 2021 compliance
-   - Laravel-specific vulnerabilities (mass assignment, route security)
-   - Authentication and authorization validation
-   - Dependency vulnerability scanning
-   - License compliance (GPL/AGPL detection)
-
-2. **Performance (18 analyzers)**
-   - N+1 query detection across all Eloquent relationships
-   - Cache configuration optimization
-   - OPcache and autoloader tuning
-   - Database indexing recommendations
-   - Queue and job optimization
-
-3. **Reliability (25 analyzers)**
-   - Error handling and logging validation
-   - Session and queue driver configuration
-   - Deployment readiness checks
-   - Environment variable validation
-   - Service provider health checks
-
-4. **Code Quality (15 analyzers)**
-   - Laravel best practices enforcement
-   - Deprecated API detection
-   - Code complexity and maintainability
-   - Namespace and PSR compliance
-   - Code duplication analysis
-
-5. **Best Practices (23 analyzers)**
-   - Laravel conventions validation
-   - Testing coverage and quality
-   - Documentation standards
-   - Development environment setup
-   - Framework pattern compliance
-
 ### Zero-Configuration Setup
 
 **Get started in under 5 minutes:**
@@ -160,37 +121,6 @@ php artisan shield:analyze
 4. **Step-by-step fixes** - Exact code changes needed
 5. **Time estimates** - How long the fix typically takes
 6. **Documentation links** - Laravel docs and OWASP references
-
-**Example Report:**
-```
-❌ CRITICAL: Debug Mode Enabled in Production
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Location: config/app.php:46
-Severity: Critical
-Time to Fix: 5 minutes
-
-Issue:
-APP_DEBUG=true in production exposes sensitive information including:
-- Stack traces with file paths and code
-- Database credentials in error messages
-- API keys and secrets in exception dumps
-
-Fix:
-1. Set APP_DEBUG=false in .env
-2. Configure proper error logging:
-
-   # .env
-   APP_DEBUG=false
-   LOG_LEVEL=error
-   LOG_CHANNEL=stack
-
-3. Restart application
-
-References:
-- https://laravel.com/docs/errors
-- https://owasp.org/www-community/Improper_Error_Handling
-```
 
 **Why This Matters:**
 - Developers fix issues 3x faster with clear guidance
@@ -243,34 +173,16 @@ php artisan shield:analyze --format=json
 
 ShieldCI provides Laravel-specific depth that generic tools lack:
 
-| Feature | ShieldCI | Generic Scanners |
-|---------|----------|------------------|
-| **Dependency Vulnerabilities** | ✅ Composer + NPM | ✅ Multi-language |
-| **Framework Misconfig** | ✅ 60+ Laravel checks | ❌ None |
-| **Performance Analysis** | ✅ N+1, caching, OPcache | ❌ None |
-| **False Positive Rate** | ✅ <5% | ⚠️ 30-50% |
-| **Laravel Best Practices** | ✅ 23 analyzers | ❌ None |
+| Feature | ShieldCI                         | Generic Scanners |
+|---------|----------------------------------|------------------|
+| **Dependency Vulnerabilities** | ✅ Composer + NPM                 | ✅ Multi-language |
+| **Framework Misconfig** | ✅ 60+ Laravel checks             | ❌ None |
+| **Performance Analysis** | ✅ N+1, caching, OPcache          | ❌ None |
+| **False Positive Rate** | ✅ <5%                            | ⚠️ 30-50% |
+| **Laravel Best Practices** | ✅ 15 analyzers                   | ❌ None |
 | **Actionable Fixes** | ✅ Laravel-specific code examples | ⚠️ Generic advice |
-| **Privacy** | ✅ 100% local | ❌ Cloud-based (SaaS) |
-| **Cost** | ✅ $0 (free tier) | ⚠️ $$$$ (per-seat) |
-
-**Example Difference:**
-
-```php
-// Generic scanner: ✅ No issues found
-// ShieldCI: ❌ CRITICAL - Missing CSRF protection
-
-Route::post('/transfer-funds', function(Request $request) {
-    BankTransfer::create([
-        'amount' => $request->amount,
-        'recipient' => $request->recipient,
-    ]);
-});
-
-// ShieldCI explains:
-// "POST route lacks CSRF middleware - vulnerable to cross-site request forgery"
-// "Add ->middleware('csrf') or use Laravel's web middleware group"
-```
+| **Privacy** | ✅ 100% local                     | ❌ Cloud-based (SaaS) |
+| **Cost** | ✅ $0 (free tier)                 | ⚠️ $$$$ (per-seat) |
 
 ## Return on Investment
 
@@ -379,16 +291,17 @@ Ready to improve your Laravel application's security, performance, and quality?
 ## Free vs Pro
 
 ### Free (Open Source)
-- ✅ 67+ analyzers
-- ✅ Security + Performance + Reliability
+- ✅ 73 analyzers
+- ✅ Security + Performance + Reliability + Best Practices + Code Quality
 - ✅ Local analysis via Artisan
 - ✅ JSON/Console reporting
 - ✅ Community support
 
 **Perfect for:** Solo developers, small projects, startups
 
-### Pro (Commercial)
-- ✅ **130+ analyzers** (all categories)
+::: tip Coming Soon
+### :soon: Pro (Commercial) :bell:
+- ✅ **100+ analyzers** (all categories)
 - ✅ **Team dashboards** (multi-user)
 - ✅ **Historical trends** (track progress)
 - ✅ **CI/CD integration** (GitHub/GitLab/Bitbucket)
@@ -398,6 +311,5 @@ Ready to improve your Laravel application's security, performance, and quality?
 
 **Perfect for:** Agencies, enterprise teams, compliance requirements
 
-**Pricing:** $49/month per project (annual: $490/year, save $98)
+:::
 
-[Start Free Trial](/getting-started/installation) • [Compare Plans](/pricing)

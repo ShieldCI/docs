@@ -21,13 +21,22 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **[Cache Status Analyzer](/analyzers/reliability/cache-status)** - Validates cache connectivity and functionality
 - **[Composer Validation Analyzer](/analyzers/reliability/composer-validation)** - Ensures composer.json is valid and follows best practices
 - **[Database Status Analyzer](/analyzers/reliability/database-status)** - Ensures database connections are accessible and functioning
-- **[Directory Write Permissions Analyzer](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions
+- **[Environment Example Documentation Analyzer](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
 - **[Environment File Existence Analyzer](/analyzers/reliability/env-file-exists)** - Ensures .env file exists, is readable, not empty, and checks for broken symlinks
 - **[Environment Variables Complete Analyzer](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables from .env.example are defined in .env
-- **[Environment Example Documentation Analyzer](/analyzers/reliability/env-example-documented)** - Ensures all environment variables used in .env are documented in .env.example for team collaboration
 - **[Maintenance Mode Status Analyzer](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
 
-### Static Analysis (PHPStan)
+### Infrastructure & Permissions
+
+- **[Custom Error Pages Analyzer](/analyzers/reliability/custom-error-pages)** - Ensures custom error pages are configured to prevent framework fingerprinting
+- **[Directory Write Permissions Analyzer](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions
+
+### Queue & Database
+
+- **[Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration)** - Ensures queue timeout and retry_after values are properly configured
+- **[Up-to-Date Migrations Analyzer](/analyzers/reliability/up-to-date-migrations)** - Ensures all database migrations are up to date and have been executed
+
+### Static Analysis
 
 - **[PHPStan Static Analysis Analyzer](/analyzers/reliability/phpstan)** - Comprehensive static analysis detecting 13 categories of code reliability issues:
   - **Dead Code** - Unreachable statements, unused variables, and code with no effect
@@ -43,16 +52,6 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   - **Missing Return Statements** - Methods with missing return statements
   - **Undefined Constants** - References to undefined constants
   - **Undefined Variables** - References to undefined variables
-
-### Infrastructure & Permissions
-
-- **[Custom Error Pages Analyzer](/analyzers/reliability/custom-error-pages)** - Ensures custom error pages are configured to prevent framework fingerprinting
-- **[Directory Write Permissions Analyzer](/analyzers/reliability/directory-write-permissions)** - Ensures critical Laravel directories have proper write permissions
-
-### Queue & Database
-
-- **[Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration)** - Ensures queue timeout and retry_after values are properly configured
-- **[Up-to-Date Migrations Analyzer](/analyzers/reliability/up-to-date-migrations)** - Ensures all database migrations are up to date and have been executed
 
 ## How They Work
 
