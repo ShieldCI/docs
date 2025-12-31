@@ -1,5 +1,6 @@
 ---
 title: Custom Error Pages Analyzer
+description: Checks for conventional file-based error page templates
 icon: alert-triangle
 outline: [2, 3]
 tags: errors,ux,reliability,security,fingerprinting
