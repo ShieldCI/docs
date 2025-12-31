@@ -1,6 +1,5 @@
 ---
 title: Custom Error Pages Analyzer
-description: Ensure user-friendly, non-fingerprinting error pages are in place
 icon: alert-triangle
 outline: [2, 3]
 tags: errors,ux,reliability,security,fingerprinting
@@ -10,25 +9,51 @@ tags: errors,ux,reliability,security,fingerprinting
 
 | Analyzer ID          |    Category    | Severity | Time To Fix |
 | ---------------------|:--------------:|:--------:|------------:|
-| `custom-error-pages` | ✅ Reliability |  Medium  |  30 minutes |
+| `custom-error-pages` | ✅ Reliability |    Low   |  30 minutes |
 
 ## What This Checks
 
-- Verifies that 404, 500, and 503 templates exist under `resources/views/errors` (or the `errors` namespace)
-- Performs filesystem checks to detect missing templates that would fall back to Laravel's default branding
-- Checks all configured view paths and custom error view namespaces
-- Skips stateless/API-only apps (no session middleware) where HTML error pages aren't relevant
-- Reports which templates are missing and which view paths were inspected
+This analyzer validates the **conventional Laravel approach** of creating individual error template files in `resources/views/errors/`:
+
+- `401.blade.php` - Unauthorized (authentication required)
+- `403.blade.php` - Forbidden (authorization failed)
+- `404.blade.php` - Not Found
+- `419.blade.php` - Page Expired (CSRF token mismatch)
+- `429.blade.php` - Too Many Requests (rate limiting)
+- `500.blade.php` - Internal Server Error
+- `503.blade.php` - Service Unavailable (maintenance mode)
+
+**What this analyzer checks:**
+- Existence of conventional error template files on the filesystem
+- All configured view paths and custom error view namespaces
+- Skips stateless/API-only apps (no session middleware)
+
+**What this analyzer does NOT check:**
+- Custom exception handlers in `app/Exceptions/Handler.php`
+- Dynamic error views (single template handling multiple HTTP codes)
+- Middleware-level error response overrides
+- Custom render methods on exception classes
+- Error responses returned from controllers
+
+::: warning Important
+Applications can implement custom error handling through various approaches. If you use custom exception handlers or other non-conventional methods, you can safely ignore this warning.
+:::
 
 ## Why It Matters
 
-- **Framework fingerprinting**: Default error pages advertise “Laravel”, helping attackers tailor exploits
+- **Framework fingerprinting**: Default error pages advertise "Laravel", helping attackers tailor exploits
+- **Security exposure**: CSRF errors (419) and authorization failures (401, 403) revealing framework details can guide attacks
 - **User experience**: Users prefer branded error pages with recovery instructions (contact support, try again)
-- **Consistency**: Custom maintenance/500 pages prevent sudden theme changes when outages occur
+- **Rate limiting clarity**: Custom 429 pages can explain retry timing and help prevent support tickets
+- **Consistency**: Custom error pages maintain brand experience even during failures or maintenance
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+Custom error handling can be implemented in several ways. Choose the approach that best fits your architecture:
+
+### Approach 1: Conventional File-Based (Checked by This Analyzer)
+
+**Quick Fix (15 minutes):**
 
 1. Publish the default error views:
 
@@ -36,15 +61,84 @@ tags: errors,ux,reliability,security,fingerprinting
 php artisan vendor:publish --tag=laravel-errors
 ```
 
-2. Customize `resources/views/errors/404.blade.php`, `500.blade.php`, and `503.blade.php` to match your brand.
+2. Customize all error templates in `resources/views/errors/`:
+   - `401.blade.php` - Unauthorized
+   - `403.blade.php` - Forbidden
+   - `404.blade.php` - Not Found
+   - `419.blade.php` - Page Expired (CSRF)
+   - `429.blade.php` - Too Many Requests
+   - `500.blade.php` - Internal Server Error
+   - `503.blade.php` - Service Unavailable
 
-### Proper Fix (30 minutes)
+**Best Practices:**
+- Add helpful CTAs (support links, status pages, recovery instructions)
+- Display correlation/request IDs for debugging
+- Localize error messages for multilingual apps
+- Write feature tests to verify templates render correctly
 
-1. **Add helpful CTAs**: Link to support, status pages, or self-service instructions
-2. **Log correlation IDs**: Display a request ID so ops can trace the failure
-3. **Localize**: Provide translated error messages if your app is multilingual
-4. **Automate tests**: Write feature tests to assert the custom templates render for 404/500 responses
-5. **Namespace sharing**: If you ship a design system package, register an `errors` view namespace and keep templates centralized
+### Approach 2: Custom Exception Handler
+
+Override the `render()` method in `app/Exceptions/Handler.php`:
+
+```php
+public function render($request, Throwable $e)
+{
+    if ($e instanceof NotFoundHttpException) {
+        return response()->view('errors.custom-404', [], 404);
+    }
+
+    if ($e instanceof AuthorizationException) {
+        return response()->view('errors.custom-403', [], 403);
+    }
+
+    return parent::render($request, $e);
+}
+```
+
+### Approach 3: Dynamic Error View
+
+Create a single template that handles all error codes:
+
+```blade
+{{-- resources/views/errors/error.blade.php --}}
+@switch($exception->getStatusCode())
+    @case(404)
+        <h1>Page Not Found</h1>
+    @case(500)
+        <h1>Server Error</h1>
+    @default
+        <h1>An Error Occurred</h1>
+@endswitch
+```
+
+### Approach 4: Middleware-Based
+
+Transform error responses in middleware:
+
+```php
+public function handle($request, Closure $next)
+{
+    $response = $next($request);
+
+    if ($response->status() >= 400) {
+        return response()->view('errors.handler', [
+            'code' => $response->status()
+        ], $response->status());
+    }
+
+    return $response;
+}
+```
+
+### Skipping This Analyzer
+
+If you use approaches 2-4, add to `config/shieldci.php`:
+
+```php
+'dont_report' => [
+    'custom-error-pages',
+],
+```
 
 ## ShieldCI Configuration
 
@@ -61,7 +155,6 @@ This analyzer is automatically skipped for stateless/API-only applications.
 - ✅ **Hybrid apps**: Applications with both web and API routes
 - ✅ **Local development**: Ensures error pages are configured before deployment
 - ✅ **Staging/Production servers**: Validates custom error pages are in place
-- ❌ **CI/CD pipelines**: Skipped automatically (no web server context)
 - ❌ **API-only applications**: Skipped automatically (no session middleware detected)
 
 ## References
