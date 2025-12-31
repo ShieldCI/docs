@@ -1,13 +1,13 @@
 ---
 title: Security Analyzers
-description: 24 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more
+description: 25 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
 icon: lock
 outline: [2, 3]
 ---
 
 # Security Analyzers
 
-**25 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, clickjacking, file upload, authentication issues, and more.
+**25 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 ## Overview
 
