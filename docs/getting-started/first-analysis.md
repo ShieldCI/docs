@@ -47,20 +47,7 @@ All checks that fail will include a description of why they failed along with th
 
 After displaying all issues, ShieldCI shows a Report Card with analyzer results grouped by category:
 
-```
-Report Card
-===========
-
-+----------------+----------------+----------------+----------------+----------------+----------------+------------+
-| Status         | Security       | Performance    | Reliability    | Code Quality   | Best Practices |     Total  |
-+----------------+----------------+----------------+----------------+----------------+----------------+------------+
-| Passed         |   18  (82%)    |   8  (44%)     |   9  (69%)     |   1  (20%)     |   5  (33%)     | 41  (56%)  |
-| Failed         |    1   (5%)    |    0   (0%)    |    3   (23%)   |    4   (80%)   |    9   (60%)   |  17  (23%) |
-| Warning        |    1   (5%)    |    1   (6%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |  2  (3%)   |
-| Not Applicable |    2   (9%)    |    9   (50%)   |    1   (8%)    |    0   (0%)    |    1   (7%)    |  13   (18%)|
-| Error          |    0   (0%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |  0   (0%)  |
-+----------------+----------------+----------------+----------------+----------------+----------------+------------+
-```
+<img src="/report-card.png" style="margin-top: 16px" alt="ShieldCI Report Card" />
 
 **Understanding the Report Card:**
 
