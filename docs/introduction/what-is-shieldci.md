@@ -30,14 +30,14 @@ ShieldCI is purpose-built for Laravel applications, understanding Laravel's conv
 ### Successor to Laravel Enlightn
 ShieldCI is the modern successor to the abandoned Laravel Enlightn project, providing:
 - **Modern Laravel support** - Full compatibility with Laravel 9, 10, 11, and 12
-- **103 analyzers** - Comprehensive coverage across 5 categories
+- **73 analyzers** - Comprehensive coverage across 5 categories
 - **Active development** - Regular updates and new analyzers
 - **Better performance** - Optimized analysis engine
 - **Enhanced reporting** - Beautiful, actionable insights
 
 ### Comprehensive Analysis
 
-**103 Analyzers Across 5 Categories:**
+**73 Analyzers Across 5 Categories:**
 
 1. **Security** (22 analyzers)
    - OWASP Top 10 2021 coverage
@@ -53,21 +53,21 @@ ShieldCI is the modern successor to the abandoned Laravel Enlightn project, prov
    - OPcache settings
    - Route and config caching
 
-3. **Reliability** (25 analyzers)
+3. **Reliability** (13 analyzers)
    - Error handling & logging
    - Queue configuration
    - Session management
    - Environment configuration
    - Deployment readiness
 
-4. **Code Quality** (15 analyzers)
+4. **Code Quality** (5 analyzers)
    - Laravel best practices
    - Code duplication
    - Deprecated API usage
    - Maintainability metrics
    - Code complexity
 
-5. **Best Practices** (23 analyzers)
+5. **Best Practices** (15 analyzers)
    - Laravel conventions
    - Framework patterns
    - Testing practices
@@ -166,18 +166,20 @@ ShieldCI performs all analysis locally:
 ## Package Structure
 
 ### Free Package (Open Source)
-- **67+ analyzers** - Core security, performance, and quality checks
+- **73 analyzers** - Core security, performance, reliability, best practices and quality checks
 - **Local analysis** - Run anywhere via Artisan command
 - **JSON/Console reporting** - Export and view results
 - **Community support** - GitHub issues and discussions
 
-### Pro Package (Commercial)
-- **130+ analyzers** - Advanced security, compliance, and enterprise features
+::: tip Coming Soon
+### :soon: Pro Package (Commercial) :bell:
+- **100+ analyzers** - Advanced security, compliance, and enterprise features
 - **Team collaboration** - Multi-user dashboards
 - **Historical trends** - Track quality over time
 - **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Priority support** - Direct support channel
 - **Custom analyzers** - Enterprise-specific checks
+:::
 
 ## Laravel Version Support
 
