@@ -34,7 +34,7 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
                            ↓
 ┌─────────────────────────────────────────────────────────────┐
 │  3. Analysis Phase                                          │
-│  ├─ Run 103 specialized analyzers                           │
+│  ├─ Run all specialized analyzers                           │
 │  ├─ Check security patterns                                 │
 │  ├─ Detect performance anti-patterns                        │
 │  └─ Validate best practices                                 │
@@ -64,8 +64,8 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
 - Caches parsed results for performance
 
 **3. Analyzer Registry**
-- Maintains catalog of 103 analyzers
-- Filters analyzers by category, severity, and tags
+- Maintains catalog of all analyzers
+- Filters analyzers by category, severity
 - Manages analyzer dependencies
 - Supports dynamic analyzer loading
 
@@ -76,7 +76,7 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
 - Generates summary statistics
 
 **5. Reporter System**
-- Formats results for different outputs (console, JSON, HTML)
+- Formats results for different outputs (console, JSON)
 - Creates code snippets with context
 - Generates actionable recommendations
 - Supports custom report templates
@@ -205,17 +205,17 @@ class NPlusOneQueryAnalyzer extends AbstractFileAnalyzer
    - Method: AST analysis + configuration checks
    - Example: Detect N+1 queries by finding relationship access in loops
 
-3. **Reliability Analyzers** (25 total)
+3. **Reliability Analyzers** (13 total)
    - Pattern: Validate error handling and configuration
    - Method: Configuration parsing + environment checks
    - Example: Ensure `APP_DEBUG=false` in production
 
-4. **Code Quality Analyzers** (15 total)
+4. **Code Quality Analyzers** (5 total)
    - Pattern: Check for deprecated APIs and anti-patterns
    - Method: AST traversal + Laravel version awareness
    - Example: Detect usage of deprecated `array_divide()` helper
 
-5. **Best Practice Analyzers** (23 total)
+5. **Best Practice Analyzers** (15 total)
    - Pattern: Enforce Laravel conventions
    - Method: AST analysis + naming pattern checks
    - Example: Ensure route names follow kebab-case convention
@@ -349,80 +349,6 @@ ShieldCI creates detailed, actionable reports:
 - Documentation gaps
 ```
 
-## Performance Optimizations
-
-### 1. Incremental Analysis
-
-ShieldCI only analyzes changed files when possible:
-
-```php
-// Cache file hashes
-$cache = [
-    'app/Http/Controllers/UserController.php' => 'abc123...',
-    'routes/web.php' => 'def456...',
-];
-
-// Only re-analyze modified files
-foreach ($files as $file) {
-    $currentHash = hash_file('sha256', $file);
-
-    if ($cache[$file] !== $currentHash) {
-        $this->analyzeFile($file);  // File changed
-        $cache[$file] = $currentHash;
-    }
-}
-```
-
-**Result:** 80% faster analysis on subsequent runs
-
-### 2. Parallel Execution
-
-Analyzers run concurrently when possible:
-
-```php
-// Independent analyzers run in parallel
-$results = collect($analyzers)->parallel(function ($analyzer) {
-    return $analyzer->analyze();
-}, 4);  // 4 parallel processes
-```
-
-**Result:** 3x faster on multi-core systems
-
-### 3. Selective Parsing
-
-Only parse files relevant to each analyzer:
-
-```php
-// Security analyzers only need controllers/routes
-$securityFiles = array_merge(
-    glob('app/Http/Controllers/**/*.php'),
-    glob('routes/*.php')
-);
-
-// Performance analyzers need models/queries
-$performanceFiles = array_merge(
-    glob('app/Models/**/*.php'),
-    glob('app/Services/**/*.php')
-);
-```
-
-**Result:** 50% reduction in parsing overhead
-
-### 4. AST Caching
-
-Parsed ASTs are cached between analyzers:
-
-```php
-// First analyzer parses file
-$ast = $this->parser->parseFile('UserController.php');
-Cache::put('ast:UserController', $ast, 3600);
-
-// Subsequent analyzers reuse cached AST
-$ast = Cache::get('ast:UserController');
-```
-
-**Result:** 90% reduction in parse time for multi-analyzer runs
-
 ## CI/CD Integration
 
 ### GitHub Actions
@@ -481,10 +407,8 @@ shieldci:
 ShieldCI returns specific exit codes for CI/CD:
 
 ```php
-0  // Success: No critical issues
-1  // Failure: Critical issues found
-2  // Warning: High severity issues found
-3  // Error: Analysis failed (exception)
+0  // Success: No High/Critical issues (even if Medium/Low issues exist with Warning status)
+1  // Failure: High or Critical severity issues detected
 ```
 
 ## Extending ShieldCI
@@ -552,74 +476,6 @@ return [
     ],
 ];
 ```
-
-## Output Formats
-
-### Console (Default)
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ShieldCI Analysis Report
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ FAILED - Found 3 critical issues
-
-  📊 Summary:
-  • Total Issues: 12
-  • Critical: 3
-  • High: 4
-  • Medium: 3
-  • Low: 2
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Critical Issues (3)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ Debug Mode Enabled in Production
-  Location: config/app.php:46
-  Time to Fix: 5 minutes
-
-  APP_DEBUG=true exposes sensitive information in production.
-  Set APP_DEBUG=false in .env
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-### JSON
-
-```json
-{
-  "status": "failed",
-  "summary": {
-    "total": 12,
-    "critical": 3,
-    "high": 4,
-    "medium": 3,
-    "low": 2
-  },
-  "issues": [
-    {
-      "id": "debug-mode-001",
-      "analyzer": "DebugModeAnalyzer",
-      "severity": "critical",
-      "message": "Debug mode enabled in production",
-      "location": {
-        "file": "config/app.php",
-        "line": 46
-      },
-      "recommendation": "Set APP_DEBUG=false in .env"
-    }
-  ]
-}
-```
-
-### JSON Output
-
-Structured JSON output for automation:
-- Machine-readable format
-- Easy integration with CI/CD
-- Can be processed by scripts
-- Compatible with code quality tools
 
 ## Privacy & Security
 
