@@ -26,229 +26,122 @@ php artisan shield:analyze
 **What happens next:**
 1. ShieldCI discovers your project structure (3-5 seconds)
 2. Parses PHP files into Abstract Syntax Trees (10-20 seconds)
-3. Runs 103 analyzers across 5 categories (20-30 seconds)
+3. Runs 73 analyzers across 5 categories (20-30 seconds)
 4. Generates detailed report (2-5 seconds)
 
 **Total duration:** 30-60 seconds for typical Laravel apps
 
 ## Step 2: Understanding the Output
 
-### Success - No Critical Issues
+### Terminal output
+
+<img src="/terminal.png" style="margin-top: 16px" alt="ShieldCI Terminal" />
+
+### Failed Checks
+
+All checks that fail will include a description of why they failed along with the associated lines of code (if applicable).
+
+<img src="/failed-checks.png" style="margin-top: 16px" alt="ShieldCI Terminal" />
+
+### Report Card Summary
+
+After displaying all issues, ShieldCI shows a Report Card with analyzer results grouped by category:
 
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ShieldCI Analysis Report
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Report Card
+===========
 
-  ✅ PASSED - Your application meets security standards
-
-  📊 Summary:
-  • Total Issues: 0
-  • Critical: 0
-  • High: 0
-  • Medium: 0
-  • Low: 0
-
-  🎉 Great job! No issues found.
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Analysis completed in 42.3 seconds
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
++----------------+----------------+----------------+----------------+----------------+----------------+------------+
+| Status         | Security       | Performance    | Reliability    | Code Quality   | Best Practices |     Total  |
++----------------+----------------+----------------+----------------+----------------+----------------+------------+
+| Passed         |   18  (82%)    |   8  (44%)     |   9  (69%)     |   1  (20%)     |   5  (33%)     | 41  (56%)  |
+| Failed         |    1   (5%)    |    0   (0%)    |    3   (23%)   |    4   (80%)   |    9   (60%)   |  17  (23%) |
+| Warning        |    1   (5%)    |    1   (6%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |  2  (3%)   |
+| Not Applicable |    2   (9%)    |    9   (50%)   |    1   (8%)    |    0   (0%)    |    1   (7%)    |  13   (18%)|
+| Error          |    0   (0%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |    0   (0%)    |  0   (0%)  |
++----------------+----------------+----------------+----------------+----------------+----------------+------------+
 ```
 
-**Congratulations!** Your app has no detectable security or quality issues.
+**Understanding the Report Card:**
 
-### Warning - Medium/Low Issues
+- **Passed:** Analyzers that found no issues
+- **Failed:** Analyzers that found Critical or High severity issues
+- **Warning:** Analyzers that found Medium or Low severity issues
+- **Not Applicable:** Analyzers skipped because they don't apply to your project (e.g., MySQL analyzer when using PostgreSQL)
+- **Error:** Analyzers that encountered exceptions during execution
 
+### Exit Codes
+
+ShieldCI returns different exit codes for CI/CD integration:
+
+- **Exit code 0:** Analysis passed (no Critical/High issues)
+- **Exit code 1:** Analysis failed (Critical or High issues detected)
+
+::: tip CI/CD Integration
+Use the exit code in your CI/CD pipeline to fail builds when security issues are detected:
+```bash
+php artisan shield:analyze || exit 1
 ```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ShieldCI Analysis Report
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+:::
 
-  ⚠️  WARNING - Found 5 medium/low severity issues
+## Step 3: Understanding Analyzer Statuses
 
-  📊 Summary:
-  • Total Issues: 5
-  • Critical: 0
-  • High: 0
-  • Medium: 3
-  • Low: 2
+Each analyzer reports one of five statuses:
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Medium Issues (3)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+### ✅ Passed
+No issues detected. The analyzer completed successfully and found no problems.
 
-  ⚠️  Missing Route Caching
-  Location: routes/web.php
-  Time to Fix: 2 minutes
+### ❌ Failed
+Critical or High severity issues detected. These require prompt attention.
 
-  Routes are not cached, impacting performance. Run:
-  php artisan route:cache
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Action required:** Fix medium/low issues when convenient.
-
-### Failed - Critical/High Issues
-
-```
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ShieldCI Analysis Report
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ FAILED - Found 3 critical issues requiring immediate attention
-
-  📊 Summary:
-  • Total Issues: 12
-  • Critical: 3
-  • High: 4
-  • Medium: 3
-  • Low: 2
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Critical Issues (3)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ Debug Mode Enabled in Production
-  Category: Security
-  Location: config/app.php:46
-  Time to Fix: 5 minutes
-
-  Issue:
-  APP_DEBUG=true in production exposes sensitive information including:
-  - Stack traces with file paths and code
-  - Database credentials in error messages
-  - API keys and secrets in exception dumps
-
-  Code:
-  45 │     'debug' => env('APP_DEBUG', false),
-  46 │
-
-  Fix:
-  1. Set APP_DEBUG=false in .env
-  2. Configure proper error logging:
-
-     # .env
-     APP_DEBUG=false
-     LOG_LEVEL=error
-     LOG_CHANNEL=stack
-
-  3. Restart application
-
-  References:
-  - https://laravel.com/docs/errors
-  - https://owasp.org/www-community/Improper_Error_Handling
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ Login Route Lacks Rate Limiting
-  Category: Security
-  Location: routes/web.php:24
-  Time to Fix: 5 minutes
-
-  Issue:
-  Without rate limiting, attackers can attempt unlimited password
-  combinations, leading to brute force attacks and account takeover.
-
-  Code:
-  23 │ use App\Http\Controllers\Auth\LoginController;
-  24 │ Route::post('/login', [LoginController::class, 'login']);
-  25 │
-
-  Fix:
-  Add throttle middleware:
-
-  Route::post('/login', [LoginController::class, 'login'])
-       ->middleware('throttle:5,1');
-
-  This allows 5 attempts per minute per IP address.
-
-  References:
-  - https://laravel.com/docs/routing#rate-limiting
-  - https://docs.shieldci.com/analyzers/security/login-throttling
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ❌ Vulnerable Dependency Detected
-  Category: Security
-  Location: composer.lock
-  Time to Fix: 10 minutes
-
-  Issue:
-  symfony/http-foundation v6.0.1 has a known security vulnerability
-  (CVE-2023-1234): Session fixation attack possible
-
-  Fix:
-  Update the vulnerable package:
-
-  composer update symfony/http-foundation
-
-  Then verify the fix:
-  composer show symfony/http-foundation
-
-  Expected version: 6.0.8 or higher
-
-  References:
-  - https://symfony.com/blog/cve-2023-1234
-  - https://github.com/symfony/symfony/security/advisories
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  High Issues (4)
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  ⚠️  N+1 Query Detected in UserController
-  [Additional issues listed...]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  Analysis completed in 45.7 seconds
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-```
-
-**Action required:** Fix critical/high issues immediately before deploying.
-
-## Step 3: Understanding Issue Severity
-
-### Critical Issues (Red ❌)
-**Fix immediately** - These are security vulnerabilities that could lead to:
+**Critical Issues** - Security vulnerabilities that could lead to:
 - Data breaches
 - Account takeover
 - Code execution
 - Information disclosure
 
-**Examples:**
-- Debug mode enabled in production
-- Missing CSRF protection
-- SQL injection vulnerabilities
-- Exposed database credentials
+**Examples:** Debug mode in production, Missing CSRF protection, SQL injection, Exposed credentials
 
-**Timeline:** Fix before next deployment (0-24 hours)
-
-### High Issues (Orange ⚠️)
-**Fix soon** - These are significant security or performance risks:
+**High Issues** - Significant security or performance risks:
 - Brute force attack vectors
-- N+1 queries in critical paths
+- N+1 queries
 - Vulnerable dependencies
-- Missing authentication checks
+- Missing auth checks
 
-**Timeline:** Fix within 1-2 weeks
+**Examples:** Login throttling disabled, Eager loading missing, Outdated packages with CVEs
 
-### Medium Issues (Yellow ⚠️)
-**Fix when convenient** - Best practice violations and optimizations:
+### ⚠️ Warning
+Medium or Low severity issues detected. Address when convenient.
+
+**Medium Issues** - Best practice violations and optimizations:
 - Missing cache configuration
 - Deprecated API usage
 - Code quality issues
-- Suboptimal configurations
 
-**Timeline:** Fix within 1-2 months or next refactoring cycle
+**Examples:** Config not cached, Route caching disabled, Using deprecated methods
 
-### Low Issues (Blue ℹ️)
-**Optional improvements** - Minor enhancements:
+**Low Issues** - Optional improvements:
 - Missing route names
 - Documentation gaps
 - Code style inconsistencies
 
-**Timeline:** Fix when refactoring or during maintenance
+**Examples:** Missing DocBlocks, Unnamed routes, Minor formatting issues
+
+### ⊘ Not Applicable
+Analyzer doesn't apply to your project configuration.
+
+**Examples:**
+- MySQL optimization analyzer when using PostgreSQL
+- Horizon analyzer when not using Laravel Horizon
+- Frontend dependency analyzer when no package.json exists
+
+### ⚠️ Error
+Analyzer encountered an unexpected error during execution. This typically indicates:
+- Missing dependencies or configuration
+- File permission issues
+- Corrupted project files
+
+**Action:** Check the error message and verify your project setup.
 
 ## Step 4: Fixing Your First Issue
 
@@ -292,14 +185,7 @@ php artisan config:clear
 php artisan cache:clear
 ```
 
-**4. Verify the fix:**
-```bash
-php artisan tinker
->>> config('app.debug')
-=> false  // ✅ Correct
-```
-
-**5. Re-run ShieldCI to confirm:**
+**4. Re-run ShieldCI to confirm:**
 ```bash
 php artisan shield:analyze
 ```
@@ -349,12 +235,14 @@ Route::post('/login', [LoginController::class, 'login'])
 
 **Verify the fix:**
 ```bash
-php artisan route:list | grep login
+php artisan route:list --path=login -v
 ```
 
 Expected output:
 ```
-POST   | /login | login | throttle:5,1 | LoginController@login
+POST   | /login.........................LoginController@login
+         ⇂ web
+         ⇂ Illuminate\Routing\Middleware\ThrottleRequests:5,1
 ```
 
 **Re-run ShieldCI:**
@@ -436,11 +324,11 @@ fi
 php artisan shield:analyze --format=json --output=report.json
 ```
 
-Open `report.html` in your browser for an interactive report with:
-- Visual charts
-- Filterable issue list
-- Historical trends
-- Exportable PDF
+This exports a structured JSON file containing:
+- Complete analysis results
+- Issue details and metadata
+- Summary statistics
+- Analyzer information
 
 ## Step 8: Continuous Monitoring
 
@@ -492,40 +380,6 @@ jobs:
 
 This runs ShieldCI on every commit, blocking merges if critical issues are found.
 
-## Common First-Time Issues
-
-### Issue: "Skipped - No routes directory"
-
-**Cause:** Project doesn't have a `routes/` directory
-
-**Solution:**
-```bash
-# For Laravel 11+ with bootstrap/app.php
-mkdir -p routes
-touch routes/web.php
-```
-
-### Issue: "Memory limit exceeded"
-
-**Cause:** Large project with insufficient memory
-
-**Solution:**
-```bash
-php -d memory_limit=512M artisan shield:analyze
-```
-
-### Issue: "Too many issues to fix"
-
-**Cause:** Legacy project with accumulated technical debt
-
-**Solution:** Create a baseline
-```bash
-# Ignore existing issues
-php artisan shield:baseline
-
-# Only new issues will be reported
-php artisan shield:analyze --baseline
-```
 
 ## Next Steps
 
@@ -533,8 +387,6 @@ Now that you've run your first analysis and fixed some issues:
 
 1. **[Configuration](/getting-started/configuration)** - Customize analyzer behavior
 2. **[Analyzers Reference](/analyzers/)** - Understand each analyzer in depth
-3. **[CI/CD Integration](/integrations/ci-cd)** - Automate security checks
-4. **[Best Practices](/guides/best-practices)** - Learn pro tips for secure Laravel apps
 
 ## Quick Reference
 
@@ -565,10 +417,8 @@ php artisan shield:analyze --baseline
 
 ### Exit Codes
 
-- `0` - Success (no critical issues)
-- `1` - Failed (critical issues found)
-- `2` - Warning (high severity issues)
-- `3` - Error (analysis failed)
+- `0` - Success (no high/critical issues)
+- `1` - Failed (high/critical issues found)
 
 ### Severity Priorities
 
@@ -582,12 +432,7 @@ php artisan shield:analyze --baseline
 **Found an issue you don't understand?**
 - Check the [Analyzers Reference](/analyzers/) for detailed explanations
 - Search [GitHub Issues](https://github.com/shieldci/laravel/issues)
-- Ask on [Discord](https://discord.gg/shieldci)
 
 **False positive?**
-- Use inline suppression: `// @shieldci-ignore-next-line`
+<!-- Use inline suppression: `// @shieldci-ignore-next-line` -->
 - Report to improve analyzer accuracy
-
-**Need custom rules?**
-- See [Custom Analyzers](/guides/custom-analyzers)
-- Contact support for Pro customers
