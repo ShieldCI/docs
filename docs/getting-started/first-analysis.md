@@ -72,15 +72,72 @@ Report Card
 
 ### Exit Codes
 
-ShieldCI returns different exit codes for CI/CD integration:
+ShieldCI returns exit codes for CI/CD integration based on the `fail_on` configuration (default: `'high'`):
 
-- **Exit code 0:** Analysis passed (no Critical/High issues)
-- **Exit code 1:** Analysis failed (Critical or High issues detected)
+**Exit Code 0 (Success):**
+- No issues above the configured severity threshold
+- OR `fail_on` is set to `'never'`
+- AND score is above `fail_threshold` (if configured)
 
-::: tip CI/CD Integration
-Use the exit code in your CI/CD pipeline to fail builds when security issues are detected:
+**Exit Code 1 (Failure):**
+- Issues found at or above the configured severity threshold
+- OR score is below `fail_threshold` (if configured)
+
+**Severity Thresholds:**
+
+Configure which severity levels trigger build failures:
+
+| `fail_on` Value | Fails On | Use Case |
+|-----------------|----------|----------|
+| `'never'` | Never fails | CI runs for reporting only |
+| `'critical'` | Critical issues only | Legacy codebases with many High issues |
+| `'high'` ⭐ | High + Critical issues | Recommended default (matches Failed status) |
+| `'medium'` | Medium + High + Critical | Strict quality standards |
+| `'low'` | Any issues (all severities) | Zero-tolerance quality enforcement |
+
+::: warning Consistency Note
+Analyzers mark both **High and Critical** issues as "Failed" status in the report. Using `fail_on='high'` (default) ensures consistency between what appears as "Failed" in the report and the actual build exit code.
+
+If you set `fail_on='critical'`, you may see High severity issues marked as "Failed" in the report, but the build will still pass (exit code 0).
+:::
+
+**Configuration:**
+
+Set in `config/shieldci.php` or via environment variables:
+
+```php
+// When should analysis fail?
+'fail_on' => env('SHIELDCI_FAIL_ON', 'high'),
+
+// Minimum score to pass (0-100, optional)
+'fail_threshold' => env('SHIELDCI_FAIL_THRESHOLD', null),
+```
+
+**Examples:**
+
+::: tip Progressive Quality Improvement
+For legacy codebases, start permissive and tighten standards over time:
+
 ```bash
-php artisan shield:analyze || exit 1
+# Phase 1: Legacy codebases with many issues
+SHIELDCI_FAIL_ON=critical
+
+# Phase 2: Standard quality (recommended default)
+SHIELDCI_FAIL_ON=high
+
+# Phase 3: Strict quality standards
+SHIELDCI_FAIL_ON=medium
+
+# Phase 4: Zero-tolerance enforcement
+SHIELDCI_FAIL_ON=low
+```
+
+You can also combine with score thresholds:
+
+```bash
+# Require 80% pass rate AND no high/critical issues
+SHIELDCI_FAIL_ON=high
+SHIELDCI_FAIL_THRESHOLD=80
 ```
 :::
 
@@ -387,52 +444,3 @@ Now that you've run your first analysis and fixed some issues:
 
 1. **[Configuration](/getting-started/configuration)** - Customize analyzer behavior
 2. **[Analyzers Reference](/analyzers/)** - Understand each analyzer in depth
-
-## Quick Reference
-
-### Commands
-
-```bash
-# Basic analysis
-php artisan shield:analyze
-
-# Specific categories
-php artisan shield:analyze --category=security
-
-# Specific analyzer
-php artisan shield:analyze --analyzer=sql-injection
-
-# JSON output
-php artisan shield:analyze --format=json
-
-# Save report to file
-php artisan shield:analyze --output=results.json
-
-# Create baseline (ignore existing issues)
-php artisan shield:baseline
-
-# Use baseline to filter results
-php artisan shield:analyze --baseline
-```
-
-### Exit Codes
-
-- `0` - Success (no high/critical issues)
-- `1` - Failed (high/critical issues found)
-
-### Severity Priorities
-
-1. **Critical** → Fix immediately (0-24 hours)
-2. **High** → Fix soon (1-2 weeks)
-3. **Medium** → Fix when convenient (1-2 months)
-4. **Low** → Optional improvements
-
-## Getting Help
-
-**Found an issue you don't understand?**
-- Check the [Analyzers Reference](/analyzers/) for detailed explanations
-- Search [GitHub Issues](https://github.com/shieldci/laravel/issues)
-
-**False positive?**
-<!-- Use inline suppression: `// @shieldci-ignore-next-line` -->
-- Report to improve analyzer accuracy
