@@ -35,13 +35,13 @@ php artisan shield:analyze
 
 ### Terminal output
 
-<img src="/terminal.png" style="margin-top: 16px" alt="ShieldCI Terminal" />
+<img src="/terminal.png" style="margin-top: 16px" alt="ShieldCI Terminal Output" />
 
 ### Failed Checks
 
 All checks that fail will include a description of why they failed along with the associated lines of code (if applicable).
 
-<img src="/failed-checks.png" style="margin-top: 16px" alt="ShieldCI Terminal" />
+<img src="/failed-checks.png" style="margin-top: 16px" alt="ShieldCI Failed Checks" />
 
 ### Report Card Summary
 
