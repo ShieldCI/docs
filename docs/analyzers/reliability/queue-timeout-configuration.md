@@ -10,7 +10,7 @@ tags: queue,configuration,reliability,jobs
 
 | Analyzer ID                    | Category       | Severity | Time To Fix |
 | -------------------------------| :------------: |:--------:| -----------:|
-| `queue-timeout-configuration`  | ✅ Reliability | Critical | 10 minutes  |
+| `queue-timeout-configuration`  | ✅ Reliability |   High   | 10 minutes  |
 
 ## What This Checks
 
