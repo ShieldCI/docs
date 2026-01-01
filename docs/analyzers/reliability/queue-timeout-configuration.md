@@ -14,13 +14,14 @@ tags: queue,configuration,reliability,jobs
 
 ## What This Checks
 
-- Validates that `retry_after` is greater than queue timeout values
+- Validates that `retry_after` is at least **10 seconds greater** than queue timeout values
 - Ensures proper timeout configuration for queue workers
 - Prevents jobs from being processed twice due to timeout issues
 - Checks all queue connections (Redis, Database, Beanstalkd)
 - Integrates with Laravel Horizon timeout configuration
 - Skips sync and SQS drivers (they don't use retry_after)
 - Reports exact configuration file location and line number
+- Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
 
 ## Why It Matters
 
@@ -42,24 +43,35 @@ tags: queue,configuration,reliability,jobs
 If you have a timeout configuration error:
 
 ```php
-// ❌ Before: retry_after too small
+// ❌ Before: retry_after too small (insufficient buffer)
 // config/queue.php
 'connections' => [
     'redis' => [
         'driver' => 'redis',
         'connection' => 'default',
         'queue' => 'default',
-        'retry_after' => 60, // ❌ Same as or less than timeout (60)
+        'retry_after' => 60, // ❌ Same as timeout (60) - no buffer!
     ],
 ],
 
-// ✅ After: retry_after with proper buffer
+// ❌ Still too small: only 5 second buffer
 'connections' => [
     'redis' => [
         'driver' => 'redis',
         'connection' => 'default',
         'queue' => 'default',
-        'retry_after' => 90, // ✅ Timeout (60) + buffer (30)
+        'retry_after' => 65, // ❌ Timeout (60) + 5 second buffer (less than 10 second minimum)
+    ],
+],
+
+// ✅ After: retry_after with proper buffer (at least 10 seconds)
+'connections' => [
+    'redis' => [
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => 'default',
+        'retry_after' => 70, // ✅ Timeout (60) + 10 second buffer (minimum)
+        // For safety, consider 30+ second buffer: 90
     ],
 ],
 ```
@@ -68,7 +80,7 @@ If you have a timeout configuration error:
 
 #### 1: Configure retry_after for Standard Queue Workers
 
-Set `retry_after` to be at least 30 seconds more than your worker timeout:
+Set `retry_after` to be at least **10 seconds more** than your worker timeout (30+ seconds recommended for production):
 
 ```php
 // config/queue.php
@@ -81,8 +93,9 @@ return [
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
             // Worker timeout is 60 seconds by default
-            // retry_after should be: max(timeout) + 30 seconds buffer
-            'retry_after' => 90,
+            // retry_after should be: max(timeout) + buffer (minimum 10 seconds)
+            'retry_after' => 70,  // Minimum: 60 + 10
+            // Recommended for production: 90 (60 + 30 second buffer)
             'block_for' => null,
         ],
 
@@ -90,7 +103,8 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            'retry_after' => 70,  // Minimum: 60 + 10
+            // Recommended: 90
         ],
     ],
 ];
@@ -358,6 +372,47 @@ Schema::create('jobs', function (Blueprint $table) {
     $table->unsignedInteger('created_at');
 });
 ```
+
+## ShieldCI Configuration
+
+**Customizing the Minimum Buffer Requirement**
+
+By default, this analyzer enforces a **10-second minimum buffer** between timeout and retry_after. This is a safe default that prevents most timeout-related issues while not being overly restrictive.
+
+You can customize this buffer requirement in your `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+return [
+    'analyzers' => [
+        'reliability' => [
+            'enabled' => true,
+        
+            'queue-timeout' => [
+                // Minimum buffer in seconds between timeout and retry_after
+                // Default: 10 seconds
+                'minimum_buffer' => 30, // Increase for extra safety
+            ],
+        ],
+    ],
+];
+```
+
+**Choosing the Right Buffer:**
+
+- **10 seconds (default)**: Good for most applications, catches dangerous configurations
+- **30 seconds**: Recommended for production applications with critical queues
+- **5 seconds**: Only if you fully understand the risks and have highly idempotent jobs
+- **60+ seconds**: For applications with complex job dependencies or unreliable infrastructure
+
+**Why Buffer Matters:**
+
+The buffer accounts for:
+- Network latency between queue and worker
+- Time to serialize/deserialize job data
+- Job startup overhead (autoloading, booting services)
+- Graceful shutdown time when worker receives SIGTERM
+- Clock drift between queue server and worker servers
 
 ## References
 
