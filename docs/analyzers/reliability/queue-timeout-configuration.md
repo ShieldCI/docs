@@ -14,14 +14,18 @@ tags: queue,configuration,reliability,jobs
 
 ## What This Checks
 
-- Validates that `retry_after` is at least **10 seconds greater** than queue timeout values
+- Validates that `retry_after` is at least **10 seconds greater** than queue timeout values (configurable)
 - Ensures proper timeout configuration for queue workers
 - Prevents jobs from being processed twice due to timeout issues
 - Checks all queue connections (Redis, Database, Beanstalkd)
-- Integrates with Laravel Horizon timeout configuration
 - Skips sync and SQS drivers (they don't use retry_after)
 - Reports exact configuration file location and line number
 - Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
+- **Tiered timeout detection**:
+  - Detects connection-specific timeouts from queue config
+  - Automatically detects Horizon timeouts for Redis (matches queues to supervisors)
+  - Supports ShieldCI config overrides for database/Beanstalkd drivers
+  - Falls back to 60-second default with detection warning
 
 ## Why It Matters
 
@@ -375,11 +379,23 @@ Schema::create('jobs', function (Blueprint $table) {
 
 ## ShieldCI Configuration
 
-**Customizing the Minimum Buffer Requirement**
+This analyzer uses a **tiered detection approach** to determine queue worker timeouts:
 
-By default, this analyzer enforces a **10-second minimum buffer** between timeout and retry_after. This is a safe default that prevents most timeout-related issues while not being overly restrictive.
+**1. Connection-Specific Timeout** (Highest Priority)
+```php
+// config/queue.php - Non-standard but supported
+'database' => [
+    'driver' => 'database',
+    'timeout' => 120,  // Explicit timeout in connection config
+    'retry_after' => 150,
+],
+```
 
-You can customize this buffer requirement in your `config/shieldci.php`:
+**2. Horizon Configuration** (Redis only)
+The analyzer automatically detects timeouts from Laravel Horizon config by matching queue names to supervisors.
+
+**3. ShieldCI Configuration Override**
+For database, Beanstalkd, and other drivers where timeout isn't automatically detectable:
 
 ```php
 // config/shieldci.php
@@ -387,25 +403,41 @@ return [
     'analyzers' => [
         'reliability' => [
             'enabled' => true,
-        
-            'queue-timeout' => [
-                // Minimum buffer in seconds between timeout and retry_after
-                // Default: 10 seconds
-                'minimum_buffer' => 30, // Increase for extra safety
+            
+            'queue-timeout-configuration' => [
+                // Minimum buffer requirement (default: 10 seconds)
+                'minimum_buffer' => 30,
+
+                // Connection-specific timeouts (recommended for non-Redis)
+                'connection_timeouts' => [
+                    'database' => 120,     // php artisan queue:work database --timeout=120
+                    'beanstalkd' => 180,   // Supervisor runs with --timeout=180
+                ],
+
+                // Driver-specific timeouts (fallback if connection not specified)
+                'driver_timeouts' => [
+                    'database' => 90,
+                    'beanstalkd' => 120,
+                ],
             ],
         ],
     ],
 ];
 ```
 
-**Choosing the Right Buffer:**
+**4. Default Assumption** (60 seconds with warning)
+If no timeout is configured, the analyzer assumes 60 seconds but includes a detection warning in the metadata.
 
-- **10 seconds (default)**: Good for most applications, catches dangerous configurations
-- **30 seconds**: Recommended for production applications with critical queues
-- **5 seconds**: Only if you fully understand the risks and have highly idempotent jobs
-- **60+ seconds**: For applications with complex job dependencies or unreliable infrastructure
+#### Why Configure Timeouts?
 
-**Why Buffer Matters:**
+**For Database and Beanstalkd drivers**, the analyzer cannot automatically detect worker timeouts configured via:
+- CLI: `php artisan queue:work database --timeout=120`
+- Supervisor: `command=php artisan queue:work --timeout=180`
+- systemd, Docker, or other process managers
+
+**Without configuration**, the analyzer:
+- Assumes default timeout of 60 seconds
+- May miss issues if actual timeout is higher (false negatives)
 
 The buffer accounts for:
 - Network latency between queue and worker
