@@ -439,12 +439,9 @@ If no timeout is configured, the analyzer assumes 60 seconds but includes a dete
 - Assumes default timeout of 60 seconds
 - May miss issues if actual timeout is higher (false negatives)
 
-The buffer accounts for:
-- Network latency between queue and worker
-- Time to serialize/deserialize job data
-- Job startup overhead (autoloading, booting services)
-- Graceful shutdown time when worker receives SIGTERM
-- Clock drift between queue server and worker servers
+**With configuration**, you get:
+- Accurate timeout validation for all drivers
+- No false negatives from missed timeout configurations
 
 ## References
 
