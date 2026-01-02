@@ -1,13 +1,13 @@
 ---
 title: Security Analyzers
-description: 26 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more
+description: 27 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more
 icon: lock
 outline: [2, 3]
 ---
 
 # Security Analyzers
 
-**26 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
+**27 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
 
 ## Overview
 
@@ -43,6 +43,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 - **[Password Hashing Strength Analyzer](/analyzers/security/hashing-strength)** - Validates that password hashing configuration uses secure parameters
 - **[Cookie Analyzer](/analyzers/security/cookie)** - Validates cookie encryption and security configuration
+- **[Cookie Domain Analyzer](/analyzers/security/cookie-domain)** - Detects unnecessary cookie domain configuration that makes cookies less restrictive
 - **[Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key)** - Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation
 
 ### HTTP Security
@@ -151,6 +152,7 @@ Before deploying to production, ensure:
 - ✅ Dependencies are up-to-date and vulnerability-free
 - ✅ HTTPS is enforced (HSTS header configured)
 - ✅ Cookies are secure (httpOnly, secure flags)
+- ✅ Cookie domain is only set when using subdomain routing
 - ✅ Login throttling is enabled
 
 ## Related Categories
