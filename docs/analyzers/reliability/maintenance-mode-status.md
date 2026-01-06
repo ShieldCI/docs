@@ -187,6 +187,41 @@ php artisan down --secret="team-access-2024"
 php artisan up
 ```
 
+## ShieldCI Configuration
+
+This analyzer only runs in production and staging environments and continues to run in CI environments for deployment pipelines.
+
+**Why only production and staging?**
+- Developers intentionally use maintenance mode during local development for testing
+- Test suites may deliberately test maintenance mode functionality
+- Non-production environments don't serve real users, so maintenance mode is less critical
+- Reduces noise from intentional development-time usage
+- Focuses the check on environments where downtime affects users
+
+**Why continue running in CI?**
+Unlike package detection analyzers, maintenance mode checks are valuable during CI/CD deployment pipelines:
+- Catches forgotten `php artisan up` after deployment
+- Prevents deploying an application stuck in maintenance mode
+- Validates post-deployment application state in real-time
+- CI environments often deploy to staging/production where this check matters
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
 ## References
 
 - [Laravel Maintenance Mode](https://laravel.com/docs/configuration#maintenance-mode)

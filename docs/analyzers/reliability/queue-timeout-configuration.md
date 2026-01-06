@@ -10,17 +10,22 @@ tags: queue,configuration,reliability,jobs
 
 | Analyzer ID                    | Category       | Severity | Time To Fix |
 | -------------------------------| :------------: |:--------:| -----------:|
-| `queue-timeout-configuration`  | ✅ Reliability | Critical | 10 minutes  |
+| `queue-timeout-configuration`  | ✅ Reliability |   High   | 10 minutes  |
 
 ## What This Checks
 
-- Validates that `retry_after` is greater than queue timeout values
+- Validates that `retry_after` is at least **10 seconds greater** than queue timeout values (configurable)
 - Ensures proper timeout configuration for queue workers
 - Prevents jobs from being processed twice due to timeout issues
 - Checks all queue connections (Redis, Database, Beanstalkd)
-- Integrates with Laravel Horizon timeout configuration
 - Skips sync and SQS drivers (they don't use retry_after)
 - Reports exact configuration file location and line number
+- Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
+- **Tiered timeout detection**:
+  - Detects connection-specific timeouts from queue config
+  - Automatically detects Horizon timeouts for Redis (matches queues to supervisors)
+  - Supports ShieldCI config overrides for database/Beanstalkd drivers
+  - Falls back to 60-second default with detection warning
 
 ## Why It Matters
 
@@ -42,24 +47,35 @@ tags: queue,configuration,reliability,jobs
 If you have a timeout configuration error:
 
 ```php
-// ❌ Before: retry_after too small
+// ❌ Before: retry_after too small (insufficient buffer)
 // config/queue.php
 'connections' => [
     'redis' => [
         'driver' => 'redis',
         'connection' => 'default',
         'queue' => 'default',
-        'retry_after' => 60, // ❌ Same as or less than timeout (60)
+        'retry_after' => 60, // ❌ Same as timeout (60) - no buffer!
     ],
 ],
 
-// ✅ After: retry_after with proper buffer
+// ❌ Still too small: only 5 second buffer
 'connections' => [
     'redis' => [
         'driver' => 'redis',
         'connection' => 'default',
         'queue' => 'default',
-        'retry_after' => 90, // ✅ Timeout (60) + buffer (30)
+        'retry_after' => 65, // ❌ Timeout (60) + 5 second buffer (less than 10 second minimum)
+    ],
+],
+
+// ✅ After: retry_after with proper buffer (at least 10 seconds)
+'connections' => [
+    'redis' => [
+        'driver' => 'redis',
+        'connection' => 'default',
+        'queue' => 'default',
+        'retry_after' => 70, // ✅ Timeout (60) + 10 second buffer (minimum)
+        // For safety, consider 30+ second buffer: 90
     ],
 ],
 ```
@@ -68,7 +84,7 @@ If you have a timeout configuration error:
 
 #### 1: Configure retry_after for Standard Queue Workers
 
-Set `retry_after` to be at least 30 seconds more than your worker timeout:
+Set `retry_after` to be at least **10 seconds more** than your worker timeout (30+ seconds recommended for production):
 
 ```php
 // config/queue.php
@@ -81,8 +97,9 @@ return [
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
             // Worker timeout is 60 seconds by default
-            // retry_after should be: max(timeout) + 30 seconds buffer
-            'retry_after' => 90,
+            // retry_after should be: max(timeout) + buffer (minimum 10 seconds)
+            'retry_after' => 70,  // Minimum: 60 + 10
+            // Recommended for production: 90 (60 + 30 second buffer)
             'block_for' => null,
         ],
 
@@ -90,7 +107,8 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            'retry_after' => 70,  // Minimum: 60 + 10
+            // Recommended: 90
         ],
     ],
 ];
@@ -358,6 +376,72 @@ Schema::create('jobs', function (Blueprint $table) {
     $table->unsignedInteger('created_at');
 });
 ```
+
+## ShieldCI Configuration
+
+This analyzer uses a **tiered detection approach** to determine queue worker timeouts:
+
+**1. Connection-Specific Timeout** (Highest Priority)
+```php
+// config/queue.php - Non-standard but supported
+'database' => [
+    'driver' => 'database',
+    'timeout' => 120,  // Explicit timeout in connection config
+    'retry_after' => 150,
+],
+```
+
+**2. Horizon Configuration** (Redis only)
+The analyzer automatically detects timeouts from Laravel Horizon config by matching queue names to supervisors.
+
+**3. ShieldCI Configuration Override**
+For database, Beanstalkd, and other drivers where timeout isn't automatically detectable:
+
+```php
+// config/shieldci.php
+return [
+    'analyzers' => [
+        'reliability' => [
+            'enabled' => true,
+            
+            'queue-timeout-configuration' => [
+                // Minimum buffer requirement (default: 10 seconds)
+                'minimum_buffer' => 30,
+
+                // Connection-specific timeouts (recommended for non-Redis)
+                'connection_timeouts' => [
+                    'database' => 120,     // php artisan queue:work database --timeout=120
+                    'beanstalkd' => 180,   // Supervisor runs with --timeout=180
+                ],
+
+                // Driver-specific timeouts (fallback if connection not specified)
+                'driver_timeouts' => [
+                    'database' => 90,
+                    'beanstalkd' => 120,
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+**4. Default Assumption** (60 seconds with warning)
+If no timeout is configured, the analyzer assumes 60 seconds but includes a detection warning in the metadata.
+
+#### Why Configure Timeouts?
+
+**For Database and Beanstalkd drivers**, the analyzer cannot automatically detect worker timeouts configured via:
+- CLI: `php artisan queue:work database --timeout=120`
+- Supervisor: `command=php artisan queue:work --timeout=180`
+- systemd, Docker, or other process managers
+
+**Without configuration**, the analyzer:
+- Assumes default timeout of 60 seconds
+- May miss issues if actual timeout is higher (false negatives)
+
+**With configuration**, you get:
+- Accurate timeout validation for all drivers
+- No false negatives from missed timeout configurations
 
 ## References
 
