@@ -14,13 +14,20 @@ tags: cache,views,blade,performance,optimization
 
 ## What This Checks
 
-Validates that Blade templates are properly precompiled and cached in production/staging environments for optimal performance.
+Validates that Blade templates are properly precompiled and cached in production/staging environments using timestamp-based freshness detection:
+
+- **Compiled views exist**: Checks that the compiled views directory contains cached views
+- **Cache freshness**: Compares the newest Blade file timestamp against the newest compiled view timestamp
+- **Stale detection**: If any Blade file is newer than the most recent compiled view, the cache is stale
+
+By default, only application views (`resources/views`) are checked. Published vendor views within `resources/views/vendor/` are included since they override package views and are compiled by Laravel.
 
 ## Why It Matters
 
 - **Performance Impact:** Precompiled views improve render time by 2-5x
 - **Bootstrap Speed:** Eliminates template compilation on first request
 - **Production Critical:** Without caching, Blade templates are compiled on-demand, adding latency
+- **Stale Cache Risk:** Modified views after caching means users see outdated templates until cache is regenerated
 
 Blade templates must be compiled to PHP before execution. Without caching, Laravel compiles templates on the first request, adding overhead. Precompiling ensures all views are ready before the first user request.
 
@@ -87,6 +94,38 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production` → Runs (no mapping needed)
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
+
+### Include Package Views
+
+By default, package views (registered via `loadViewsFrom()` in service providers) are **excluded** from the freshness check. This prevents false positives when `composer install` or `composer update` changes vendor file timestamps.
+
+To include package views in the freshness check, publish the config and enable the option:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'performance' => [
+        'enabled' => true,
+        
+        'view-caching' => [
+            'include_package_views' => true,
+        ],
+    ],
+],
+```
+
+**When to enable:**
+- You want strict cache validation including all package views
+- Your deployment process always runs `view:cache` after `composer install`
+
+**When to keep disabled (default):**
+- You run `composer install` separately from `view:cache`
+- You want to avoid warnings after dependency updates
 
 ## References
 
