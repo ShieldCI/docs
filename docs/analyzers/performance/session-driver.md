@@ -8,9 +8,9 @@ tags: session,performance,configuration,redis,scalability
 
 # Session Driver Configuration Analyzer
 
-| Analyzer ID      | Category       | Severity   | Time To Fix  |
-| -----------------| :------------: |:----------:| ------------:|
-| `session-driver` | ⚡ Performance  | Medium     | 30 minutes   |
+| Analyzer ID      | Category       | Severity | Time To Fix  |
+| -----------------| :------------: |:--------:| ------------:|
+| `session-driver` | ⚡ Performance  | Critical | 30 minutes   |
 
 ## What This Checks
 
