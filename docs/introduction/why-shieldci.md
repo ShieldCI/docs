@@ -137,7 +137,7 @@ ShieldCI is the modern successor to the abandoned Enlightn project:
 |---------|----------|----------|
 | **Development Status** | ✅ Active (monthly updates) | ❌ Abandoned (2021) |
 | **Laravel 12 Support** | ✅ Full support | ❌ No support |
-| **Total Analyzers** | ✅ 200+ analyzers | ⚠️ 131 analyzers |
+| **Total Analyzers** | ✅ 150+ analyzers | ⚠️ 131 analyzers |
 | **Performance** | ✅ 40% faster analysis | ⚠️ Slower AST parsing |
 | **Architecture** | ✅ Modern PHP 8.1+ | ⚠️ Legacy PHP 7.x |
 | **Documentation** | ✅ Comprehensive docs | ⚠️ Basic docs |

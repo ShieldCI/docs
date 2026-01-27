@@ -230,7 +230,7 @@ Ready to improve your Laravel application's security and quality?
 ### vs Laravel Enlightn
 - ✅ Active development (Enlightn abandoned)
 - ✅ Laravel 12 support
-- ✅ More analyzers (200+ vs 131)
+- ✅ More analyzers (150+ vs 131)
 - ✅ Better performance
 - ✅ Modern architecture
 
