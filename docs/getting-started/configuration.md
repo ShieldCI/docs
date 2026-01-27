@@ -449,7 +449,6 @@ Analyzers in `dont_report` run normally and show in the report, but **don't affe
 ```php
 'dont_report' => [
     'missing-error-tracking',  // Shows in report but doesn't fail CI
-    'select-asterisk',         // Shows in report but doesn't fail CI
 ],
 ```
 
