@@ -156,5 +156,5 @@ git push origin main
 
 - [Environment Variables Complete Analyzer](/analyzers/reliability/env-variables-complete) - Ensures all required variables from .env.example are in .env (reverse check)
 - [Environment File Existence Analyzer](/analyzers/reliability/env-file-exists) - Ensures .env file exists
-- [Environment File Security](/analyzers/security/env-file-security) - Ensures .env.example doesn't contain real secrets
-- [App Key Security](/analyzers/security/app-key-security) - Validates APP_KEY format
+- [Environment File Analyzer](/analyzers/security/env-file) - Ensures .env.example doesn't contain real secrets
+- [App Key Analyzer](/analyzers/security/app-key) - Validates APP_KEY format

@@ -615,4 +615,3 @@ Log::error('Operation failed', [
 
 - **[Service Container Resolution](/analyzers/best-practices/service-container-resolution)** - Avoid manual container resolution that hides dependencies
 - **[Debug Mode Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled in production
-- **[Error Disclosure](/analyzers/security/error-disclosure)** - Prevents exposing error details to users

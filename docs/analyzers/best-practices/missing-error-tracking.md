@@ -312,6 +312,3 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 ## Related Analyzers
 
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode is off in production
-- [Exception Handler Coverage Analyzer](/analyzers/reliability/exception-handler-coverage) - Validates exception types are handled
-- [Log Channel Configuration Analyzer](/analyzers/reliability/log-channel-configuration) - Checks logging setup
-- [Monitoring Integration Analyzer](/analyzers/reliability/monitoring-integration) - Validates APM and monitoring setup

@@ -708,7 +708,6 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 
 - **[First Analysis](/getting-started/first-analysis)** - Run your first scan
 - **[Analyzers Reference](/analyzers/)** - Detailed analyzer documentation
-- **[CI/CD Integration](/integrations/ci-cd)** - Automate checks
 
 ## Configuration Reference
 

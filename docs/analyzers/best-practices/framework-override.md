@@ -473,4 +473,3 @@ Use configuration exceptions sparingly. Each framework class you extend becomes 
 
 - [Fat Model](/analyzers/best-practices/fat-model) - Detects models with too much business logic
 - [Service Container Resolution](/analyzers/best-practices/service-container-resolution) - Promotes dependency injection
-- [MVC Violations](/analyzers/best-practices/mvc-violations) - Detects logic in wrong layers

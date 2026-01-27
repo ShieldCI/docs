@@ -290,4 +290,4 @@ SLACK_CHANNEL=#general
 
 - [App Key Analyzer](/analyzers/security/app-key) - Validates APP_KEY security
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Detects debug mode in production
-- [Environment File Security Analyzer](/analyzers/security/environment-file-security) - Validates .env file security
+
