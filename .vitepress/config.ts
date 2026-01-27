@@ -181,7 +181,7 @@ export default defineConfig({
             options: {
                 appId: 'XVN8IXORZF',
                 apiKey: '86f0c3b09d78172f3cc3cac991c10af0',
-                indexName: 'shieldCI_docs',
+                indexName: 'docs_shieldci_com_xvn8ixorzf_pages',
                 askAi: "vm0ybu30QDS3"
             }
         },
