@@ -180,8 +180,8 @@ export default defineConfig({
             provider: 'algolia',
             options: {
                 appId: 'XVN8IXORZF',
-                apiKey: '86f0c3b09d78172f3cc3cac991c10af0',
-                indexName: 'docs_shieldci_com_xvn8ixorzf_pages',
+                apiKey: 'b669713e0a16054e2e2fc6d1d69ebd3d',
+                indexName: 'shieldci_docs',
                 askAi: "vm0ybu30QDS3"
             }
         },
