@@ -26,10 +26,10 @@ export default defineConfig({
 
         // Navigation
         nav: [
-            {
+            /*{
                 text: 'Home',
                 link: 'https://shieldci.com'
-            },
+            },*/
             {
                 text: 'Changelog',
                 link: 'https://github.com/shieldci/laravel/releases'
