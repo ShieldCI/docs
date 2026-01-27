@@ -14,14 +14,14 @@ tags: laravel,performance,database,memory,optimization,collections,best-practice
 
 ## What This Checks
 
-Detects PHP-side filtering patterns that should be performed at the database level. This analyzer **complements** the [Collection Call Analyzer](/analyzers/performance/collection-call-analyzer) by detecting **unique patterns NOT covered by Larastan**:
+Detects PHP-side filtering patterns that should be performed at the database level. This analyzer **complements** the [Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization) by detecting **unique patterns NOT covered by Larastan**:
 
 - **`filter()` after fetch**: `->all()->filter()` or `->get()->filter()` - Custom filtering logic with closures
 - **`reject()` after fetch**: `->all()->reject()` or `->get()->reject()` - Inverse filtering
 - **`whereIn()` after fetch**: `->all()->whereIn()` or `->get()->whereIn()` - Array-based filtering
 - **`whereNotIn()` after fetch**: `->all()->whereNotIn()` or `->get()->whereNotIn()` - Inverse array filtering
 
-**Note:** Common patterns like `->get()->where()`, `->get()->first()`, `->get()->last()`, `->get()->take()`, and `->get()->skip()` are detected by the [Collection Call Analyzer](/analyzers/performance/collection-call-analyzer) (via Larastan's `noUnnecessaryCollectionCall` rule) and are **not** checked by this analyzer to avoid duplication.
+**Note:** Common patterns like `->get()->where()`, `->get()->first()`, `->get()->last()`, `->get()->take()`, and `->get()->skip()` are detected by the [Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization) (via Larastan's `noUnnecessaryCollectionCall` rule) and are **not** checked by this analyzer to avoid duplication.
 
 ## Why It Matters
 
@@ -327,7 +327,5 @@ Files matching any whitelist pattern will be skipped.
 
 ## Related Analyzers
 
-- [Collection Call Analyzer](/analyzers/performance/collection-call-analyzer) - Detects common collection anti-patterns via Larastan
+- [Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization) - Detects common collection anti-patterns via Larastan
 - [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) - Detects missing eager loading
-- [Missing Database Index Analyzer](/analyzers/performance/missing-database-index) - Suggests database indexes
-- [Slow Query Analyzer](/analyzers/performance/slow-query) - Detects slow database queries

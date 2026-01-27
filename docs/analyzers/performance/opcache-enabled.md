@@ -233,4 +233,4 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 - **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
 - [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
-- [Debug Log Level Analyzer](/analyzers/performance/debug-log) - Ensure debug mode is disabled in production
+- [Debug Log Level Analyzer](/analyzers/performance/debug-log-level) - Ensure debug mode is disabled in production

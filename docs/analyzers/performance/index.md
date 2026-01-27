@@ -41,7 +41,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 ### Assets & Frontend
 
-- **[Asset Minification Analyzer](/analyzers/performance/minification)** - Ensures JavaScript and CSS assets are minified in production
+- **[Asset Minification Analyzer](/analyzers/performance/asset-minification)** - Ensures JavaScript and CSS assets are minified in production
 - **[Asset Cache Headers Analyzer](/analyzers/performance/asset-cache-headers)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
 
 ### Configuration & Environment
