@@ -18,9 +18,8 @@ Detects inconsistent mixing of Query Builder (`DB::table()`) and Eloquent ORM (`
 
 - **Same-table mixing**: Using both `User::where()` and `DB::table('users')` in the same repository/service
 - **QB-via-model patterns**: Converting Eloquent to Query Builder with `toBase()` or `getQuery()`
-- **Relationship queries**: Detecting relationship-based queries like `$user->posts()->where()`
 - **Method chaining patterns**: Tracking variable assignments like `$query = User::where()` then `$query->get()`
-- **Significant mixing**: Classes using Eloquent for some tables and Query Builder for others (3+ QB tables)
+- **Significant mixing**: Classes using Eloquent for some tables and Query Builder for others (configurable threshold, default: 3+ QB tables)
 
 ## Why It Matters
 
@@ -125,12 +124,44 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'best-practices' => [
         'enabled' => true,
-        
+
         'mixed-query-builder-eloquent' => [
+            // Classes to skip analysis for
             'whitelist' => [
                 'LegacyReportRepository',  // Complex joins, raw SQL needed
                 'AnalyticsService',         // Performance-critical aggregations
             ],
+
+            // Whether toBase()/getQuery() counts as Query Builder (default: true)
+            'treat_tobase_as_query_builder' => true,
+
+            // QB table count threshold for "significant mixing" warning (default: 2)
+            // Warning triggers when QB tables > this threshold
+            'mixing_threshold' => 2,
+        ],
+    ],
+],
+```
+
+**Scenario 4: Allow toBase() for Performance**
+
+If you intentionally use `toBase()` for performance-critical queries and understand it bypasses scopes, you can disable this detection in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'best-practices' => [
+        'enabled' => true,
+
+        'mixed-query-builder-eloquent' => [
+            // Classes to skip analysis for
+            'whitelist' => [],
+
+            // Whether toBase()/getQuery() counts as Query Builder
+            'treat_tobase_as_query_builder' => false,
+
+            // QB table count threshold for "significant mixing" warning (default: 2)
+            // Warning triggers when QB tables > this threshold
+            'mixing_threshold' => 2,
         ],
     ],
 ],
