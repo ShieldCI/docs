@@ -138,6 +138,16 @@ Then in `config/shieldci.php`:
             // QB table count threshold for "significant mixing" warning (default: 2)
             // Warning triggers when QB tables > this threshold
             'mixing_threshold' => 2,
+
+            // Directories to scan for model files (default: ['app/Models'])
+            'model_paths' => [
+                'app/Models',
+            ],
+
+            // Explicit model-to-table mappings (overrides scanning and inference)
+            'table_mappings' => [
+                // 'App\\Package\\ExternalModel' => 'custom_table_name',
+            ],
         ],
     ],
 ],
@@ -162,10 +172,74 @@ If you intentionally use `toBase()` for performance-critical queries and underst
             // QB table count threshold for "significant mixing" warning (default: 2)
             // Warning triggers when QB tables > this threshold
             'mixing_threshold' => 2,
+
+            // Directories to scan for model files (default: ['app/Models'])
+            'model_paths' => [
+                'app/Models',
+            ],
+
+            // Explicit model-to-table mappings (overrides scanning and inference)
+            'table_mappings' => [
+                // 'App\\Package\\ExternalModel' => 'custom_table_name',
+            ],
         ],
     ],
 ],
 ```
+
+**Scenario 5: Configure Model Scanning and Custom Table Mappings**
+
+The analyzer automatically scans your model directories to extract `$table` properties, enabling accurate detection of model-to-table relationships. This is particularly useful when models use custom table names.
+
+For non-standard project structures (e.g., domain-driven design), customize the scan paths in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'best-practices' => [
+        'enabled' => true,
+    
+        'mixed-query-builder-eloquent' => [
+            // Scan multiple directories for models
+            'model_paths' => [
+                'app/Models',
+                'app/Domain/*/Models',      // Domain-driven patterns
+                'packages/*/src/Models',    // Local packages
+            ],
+        ],
+    ],
+],
+```
+
+For external packages or edge cases where model scanning doesn't work (e.g., models without explicit `$table` properties that use irregular pluralization), use explicit mappings in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'best-practices' => [
+        'enabled' => true,
+    
+        'mixed-query-builder-eloquent' => [
+            // Explicit model-to-table mappings
+            'table_mappings' => [
+                // External package models
+                'Spatie\\Permission\\Models\\Role' => 'roles',
+                'Spatie\\Permission\\Models\\Permission' => 'permissions',
+
+                // Models with irregular pluralization
+                'App\\Models\\Person' => 'people',
+                'App\\Models\\Child' => 'children',
+
+                // Models with custom table names not using $table property
+                'App\\Models\\LegacyUser' => 'tbl_users',
+            ],
+        ],
+    ],
+],
+```
+
+**How table resolution works:**
+1. **Explicit mappings** (`table_mappings`) take highest priority
+2. **Model scanning** extracts `$table` properties from model files
+3. **Inference** uses Laravel's snake_case pluralization as fallback (e.g., `UserProfile` → `user_profiles`)
 
 ### Proper Fix (20 minutes)
 
