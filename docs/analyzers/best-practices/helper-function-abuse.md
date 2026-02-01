@@ -10,19 +10,42 @@ tags: laravel,testability,dependency-injection,best-practices,helpers,code-quali
 
 | Analyzer ID                 | Category           | Severity | Time To Fix |
 | ----------------------------| :----------------: |:--------:| -----------:|
-| `helper-function-abuse`     | ✨ Best Practices  |   Low    | 25 minutes  |
+| `helper-function-abuse`     | Best Practices  |   Low    | 25 minutes  |
 
 ## What This Checks
 
 Detects excessive use of Laravel helper functions that hide dependencies and violate SOLID principles. Tracks:
 
-- **Helper function calls in classes/traits**: Counts calls to common Laravel helpers like `auth()`, `request()`, `cache()`, `config()`, `session()`, etc.
+- **Dependency-hiding helper calls**: Counts calls to helpers that create implicit dependencies like `auth()`, `request()`, `cache()`, `config()`, `session()`, etc.
 - **Threshold violations**: Flags classes exceeding the configured threshold (default: 5 helpers)
 - **Severity escalation**: Low severity for moderate violations, Medium for 10+ over threshold, High for 20+ over threshold
 - **Per-helper tracking**: Shows which specific helpers are used and how many times
 
-**Tracked Helpers** (36 by default):
-`app`, `auth`, `cache`, `config`, `cookie`, `event`, `logger`, `old`, `redirect`, `request`, `response`, `route`, `session`, `storage_path`, `url`, `view`, `abort`, `abort_if`, `abort_unless`, `bcrypt`, `collect`, `dd`, `dispatch`, `info`, `now`, `optional`, `policy`, `resolve`, `retry`, `tap`, `throw_if`, `throw_unless`, `today`, `validator`, `value`, `report`
+**Tracked Helpers** (25 dependency-hiding helpers):
+
+`app`, `auth`, `cache`, `config`, `cookie`, `event`, `logger`, `old`, `redirect`, `request`, `response`, `route`, `session`, `storage_path`, `url`, `view`, `abort`, `abort_if`, `abort_unless`, `dispatch`, `info`, `policy`, `resolve`, `validator`, `report`
+
+**Not Tracked** (intentionally excluded):
+
+- **Utility helpers**: `collect`, `tap`, `value`, `optional`, `now`, `today`, `retry`, `throw_if`, `throw_unless` - pure utilities that don't hide dependencies
+- **Debug helpers**: `dd`, `dump` - handled by [Debug Mode Analyzer](/analyzers/security/debug-mode)
+- **Low priority**: `bcrypt` - simple utility, rarely abused
+
+## Whitelisted Contexts
+
+The analyzer automatically skips certain contexts where helper usage is acceptable:
+
+**Whitelisted Directories** (default):
+- `tests/` - Test files need flexibility
+- `database/migrations/` - Migrations don't support constructor DI
+- `database/seeders/` - Seeders often need dynamic resolution
+- `database/factories/` - Factories may need service resolution
+
+**Whitelisted Class Patterns** (default):
+- `*ServiceProvider` - Service providers legitimately bootstrap the app
+- `*Command` - Console commands often need conditional resolution
+- `*Seeder` - Database seeders need service resolution
+- `*Test` / `*TestCase` - Test classes need flexibility
 
 ## Why It Matters
 
@@ -91,11 +114,8 @@ class ReportGenerator
 {
     public function generate()
     {
-        $start = now()->startOfMonth();
-        $end = now()->endOfMonth();
-
         $data = cache()->remember('report', 3600, function() {
-            return collect($this->getData())->filter(...);
+            return $this->getData();
         });
 
         logger()->info('Report generated');
@@ -107,17 +127,13 @@ class ReportGenerator
 // ✅ GOOD - Use Facades (still testable via fake())
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
 
 class ReportGenerator
 {
     public function generate()
     {
-        $start = Carbon::now()->startOfMonth();
-        $end = Carbon::now()->endOfMonth();
-
         $data = Cache::remember('report', 3600, function() {
-            return collect($this->getData())->filter(...);
+            return $this->getData();
         });
 
         Log::info('Report generated');
@@ -185,23 +201,26 @@ class OrderService
 
 **2. Acceptable Helper Usage**
 
-Some helpers are fine to use:
+Some helpers are fine to use (and are not tracked by default):
 
 ```php
-// ✅ ACCEPTABLE - View helpers in Blade templates
-@foreach($posts as $post)
-    {{ $post->title }}
-    <small>{{ $post->created_at->diffForHumans() }}</small>
-@endforeach
-
-// ✅ ACCEPTABLE - Collection helpers for data manipulation
+// ✅ ACCEPTABLE - Utility helpers (not tracked)
 public function transform(array $data)
 {
-    return collect($data)
+    return collect($data)           // collect() is a utility, not tracked
         ->map(fn($item) => $this->process($item))
         ->filter()
         ->values()
         ->all();
+}
+
+// ✅ ACCEPTABLE - Date helpers (not tracked)
+public function getReportPeriod()
+{
+    return [
+        'start' => now()->startOfMonth(),   // now() is a utility, not tracked
+        'end' => today()->endOfMonth(),     // today() is a utility, not tracked
+    ];
 }
 
 // ✅ ACCEPTABLE - Response helpers at controller return
@@ -217,9 +236,9 @@ Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
 Route::redirect('/home', '/dashboard');
 ```
 
-**3. Configuration for Legitimate Thresholds and Functions**
+**3. Configuration Options**
 
-Customize the analyzer for your project, publish the config:
+Customize the analyzer for your project. Publish the config:
 ```bash
 php artisan vendor:publish --tag=shieldci-config
 ```
@@ -230,12 +249,32 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'best-practices' => [
         'enabled' => true,
-        
+
         'helper-function-abuse' => [
             // Threshold before flagging (default: 5)
             'threshold' => 5,
 
-            // Customize which helpers to track
+            // Directories to skip (supports partial paths)
+            'whitelist_dirs' => [
+                'tests',
+                'database/migrations',
+                'database/seeders',
+                'database/factories',
+                'app/Console/Commands',  // Add custom directories
+            ],
+
+            // Class name patterns to skip (supports wildcards)
+            'whitelist_classes' => [
+                '*ServiceProvider',
+                '*Command',
+                '*Seeder',
+                '*Test',
+                '*TestCase',
+                '*Handler',  // Add custom patterns
+            ],
+
+            // Override the default helper list (advanced)
+            // Only set this if you want complete control
             'helper_functions' => [
                 'auth', 'request', 'cache', 'config', 'session',
                 'event', 'logger', 'app', 'resolve',
@@ -280,3 +319,4 @@ php artisan shield:baseline
 - [Fat Model Analyzer](/analyzers/best-practices/fat-model) - Detects models with too much business logic
 - [Framework Override Analyzer](/analyzers/best-practices/framework-override) - Detects dangerous framework method overrides
 - [Config Outside Config](/analyzers/best-practices/config-outside-config) - Detects hardcoded configuration values
+- [Service Container Resolution](/analyzers/best-practices/service-container-resolution) - Detects manual service container resolution

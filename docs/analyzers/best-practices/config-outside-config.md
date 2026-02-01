@@ -26,6 +26,7 @@ Detects configuration values hardcoded directly in your code that should be exte
 - ✅ Excludes hash values (MD5, SHA1, SHA256) to prevent false positives
 - ✅ Detects common API key patterns (`sk_`, `pk_`, `live_`, `test_` prefixes)
 - ✅ Skips config directory files (configuration in config files is expected)
+- ✅ Supports custom domain exclusions via configuration
 
 ## Why It Matters
 
@@ -278,6 +279,39 @@ MAILGUN_SECRET=key-your_mailgun_secret_here
 SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 SLACK_CHANNEL=#general
 ```
+
+**5. Customize ShieldCI exclusion list (Optional)**
+
+To add custom domains to the exclusion list, publish the config:
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+return [
+    'analyzers' => [
+        'best-practices' => [
+            'enabled' => true,
+            
+            'config-outside-config' => [
+                'excluded_domains' => [
+                    'api.stripe.com',
+                    'api.twilio.com',
+                    's3.amazonaws.com',
+                    'your-internal-api.company.com',
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+Custom domains are merged with the default exclusions (documentation sites, CDNs, schema URLs, placeholders). This is useful for:
+- Well-known API endpoints your team treats as stable constants
+- Internal services with fixed URLs
+- Third-party services not in the default list
 
 ## References
 
