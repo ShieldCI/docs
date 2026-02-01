@@ -197,6 +197,4 @@ $admin = User::where('role', 'admin')->first();
 ## Related Analyzers
 
 - [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) - Detects missing eager loading
-- [Select Asterisk Analyzer](/analyzers/best-practices/select-asterisk) - Detects inefficient SELECT * queries
 - [PHP Side Filtering Analyzer](/analyzers/best-practices/php-side-filtering) - Detects filtering done in PHP vs database
-- [Query Builder in Controller](/analyzers/best-practices/query-builder-in-controller) - Promotes repository pattern

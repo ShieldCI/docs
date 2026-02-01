@@ -494,6 +494,4 @@ class AnalyticsRepository
 ## Related Analyzers
 
 - [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) - Detects missing eager loading
-- [Raw Eloquent Avoidance Analyzer](/analyzers/best-practices/raw-eloquent-avoidance) - Detects overuse of raw SQL
-- [Query Builder in Controller](/analyzers/best-practices/query-builder-in-controller) - Promotes repository pattern
-- [Mass Assignment Analyzer](/analyzers/security/mass-assignment) - Prevents mass assignment vulnerabilities
+- [Mass Assignment Analyzer](/analyzers/security/mass-assignment-vulnerabilities) - Prevents mass assignment vulnerabilities

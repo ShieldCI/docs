@@ -433,7 +433,5 @@ The analyzer automatically excludes Laravel magic methods (scopes, relationships
 
 ## Related Analyzers
 
-- [Query Builder in Controller](/analyzers/best-practices/query-builder-in-controller) - Promotes repository pattern
 - [Service Container Resolution](/analyzers/best-practices/service-container-resolution) - Encourages dependency injection
-- [MVC Violations](/analyzers/best-practices/mvc-violations) - Detects logic in wrong layers
 - [Eloquent N+1 Query](/analyzers/best-practices/eloquent-n-plus-one) - Performance issues in models

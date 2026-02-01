@@ -449,7 +449,6 @@ Analyzers in `dont_report` run normally and show in the report, but **don't affe
 ```php
 'dont_report' => [
     'missing-error-tracking',  // Shows in report but doesn't fail CI
-    'select-asterisk',         // Shows in report but doesn't fail CI
 ],
 ```
 
@@ -708,7 +707,6 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 
 - **[First Analysis](/getting-started/first-analysis)** - Run your first scan
 - **[Analyzers Reference](/analyzers/)** - Detailed analyzer documentation
-- **[CI/CD Integration](/integrations/ci-cd)** - Automate checks
 
 ## Configuration Reference
 
