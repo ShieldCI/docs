@@ -430,4 +430,6 @@ This runs ShieldCI on every commit, blocking merges if critical issues are found
 Now that you've run your first analysis and fixed some issues:
 
 1. **[Configuration](/getting-started/configuration)** - Customize analyzer behavior
-2. **[Analyzers Reference](/analyzers/)** - Understand each analyzer in depth
+2. **[CI/CD Integration](/getting-started/ci-cd-integration)** - Automate analysis in your pipeline
+3. **[Troubleshooting](/getting-started/troubleshooting)** - Common issues and solutions
+4. **[Analyzers Reference](/analyzers/)** - Understand each analyzer in depth

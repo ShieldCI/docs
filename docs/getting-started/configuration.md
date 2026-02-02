@@ -127,7 +127,7 @@ return [
     | Exit with error code if issues of this severity are found
     | Options: never, critical, high, medium, low
     */
-    'fail_on' => env('SHIELDCI_FAIL_ON', 'critical'),
+    'fail_on' => env('SHIELDCI_FAIL_ON', 'high'),
     'fail_threshold' => env('SHIELDCI_FAIL_THRESHOLD', null), // minimum score to pass (0-100)
 ];
 ```
@@ -344,6 +344,28 @@ When CI mode is enabled, only analyzers that support CI will run. Configure whic
 php artisan shield:baseline
 ```
 
+**Command Options:**
+
+| Option | Description |
+|--------|-------------|
+| `--merge` | Merge with existing baseline instead of overwriting |
+| `--ci` | Generate baseline for CI mode (only CI-compatible analyzers) |
+
+**Examples:**
+```bash
+# Create new baseline (overwrites existing)
+php artisan shield:baseline
+
+# Merge new issues into existing baseline
+php artisan shield:baseline --merge
+
+# Create baseline for CI-compatible analyzers only
+php artisan shield:baseline --ci
+
+# Combine options
+php artisan shield:baseline --merge --ci
+```
+
 This creates `.shieldci-baseline.json` with all current issues:
 ```json
 {
@@ -531,7 +553,7 @@ return [
         ],
     ],
 
-    'fail_on' => env('SHIELDCI_FAIL_ON', 'critical'),
+    'fail_on' => env('SHIELDCI_FAIL_ON', 'high'),
 ];
 ```
 
@@ -706,6 +728,8 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 ## Next Steps
 
 - **[First Analysis](/getting-started/first-analysis)** - Run your first scan
+- **[CI/CD Integration](/getting-started/ci-cd-integration)** - Set up automated analysis in your pipeline
+- **[Troubleshooting](/getting-started/troubleshooting)** - Common issues and solutions
 - **[Analyzers Reference](/analyzers/)** - Detailed analyzer documentation
 
 ## Configuration Reference
@@ -734,5 +758,5 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `report.max_issues_per_check` | int | `5` | Limit displayed issues per analyzer |
 | `baseline_file` | string | `.shieldci-baseline.json` | Baseline file path |
 | `ignore_errors` | array | `[]` | Ignore specific errors by analyzer (completely removes from report) |
-| `fail_on` | string | `'critical'` | Failure threshold for CI (never, critical, high, medium, low) |
+| `fail_on` | string | `'high'` | Failure threshold for CI (never, critical, high, medium, low) |
 | `fail_threshold` | int\|null | `null` | Minimum score to pass (0-100) |
