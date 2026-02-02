@@ -55,6 +55,8 @@ export default defineConfig({
                         { text: 'Installation', link: '/getting-started/installation' },
                         { text: 'Configuration', link: '/getting-started/configuration' },
                         { text: 'First Analysis', link: '/getting-started/first-analysis' },
+                        { text: 'CI/CD Integration', link: '/getting-started/ci-cd-integration' },
+                        { text: 'Troubleshooting', link: '/getting-started/troubleshooting' },
                     ]
                 },
                 {

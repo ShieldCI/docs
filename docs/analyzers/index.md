@@ -165,7 +165,7 @@ Configure when CI/CD should fail:
 ```php
 return [
     // Fail CI/CD on issues of this severity or higher
-    'fail_on' => 'critical',  // Options: never, critical, high, medium, low
+    'fail_on' => 'high',  // Options: never, critical, high, medium, low (default: 'high')
 ];
 ```
 
@@ -188,9 +188,8 @@ php artisan shield:analyze --category=security
 # Run single analyzer
 php artisan shield:analyze --analyzer=sql-injection
 
-# Multiple analyzers (run separately)
-php artisan shield:analyze --analyzer=sql-injection
-php artisan shield:analyze --analyzer=xss-vulnerabilities
+# Run multiple analyzers (comma-separated)
+php artisan shield:analyze --analyzer=sql-injection,xss-vulnerabilities,csrf-protection
 ```
 
 ## Understanding Results
