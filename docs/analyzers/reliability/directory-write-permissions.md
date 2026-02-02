@@ -3,7 +3,7 @@ title: Directory Write Permissions Analyzer
 description: Ensures critical Laravel directories have proper write permissions for logs, cache, sessions, and compiled views
 icon: folder-lock
 outline: [2, 3]
-tags: permissions,filesystem,reliability,deployment
+tags: permissions,filesystem,reliability,deployment,symlinks
 ---
 
 # Directory Write Permissions Analyzer
@@ -21,6 +21,10 @@ tags: permissions,filesystem,reliability,deployment
 - Validates both relative and absolute paths from configuration
 - Reports all failed directories with actionable fix commands
 - Supports symlinked directories
+- Verifies storage symlinks exist (from `config('filesystems.links')`)
+- Detects broken symlinks (link exists but target doesn't)
+- Validates symlink targets are directories
+- Default: checks `public/storage` → `storage/app/public`
 
 ## Why It Matters
 
@@ -31,6 +35,9 @@ tags: permissions,filesystem,reliability,deployment
 - **Session management**: User sessions require writable storage - login/authentication will fail without it
 - **File uploads**: User file uploads to `storage/` will fail silently or with cryptic errors
 - **Deployment issues**: Fresh deployments often fail due to incorrect directory permissions, especially in Docker/CI environments
+- **Broken file URLs**: Without the storage symlink, publicly accessible files in `storage/app/public` return 404 errors
+- **Image/file display**: User-uploaded images and files won't display without proper symlinks
+- **Deployment failures**: New deployments often forget to recreate symlinks after fresh clones
 
 ## How to Fix
 
@@ -77,6 +84,25 @@ RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 # Or run as Administrator:
 icacls storage /grant Users:F /t
 icacls bootstrap\cache /grant Users:F /t
+```
+
+**Symlink Issues**:
+
+```bash
+# Check if storage symlink exists
+ls -la public/storage
+
+# If missing or broken, recreate it
+php artisan storage:link
+
+# For custom symlinks, add to config/filesystems.php:
+'links' => [
+    public_path('storage') => storage_path('app/public'),
+    public_path('uploads') => storage_path('app/uploads'),
+],
+
+# Then run:
+php artisan storage:link
 ```
 
 ### Proper Fix (10 minutes)
@@ -167,9 +193,44 @@ Then in `config/shieldci.php`:
 By default, the analyzer checks `storage` and `bootstrap/cache` directories. You only need to publish the config if you want to check additional directories.
 :::
 
+6. **Include symlink creation in deployment**:
+
+```yaml
+# .github/workflows/deploy.yml
+- name: Create Storage Symlinks
+  run: php artisan storage:link --force
+```
+
+```bash
+# deploy/post-deploy.sh
+php artisan storage:link --force
+echo "✓ Storage symlinks created"
+```
+
+::: warning
+The `--force` flag recreates symlinks even if they exist. Use with caution in production if you have custom symlink configurations.
+:::
+
+7. **Configure symlink checking** (optional):
+
+If you want to disable symlink verification or check custom symlinks:
+
+```php
+// config/shieldci.php
+'check_symlinks' => true,  // Set to false to disable
+
+// Or use Laravel's filesystems config:
+// config/filesystems.php
+'links' => [
+    public_path('storage') => storage_path('app/public'),
+    public_path('media') => storage_path('app/media'),
+],
+```
+
 ## References
 
 - [Laravel Installation - Directory Permissions](https://laravel.com/docs/installation#directory-permissions)
+- [Laravel File Storage - The Public Disk](https://laravel.com/docs/filesystem#the-public-disk)
 - [Linux File Permissions Guide](https://www.linux.com/training-tutorials/understanding-linux-file-permissions/)
 - [Docker Security Best Practices](https://docs.docker.com/develop/security-best-practices/)
 - [Nginx + PHP-FPM Configuration](https://www.nginx.com/resources/wiki/start/topics/examples/phpfcgi/)
