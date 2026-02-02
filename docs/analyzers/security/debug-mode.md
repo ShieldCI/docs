@@ -21,6 +21,7 @@ Detects debug mode configurations and debugging functions that expose sensitive 
 - **PHP code**: Debug functions like `dd()`, `dump()`, `var_dump()`, `ray()`
 - **Error handling**: `ini_set('display_errors')`, `error_reporting(E_ALL)`
 - **Dependencies**: Debug packages in `require` section (should be `require-dev`)
+- **Script termination**: `exit()` and `die()` calls in production code (bypasses Laravel lifecycle)
 
 ## Why It Matters
 
@@ -29,6 +30,7 @@ Detects debug mode configurations and debugging functions that expose sensitive 
 - **Path Disclosure:** Reveals exact file paths, framework versions, and directory structure to attackers
 - **SQL Injection Aid:** Error messages expose table structures and query patterns
 - **Attack Surface:** Debug packages in production increase vulnerability opportunities
+- **Improper Termination:** `exit()` and `die()` bypass Laravel's exception handling, preventing proper logging, cleanup, and response formatting
 
 Debug mode enabled in production is one of the most dangerous misconfigurations in web applications. A single error page can expose:
 - Complete stack traces showing your application architecture
@@ -92,6 +94,22 @@ composer require --dev spatie/laravel-ray
 
 # Deploy without dev packages
 composer install --no-dev --optimize-autoloader
+```
+
+**Scenario 4: exit() or die() in Code**
+
+```bash
+# Search for termination functions
+grep -r "exit(" app/
+grep -r "die(" app/
+
+# Replace with proper alternatives
+# Before: exit('Error');
+# After: abort(500, 'Error');
+
+# For CLI commands, use exit codes properly:
+# Before: exit(1);
+# After: return Command::FAILURE;
 ```
 
 ### Proper Fix (5 minutes)
@@ -232,6 +250,26 @@ composer show | grep -i debug
 php artisan config:cache
 >>> app()->configurationIsCached()
 // Should be true
+```
+
+**7. Replace exit()/die() with Proper Termination**
+
+```php
+// ❌ BAD - Bypasses Laravel lifecycle
+exit('Error occurred');
+die('Fatal error');
+
+// ✅ GOOD - Web requests: Use abort()
+abort(500, 'Error occurred');
+abort_if($condition, 403, 'Unauthorized');
+abort_unless($valid, 422, 'Validation failed');
+
+// ✅ GOOD - CLI commands: Use exit codes
+return Command::FAILURE;  // or return 1;
+return Command::SUCCESS;  // or return 0;
+
+// ✅ GOOD - Throw exceptions
+throw new \RuntimeException('Error occurred');
 ```
 
 ## References
