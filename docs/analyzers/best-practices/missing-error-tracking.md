@@ -16,10 +16,9 @@ tags: laravel,monitoring,production,error-tracking,observability,sentry,bugsnag,
 
 Detects applications without error tracking services or custom error monitoring. Checks for:
 
-- **Popular Error Tracking Packages**: Sentry, Bugsnag, Rollbar, Airbrake, Honeybadger, Flare, Ray (9 packages total)
+- **Popular Error Tracking Packages**: Sentry, Bugsnag, Rollbar, Airbrake, Honeybadger
 - **Custom Error Tracking**: CloudWatch, Datadog, New Relic implementations in `app/Exceptions/Handler.php` (Laravel ≤10) or `bootstrap/app.php` (Laravel 11+)
 - **Logging Configurations**: Papertrail, Logtail, LogEntries in `config/logging.php`
-- **APM Solutions**: AWS SDK (CloudWatch), custom error reporting logic
 - **Complex Custom Implementations**: Custom `report()` methods with >10 lines of logic
 
 ## Why It Matters
@@ -312,6 +311,3 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 ## Related Analyzers
 
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode is off in production
-- [Exception Handler Coverage Analyzer](/analyzers/reliability/exception-handler-coverage) - Validates exception types are handled
-- [Log Channel Configuration Analyzer](/analyzers/reliability/log-channel-configuration) - Checks logging setup
-- [Monitoring Integration Analyzer](/analyzers/reliability/monitoring-integration) - Validates APM and monitoring setup

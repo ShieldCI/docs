@@ -358,6 +358,4 @@ class PostController
 ## Related Analyzers
 
 - [Missing Chunk Analyzer](/analyzers/best-practices/chunk-missing) - Detects queries without chunking for large datasets
-- [Select Asterisk Analyzer](/analyzers/best-practices/select-asterisk) - Detects inefficient SELECT * queries
 - [PHP Side Filtering Analyzer](/analyzers/best-practices/php-side-filtering) - Detects filtering done in PHP vs database
-- [Query Builder in Controller](/analyzers/best-practices/query-builder-in-controller) - Promotes repository pattern

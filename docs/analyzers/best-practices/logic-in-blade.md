@@ -458,6 +458,6 @@ Then in `config/shieldci.php`:
 
 ## Related Analyzers
 
-- [N+1 Query Analyzer](/analyzers/performance/n-plus-one-queries) - Detects relationship loading without eager loading
+- [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) - Detects relationship loading without eager loading
 - [Missing Database Transactions Analyzer](/analyzers/best-practices/missing-database-transactions) - Ensures data integrity for multiple writes
-- [Fat Model Analyzer](/analyzers/code-quality/fat-models) - Detects business logic that should be extracted from models
+- [Fat Model Analyzer](/analyzers/best-practices/fat-model) - Detects business logic that should be extracted from models

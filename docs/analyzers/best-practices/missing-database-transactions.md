@@ -346,6 +346,4 @@ Then in `config/shieldci.php`:
 ## Related Analyzers
 
 - [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects unsafe SQL query construction
-- [N+1 Query Analyzer](/analyzers/performance/n-plus-one-queries) - Identifies inefficient database queries
-- [Missing Database Indexes Analyzer](/analyzers/performance/missing-indexes) - Recommends indexes for query performance
-- [Foreign Key Constraint Analyzer](/analyzers/reliability/foreign-key-constraint) - Validates referential integrity
+- [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) - Detects relationship loading without eager loading

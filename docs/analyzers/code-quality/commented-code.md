@@ -234,7 +234,6 @@ Then in `config/shieldci.php`:
 
 ## Related Analyzers
 
-- [Dead Code Analyzer](/analyzers/reliability/dead-code) - Detects unreachable code
 - [Method Length Analyzer](/analyzers/code-quality/method-length) - Detects methods that are too long
 - [Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock) - Ensures proper documentation
 

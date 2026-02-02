@@ -1,6 +1,6 @@
 ---
 title: Mass Assignment Vulnerabilities Analyzer
-description: Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders
+description: Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, including relationship operations, nested assignment patterns, and missing $hidden attributes for sensitive data
 icon: shield-alert
 outline: [2, 3]
 tags: mass-assignment,eloquent,security,models,sql-injection
@@ -14,7 +14,16 @@ tags: mass-assignment,eloquent,security,models,sql-injection
 
 ## What This Checks
 
-Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, allowing attackers to modify unintended database fields. This analyzer checks for models without `$fillable` or `$guarded` protection, dangerous method calls with `request()->all()`, query builder operations with raw request data, and multiple unsafe request data retrieval patterns.
+Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, allowing attackers to modify unintended database fields. This analyzer checks for:
+
+- Models without `$fillable` or `$guarded` protection
+- Dangerous method calls with `request()->all()`
+- Query builder operations with raw request data
+- Multiple unsafe request data retrieval patterns
+- **Missing `$hidden` attributes** for sensitive fields (password, api_token, remember_token, etc.)
+- **Relationship operations** with unfiltered data (`sync()`, `attach()`, `updateExistingPivot()`, etc.)
+- **Nested mass assignment** via dot notation patterns like `$request->input('user.profile')`
+- **Blacklist filtering warnings** when using `request()->except()` instead of the safer `only()` approach
 
 ## Why It Matters
 
@@ -228,6 +237,120 @@ class Product extends Model
 {
     protected $fillable = ['name', 'description', 'price', 'stock'];
 }
+```
+
+**Pattern 4: Missing $hidden for sensitive data**
+
+**Before (❌):**
+```php
+class User extends Model
+{
+    protected $fillable = ['name', 'email', 'password'];
+    // Sensitive fields exposed in JSON/array output
+}
+```
+
+**After (✅):**
+```php
+class User extends Model
+{
+    protected $fillable = ['name', 'email', 'password'];
+
+    // Hide sensitive fields from serialization
+    protected $hidden = [
+        'password',
+        'remember_token',
+        'api_token',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+    ];
+}
+```
+
+**Pattern 5: Relationship operations with unfiltered data**
+
+**Before (❌):**
+```php
+public function updateRoles(Request $request, User $user)
+{
+    $user->roles()->sync($request->input('roles')); // Dangerous
+    $user->permissions()->attach($request->all()); // Very dangerous
+}
+```
+
+**After (✅):**
+```php
+public function updateRoles(UpdateRolesRequest $request, User $user)
+{
+    // Validate role IDs exist and user is authorized to assign them
+    $validRoleIds = Role::whereIn('id', $request->input('roles', []))
+        ->where('assignable', true)
+        ->pluck('id')
+        ->toArray();
+
+    $user->roles()->sync($validRoleIds);
+}
+
+// Or use validated data with explicit allowed values
+public function updatePermissions(Request $request, User $user)
+{
+    $validated = $request->validate([
+        'permissions' => 'array',
+        'permissions.*' => 'exists:permissions,id',
+    ]);
+
+    $user->permissions()->sync($validated['permissions'] ?? []);
+}
+```
+
+**Pattern 6: Blacklist filtering (except) vs Whitelist (only)**
+
+**Before (❌):**
+```php
+// Blacklist approach - easy to forget new sensitive fields
+$user->update($request->except(['is_admin', 'role']));
+
+// New fields added later may be vulnerable
+// e.g., 'api_token', 'email_verified_at' could be mass-assigned
+```
+
+**After (✅):**
+```php
+// Whitelist approach - only explicitly allowed fields
+$user->update($request->only(['name', 'email', 'bio', 'avatar']));
+
+// Or best: use validated data from Form Request
+$user->update($request->validated());
+```
+
+**Why whitelist is safer:** When new fields are added to your model, the blacklist approach requires you to remember to add them to `except()`. With whitelist (`only()` or `validated()`), new fields are automatically protected.
+
+**Pattern 7: Nested mass assignment**
+
+**Before (❌):**
+```php
+// Dot notation can bypass simple $fillable checks
+$user->update($request->input('user')); // Gets nested array
+$user->profile()->update($request->input('user.profile'));
+```
+
+**After (✅):**
+```php
+// Explicitly validate and extract nested data
+$validated = $request->validate([
+    'user.name' => 'required|string|max:255',
+    'user.email' => 'required|email',
+    'user.profile.bio' => 'nullable|string|max:1000',
+]);
+
+$user->update([
+    'name' => $validated['user']['name'],
+    'email' => $validated['user']['email'],
+]);
+
+$user->profile()->update([
+    'bio' => $validated['user']['profile']['bio'] ?? null,
+]);
 ```
 
 **Step 4: Test your implementation**

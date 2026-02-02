@@ -358,4 +358,3 @@ The analyzer provides specific issue codes for each violation type:
 
 - [Helper Function Abuse](/analyzers/best-practices/helper-function-abuse) - Detects excessive helper usage that hides dependencies
 - [Fat Model Analyzer](/analyzers/best-practices/fat-model) - Detects models with too much business logic
-- [Controller Size](/analyzers/best-practices/controller-size) - Monitors controller complexity

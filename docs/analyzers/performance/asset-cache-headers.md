@@ -84,4 +84,4 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 ## Related Analyzers
 
-- [Asset Minification Analyzer](/analyzers/performance/minification) - Ensures JavaScript and CSS assets are minified for production
+- [Asset Minification Analyzer](/analyzers/performance/asset-minification) - Ensures JavaScript and CSS assets are minified for production

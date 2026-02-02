@@ -125,4 +125,4 @@ By default, the analyzer checks the `public` directory. You only need to configu
 
 ## Related Analyzers
 
-- [Asset Cache Headers Analyzer](/analyzers/performance/cache-header) - Ensures compiled assets have appropriate cache headers for optimal browser caching
+- [Asset Cache Headers Analyzer](/analyzers/performance/asset-cache-headers) - Ensures compiled assets have appropriate cache headers for optimal browser caching

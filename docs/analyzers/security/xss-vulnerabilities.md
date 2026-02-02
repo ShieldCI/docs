@@ -1,6 +1,6 @@
 ---
 title: XSS Vulnerabilities Analyzer
-description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output and missing Content-Security-Policy headers
+description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output, dangerous HTML attribute contexts, and missing Content-Security-Policy headers
 icon: shield-alert
 outline: [2, 3]
 tags: xss,cross-site-scripting,security,blade,csp,headers
@@ -16,6 +16,12 @@ tags: xss,cross-site-scripting,security,blade,csp,headers
 ## What This Checks
 
 - Scans PHP controllers and Blade views for patterns such as `{!! !!}` output, direct `echo $_GET`/`request()` calls, unescaped `Response::make()`, and unsafe values inside `<script>` tags.
+- **Detects dangerous HTML attribute contexts** including:
+  - `javascript:` protocol in `href`, `src`, `action`, `formaction` attributes (flagged for any usage)
+  - `data:` protocol combined with user input in URL attributes
+  - Event handler attributes (`onclick`, `onerror`, `onload`, `onmouseover`, etc.) with dynamic values
+  - Unvalidated/unescaped URLs in `href` and `src` attributes
+  - Unescaped output in `data-*` attributes that may be consumed by JavaScript
 - Verifies HTTP responses (non-CI environments, non-localhost) to ensure `Content-Security-Policy` headers exist and forbid `unsafe-inline`/`unsafe-eval`; falls back to meta tags when necessary.
 - Uses router/guest-route discovery to probe a publicly accessible page and confirm CSP enforcement.
 

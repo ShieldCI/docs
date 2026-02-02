@@ -254,7 +254,5 @@ $path = storage_path('logs/');
 
 ## Related Analyzers
 
-- [Config Outside Config Analyzer](/analyzers/best-practices/config-outside-config) - Detects configuration outside config files
-- [Environment Check Smell Analyzer](/analyzers/best-practices/environment-check-smell) - Detects environment checks in code
+- [Hardcoded Configuration Analyzer](/analyzers/best-practices/config-outside-config) - Detects configuration outside config files
 - [File Permissions Analyzer](/analyzers/security/file-permissions) - Validates file and directory permissions
-- [Environment File Security Analyzer](/analyzers/security/environment-file-security) - Validates .env security
