@@ -1,0 +1,202 @@
+---
+title: HTTP/2 Support Analyzer
+description: Verifies that HTTP/2 protocol is enabled for improved performance
+icon: zap
+outline: [2, 3]
+tags: http2,protocol,performance,infrastructure
+---
+
+# HTTP/2 Support Analyzer
+
+| Analyzer ID      | Category       | Severity   | Time To Fix  |
+| -----------------| :------------: |:----------:| ------------:|
+| `http2-support`  | ⚡ Performance  | Medium     | 30 minutes   |
+
+## What This Checks
+
+Verifies that your web server supports HTTP/2 protocol, which provides significant performance improvements over HTTP/1.1.
+
+## Why It Matters
+
+- **Multiplexing:** Multiple requests over a single connection (no head-of-line blocking)
+- **Header Compression:** HPACK reduces header overhead by 30-90%
+- **Server Push:** Proactively send resources before the browser requests them
+- **Binary Protocol:** More efficient parsing than text-based HTTP/1.1
+- **Stream Prioritization:** Important resources loaded first
+
+| Metric | HTTP/1.1 | HTTP/2 | Improvement |
+|--------|----------|--------|-------------|
+| Connections per domain | 6 | 1 | Fewer connections |
+| Header size | ~700 bytes | ~20 bytes | ~97% smaller |
+| Page load time | Baseline | 15-50% faster | Significant |
+
+## How to Fix
+
+### Nginx Configuration
+
+```nginx
+# /etc/nginx/sites-available/yoursite
+
+server {
+    listen 443 ssl http2;  # Add http2 here
+    listen [::]:443 ssl http2;
+
+    server_name example.com;
+
+    ssl_certificate /path/to/certificate.crt;
+    ssl_certificate_key /path/to/private.key;
+
+    # Recommended SSL settings for HTTP/2
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
+    ssl_prefer_server_ciphers off;
+
+    # ... rest of configuration
+}
+```
+
+**Verify Nginx HTTP/2 support:**
+```bash
+nginx -V 2>&1 | grep -o http_v2
+```
+
+### Apache Configuration
+
+```apache
+# httpd.conf or apache2.conf
+
+# Load HTTP/2 module (Apache 2.4.17+)
+LoadModule http2_module modules/mod_http2.so
+
+# Enable HTTP/2
+Protocols h2 http/1.1
+
+<VirtualHost *:443>
+    ServerName example.com
+
+    # HTTP/2 specific settings
+    Protocols h2 http/1.1
+    H2Push on
+    H2PushPriority * after
+    H2PushPriority text/css before
+    H2PushPriority image/jpeg after 32
+    H2PushPriority image/png after 32
+
+    SSLEngine on
+    SSLCertificateFile /path/to/certificate.crt
+    SSLCertificateKeyFile /path/to/private.key
+</VirtualHost>
+```
+
+**Enable Apache HTTP/2:**
+```bash
+sudo a2enmod http2
+sudo systemctl restart apache2
+```
+
+### Caddy (HTTP/2 by Default)
+
+```caddyfile
+# Caddyfile
+example.com {
+    # HTTP/2 is enabled by default with HTTPS
+    root * /var/www/html
+    file_server
+    php_fastcgi unix//run/php/php8.1-fpm.sock
+}
+```
+
+### Laravel Vapor
+
+HTTP/2 is enabled by default through AWS CloudFront.
+
+### Docker with Nginx
+
+```dockerfile
+FROM nginx:alpine
+
+# HTTP/2 is supported by default in nginx:alpine
+COPY nginx.conf /etc/nginx/nginx.conf
+```
+
+### CDN Configuration
+
+| CDN | HTTP/2 | HTTP/3 | Notes |
+|-----|--------|--------|-------|
+| Cloudflare | Default | Default | No configuration needed |
+| AWS CloudFront | Default | Available | Enable in distribution settings |
+| Bunny CDN | Default | Default | No configuration needed |
+| Fastly | Default | Available | Enable in configuration |
+
+## HTTP/2 Requirements
+
+1. **HTTPS Required:** Browsers only support HTTP/2 over TLS
+2. **TLS 1.2+:** Minimum TLS version required
+3. **ALPN Support:** Application-Layer Protocol Negotiation for protocol discovery
+4. **Modern Web Server:** Nginx 1.9.5+, Apache 2.4.17+
+
+## Verification
+
+**Using curl:**
+```bash
+# Check HTTP version
+curl -sI https://example.com -o /dev/null -w '%{http_version}\n'
+# Output: 2 (for HTTP/2)
+
+# Verbose output
+curl -vso /dev/null https://example.com 2>&1 | grep -i 'http/2'
+```
+
+**Using browser DevTools:**
+1. Open DevTools (F12)
+2. Go to Network tab
+3. Right-click column header → Enable "Protocol" column
+4. Reload page and check protocol column (should show "h2")
+
+**Using online tools:**
+- [KeyCDN HTTP/2 Test](https://tools.keycdn.com/http2-test)
+- [HTTP/2 Test by Cloudflare](https://http2.cloudflare.com/)
+
+## HTTP/3 (QUIC)
+
+HTTP/3 uses QUIC protocol for even better performance:
+
+| Feature | HTTP/2 | HTTP/3 |
+|---------|--------|--------|
+| Transport | TCP | QUIC (UDP) |
+| Connection setup | 2-3 RTTs | 0-1 RTT |
+| Head-of-line blocking | At TCP level | Eliminated |
+| Mobile performance | Good | Excellent |
+
+**Nginx HTTP/3 (experimental):**
+```nginx
+server {
+    listen 443 ssl http2;
+    listen 443 quic reuseport;
+
+    ssl_protocols TLSv1.3;
+
+    add_header Alt-Svc 'h3=":443"; ma=86400';
+}
+```
+
+## ShieldCI Configuration
+
+This analyzer:
+- Runs only in **production** and **staging** environments
+- Requires HTTPS (`APP_URL` starting with `https://`)
+- Makes actual HTTP requests to verify protocol support
+- Also checks for HTTP/3 support (informational)
+
+## References
+
+- [HTTP/2 Specification (RFC 7540)](https://httpwg.org/specs/rfc7540.html)
+- [Nginx HTTP/2 Module](https://nginx.org/en/docs/http/ngx_http_v2_module.html)
+- [Apache HTTP/2 Guide](https://httpd.apache.org/docs/current/howto/http2.html)
+- [Can I Use HTTP/2](https://caniuse.com/http2)
+
+## Related Analyzers
+
+- [HTTPS Configuration](/analyzers/security/hsts-header) - Ensures HTTPS is properly configured
+- [Compression Headers Analyzer](/analyzers/performance/compression-headers) - Ensures compression is enabled
+- [CDN Configuration Analyzer](/analyzers/performance/cdn-configuration) - Ensures CDN is configured
