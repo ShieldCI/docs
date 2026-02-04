@@ -1,16 +1,16 @@
 ---
-title: XXE Analyzer
+title: XXE Injection Vulnerabilities Analyzer
 description: Detects XML External Entity injection vulnerabilities in XML parsing functions that could allow file disclosure, SSRF, and denial of service attacks
 icon: file-code
 outline: [2, 3]
 tags: xxe,xml,external-entity,injection,security
 ---
 
-# XXE Analyzer
+# XXE Injection Vulnerabilities Analyzer
 
-| Analyzer ID | Category     | Severity   | Time To Fix  |
-| ----------- | :----------: |:----------:| ------------:|
-| `xxe`       | 🛡️ Security  | Critical   | 20 minutes   |
+| Analyzer ID           | Category     | Severity   | Time To Fix  |
+|-----------------------| :----------: |:----------:| ------------:|
+| `xxe-vulnerabilities` | 🛡️ Security  | Critical   | 20 minutes   |
 
 ## What This Checks
 
