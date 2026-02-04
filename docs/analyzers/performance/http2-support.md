@@ -96,7 +96,7 @@ sudo systemctl restart apache2
 
 ### Caddy (HTTP/2 by Default)
 
-```caddyfile
+```txt
 # Caddyfile
 example.com {
     # HTTP/2 is enabled by default with HTTPS

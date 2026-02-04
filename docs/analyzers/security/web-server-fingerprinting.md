@@ -126,7 +126,7 @@ class SecurityHeaders
 ```
 
 **Caddy:**
-```caddyfile
+```txt
 yourdomain.com {
     header -Server
     header -X-Powered-By
