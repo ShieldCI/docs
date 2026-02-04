@@ -190,15 +190,11 @@ Ready to improve your Laravel application's security, performance, and quality?
 
 **Perfect for:** Solo developers, small projects, startups
 
-::: tip Coming Soon
-### :soon: Pro (Commercial) :bell:
-- ✅ **100+ analyzers** (all categories)
+### Pro (Commercial) :bell:
+- ✅ **48+ analyzers** (all categories)
 - ✅ **Team dashboards** (multi-user)
 - ✅ **Historical trends** (track progress)
 - ✅ **Priority support** (48-hour response)
 - ✅ **SOC 2 compliance** (audit reports)
 
 **Perfect for:** Agencies, enterprise teams, compliance requirements
-
-:::
-
