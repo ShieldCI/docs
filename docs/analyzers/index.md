@@ -1,18 +1,18 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 73 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's 121 analyzers across 5 categories
 icon: shield-check
 outline: [2, 3]
 ---
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 73 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. With 121 analyzers across all categories, ShieldCI provides the most comprehensive Laravel analysis available.
 
 ## Categories
 
 ### [Security](/analyzers/security)
-**22 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
+**46 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 **Critical Analyzers:**
 - SQL Injection Detection 
@@ -24,7 +24,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Environment File Security
 
 ### [Performance](/analyzers/performance)
-**18 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
+**30 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
 
 **Key Analyzers:**
 - Autoloader Optimization
@@ -35,7 +35,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - View Compilation
 
 ### [Reliability](/analyzers/reliability)
-**13 analyzers** ensuring your application handles errors gracefully and maintains uptime.
+**25 analyzers** ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
 - PHPStan Static Analysis (13 categories consolidated)
@@ -62,18 +62,23 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Framework Usage Patterns
 - Third-Party Integration Best Practices
 
-## Analyzer Package
+## Analyzer Packages
 
 ### Free Package (73 Analyzers)
-The open-source package includes comprehensive analyzers across all categories:
+The open-source package includes:
 
-- ✅ All 22 security analyzers
-- ✅ All 18 performance analyzers
-- ✅ All 13 reliability analyzers
-- ✅ All 5 code quality analyzers
-- ✅ All 15 best practices analyzers
+- ✅ 22 security analyzers
+- ✅ 18 performance analyzers
+- ✅ 13 reliability analyzers
+- ✅ 5 code quality analyzers
+- ✅ 15 best practices analyzers
 
-All analyzers are available in the free package.
+### Pro Package (+48 Analyzers)
+The commercial package adds advanced analyzers:
+
+- 🔒 +24 security analyzers (advanced vulnerability detection)
+- ⚡ +12 performance analyzers (deep optimization)
+- 🛡️ +12 reliability analyzers (enterprise monitoring)
 
 ## How Analyzers Work
 

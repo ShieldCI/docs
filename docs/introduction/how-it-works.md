@@ -45,7 +45,7 @@ ShieldCI analyzes your Laravel application using static code analysis, examining
 │  ├─ Aggregate issues by severity                            │
 │  ├─ Generate recommendations                                │
 │  ├─ Create code snippets                                    │
-│  └─ Output results (console/JSON/HTML)                      │
+│  └─ Output results (console/JSON)                      │
 └─────────────────────────────────────────────────────────────┘
 ```
 
@@ -195,27 +195,27 @@ class NPlusOneQueryAnalyzer extends AbstractFileAnalyzer
 
 **Analyzer Categories:**
 
-1. **Security Analyzers** (22 total)
+1. **Security Analyzers**
    - Pattern: Look for vulnerable code patterns (SQL injection, XSS, CSRF)
    - Method: AST analysis + configuration validation
    - Example: Detect missing `->middleware('throttle')` on login routes
 
-2. **Performance Analyzers** (18 total)
+2. **Performance Analyzers**
    - Pattern: Identify inefficient database queries and caching issues
    - Method: AST analysis + configuration checks
    - Example: Detect N+1 queries by finding relationship access in loops
 
-3. **Reliability Analyzers** (13 total)
+3. **Reliability Analyzers**
    - Pattern: Validate error handling and configuration
    - Method: Configuration parsing + environment checks
    - Example: Ensure `APP_DEBUG=false` in production
 
-4. **Code Quality Analyzers** (5 total)
+4. **Code Quality Analyzers**
    - Pattern: Check for deprecated APIs and anti-patterns
    - Method: AST traversal + Laravel version awareness
    - Example: Detect usage of deprecated `array_divide()` helper
 
-5. **Best Practice Analyzers** (15 total)
+5. **Best Practice Analyzers**
    - Pattern: Enforce Laravel conventions
    - Method: AST analysis + naming pattern checks
    - Example: Ensure route names follow kebab-case convention

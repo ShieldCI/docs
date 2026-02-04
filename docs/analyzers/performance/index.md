@@ -1,13 +1,13 @@
 ---
 title: Performance Analyzers
-description: 18 analyzers identifying bottlenecks and optimization opportunities in Laravel applications
+description: 30 analyzers identifying bottlenecks and optimization opportunities in Laravel applications
 icon: zap
 outline: [2, 3]
 ---
 
 # Performance Analyzers
 
-**18 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
+**30 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
 
 ## Overview
 
@@ -19,6 +19,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 - **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
 - **[Configuration Caching Analyzer](/analyzers/performance/config-caching)** - Ensures configuration caching is properly configured for each environment
+- **[Event Caching Analyzer](/analyzers/performance/event-caching)** - Ensures event discovery is cached for optimal performance
 - **[Route Caching Analyzer](/analyzers/performance/route-caching)** - Ensures route caching is properly configured for optimal performance
 - **[View Caching Analyzer](/analyzers/performance/view-caching)** - Ensures Blade views are properly compiled and cached for optimal performance
 - **[OPcache Enabled Analyzer](/analyzers/performance/opcache-enabled)** - Ensures OPcache is enabled for PHP bytecode caching and performance
@@ -26,6 +27,9 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 ### Cache & Session Configuration
 
 - **[Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver)** - Ensures a proper cache driver is configured for optimal performance
+- **[Redis Single Server Optimization Analyzer](/analyzers/performance/redis-single-server)** - Ensures Redis is configured optimally for single-server setups using Unix sockets
+- **[Redis Rate Limiting Analyzer](/analyzers/performance/redis-rate-limiting)** - Ensures Redis is used for rate limiting in production environments
+- **[Redis Throttling Analyzer](/analyzers/performance/redis-throttling)** - Ensures Redis is used for request throttling in production
 - **[Shared Cache Lock Store Analyzer](/analyzers/performance/shared-cache-lock)** - Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed
 - **[Session Driver Configuration Analyzer](/analyzers/performance/session-driver)** - Ensures a proper session driver is configured for scalability and performance
 
@@ -36,6 +40,8 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 ### Database & Queries
 
+- **[Database Query Optimization Analyzer](/analyzers/performance/database-query-optimization)** - Detects inefficient database query patterns that can be optimized
+- **[Eager Loading Analyzer](/analyzers/performance/eager-loading)** - Ensures relationships are eager loaded to prevent N+1 query problems
 - **[MySQL Single Server Optimization Analyzer](/analyzers/performance/mysql-single-server-optimization)** - Ensures MySQL is configured optimally for single-server setups using Unix sockets
 - **[Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization)** - Detects inefficient collection operations that should be performed at the database query level
 
@@ -43,12 +49,18 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 - **[Asset Minification Analyzer](/analyzers/performance/asset-minification)** - Ensures JavaScript and CSS assets are minified in production
 - **[Asset Cache Headers Analyzer](/analyzers/performance/asset-cache-headers)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
+- **[CDN Configuration Analyzer](/analyzers/performance/cdn-configuration)** - Detects CDN configuration for optimal asset delivery
+- **[Compression Headers Analyzer](/analyzers/performance/compression-headers)** - Ensures compression is enabled for HTTP responses
+- **[HTTP/2 Support Analyzer](/analyzers/performance/http2-support)** - Detects HTTP/2 support for improved performance
 
 ### Configuration & Environment
 
 - **[Debug Log Level Analyzer](/analyzers/performance/debug-log-level)** - Ensures log level is not set to debug in production for optimal performance
 - **[Env Calls Outside Config Analyzer](/analyzers/performance/env-call-outside-config)** - Detects env() function calls outside configuration files that break when config is cached
 - **[Dev Dependencies in Production Analyzer](/analyzers/performance/dev-dependencies-production)** - Detects if development dependencies are installed in production environment
+- **[Xdebug Production Check Analyzer](/analyzers/performance/xdebug-enabled)** - Detects if Xdebug is enabled in production, which severely impacts performance
+- **[Command Constructor Injection Analyzer](/analyzers/performance/command-constructor-injection)** - Detects heavy service injection in Artisan command constructors
+- **[Fallback Route SEO Check Analyzer](/analyzers/performance/fallback-routes)** - Detects fallback routes that may harm SEO by returning 200 for non-existent pages
 - **[Unused Global Middleware Analyzer](/analyzers/performance/unused-global-middleware)** - Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead on every request
 
 ## How They Work

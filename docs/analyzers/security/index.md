@@ -1,13 +1,13 @@
 ---
 title: Security Analyzers
-description: 27 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more
+description: 46 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more
 icon: lock
 outline: [2, 3]
 ---
 
 # Security Analyzers
 
-**27 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
+**46 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
 
 ## Overview
 
@@ -19,7 +19,16 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 - **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
 - **[Column Name SQL Injection Analyzer](/analyzers/security/column-name-sql-injection)** - Detects SQL injection vulnerabilities where user input controls column names
+- **[Validation SQL Injection Analyzer](/analyzers/security/validation-sql-injection)** - Detects SQL injection vulnerabilities in validation rules
 - **[Command Injection Analyzer](/analyzers/security/command-injection)** - Detects command injection vulnerabilities where user input is passed to shell execution functions
+- **[Directory Traversal Analyzer](/analyzers/security/directory-traversal)** - Detects path traversal vulnerabilities that allow accessing files outside intended directories
+- **[Remote Code Execution (RCE) Analyzer](/analyzers/security/rce)** - Detects code execution vulnerabilities that allow arbitrary code execution
+- **[Object Injection Analyzer](/analyzers/security/object-injection)** - Detects unsafe deserialization that can lead to object injection attacks
+- **[Server-Side Request Forgery (SSRF) Analyzer](/analyzers/security/ssrf)** - Detects SSRF vulnerabilities where user input controls server-side requests
+- **[Eval Usage Analyzer](/analyzers/security/eval)** - Detects dangerous eval usage that can execute arbitrary code
+- **[Extract Function Analyzer](/analyzers/security/extract)** - Detects unsafe extract usage that can overwrite variables
+- **[XXE Injection Vulnerabilities Analyzer](/analyzers/security/xxe-vulnerabilities)** - Detects XML External Entity injection vulnerabilities
+- **[Regular Expression DoS Analyzer](/analyzers/security/regex-dos)** - Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns
 - **[XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
 - **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
 - **[Arbitrary File Upload Analyzer](/analyzers/security/arbitrary-file-upload)** - Detects file upload vulnerabilities that could lead to remote code execution
@@ -30,14 +39,19 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 - **[Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization)** - Detects missing authentication and authorization protection on routes and controllers
 - **[Login Throttling Analyzer](/analyzers/security/login-throttling)** - Detects missing rate limiting on authentication endpoints to prevent brute force attacks
+- **[Session Timeout Analyzer](/analyzers/security/session-timeout)** - Ensures session lifetime is configured appropriately for security
 
 ### Configuration & Secrets
 
 - **[Application Key Analyzer](/analyzers/security/app-key)** - Validates that the application encryption key is properly configured and secure
+- **[Hardcoded Credentials Analyzer](/analyzers/security/hardcoded-credentials)** - Detects hardcoded passwords, API keys, and secrets in source code
 - **[Environment File Analyzer](/analyzers/security/env-file)** - Validates .env file security, location, and prevents exposure of sensitive data
 - **[Environment File HTTP Accessibility Analyzer](/analyzers/security/env-http-accessibility)** - Verifies .env file is not accessible via HTTP requests to the web server
 - **[Debug Mode Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled and debugging functions that expose sensitive information
 - **[PHP Configuration Analyzer](/analyzers/security/php-ini)** - Validates that PHP ini settings are configured securely
+- **[Telescope Security Analyzer](/analyzers/security/telescope-security)** - Ensures Laravel Telescope is properly secured in production
+- **[Nova Security Analyzer](/analyzers/security/nova-security)** - Ensures Laravel Nova admin panel is properly secured
+- **[Horizon Security Analyzer](/analyzers/security/horizon-security)** - Ensures Laravel Horizon dashboard is properly secured
 
 ### Data Protection
 
@@ -45,11 +59,16 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 - **[Cookie Analyzer](/analyzers/security/cookie)** - Validates cookie encryption and security configuration
 - **[Cookie Domain Analyzer](/analyzers/security/cookie-domain)** - Detects unnecessary cookie domain configuration that makes cookies less restrictive
 - **[Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key)** - Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation
+- **[Cryptographic Weakness Analyzer](/analyzers/security/cryptographic-weakness)** - Detects weak cryptographic algorithms and insecure random number generation
 
 ### HTTP Security
 
 - **[Clickjacking Protection Analyzer](/analyzers/security/clickjacking)** - Detects missing clickjacking protection via X-Frame-Options or CSP frame-ancestors
 - **[HSTS Header Analyzer](/analyzers/security/hsts-header)** - Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications
+- **[MIME Sniffing Protection Analyzer](/analyzers/security/mime-sniffing)** - Ensures X-Content-Type-Options header prevents MIME type sniffing
+- **[Web Server Fingerprinting Analyzer](/analyzers/security/web-server-fingerprinting)** - Detects server information leakage through HTTP headers
+- **[Host Header Injection Analyzer](/analyzers/security/host-injection)** - Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks
+- **[Open Redirection Analyzer](/analyzers/security/open-redirection)** - Detects open redirect vulnerabilities that can be used for phishing attacks
 
 ### Dependencies & Updates
 

@@ -70,8 +70,13 @@ export default defineConfig({
                             collapsed: true,
                             items: [
                                 { text: 'Application Key', link: '/analyzers/security/app-key' },
+                                { text: 'Arbitrary File Upload', link: '/analyzers/security/arbitrary-file-upload' },
                                 { text: 'Auth & Authorization', link: '/analyzers/security/authentication-authorization' },
+                                { text: 'Clickjacking', link: '/analyzers/security/clickjacking' },
+                                { text: 'Column Name SQL Injection', link: '/analyzers/security/column-name-sql-injection' },
+                                { text: 'Command Injection', link: '/analyzers/security/command-injection' },
                                 { text: 'Cookie', link: '/analyzers/security/cookie' },
+                                { text: 'Cookie Domain', link: '/analyzers/security/cookie-domain' },
                                 { text: 'CSRF Protection', link: '/analyzers/security/csrf-protection' },
                                 { text: 'Cryptographic Weakness', link: '/analyzers/security/cryptographic-weakness' },
                                 { text: 'Debug Mode', link: '/analyzers/security/debug-mode' },

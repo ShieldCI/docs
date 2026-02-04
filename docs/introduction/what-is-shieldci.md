@@ -29,23 +29,23 @@ ShieldCI is purpose-built for Laravel applications, understanding Laravel's conv
 
 ### Comprehensive Analysis
 
-**73 Analyzers Across 5 Categories:**
+**121 Analyzers Across 5 Categories:**
 
-1. **Security** (22 analyzers)
+1. **Security** (46 analyzers)
    - OWASP Top 10 2021 coverage
    - SQL injection, XSS, CSRF protection
    - Authentication & authorization checks
    - HTTP security headers
    - License compliance
 
-2. **Performance** (18 analyzers)
+2. **Performance** (30 analyzers)
    - Database query optimization
    - Caching configuration
    - Autoloader optimization
    - OPcache settings
    - Route and config caching
 
-3. **Reliability** (13 analyzers)
+3. **Reliability** (25 analyzers)
    - Error handling & logging
    - Queue configuration
    - Session management
@@ -158,19 +158,18 @@ ShieldCI performs all analysis locally:
 ## Package Structure
 
 ### Free Package (Open Source)
-- **73 analyzers** - Core security, performance, reliability, best practices and quality checks
+- **73 analyzers** - Core security (22), performance (18), reliability (13), code quality (5), best practices (15)
 - **Local analysis** - Run anywhere via Artisan command
 - **JSON/Console reporting** - Export and view results
+- **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Community support** - GitHub issues and discussions
 
 ::: tip Coming Soon
 ### :soon: Pro Package (Commercial) :bell:
-- **100+ analyzers** - Advanced security, compliance, and enterprise features
+- **+48 analyzers** - Advanced security (+24), performance (+12), reliability (+12)
 - **Team collaboration** - Multi-user dashboards
 - **Historical trends** - Track quality over time
-- **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Priority support** - Direct support channel
-- **Custom analyzers** - Enterprise-specific checks
 :::
 
 ## Laravel Version Support

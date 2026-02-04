@@ -1,13 +1,13 @@
 ---
 title: Reliability Analyzers
-description: 13 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
+description: 25 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
 icon: check-circle
 outline: [2, 3]
 ---
 
 # Reliability Analyzers
 
-**13 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
+**25 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
 
 ## Overview
 
@@ -25,6 +25,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **[Environment File Existence Analyzer](/analyzers/reliability/env-file-exists)** - Ensures .env file exists, is readable, not empty, and checks for broken symlinks
 - **[Environment Variables Complete Analyzer](/analyzers/reliability/env-variables-complete)** - Ensures all required environment variables from .env.example are defined in .env
 - **[Maintenance Mode Status Analyzer](/analyzers/reliability/maintenance-mode-status)** - Checks if the application is in maintenance mode
+- **[Disk Space Analyzer](/analyzers/reliability/disk-space)** - Monitors available disk space and warns when storage is running low
 
 ### Infrastructure & Permissions
 
@@ -34,7 +35,27 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 ### Queue & Database
 
 - **[Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration)** - Ensures queue timeout and retry_after values are properly configured
+- **[Queue Blocking Analyzer](/analyzers/reliability/queue-blocking)** - Detects blocking operations in queue workers that can cause timeouts
+- **[Dead Route Analyzer](/analyzers/reliability/dead-route)** - Detects routes pointing to non-existent controllers or methods
 - **[Up-to-Date Migrations Analyzer](/analyzers/reliability/up-to-date-migrations)** - Ensures all database migrations are up to date and have been executed
+
+### Cache & Redis
+
+- **[Cache Busting Analyzer](/analyzers/reliability/cache-busting)** - Detects cache invalidation issues and stale cache problems
+- **[Redis Eviction Policy Analyzer](/analyzers/reliability/redis-eviction-policy)** - Ensures Redis eviction policy is configured appropriately
+- **[Redis Shared Database Analyzer](/analyzers/reliability/redis-shared-database)** - Detects when multiple services share the same Redis database
+- **[Redis Status Analyzer](/analyzers/reliability/redis-status)** - Validates Redis connectivity and health
+
+### Horizon
+
+- **[Horizon Prefix Analyzer](/analyzers/reliability/horizon-prefix)** - Ensures Horizon prefix is configured to avoid job collisions
+- **[Horizon Provisioning Plan Analyzer](/analyzers/reliability/horizon-provisioning-plan)** - Validates Horizon supervisor provisioning configuration
+- **[Horizon Status Analyzer](/analyzers/reliability/horizon-status)** - Checks if Horizon is running and processing jobs
+
+### Extensions & Variables
+
+- **[PCNTL Extension Analyzer](/analyzers/reliability/pcntl)** - Ensures PCNTL extension is available for queue workers and signal handling
+- **[Global Variable Analyzer](/analyzers/reliability/global-variable)** - Detects usage of global variables which can cause unpredictable behavior
 
 ### Static Analysis
 

@@ -170,102 +170,6 @@ ShieldCI provides Laravel-specific depth that generic tools lack:
 | **Privacy** | ✅ 100% local                     | ❌ Cloud-based (SaaS) |
 | **Cost** | ✅ $0 (free tier)                 | ⚠️ $$$$ (per-seat) |
 
-## Return on Investment
-
-### Solo Developers
-
-**Time Savings:**
-- **Pre-deployment checks:** 2 hours → 5 minutes (96% faster)
-- **Security audits:** 4 hours → 10 minutes (98% faster)
-- **Performance optimization:** 6 hours research → instant recommendations
-
-**Cost Savings:**
-- Catch production bugs before deployment ($0 vs $500-$5000 emergency fixes)
-- Optimize hosting costs (40-60% reduction through caching recommendations)
-- Avoid security breaches (average breach costs $4,000+ in downtime and fixes)
-
-**Annual Value:** $15,000-$25,000 in saved time and avoided costs
-
-### Development Agencies
-
-**Client Deliverables:**
-- Pre-deployment security reports add $2,000-$5,000 to project value
-- Demonstrate technical excellence and due diligence
-- Reduce post-launch support tickets by 40%
-
-**Operational Efficiency:**
-- Standardize quality across all projects
-- Onboard junior developers faster (clear best practice guidance)
-- Reduce code review time by 30% (automated checks catch issues first)
-
-**Per-Project Value:** $3,000-$8,000 in increased margins and reduced support costs
-
-### Enterprise Teams
-
-**Compliance & Risk:**
-- OWASP compliance reports for auditors ($10,000+ in audit prep time saved)
-- GPL/AGPL license detection prevents legal issues ($50,000+ in potential liability)
-- SOC 2 documentation support (Pro version)
-
-**Developer Productivity:**
-- 10-person team saves 20 hours/week on manual security checks
-- Reduce production incidents by 60% (fewer misconfigurations)
-- Accelerate Laravel upgrades (deprecated code detection)
-
-**Annual Value:** $150,000-$300,000 in productivity gains and risk reduction
-
-## Real-World Success Stories
-
-### SaaS Startup: 60% Hosting Cost Reduction
-
-**Challenge:** Growing SaaS app with escalating AWS bills
-
-**ShieldCI Findings:**
-- Missing OPcache configuration
-- No route/config caching
-- Inefficient session driver (file-based)
-- 12 N+1 query issues
-
-**Results:**
-- AWS costs dropped from $3,200/month to $1,200/month
-- Average response time improved 40% (800ms → 480ms)
-- Fixed in 2 days with ShieldCI's step-by-step recommendations
-
-**ROI:** $24,000/year in hosting savings
-
-### E-Commerce Platform: Pre-Breach Detection
-
-**Challenge:** Security audit before Series A fundraising
-
-**ShieldCI Findings:**
-- Debug mode enabled in production (exposing database credentials)
-- Missing CSRF protection on payment endpoints
-- Vulnerable dependencies (3 critical CVEs)
-- No login rate limiting
-
-**Results:**
-- All critical issues fixed in 3 days
-- Passed security audit without external consultant ($15,000 saved)
-- Investors gained confidence in technical team
-
-**ROI:** Avoided potential $100,000+ breach + $15,000 audit savings
-
-### Agency: Standardized Quality Across 40 Projects
-
-**Challenge:** Inconsistent code quality across client projects
-
-**ShieldCI Implementation:**
-- Added to CI/CD for all Laravel projects
-- Pre-deployment gate (must pass analysis)
-- Monthly security reports for clients
-
-**Results:**
-- Production bugs reduced by 65%
-- Client retention improved (perceived technical excellence)
-- Support ticket volume dropped 40%
-
-**ROI:** $80,000/year in reduced support costs + improved client lifetime value
-
 ## Getting Started
 
 Ready to improve your Laravel application's security, performance, and quality?
@@ -282,6 +186,7 @@ Ready to improve your Laravel application's security, performance, and quality?
 - ✅ Local analysis via Artisan
 - ✅ JSON/Console reporting
 - ✅ Community support
+- ✅ CI/CD integration
 
 **Perfect for:** Solo developers, small projects, startups
 
@@ -290,9 +195,7 @@ Ready to improve your Laravel application's security, performance, and quality?
 - ✅ **100+ analyzers** (all categories)
 - ✅ **Team dashboards** (multi-user)
 - ✅ **Historical trends** (track progress)
-- ✅ **CI/CD integration** (GitHub/GitLab/Bitbucket)
 - ✅ **Priority support** (48-hour response)
-- ✅ **Custom analyzers** (enterprise needs)
 - ✅ **SOC 2 compliance** (audit reports)
 
 **Perfect for:** Agencies, enterprise teams, compliance requirements
