@@ -164,13 +164,11 @@ ShieldCI performs all analysis locally:
 - **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Community support** - GitHub issues and discussions
 
-::: tip Coming Soon
-### :soon: Pro Package (Commercial) :bell:
+### Pro Package (Commercial)
 - **+48 analyzers** - Advanced security (+24), performance (+12), reliability (+12)
 - **Team collaboration** - Multi-user dashboards
 - **Historical trends** - Track quality over time
 - **Priority support** - Direct support channel
-:::
 
 ## Laravel Version Support
 
