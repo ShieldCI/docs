@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+/* Tell Tailwind v4 to scan Vue components and markdown files */
+@source "../components/**/*.vue";
+@source "../../../**/*.md";
+
+/* Use class-based dark mode (VitePress adds .dark to <html>) */
+@variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Semantic Colors */
   --color-security-red-50: #FEF2F2;

@@ -17,39 +17,165 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 ### Caching & Optimization
 
-- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
-- **[Configuration Caching Analyzer](/analyzers/performance/config-caching)** - Ensures configuration caching is properly configured for each environment
-- **[Route Caching Analyzer](/analyzers/performance/route-caching)** - Ensures route caching is properly configured for optimal performance
-- **[View Caching Analyzer](/analyzers/performance/view-caching)** - Ensures Blade views are properly compiled and cached for optimal performance
-- **[OPcache Enabled Analyzer](/analyzers/performance/opcache-enabled)** - Ensures OPcache is enabled for PHP bytecode caching and performance
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Composer Autoloader Optimization"
+  description="Ensures Composer autoloader is optimized for production performance"
+  severity="high"
+  link="/analyzers/performance/autoloader-optimization"
+/>
+
+<AnalyzerCard
+  title="Configuration Caching"
+  description="Ensures configuration caching is properly configured for each environment"
+  severity="high"
+  link="/analyzers/performance/config-caching"
+/>
+
+<AnalyzerCard
+  title="Route Caching"
+  description="Ensures route caching is properly configured for optimal performance"
+  severity="high"
+  link="/analyzers/performance/route-caching"
+/>
+
+<AnalyzerCard
+  title="View Caching"
+  description="Ensures Blade views are properly compiled and cached for optimal performance"
+  severity="medium"
+  link="/analyzers/performance/view-caching"
+/>
+
+<AnalyzerCard
+  title="OPcache Enabled"
+  description="Ensures OPcache is enabled for PHP bytecode caching and performance"
+  severity="critical"
+  link="/analyzers/performance/opcache-enabled"
+/>
+
+</div>
 
 ### Cache & Session Configuration
 
-- **[Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver)** - Ensures a proper cache driver is configured for optimal performance
-- **[Shared Cache Lock Store Analyzer](/analyzers/performance/shared-cache-lock)** - Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed
-- **[Session Driver Configuration Analyzer](/analyzers/performance/session-driver)** - Ensures a proper session driver is configured for scalability and performance
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Cache Driver Configuration"
+  description="Ensures a proper cache driver is configured for optimal performance"
+  severity="high"
+  link="/analyzers/performance/cache-driver"
+/>
+
+<AnalyzerCard
+  title="Shared Cache Lock Store"
+  description="Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed"
+  severity="medium"
+  link="/analyzers/performance/shared-cache-lock"
+/>
+
+<AnalyzerCard
+  title="Session Driver Configuration"
+  description="Ensures a proper session driver is configured for scalability and performance"
+  severity="high"
+  link="/analyzers/performance/session-driver"
+/>
+
+</div>
 
 ### Queue & Background Jobs
 
-- **[Queue Driver Configuration Analyzer](/analyzers/performance/queue-driver)** - Ensures a proper queue driver is configured for optimal performance and reliability
-- **[Horizon Suggestion Analyzer](/analyzers/performance/horizon-suggestion)** - Recommends using Laravel Horizon when Redis queues are configured
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Queue Driver Configuration"
+  description="Ensures a proper queue driver is configured for optimal performance and reliability"
+  severity="high"
+  link="/analyzers/performance/queue-driver"
+/>
+
+<AnalyzerCard
+  title="Horizon Suggestion"
+  description="Recommends using Laravel Horizon when Redis queues are configured"
+  severity="info"
+  link="/analyzers/performance/horizon-suggestion"
+/>
+
+</div>
 
 ### Database & Queries
 
-- **[MySQL Single Server Optimization Analyzer](/analyzers/performance/mysql-single-server-optimization)** - Ensures MySQL is configured optimally for single-server setups using Unix sockets
-- **[Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization)** - Detects inefficient collection operations that should be performed at the database query level
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="MySQL Single Server Optimization"
+  description="Ensures MySQL is configured optimally for single-server setups using Unix sockets"
+  severity="low"
+  link="/analyzers/performance/mysql-single-server-optimization"
+/>
+
+<AnalyzerCard
+  title="Collection Call Optimization"
+  description="Detects inefficient collection operations that should be performed at the database query level"
+  severity="medium"
+  link="/analyzers/performance/collection-call-optimization"
+/>
+
+</div>
 
 ### Assets & Frontend
 
-- **[Asset Minification Analyzer](/analyzers/performance/asset-minification)** - Ensures JavaScript and CSS assets are minified in production
-- **[Asset Cache Headers Analyzer](/analyzers/performance/asset-cache-headers)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Asset Minification"
+  description="Ensures JavaScript and CSS assets are minified in production"
+  severity="medium"
+  link="/analyzers/performance/asset-minification"
+/>
+
+<AnalyzerCard
+  title="Asset Cache Headers"
+  description="Ensures compiled assets have appropriate cache headers for optimal browser caching"
+  severity="low"
+  link="/analyzers/performance/asset-cache-headers"
+/>
+
+</div>
 
 ### Configuration & Environment
 
-- **[Debug Log Level Analyzer](/analyzers/performance/debug-log-level)** - Ensures log level is not set to debug in production for optimal performance
-- **[Env Calls Outside Config Analyzer](/analyzers/performance/env-call-outside-config)** - Detects env() function calls outside configuration files that break when config is cached
-- **[Dev Dependencies in Production Analyzer](/analyzers/performance/dev-dependencies-production)** - Detects if development dependencies are installed in production environment
-- **[Unused Global Middleware Analyzer](/analyzers/performance/unused-global-middleware)** - Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead on every request
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Debug Log Level"
+  description="Ensures log level is not set to debug in production for optimal performance"
+  severity="medium"
+  link="/analyzers/performance/debug-log-level"
+/>
+
+<AnalyzerCard
+  title="Env Calls Outside Config"
+  description="Detects env() function calls outside configuration files that break when config is cached"
+  severity="high"
+  link="/analyzers/performance/env-call-outside-config"
+/>
+
+<AnalyzerCard
+  title="Dev Dependencies in Production"
+  description="Detects if development dependencies are installed in production environment"
+  severity="medium"
+  link="/analyzers/performance/dev-dependencies-production"
+/>
+
+<AnalyzerCard
+  title="Unused Global Middleware"
+  description="Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead"
+  severity="low"
+  link="/analyzers/performance/unused-global-middleware"
+/>
+
+</div>
 
 ## How They Work
 

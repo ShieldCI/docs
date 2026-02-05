@@ -20,15 +20,15 @@ const severityConfig = {
   <component
     :is="link ? 'a' : 'div'"
     :href="link"
-    class="block p-4 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:border-blue-300 dark:hover:border-blue-600 transition-colors"
+    class="block no-underline! p-4 rounded-lg border border-gray-200 dark:border-neutral-700 bg-gray-100 dark:bg-neutral-800 hover:border-violet-300 dark:hover:border-violet-600 transition-colors"
     :class="{ 'cursor-pointer': link }"
   >
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1 min-w-0">
-        <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 m-0">
+        <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 m-0!">
           {{ title }}
         </h3>
-        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 m-0 line-clamp-2">
+        <p class="mt-2! text-sm text-gray-600 dark:text-gray-400 m-0! line-clamp-2">
           {{ description }}
         </p>
       </div>
