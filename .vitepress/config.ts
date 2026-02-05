@@ -9,12 +9,16 @@ export default defineConfig({
     // Source directory
     srcDir: 'docs',
 
+    // Exclude files from build
+    srcExclude: ['**/README.md'],
+
     // Clean URLs
     cleanUrls: true,
 
     // Sitemap generation
     sitemap: {
-        hostname: 'https://docs.shieldci.com'
+        hostname: 'https://docs.shieldci.com',
+        transformItems: (items) => items.filter(item => !item.url.includes('README'))
     },
 
     // Head configuration for fonts, favicon, and meta tags
@@ -254,7 +258,7 @@ export default defineConfig({
     vite: {
         plugins: [
             tailwindcss(),
-            llmstxt({ignoreFiles: ['index.md']})
+            llmstxt({ignoreFiles: ['index.md', 'README.md']})
         ],
     },
 })
