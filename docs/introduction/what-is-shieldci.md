@@ -161,6 +161,7 @@ ShieldCI performs all analysis locally:
 - **73 analyzers** - Core security, performance, reliability, best practices and quality checks
 - **Local analysis** - Run anywhere via Artisan command
 - **JSON/Console reporting** - Export and view results
+- **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Community support** - GitHub issues and discussions
 
 ::: tip Coming Soon
@@ -168,9 +169,7 @@ ShieldCI performs all analysis locally:
 - **100+ analyzers** - Advanced security, compliance, and enterprise features
 - **Team collaboration** - Multi-user dashboards
 - **Historical trends** - Track quality over time
-- **CI/CD integration** - GitHub, GitLab, Bitbucket
 - **Priority support** - Direct support channel
-- **Custom analyzers** - Enterprise-specific checks
 :::
 
 ## Laravel Version Support
