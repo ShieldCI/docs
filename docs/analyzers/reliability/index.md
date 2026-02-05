@@ -71,8 +71,15 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Maintenance Mode Status"
   description="Checks if the application is in maintenance mode"
-  severity="info"
+  severity="high"
   link="/analyzers/reliability/maintenance-mode-status"
+/>
+
+<AnalyzerCard
+  title="Disk Space"
+  description="Monitors available disk space and warns when storage is running low"
+  severity="medium"
+  link="/analyzers/reliability/disk-space"
 />
 
 </div>
@@ -115,25 +122,102 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   link="/analyzers/reliability/up-to-date-migrations"
 />
 
+<AnalyzerCard
+  title="Queue Blocking"
+  description="Detects blocking operations in queue workers that can cause timeouts"
+  severity="high"
+  link="/analyzers/reliability/queue-blocking"
+/>
+
+<AnalyzerCard
+  title="Dead Route"
+  description="Detects routes pointing to non-existent controllers or methods"
+  severity="medium"
+  link="/analyzers/reliability/dead-route"
+/>
+
 </div>
 
 ### Cache & Redis
 
-- **[Cache Busting Analyzer](/analyzers/reliability/cache-busting)** - Detects cache invalidation issues and stale cache problems
-- **[Redis Eviction Policy Analyzer](/analyzers/reliability/redis-eviction-policy)** - Ensures Redis eviction policy is configured appropriately
-- **[Redis Shared Database Analyzer](/analyzers/reliability/redis-shared-database)** - Detects when multiple services share the same Redis database
-- **[Redis Status Analyzer](/analyzers/reliability/redis-status)** - Validates Redis connectivity and health
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Cache Busting"
+  description="Detects cache invalidation issues and stale cache problems"
+  severity="medium"
+  link="/analyzers/reliability/cache-busting"
+/>
+
+<AnalyzerCard
+  title="Redis Eviction Policy"
+  description="Ensures Redis eviction policy is configured appropriately"
+  severity="high"
+  link="/analyzers/reliability/redis-eviction-policy"
+/>
+
+<AnalyzerCard
+  title="Redis Shared Database"
+  description="Detects when multiple services share the same Redis database"
+  severity="medium"
+  link="/analyzers/reliability/redis-shared-database"
+/>
+
+<AnalyzerCard
+  title="Redis Status"
+  description="Validates Redis connectivity and health"
+  severity="high"
+  link="/analyzers/reliability/redis-status"
+/>
+
+</div>
 
 ### Horizon
 
-- **[Horizon Prefix Analyzer](/analyzers/reliability/horizon-prefix)** - Ensures Horizon prefix is configured to avoid job collisions
-- **[Horizon Provisioning Plan Analyzer](/analyzers/reliability/horizon-provisioning-plan)** - Validates Horizon supervisor provisioning configuration
-- **[Horizon Status Analyzer](/analyzers/reliability/horizon-status)** - Checks if Horizon is running and processing jobs
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Horizon Prefix"
+  description="Ensures Horizon prefix is configured to avoid job collisions"
+  severity="medium"
+  link="/analyzers/reliability/horizon-prefix"
+/>
+
+<AnalyzerCard
+  title="Horizon Provisioning Plan"
+  description="Validates Horizon supervisor provisioning configuration"
+  severity="high"
+  link="/analyzers/reliability/horizon-provisioning-plan"
+/>
+
+<AnalyzerCard
+  title="Horizon Status"
+  description="Checks if Horizon is running and processing jobs"
+  severity="high"
+  link="/analyzers/reliability/horizon-status"
+/>
+
+</div>
 
 ### Extensions & Variables
 
-- **[PCNTL Extension Analyzer](/analyzers/reliability/pcntl)** - Ensures PCNTL extension is available for queue workers and signal handling
-- **[Global Variable Analyzer](/analyzers/reliability/global-variable)** - Detects usage of global variables which can cause unpredictable behavior
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="PCNTL Extension"
+  description="Ensures PCNTL extension is available for queue workers and signal handling"
+  severity="medium"
+  link="/analyzers/reliability/pcntl"
+/>
+
+<AnalyzerCard
+  title="Global Variable"
+  description="Detects usage of global variables which can cause unpredictable behavior"
+  severity="medium"
+  link="/analyzers/reliability/global-variable"
+/>
+
+</div>
 
 ### Static Analysis
 

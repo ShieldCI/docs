@@ -27,6 +27,83 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 />
 
 <AnalyzerCard
+  title="Column Name SQL Injection"
+  description="Detects SQL injection vulnerabilities where user input controls column names"
+  severity="critical"
+  link="/analyzers/security/column-name-sql-injection"
+/>
+
+<AnalyzerCard
+  title="Validation SQL Injection"
+  description="Detects SQL injection vulnerabilities in validation rules"
+  severity="critical"
+  link="/analyzers/security/validation-sql-injection"
+/>
+
+<AnalyzerCard
+  title="Command Injection"
+  description="Detects command injection vulnerabilities where user input is passed to shell execution functions"
+  severity="critical"
+  link="/analyzers/security/command-injection"
+/>
+
+<AnalyzerCard
+  title="Directory Traversal"
+  description="Detects path traversal vulnerabilities that allow accessing files outside intended directories"
+  severity="critical"
+  link="/analyzers/security/directory-traversal"
+/>
+
+<AnalyzerCard
+  title="Remote Code Execution (RCE)"
+  description="Detects code execution vulnerabilities that allow arbitrary code execution"
+  severity="critical"
+  link="/analyzers/security/rce"
+/>
+
+<AnalyzerCard
+  title="Object Injection"
+  description="Detects unsafe deserialization that can lead to object injection attacks"
+  severity="critical"
+  link="/analyzers/security/object-injection"
+/>
+
+<AnalyzerCard
+  title="Server-Side Request Forgery (SSRF)"
+  description="Detects SSRF vulnerabilities where user input controls server-side requests"
+  severity="critical"
+  link="/analyzers/security/ssrf"
+/>
+
+<AnalyzerCard
+  title="Eval Usage"
+  description="Detects dangerous eval usage that can execute arbitrary code"
+  severity="critical"
+  link="/analyzers/security/eval"
+/>
+
+<AnalyzerCard
+  title="Extract Function"
+  description="Detects unsafe extract usage that can overwrite variables"
+  severity="high"
+  link="/analyzers/security/extract"
+/>
+
+<AnalyzerCard
+  title="XXE Injection Vulnerabilities"
+  description="Detects XML External Entity injection vulnerabilities"
+  severity="critical"
+  link="/analyzers/security/xxe-vulnerabilities"
+/>
+
+<AnalyzerCard
+  title="Regular Expression DoS"
+  description="Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns"
+  severity="high"
+  link="/analyzers/security/regex-dos"
+/>
+
+<AnalyzerCard
   title="XSS Vulnerabilities"
   description="Detects XSS vulnerabilities via code analysis and HTTP header verification"
   severity="critical"
@@ -38,6 +115,13 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects missing CSRF (Cross-Site Request Forgery) protection"
   severity="critical"
   link="/analyzers/security/csrf-protection"
+/>
+
+<AnalyzerCard
+  title="Arbitrary File Upload"
+  description="Detects file upload vulnerabilities that could lead to remote code execution"
+  severity="critical"
+  link="/analyzers/security/arbitrary-file-upload"
 />
 
 <AnalyzerCard
@@ -74,6 +158,13 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   link="/analyzers/security/login-throttling"
 />
 
+<AnalyzerCard
+  title="Session Timeout"
+  description="Ensures session lifetime is configured appropriately for security"
+  severity="medium"
+  link="/analyzers/security/session-timeout"
+/>
+
 </div>
 
 ### Configuration & Secrets
@@ -85,6 +176,13 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Validates that the application encryption key is properly configured and secure"
   severity="critical"
   link="/analyzers/security/app-key"
+/>
+
+<AnalyzerCard
+  title="Hardcoded Credentials"
+  description="Detects hardcoded passwords, API keys, and secrets in source code"
+  severity="critical"
+  link="/analyzers/security/hardcoded-credentials"
 />
 
 <AnalyzerCard
@@ -115,6 +213,27 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   link="/analyzers/security/php-ini"
 />
 
+<AnalyzerCard
+  title="Telescope Security"
+  description="Ensures Laravel Telescope is properly secured in production"
+  severity="high"
+  link="/analyzers/security/telescope-security"
+/>
+
+<AnalyzerCard
+  title="Nova Security"
+  description="Ensures Laravel Nova admin panel is properly secured"
+  severity="high"
+  link="/analyzers/security/nova-security"
+/>
+
+<AnalyzerCard
+  title="Horizon Security"
+  description="Ensures Laravel Horizon dashboard is properly secured"
+  severity="high"
+  link="/analyzers/security/horizon-security"
+/>
+
 </div>
 
 ### Data Protection
@@ -136,10 +255,24 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 />
 
 <AnalyzerCard
+  title="Cookie Domain"
+  description="Detects unnecessary cookie domain configuration that makes cookies less restrictive"
+  severity="medium"
+  link="/analyzers/security/cookie-domain"
+/>
+
+<AnalyzerCard
   title="Fillable Foreign Key"
   description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
   severity="medium"
   link="/analyzers/security/fillable-foreign-key"
+/>
+
+<AnalyzerCard
+  title="Cryptographic Weakness"
+  description="Detects weak cryptographic algorithms and insecure random number generation"
+  severity="high"
+  link="/analyzers/security/cryptographic-weakness"
 />
 
 </div>
@@ -149,10 +282,45 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <div class="grid gap-4 md:grid-cols-2 mt-4">
 
 <AnalyzerCard
+  title="Clickjacking Protection"
+  description="Detects missing clickjacking protection via X-Frame-Options or CSP frame-ancestors"
+  severity="high"
+  link="/analyzers/security/clickjacking"
+/>
+
+<AnalyzerCard
   title="HSTS Header"
   description="Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications"
   severity="high"
   link="/analyzers/security/hsts-header"
+/>
+
+<AnalyzerCard
+  title="MIME Sniffing Protection"
+  description="Ensures X-Content-Type-Options header prevents MIME type sniffing"
+  severity="medium"
+  link="/analyzers/security/mime-sniffing"
+/>
+
+<AnalyzerCard
+  title="Web Server Fingerprinting"
+  description="Detects server information leakage through HTTP headers"
+  severity="low"
+  link="/analyzers/security/web-server-fingerprinting"
+/>
+
+<AnalyzerCard
+  title="Host Header Injection"
+  description="Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks"
+  severity="high"
+  link="/analyzers/security/host-injection"
+/>
+
+<AnalyzerCard
+  title="Open Redirection"
+  description="Detects open redirect vulnerabilities that can be used for phishing attacks"
+  severity="medium"
+  link="/analyzers/security/open-redirection"
 />
 
 </div>

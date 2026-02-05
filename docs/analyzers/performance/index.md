@@ -54,6 +54,13 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   link="/analyzers/performance/opcache-enabled"
 />
 
+<AnalyzerCard
+  title="Event Caching"
+  description="Ensures event discovery is cached for optimal performance"
+  severity="medium"
+  link="/analyzers/performance/event-caching"
+/>
+
 </div>
 
 ### Cache & Session Configuration
@@ -81,6 +88,27 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   link="/analyzers/performance/session-driver"
 />
 
+<AnalyzerCard
+  title="Redis Single Server Optimization"
+  description="Ensures Redis is configured optimally for single-server setups using Unix sockets"
+  severity="low"
+  link="/analyzers/performance/redis-single-server"
+/>
+
+<AnalyzerCard
+  title="Redis Rate Limiting"
+  description="Ensures Redis is used for rate limiting in production environments"
+  severity="medium"
+  link="/analyzers/performance/redis-rate-limiting"
+/>
+
+<AnalyzerCard
+  title="Redis Throttling"
+  description="Ensures Redis is used for request throttling in production"
+  severity="medium"
+  link="/analyzers/performance/redis-throttling"
+/>
+
 </div>
 
 ### Queue & Background Jobs
@@ -97,7 +125,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Horizon Suggestion"
   description="Recommends using Laravel Horizon when Redis queues are configured"
-  severity="info"
+  severity="low"
   link="/analyzers/performance/horizon-suggestion"
 />
 
@@ -106,6 +134,20 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 ### Database & Queries
 
 <div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Database Query Optimization"
+  description="Detects inefficient database query patterns that can be optimized"
+  severity="medium"
+  link="/analyzers/performance/database-query-optimization"
+/>
+
+<AnalyzerCard
+  title="Eager Loading"
+  description="Ensures relationships are eager loaded to prevent N+1 query problems"
+  severity="high"
+  link="/analyzers/performance/eager-loading"
+/>
 
 <AnalyzerCard
   title="MySQL Single Server Optimization"
@@ -141,6 +183,27 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   link="/analyzers/performance/asset-cache-headers"
 />
 
+<AnalyzerCard
+  title="CDN Configuration"
+  description="Detects CDN configuration for optimal asset delivery"
+  severity="low"
+  link="/analyzers/performance/cdn-configuration"
+/>
+
+<AnalyzerCard
+  title="Compression Headers"
+  description="Ensures compression is enabled for HTTP responses"
+  severity="medium"
+  link="/analyzers/performance/compression-headers"
+/>
+
+<AnalyzerCard
+  title="HTTP/2 Support"
+  description="Detects HTTP/2 support for improved performance"
+  severity="low"
+  link="/analyzers/performance/http2-support"
+/>
+
 </div>
 
 ### Configuration & Environment
@@ -173,6 +236,27 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead"
   severity="low"
   link="/analyzers/performance/unused-global-middleware"
+/>
+
+<AnalyzerCard
+  title="Xdebug Production Check"
+  description="Detects if Xdebug is enabled in production, which severely impacts performance"
+  severity="critical"
+  link="/analyzers/performance/xdebug-enabled"
+/>
+
+<AnalyzerCard
+  title="Command Constructor Injection"
+  description="Detects heavy service injection in Artisan command constructors"
+  severity="low"
+  link="/analyzers/performance/command-constructor-injection"
+/>
+
+<AnalyzerCard
+  title="Fallback Route SEO Check"
+  description="Detects fallback routes that may harm SEO by returning 200 for non-existent pages"
+  severity="low"
+  link="/analyzers/performance/fallback-routes"
 />
 
 </div>
