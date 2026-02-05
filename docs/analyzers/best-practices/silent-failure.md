@@ -299,9 +299,14 @@ class EmailService
 5. Rethrow critical exceptions
 6. Document expected exceptions
 
-### Configuration
+## ShieldCI Configuration
 
-To reduce false positives, configure whitelists in `config/shieldci.php`:
+To configure whitelists, publish the config:
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [
@@ -332,7 +337,7 @@ To reduce false positives, configure whitelists in `config/shieldci.php`:
                 'ValidationException',        // Validation failures
             ],
 
-            // Functions where @ operator is acceptable
+            // Functions where @ operator is acceptable (supports namespaced: @\unlink())
             'whitelist_error_suppression_functions' => [
                 'unlink',            // File might not exist
                 'fopen',             // File might not be readable
@@ -340,265 +345,47 @@ To reduce false positives, configure whitelists in `config/shieldci.php`:
                 'mkdir',             // Directory might exist
                 'rmdir',             // Directory might not exist
             ],
+
+            // Static methods where @ operator is acceptable (e.g., @Storage::delete())
+            // Wildcards supported: 'Storage::*', '*::delete'
+            'whitelist_error_suppression_static_methods' => [
+                'Storage::delete',          // File might not exist
+                'Storage::deleteDirectory', // Directory might not exist
+                'File::delete',             // File might not exist
+                'File::deleteDirectory',    // Directory might not exist
+            ],
+
+            // Instance methods where @ operator is acceptable (e.g., @$file->delete())
+            // Matches by method name only. Wildcards supported: 'remove*'
+            'whitelist_error_suppression_instance_methods' => [
+                'delete',  // Resource deletion
+                'close',   // File handle closing
+                'unlink',  // File unlinking
+            ],
         ],
     ],
 ],
 ```
 
-## Common Mistakes to Avoid
+#### Error Suppression Whitelist Details
 
-### 1. Logging Without Context
+The error suppression whitelist supports three types of calls:
 
-**Before (❌):**
-```php
-catch (Exception $e) {
-    Log::error('Error');  // What error? Where? Why?
-}
-```
+| Call Type | Example | Config Key |
+|-----------|---------|------------|
+| Function calls | `@unlink($path)`, `@\unlink($path)` | `whitelist_error_suppression_functions` |
+| Static method calls | `@Storage::delete($path)` | `whitelist_error_suppression_static_methods` |
+| Instance method calls | `@$file->delete()` | `whitelist_error_suppression_instance_methods` |
 
-**After (✅):**
-```php
-catch (Exception $e) {
-    Log::error('Payment processing failed', [
-        'order_id' => $order->id,
-        'amount' => $amount,
-        'gateway' => $gateway,
-        'error' => $e->getMessage(),
-        'trace' => $e->getTraceAsString(),
-    ]);
-}
-```
+**Wildcard patterns** are supported in all whitelist keys:
+- `Storage::*` - matches any method on Storage
+- `*::delete` - matches delete on any class
+- `remove*` - matches removeFile, removeAll, etc.
 
-### 2. Catching Too Broadly
-
-**Before (❌):**
-```php
-try {
-    $user = User::findOrFail($id);
-    $this->sendEmail($user);
-    $this->logActivity($user);
-} catch (Exception $e) {
-    // Which operation failed? User lookup, email, or logging?
-    Log::error('Something failed');
-}
-```
-
-**After (✅):**
-```php
-try {
-    $user = User::findOrFail($id);
-} catch (ModelNotFoundException $e) {
-    Log::warning('User not found', ['id' => $id]);
-    return null;
-}
-
-try {
-    $this->sendEmail($user);
-} catch (Exception $e) {
-    Log::error('Email sending failed', [
-        'user_id' => $user->id,
-        'error' => $e->getMessage(),
-    ]);
-}
-
-try {
-    $this->logActivity($user);
-} catch (Exception $e) {
-    // Activity logging is non-critical, just log the error
-    Log::warning('Activity logging failed', [
-        'user_id' => $user->id,
-        'error' => $e->getMessage(),
-    ]);
-}
-```
-
-### 3. Using @ Instead of Proper Error Handling
-
-**Before (❌):**
-```php
-$config = @json_decode($json, true);
-if ($config === null) {
-    // Was it invalid JSON or valid null? Who knows!
-    return [];
-}
-```
-
-**After (✅):**
-```php
-try {
-    $config = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
-} catch (JsonException $e) {
-    Log::error('Invalid JSON configuration', [
-        'json' => substr($json, 0, 100),
-        'error' => $e->getMessage(),
-    ]);
-
-    return [];
-}
-```
-
-### 4. Not Using Error Tracking Services
-
-**Before (❌):**
-```php
-catch (Exception $e) {
-    Log::error($e->getMessage());
-    // Logs buried in files, no alerts, no aggregation
-}
-```
-
-**After (✅):**
-```php
-catch (Exception $e) {
-    // Use Laravel's report() which integrates with Sentry, Bugsnag, etc.
-    report($e);
-
-    // Or use service directly
-    \Sentry\captureException($e);
-
-    // Still log locally
-    Log::error('Payment failed', [
-        'exception' => $e,
-        'context' => $additionalContext,
-    ]);
-}
-```
-
-### 5. Graceful Fallback Without Logging
-
-**Before (❌):**
-```php
-try {
-    return $this->fetchUserAvatar($userId);
-} catch (NotFoundException $e) {
-    // Graceful fallback is good, but we should still log
-    return $this->getDefaultAvatar();
-}
-```
-
-**After (✅):**
-```php
-try {
-    return $this->fetchUserAvatar($userId);
-} catch (NotFoundException $e) {
-    // Log even for expected exceptions
-    Log::info('User avatar not found, using default', [
-        'user_id' => $userId,
-    ]);
-
-    return $this->getDefaultAvatar();
-}
-```
-
-### 6. Empty Catch for Performance
-
-**Before (❌):**
-```php
-// "I don't care about errors, just skip invalid items"
-foreach ($items as $item) {
-    try {
-        $this->process($item);
-    } catch (Exception $e) {
-        // Silent skip
-    }
-}
-```
-
-**After (✅):**
-```php
-$skipped = 0;
-foreach ($items as $item) {
-    try {
-        $this->process($item);
-    } catch (Exception $e) {
-        $skipped++;
-
-        // Log first few errors, then summarize
-        if ($skipped <= 5) {
-            Log::warning('Item processing failed', [
-                'item' => $item,
-                'error' => $e->getMessage(),
-            ]);
-        }
-    }
-}
-
-if ($skipped > 0) {
-    Log::warning("Skipped {$skipped} invalid items during batch processing");
-}
-```
-
-## Error Reporting Best Practices
-
-### 1. Use Laravel's `report()` Helper
-
-Laravel's `report()` function integrates with error tracking services:
-
-```php
-catch (Exception $e) {
-    // Automatically sends to configured service (Sentry, Bugsnag, etc.)
-    report($e);
-}
-```
-
-### 2. Integrate Error Tracking Services
-
-**Sentry:**
-```php
-catch (Exception $e) {
-    \Sentry\captureException($e);
-
-    // Add context
-    \Sentry\configureScope(function ($scope) use ($user, $order) {
-        $scope->setUser(['id' => $user->id, 'email' => $user->email]);
-        $scope->setExtra('order_id', $order->id);
-    });
-}
-```
-
-**Bugsnag:**
-```php
-catch (Exception $e) {
-    Bugsnag::notifyException($e, function ($report) use ($context) {
-        $report->setMetaData(['context' => $context]);
-    });
-}
-```
-
-### 3. Use Appropriate Log Levels
-
-```php
-// CRITICAL: Application is unusable
-Log::critical('Database connection lost');
-
-// ERROR: Runtime errors that need immediate attention
-Log::error('Payment processing failed', ['order_id' => $order->id]);
-
-// WARNING: Exceptional but handled, should be investigated
-Log::warning('Cache server unavailable, using fallback');
-
-// INFO: Interesting events
-Log::info('User avatar not found, using default');
-
-// DEBUG: Detailed debug information (development only)
-Log::debug('API response', ['response' => $data]);
-```
-
-### 4. Structure Log Messages
-
-```php
-Log::error('Operation failed', [
-    'operation' => 'payment_processing',
-    'user_id' => $user->id,
-    'amount' => $amount,
-    'currency' => 'USD',
-    'gateway' => $gateway,
-    'error' => $e->getMessage(),
-    'error_code' => $e->getCode(),
-    'trace' => $e->getTraceAsString(),
-    'timestamp' => now()->toIso8601String(),
-]);
-```
+**Dynamic calls are always flagged** for security reasons:
+- `@$func($path)` - dynamic function call
+- `@$class::method()` - dynamic class
+- `@$obj->$method()` - dynamic method name
 
 ## References
 

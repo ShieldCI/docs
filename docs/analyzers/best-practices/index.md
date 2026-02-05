@@ -1,6 +1,6 @@
 ---
 title: Best Practices Analyzers
-description: 15 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
+description: Analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
 icon: puzzle
 outline: [2, 3]
 ---
@@ -17,33 +17,138 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 
 ### Laravel Conventions
 
-- **[Logic in Routes Analyzer](/analyzers/best-practices/logic-in-routes)** - Detects business logic in route files
-- **[Logic in Blade Analyzer](/analyzers/best-practices/logic-in-blade)** - Detects complex logic in Blade templates
-- **[Hardcoded Configuration Analyzer](/analyzers/best-practices/config-outside-config)** - Detects configuration values outside config files
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Logic in Routes"
+  description="Detects business logic in route files"
+  severity="high"
+  link="/analyzers/best-practices/logic-in-routes"
+/>
+
+<AnalyzerCard
+  title="Logic in Blade"
+  description="Detects complex logic in Blade templates"
+  severity="medium"
+  link="/analyzers/best-practices/logic-in-blade"
+/>
+
+<AnalyzerCard
+  title="Hardcoded Configuration"
+  description="Detects configuration values outside config files"
+  severity="medium"
+  link="/analyzers/best-practices/config-outside-config"
+/>
+
+</div>
 
 ### Eloquent & Database
 
-- **[Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one)** - Detects N+1 query problems
-- **[Missing Chunk Analyzer](/analyzers/best-practices/chunk-missing)** - Detects missing chunk() calls for large datasets
-- **[Missing Database Transactions Analyzer](/analyzers/best-practices/missing-database-transactions)** - Detects operations that should use database transactions
-- **[Mixed Query Builder and Eloquent Analyzer](/analyzers/best-practices/mixed-query-builder-eloquent)** - Detects inconsistent query building patterns
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Eloquent N+1 Query"
+  description="Detects N+1 query problems"
+  severity="high"
+  link="/analyzers/best-practices/eloquent-n-plus-one"
+/>
+
+<AnalyzerCard
+  title="Missing Chunk"
+  description="Detects missing chunk() calls for large datasets"
+  severity="medium"
+  link="/analyzers/best-practices/chunk-missing"
+/>
+
+<AnalyzerCard
+  title="Missing Database Transactions"
+  description="Detects operations that should use database transactions"
+  severity="high"
+  link="/analyzers/best-practices/missing-database-transactions"
+/>
+
+<AnalyzerCard
+  title="Mixed Query Builder and Eloquent"
+  description="Detects inconsistent query building patterns"
+  severity="low"
+  link="/analyzers/best-practices/mixed-query-builder-eloquent"
+/>
+
+</div>
 
 ### Code Organization
 
-- **[Fat Model Analyzer](/analyzers/best-practices/fat-model)** - Detects models with too much business logic that violate Single Responsibility Principle
-- **[Service Container Resolution Analyzer](/analyzers/best-practices/service-container-resolution)** - Detects manual service container resolution and recommends constructor dependency injection
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Fat Model"
+  description="Detects models with too much business logic that violate Single Responsibility Principle"
+  severity="medium"
+  link="/analyzers/best-practices/fat-model"
+/>
+
+<AnalyzerCard
+  title="Service Container Resolution"
+  description="Detects manual service container resolution and recommends constructor dependency injection"
+  severity="low"
+  link="/analyzers/best-practices/service-container-resolution"
+/>
+
+</div>
 
 ### Error Handling & Logging
 
-- **[Silent Failure Analyzer](/analyzers/best-practices/silent-failure)** - Detects empty catch blocks and error suppression that hide failures
-- **[Missing Error Tracking Analyzer](/analyzers/best-practices/missing-error-tracking)** - Ensures error tracking is configured
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Silent Failure"
+  description="Detects empty catch blocks and error suppression that hide failures"
+  severity="high"
+  link="/analyzers/best-practices/silent-failure"
+/>
+
+<AnalyzerCard
+  title="Missing Error Tracking"
+  description="Ensures error tracking is configured"
+  severity="medium"
+  link="/analyzers/best-practices/missing-error-tracking"
+/>
+
+</div>
 
 ### Anti-Patterns
 
-- **[Helper Function Abuse Analyzer](/analyzers/best-practices/helper-function-abuse)** - Detects overuse of global helper functions
-- **[Hardcoded Storage Paths Analyzer](/analyzers/best-practices/hardcoded-storage-paths)** - Detects hardcoded file paths
-- **[PHP-Side Data Filtering Analyzer](/analyzers/best-practices/php-side-filtering)** - Detects filtering that should be done in database
-- **[Framework Override Analyzer](/analyzers/best-practices/framework-override)** - Detects dangerous extensions of Laravel core classes that break during framework upgrades
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Helper Function Abuse"
+  description="Detects overuse of global helper functions"
+  severity="low"
+  link="/analyzers/best-practices/helper-function-abuse"
+/>
+
+<AnalyzerCard
+  title="Hardcoded Storage Paths"
+  description="Detects hardcoded file paths"
+  severity="medium"
+  link="/analyzers/best-practices/hardcoded-storage-paths"
+/>
+
+<AnalyzerCard
+  title="PHP-Side Data Filtering"
+  description="Detects filtering that should be done in database"
+  severity="medium"
+  link="/analyzers/best-practices/php-side-filtering"
+/>
+
+<AnalyzerCard
+  title="Framework Override"
+  description="Detects dangerous extensions of Laravel core classes that break during framework upgrades"
+  severity="high"
+  link="/analyzers/best-practices/framework-override"
+/>
+
+</div>
 
 ## How They Work
 
@@ -106,7 +211,7 @@ php artisan shield:analyze --analyzer=eloquent-n-plus-one,missing-database-trans
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
-- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards
+- **[Reliability Analyzers](/analyzers/reliability/)** - Prevent runtime errors
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance

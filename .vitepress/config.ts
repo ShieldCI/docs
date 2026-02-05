@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import { defineConfig, type HeadConfig } from 'vitepress'
 import tailwindcss from '@tailwindcss/vite'
 import llmstxt from 'vitepress-plugin-llms'
 
@@ -9,11 +9,43 @@ export default defineConfig({
     // Source directory
     srcDir: 'docs',
 
+    // Exclude files from build
+    srcExclude: ['**/README.md'],
+
     // Clean URLs
     cleanUrls: true,
 
-    // Ignore dead links
-    ignoreDeadLinks: true,
+    // Sitemap generation
+    sitemap: {
+        hostname: 'https://docs.shieldci.com',
+        transformItems: (items) => items.filter(item => !item.url.includes('README'))
+    },
+
+    // Head configuration for fonts, favicon, and meta tags
+    head: [
+        ['link', { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }],
+        ['meta', { name: 'theme-color', content: '#2563eb' }],
+        ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
+        ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
+        ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }]
+    ],
+
+    // Dynamic per-page OG/Twitter meta from frontmatter
+    transformHead({ pageData }) {
+        const head: HeadConfig[] = []
+        const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
+        const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
+
+        head.push(['meta', { property: 'og:title', content: title }])
+        head.push(['meta', { property: 'og:description', content: description }])
+        head.push(['meta', { property: 'og:type', content: 'article' }])
+        head.push(['meta', { property: 'og:site_name', content: 'ShieldCI' }])
+        head.push(['meta', { name: 'twitter:card', content: 'summary_large_image' }])
+        head.push(['meta', { name: 'twitter:title', content: title }])
+        head.push(['meta', { name: 'twitter:description', content: description }])
+
+        return head
+    },
 
     // Theme configuration
     themeConfig: {
@@ -268,13 +300,13 @@ export default defineConfig({
             light: 'github-light',
             dark: 'github-dark'
         },
-        lineNumbers: true,
+        lineNumbers: false, // Disabled globally; use :line-numbers per-block where needed
     },
 
     vite: {
         plugins: [
             tailwindcss(),
-            llmstxt({ignoreFiles: ['index.md']})
+            llmstxt({ignoreFiles: ['index.md', 'README.md']})
         ],
     },
 })

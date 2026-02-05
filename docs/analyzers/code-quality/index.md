@@ -1,6 +1,6 @@
 ---
 title: Code Quality Analyzers
-description: 5 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: Analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
 icon: code
 outline: [2, 3]
 ---
@@ -17,17 +17,56 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 
 ### Complexity & Structure
 
-- **[Nesting Depth Analyzer](/analyzers/code-quality/nesting-depth)** - Detects excessive code nesting levels that reduce readability
-- **[Method Length Analyzer](/analyzers/code-quality/method-length)** - Flags methods exceeding recommended line count for better maintainability
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Nesting Depth"
+  description="Detects excessive code nesting levels that reduce readability"
+  severity="high"
+  link="/analyzers/code-quality/nesting-depth"
+/>
+
+<AnalyzerCard
+  title="Method Length"
+  description="Flags methods exceeding recommended line count for better maintainability"
+  severity="medium"
+  link="/analyzers/code-quality/method-length"
+/>
+
+</div>
 
 ### Code Smells
 
-- **[Commented Code Analyzer](/analyzers/code-quality/commented-code)** - Detects commented-out code that should be removed in favor of version control
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Commented Code"
+  description="Detects commented-out code that should be removed in favor of version control"
+  severity="low"
+  link="/analyzers/code-quality/commented-code"
+/>
+
+</div>
 
 ### Documentation & Naming
 
-- **[Missing DocBlock Analyzer](/analyzers/code-quality/missing-docblock)** - Flags public methods without proper PHPDoc documentation
-- **[Naming Convention Analyzer](/analyzers/code-quality/naming-convention)** - Validates PSR and Laravel naming standards for better code consistency
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Missing DocBlock"
+  description="Flags public methods without proper PHPDoc documentation"
+  severity="medium"
+  link="/analyzers/code-quality/missing-docblock"
+/>
+
+<AnalyzerCard
+  title="Naming Convention"
+  description="Validates PSR and Laravel naming standards for better code consistency"
+  severity="low"
+  link="/analyzers/code-quality/naming-convention"
+/>
+
+</div>
 
 ## How They Work
 
@@ -91,7 +130,7 @@ php artisan shield:analyze --analyzer=nesting-depth,method-length
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability/)** - Prevent runtime errors
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance

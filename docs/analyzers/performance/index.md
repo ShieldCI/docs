@@ -1,6 +1,6 @@
 ---
 title: Performance Analyzers
-description: 30 analyzers identifying bottlenecks and optimization opportunities in Laravel applications
+description: Analyzers identifying bottlenecks and optimization opportunities in Laravel applications
 icon: zap
 outline: [2, 3]
 ---
@@ -17,51 +17,165 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 
 ### Caching & Optimization
 
-- **[Composer Autoloader Optimization Analyzer](/analyzers/performance/autoloader-optimization)** - Ensures Composer autoloader is optimized for production performance
-- **[Configuration Caching Analyzer](/analyzers/performance/config-caching)** - Ensures configuration caching is properly configured for each environment
-- **[Event Caching Analyzer](/analyzers/performance/event-caching)** - Ensures event discovery is cached for optimal performance
-- **[Route Caching Analyzer](/analyzers/performance/route-caching)** - Ensures route caching is properly configured for optimal performance
-- **[View Caching Analyzer](/analyzers/performance/view-caching)** - Ensures Blade views are properly compiled and cached for optimal performance
-- **[OPcache Enabled Analyzer](/analyzers/performance/opcache-enabled)** - Ensures OPcache is enabled for PHP bytecode caching and performance
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Composer Autoloader Optimization"
+  description="Ensures Composer autoloader is optimized for production performance"
+  severity="high"
+  link="/analyzers/performance/autoloader-optimization"
+/>
+
+<AnalyzerCard
+  title="Configuration Caching"
+  description="Ensures configuration caching is properly configured for each environment"
+  severity="high"
+  link="/analyzers/performance/config-caching"
+/>
+
+<AnalyzerCard
+  title="Route Caching"
+  description="Ensures route caching is properly configured for optimal performance"
+  severity="high"
+  link="/analyzers/performance/route-caching"
+/>
+
+<AnalyzerCard
+  title="View Caching"
+  description="Ensures Blade views are properly compiled and cached for optimal performance"
+  severity="medium"
+  link="/analyzers/performance/view-caching"
+/>
+
+<AnalyzerCard
+  title="OPcache Enabled"
+  description="Ensures OPcache is enabled for PHP bytecode caching and performance"
+  severity="critical"
+  link="/analyzers/performance/opcache-enabled"
+/>
+
+</div>
 
 ### Cache & Session Configuration
 
-- **[Cache Driver Configuration Analyzer](/analyzers/performance/cache-driver)** - Ensures a proper cache driver is configured for optimal performance
-- **[Redis Single Server Optimization Analyzer](/analyzers/performance/redis-single-server)** - Ensures Redis is configured optimally for single-server setups using Unix sockets
-- **[Redis Rate Limiting Analyzer](/analyzers/performance/redis-rate-limiting)** - Ensures Redis is used for rate limiting in production environments
-- **[Redis Throttling Analyzer](/analyzers/performance/redis-throttling)** - Ensures Redis is used for request throttling in production
-- **[Shared Cache Lock Store Analyzer](/analyzers/performance/shared-cache-lock)** - Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed
-- **[Session Driver Configuration Analyzer](/analyzers/performance/session-driver)** - Ensures a proper session driver is configured for scalability and performance
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Cache Driver Configuration"
+  description="Ensures a proper cache driver is configured for optimal performance"
+  severity="high"
+  link="/analyzers/performance/cache-driver"
+/>
+
+<AnalyzerCard
+  title="Shared Cache Lock Store"
+  description="Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed"
+  severity="medium"
+  link="/analyzers/performance/shared-cache-lock"
+/>
+
+<AnalyzerCard
+  title="Session Driver Configuration"
+  description="Ensures a proper session driver is configured for scalability and performance"
+  severity="high"
+  link="/analyzers/performance/session-driver"
+/>
+
+</div>
 
 ### Queue & Background Jobs
 
-- **[Queue Driver Configuration Analyzer](/analyzers/performance/queue-driver)** - Ensures a proper queue driver is configured for optimal performance and reliability
-- **[Horizon Suggestion Analyzer](/analyzers/performance/horizon-suggestion)** - Recommends using Laravel Horizon when Redis queues are configured
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Queue Driver Configuration"
+  description="Ensures a proper queue driver is configured for optimal performance and reliability"
+  severity="high"
+  link="/analyzers/performance/queue-driver"
+/>
+
+<AnalyzerCard
+  title="Horizon Suggestion"
+  description="Recommends using Laravel Horizon when Redis queues are configured"
+  severity="info"
+  link="/analyzers/performance/horizon-suggestion"
+/>
+
+</div>
 
 ### Database & Queries
 
-- **[Database Query Optimization Analyzer](/analyzers/performance/database-query-optimization)** - Detects inefficient database query patterns that can be optimized
-- **[Eager Loading Analyzer](/analyzers/performance/eager-loading)** - Ensures relationships are eager loaded to prevent N+1 query problems
-- **[MySQL Single Server Optimization Analyzer](/analyzers/performance/mysql-single-server-optimization)** - Ensures MySQL is configured optimally for single-server setups using Unix sockets
-- **[Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization)** - Detects inefficient collection operations that should be performed at the database query level
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="MySQL Single Server Optimization"
+  description="Ensures MySQL is configured optimally for single-server setups using Unix sockets"
+  severity="low"
+  link="/analyzers/performance/mysql-single-server-optimization"
+/>
+
+<AnalyzerCard
+  title="Collection Call Optimization"
+  description="Detects inefficient collection operations that should be performed at the database query level"
+  severity="medium"
+  link="/analyzers/performance/collection-call-optimization"
+/>
+
+</div>
 
 ### Assets & Frontend
 
-- **[Asset Minification Analyzer](/analyzers/performance/asset-minification)** - Ensures JavaScript and CSS assets are minified in production
-- **[Asset Cache Headers Analyzer](/analyzers/performance/asset-cache-headers)** - Ensures compiled assets have appropriate cache headers for optimal browser caching
-- **[CDN Configuration Analyzer](/analyzers/performance/cdn-configuration)** - Detects CDN configuration for optimal asset delivery
-- **[Compression Headers Analyzer](/analyzers/performance/compression-headers)** - Ensures compression is enabled for HTTP responses
-- **[HTTP/2 Support Analyzer](/analyzers/performance/http2-support)** - Detects HTTP/2 support for improved performance
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Asset Minification"
+  description="Ensures JavaScript and CSS assets are minified in production"
+  severity="medium"
+  link="/analyzers/performance/asset-minification"
+/>
+
+<AnalyzerCard
+  title="Asset Cache Headers"
+  description="Ensures compiled assets have appropriate cache headers for optimal browser caching"
+  severity="low"
+  link="/analyzers/performance/asset-cache-headers"
+/>
+
+</div>
 
 ### Configuration & Environment
 
-- **[Debug Log Level Analyzer](/analyzers/performance/debug-log-level)** - Ensures log level is not set to debug in production for optimal performance
-- **[Env Calls Outside Config Analyzer](/analyzers/performance/env-call-outside-config)** - Detects env() function calls outside configuration files that break when config is cached
-- **[Dev Dependencies in Production Analyzer](/analyzers/performance/dev-dependencies-production)** - Detects if development dependencies are installed in production environment
-- **[Xdebug Production Check Analyzer](/analyzers/performance/xdebug-enabled)** - Detects if Xdebug is enabled in production, which severely impacts performance
-- **[Command Constructor Injection Analyzer](/analyzers/performance/command-constructor-injection)** - Detects heavy service injection in Artisan command constructors
-- **[Fallback Route SEO Check Analyzer](/analyzers/performance/fallback-routes)** - Detects fallback routes that may harm SEO by returning 200 for non-existent pages
-- **[Unused Global Middleware Analyzer](/analyzers/performance/unused-global-middleware)** - Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead on every request
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Debug Log Level"
+  description="Ensures log level is not set to debug in production for optimal performance"
+  severity="medium"
+  link="/analyzers/performance/debug-log-level"
+/>
+
+<AnalyzerCard
+  title="Env Calls Outside Config"
+  description="Detects env() function calls outside configuration files that break when config is cached"
+  severity="high"
+  link="/analyzers/performance/env-call-outside-config"
+/>
+
+<AnalyzerCard
+  title="Dev Dependencies in Production"
+  description="Detects if development dependencies are installed in production environment"
+  severity="medium"
+  link="/analyzers/performance/dev-dependencies-production"
+/>
+
+<AnalyzerCard
+  title="Unused Global Middleware"
+  description="Detects global HTTP middleware that is registered but not being used, causing unnecessary overhead"
+  severity="low"
+  link="/analyzers/performance/unused-global-middleware"
+/>
+
+</div>
 
 ## How They Work
 
@@ -150,7 +264,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability/)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards

@@ -11,7 +11,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 
 ## Categories
 
-### [Security](/analyzers/security)
+### [Security](/analyzers/security/)
 **46 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 **Critical Analyzers:**
@@ -23,7 +23,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 - Application Key Security
 - Environment File Security
 
-### [Performance](/analyzers/performance)
+### [Performance](/analyzers/performance/)
 **30 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
 
 **Key Analyzers:**
@@ -34,7 +34,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 - Database Query Optimization
 - View Compilation
 
-### [Reliability](/analyzers/reliability)
+### [Reliability](/analyzers/reliability/)
 **25 analyzers** ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
@@ -44,7 +44,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 - Queue Reliability
 - File Permissions & Structure
 
-### [Code Quality](/analyzers/code-quality)
+### [Code Quality](/analyzers/code-quality/)
 **5 analyzers** maintaining clean, maintainable code following Laravel conventions.
 
 **Key Analyzers:**
@@ -54,7 +54,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 - Commented Code
 - Missing DocBlocks
 
-### [Best Practices](/analyzers/best-practices)
+### [Best Practices](/analyzers/best-practices/)
 **15 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 **Key Analyzers:**
