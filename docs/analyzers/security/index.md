@@ -1,6 +1,6 @@
 ---
 title: Security Analyzers
-description: 22 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
+description: Analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
 icon: lock
 outline: [2, 3]
 ---
@@ -17,46 +17,199 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 
 ### Critical Vulnerabilities
 
-- **[SQL Injection Analyzer](/analyzers/security/sql-injection)** - Detects potential SQL injection vulnerabilities in database queries
-- **[XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities)** - Detects XSS vulnerabilities via code analysis and HTTP header verification
-- **[CSRF Protection Analyzer](/analyzers/security/csrf-protection)** - Detects missing CSRF (Cross-Site Request Forgery) protection
-- **[Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities)** - Detects mass assignment vulnerabilities in Eloquent models and query builders
-- **[Unguarded Models Analyzer](/analyzers/security/unguarded-models)** - Detects Model::unguard() usage that disables mass assignment protection
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="SQL Injection"
+  description="Detects potential SQL injection vulnerabilities in database queries"
+  severity="critical"
+  link="/analyzers/security/sql-injection"
+/>
+
+<AnalyzerCard
+  title="XSS Vulnerabilities"
+  description="Detects XSS vulnerabilities via code analysis and HTTP header verification"
+  severity="critical"
+  link="/analyzers/security/xss-vulnerabilities"
+/>
+
+<AnalyzerCard
+  title="CSRF Protection"
+  description="Detects missing CSRF (Cross-Site Request Forgery) protection"
+  severity="critical"
+  link="/analyzers/security/csrf-protection"
+/>
+
+<AnalyzerCard
+  title="Mass Assignment Vulnerabilities"
+  description="Detects mass assignment vulnerabilities in Eloquent models and query builders"
+  severity="high"
+  link="/analyzers/security/mass-assignment-vulnerabilities"
+/>
+
+<AnalyzerCard
+  title="Unguarded Models"
+  description="Detects Model::unguard() usage that disables mass assignment protection"
+  severity="high"
+  link="/analyzers/security/unguarded-models"
+/>
+
+</div>
 
 ### Authentication & Authorization
 
-- **[Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization)** - Detects missing authentication and authorization protection on routes and controllers
-- **[Login Throttling Analyzer](/analyzers/security/login-throttling)** - Detects missing rate limiting on authentication endpoints to prevent brute force attacks
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Authentication & Authorization"
+  description="Detects missing authentication and authorization protection on routes and controllers"
+  severity="critical"
+  link="/analyzers/security/authentication-authorization"
+/>
+
+<AnalyzerCard
+  title="Login Throttling"
+  description="Detects missing rate limiting on authentication endpoints to prevent brute force attacks"
+  severity="high"
+  link="/analyzers/security/login-throttling"
+/>
+
+</div>
 
 ### Configuration & Secrets
 
-- **[Application Key Analyzer](/analyzers/security/app-key)** - Validates that the application encryption key is properly configured and secure
-- **[Environment File Analyzer](/analyzers/security/env-file)** - Validates .env file security, location, and prevents exposure of sensitive data
-- **[Environment File HTTP Accessibility Analyzer](/analyzers/security/env-http-accessibility)** - Verifies .env file is not accessible via HTTP requests to the web server
-- **[Debug Mode Analyzer](/analyzers/security/debug-mode)** - Detects debug mode enabled and debugging functions that expose sensitive information
-- **[PHP Configuration Analyzer](/analyzers/security/php-ini)** - Validates that PHP ini settings are configured securely
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Application Key"
+  description="Validates that the application encryption key is properly configured and secure"
+  severity="critical"
+  link="/analyzers/security/app-key"
+/>
+
+<AnalyzerCard
+  title="Environment File"
+  description="Validates .env file security, location, and prevents exposure of sensitive data"
+  severity="critical"
+  link="/analyzers/security/env-file"
+/>
+
+<AnalyzerCard
+  title="Environment File HTTP Accessibility"
+  description="Verifies .env file is not accessible via HTTP requests to the web server"
+  severity="critical"
+  link="/analyzers/security/env-http-accessibility"
+/>
+
+<AnalyzerCard
+  title="Debug Mode"
+  description="Detects debug mode enabled and debugging functions that expose sensitive information"
+  severity="critical"
+  link="/analyzers/security/debug-mode"
+/>
+
+<AnalyzerCard
+  title="PHP Configuration"
+  description="Validates that PHP ini settings are configured securely"
+  severity="high"
+  link="/analyzers/security/php-ini"
+/>
+
+</div>
 
 ### Data Protection
 
-- **[Password Hashing Strength Analyzer](/analyzers/security/hashing-strength)** - Validates that password hashing configuration uses secure parameters
-- **[Cookie Analyzer](/analyzers/security/cookie)** - Validates cookie encryption and security configuration
-- **[Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key)** - Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Password Hashing Strength"
+  description="Validates that password hashing configuration uses secure parameters"
+  severity="high"
+  link="/analyzers/security/hashing-strength"
+/>
+
+<AnalyzerCard
+  title="Cookie Security"
+  description="Validates cookie encryption and security configuration"
+  severity="high"
+  link="/analyzers/security/cookie"
+/>
+
+<AnalyzerCard
+  title="Fillable Foreign Key"
+  description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
+  severity="medium"
+  link="/analyzers/security/fillable-foreign-key"
+/>
+
+</div>
 
 ### HTTP Security
 
-- **[HSTS Header Analyzer](/analyzers/security/hsts-header)** - Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="HSTS Header"
+  description="Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications"
+  severity="high"
+  link="/analyzers/security/hsts-header"
+/>
+
+</div>
 
 ### Dependencies & Updates
 
-- **[Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies)** - Scans composer dependencies for known security vulnerabilities
-- **[Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies)** - Scans npm/yarn dependencies for known security vulnerabilities
-- **[Up-to-Date Dependencies Analyzer](/analyzers/security/up-to-date-dependencies)** - Checks if dependencies are up-to-date with available bug fixes and security patches
-- **[Stable Dependencies Analyzer](/analyzers/security/stable-dependencies)** - Validates that all dependencies use stable versions rather than dev/alpha/beta releases
-- **[Dependency License Compliance Analyzer](/analyzers/security/license-compliance)** - Validates that all dependencies use legally acceptable licenses for your application type
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Vulnerable Dependencies"
+  description="Scans composer dependencies for known security vulnerabilities"
+  severity="critical"
+  link="/analyzers/security/vulnerable-dependencies"
+/>
+
+<AnalyzerCard
+  title="Frontend Vulnerable Dependencies"
+  description="Scans npm/yarn dependencies for known security vulnerabilities"
+  severity="critical"
+  link="/analyzers/security/frontend-vulnerable-dependencies"
+/>
+
+<AnalyzerCard
+  title="Up-to-Date Dependencies"
+  description="Checks if dependencies are up-to-date with available bug fixes and security patches"
+  severity="low"
+  link="/analyzers/security/up-to-date-dependencies"
+/>
+
+<AnalyzerCard
+  title="Stable Dependencies"
+  description="Validates that all dependencies use stable versions rather than dev/alpha/beta releases"
+  severity="medium"
+  link="/analyzers/security/stable-dependencies"
+/>
+
+<AnalyzerCard
+  title="License Compliance"
+  description="Validates that all dependencies use legally acceptable licenses for your application type"
+  severity="medium"
+  link="/analyzers/security/license-compliance"
+/>
+
+</div>
 
 ### File System Security
 
-- **[File Permissions Security Analyzer](/analyzers/security/file-permissions)** - Validates that project files and directories use secure permissions
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="File Permissions"
+  description="Validates that project files and directories use secure permissions"
+  severity="high"
+  link="/analyzers/security/file-permissions"
+/>
+
+</div>
 
 ## How They Work
 
@@ -148,7 +301,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
-- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance
+- **[Reliability Analyzers](/analyzers/reliability/)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards

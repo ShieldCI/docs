@@ -1,6 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import 'tailwindcss';
+
+/* Tell Tailwind v4 to scan Vue components and markdown files */
+@source "../components/**/*.vue";
+@source "../../../**/*.md";
+
+/* Use class-based dark mode (VitePress adds .dark to <html>) */
+@variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Semantic Colors */
