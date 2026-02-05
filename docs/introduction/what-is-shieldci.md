@@ -168,7 +168,8 @@ ShieldCI performs all analysis locally:
 - **+48 analyzers** - Advanced security (+24), performance (+12), reliability (+12)
 - **Team collaboration** - Multi-user dashboards
 - **Historical trends** - Track quality over time
-- **Priority support** - Direct support channel
+- **Priority support** - 48-hour response
+- **SOC 2 compliance** - Audit reports
 
 ## Laravel Version Support
 
