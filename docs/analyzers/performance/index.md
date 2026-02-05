@@ -97,7 +97,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Horizon Suggestion"
   description="Recommends using Laravel Horizon when Redis queues are configured"
-  severity="info"
+  severity="low"
   link="/analyzers/performance/horizon-suggestion"
 />
 
