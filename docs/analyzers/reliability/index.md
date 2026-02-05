@@ -71,7 +71,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Maintenance Mode Status"
   description="Checks if the application is in maintenance mode"
-  severity="info"
+  severity="high"
   link="/analyzers/reliability/maintenance-mode-status"
 />
 
