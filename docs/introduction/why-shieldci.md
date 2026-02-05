@@ -190,7 +190,7 @@ Ready to improve your Laravel application's security, performance, and quality?
 
 **Perfect for:** Solo developers, small projects, startups
 
-### Pro (Commercial) :bell:
+### Pro (Commercial)
 - ✅ **48+ analyzers** (all categories)
 - ✅ **Team dashboards** (multi-user)
 - ✅ **Historical trends** (track progress)
