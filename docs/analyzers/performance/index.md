@@ -1,6 +1,6 @@
 ---
 title: Performance Analyzers
-description: 18 analyzers identifying bottlenecks and optimization opportunities in Laravel applications
+description: Analyzers identifying bottlenecks and optimization opportunities in Laravel applications
 icon: zap
 outline: [2, 3]
 ---
@@ -138,7 +138,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability/)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards

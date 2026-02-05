@@ -1,6 +1,6 @@
 ---
 title: Code Quality Analyzers
-description: 5 analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: Analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
 icon: code
 outline: [2, 3]
 ---
@@ -91,7 +91,7 @@ php artisan shield:analyze --analyzer=nesting-depth,method-length
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Reliability Analyzers](/analyzers/reliability/)** - Prevent runtime errors
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance

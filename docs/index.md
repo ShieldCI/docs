@@ -5,7 +5,7 @@ layout: home
 hero:
   name: ShieldCI
   text: AI-powered Laravel code analysis
-  tagline: Modern security and code quality analysis for Laravel applications with 150+ comprehensive analyzers.
+  tagline: Modern security and code quality analysis for Laravel applications with 73 comprehensive analyzers.
   image:
     light: /icon.svg
     dark: /icon-dark.svg
@@ -27,7 +27,7 @@ features:
     details: Identify performance bottlenecks and optimization opportunities
   - icon: 🔍
     title: Comprehensive Analysis
-    details: 150+ analyzers covering security, performance, reliability, best practices, and code quality
+    details: 73 analyzers covering security, performance, reliability, best practices, and code quality
   - icon: 🚀
     title: CI/CD Ready
     details: Seamlessly integrate into your existing CI/CD pipeline

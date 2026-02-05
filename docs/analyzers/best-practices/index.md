@@ -1,6 +1,6 @@
 ---
 title: Best Practices Analyzers
-description: 15 analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
+description: Analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
 icon: puzzle
 outline: [2, 3]
 ---
@@ -106,7 +106,7 @@ php artisan shield:analyze --analyzer=eloquent-n-plus-one,missing-database-trans
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
-- **[Reliability Analyzers](/analyzers/reliability)** - Prevent runtime errors
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards
+- **[Reliability Analyzers](/analyzers/reliability/)** - Prevent runtime errors
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance

@@ -1,6 +1,6 @@
 ---
 title: Security Analyzers
-description: 22 analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
+description: Analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
 icon: lock
 outline: [2, 3]
 ---
@@ -148,7 +148,7 @@ Before deploying to production, ensure:
 
 ## Related Categories
 
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
-- **[Reliability Analyzers](/analyzers/reliability)** - Ensure application stability
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance
+- **[Reliability Analyzers](/analyzers/reliability/)** - Ensure application stability
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards

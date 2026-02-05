@@ -1,6 +1,6 @@
 ---
 title: Reliability Analyzers
-description: 13 analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
+description: Analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
 icon: check-circle
 outline: [2, 3]
 ---
@@ -115,7 +115,7 @@ php artisan shield:analyze --analyzer=composer-validation,queue-timeout-configur
 
 ## Related Categories
 
-- **[Security Analyzers](/analyzers/security)** - Prevent security vulnerabilities
-- **[Performance Analyzers](/analyzers/performance)** - Optimize application performance
-- **[Code Quality Analyzers](/analyzers/code-quality)** - Maintain code quality standards
-- **[Best Practices Analyzers](/analyzers/best-practices)** - Follow Laravel conventions
+- **[Security Analyzers](/analyzers/security/)** - Prevent security vulnerabilities
+- **[Performance Analyzers](/analyzers/performance/)** - Optimize application performance
+- **[Code Quality Analyzers](/analyzers/code-quality/)** - Maintain code quality standards
+- **[Best Practices Analyzers](/analyzers/best-practices/)** - Follow Laravel conventions
