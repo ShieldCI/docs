@@ -1,6 +1,7 @@
 ---
 title: Best Practices Analyzers
 description: Analyzers ensuring you follow Laravel ecosystem best practices and framework conventions
+tags: best-practices,eloquent,mvc,laravel,patterns,conventions
 icon: puzzle
 outline: [2, 3]
 ---

@@ -1,6 +1,7 @@
 ---
 title: Reliability Analyzers
 description: Analyzers ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures
+tags: reliability,uptime,errors,database,environment,laravel,phpstan
 icon: check-circle
 outline: [2, 3]
 ---

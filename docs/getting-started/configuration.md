@@ -1,6 +1,7 @@
 ---
 title: Configuration
 description: Configure ShieldCI analyzers and settings for your Laravel application
+tags: laravel,configuration,analyzers,settings,customization
 icon: settings
 outline: [2, 3]
 ---

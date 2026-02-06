@@ -1,6 +1,7 @@
 ---
 title: Why ShieldCI?
 description: Learn why ShieldCI is the best choice for Laravel security and performance analysis
+tags: laravel,security,performance,comparison,static-analysis
 icon: rocket
 outline: [2, 3]
 ---
