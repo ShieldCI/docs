@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useScrollReveal } from '../composables/useScrollReveal'
+
+const sectionRef = ref<HTMLElement | null>(null)
+useScrollReveal(sectionRef)
+
 const features = [
   {
     title: 'Catch Vulnerabilities Early',
@@ -40,17 +46,17 @@ const features = [
 </script>
 
 <template>
-  <section class="mx-auto px-6 sm:px-12 md:px-16 pt-16 pb-8">
-    <div class="text-center mb-10">
+  <section ref="sectionRef" class="mx-auto px-6 sm:px-12 md:px-16 pt-16 pb-8">
+    <div data-reveal class="text-center mb-10">
       <h2 class="text-2xl! sm:text-3xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
         Why ShieldCI?
       </h2>
       <p class="mt-3! text-base! text-gray-600! dark:text-gray-400! m-0! leading-relaxed!">
-        Purpose-built for Laravel developers who care about shipping secure, performant code.
+        Built for developers, teams, and organizations shipping world-class Laravel applications and APIs.
       </p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div data-reveal data-reveal-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <div
         v-for="feature in features"
         :key="feature.title"

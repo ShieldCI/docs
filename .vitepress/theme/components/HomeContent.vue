@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import { useScrollReveal } from '../composables/useScrollReveal'
+
+const sectionRef = ref<HTMLElement | null>(null)
+useScrollReveal(sectionRef)
+
 const categories = [
   {
     name: 'Security',
@@ -65,9 +71,10 @@ const steps = [
 </script>
 
 <template>
+  <div ref="sectionRef">
   <!-- Categories Section -->
   <section class="mx-auto px-6 sm:px-12 md:px-16 pt-16 pb-8">
-    <div class="text-center mb-10">
+    <div data-reveal class="text-center mb-10">
       <h2 class="text-2xl! sm:text-3xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
           AI-powered Analyzers Across 5 Categories
       </h2>
@@ -76,7 +83,7 @@ const steps = [
       </p>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div data-reveal data-reveal-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <a
         v-for="cat in categories"
         :key="cat.name"
@@ -135,7 +142,7 @@ const steps = [
 
   <!-- How It Works Section -->
   <section class="mx-auto px-6 sm:px-12 md:px-16 pt-8 pb-8">
-    <div class="text-center mb-10">
+    <div data-reveal class="text-center mb-10">
       <h2 class="text-2xl! sm:text-3xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
         How It Works
       </h2>
@@ -144,7 +151,7 @@ const steps = [
       </p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div data-reveal data-reveal-stagger class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <div
         v-for="step in steps"
         :key="step.number"
@@ -184,7 +191,7 @@ const steps = [
 
   <!-- CTA Section -->
   <section class="mx-auto px-6 sm:px-12 md:px-16 pt-4 pb-16">
-    <div class="rounded-xl border border-violet-200 dark:border-violet-800/40 bg-violet-50 dark:bg-violet-950/20 p-8 text-center">
+    <div data-reveal class="rounded-xl border border-violet-200 dark:border-violet-800/40 bg-violet-50 dark:bg-violet-950/20 p-8 text-center">
       <h3 class="text-xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
         Ship secure Laravel applications with confidence
       </h3>
@@ -207,4 +214,5 @@ const steps = [
       </div>
     </div>
   </section>
+  </div>
 </template>
