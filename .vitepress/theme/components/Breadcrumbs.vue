@@ -2,12 +2,20 @@
 import { computed } from 'vue'
 import { useData, useRoute } from 'vitepress'
 
-const { site } = useData()
+const { frontmatter, title } = useData()
 const route = useRoute()
 
 interface BreadcrumbItem {
   text: string
   link?: string
+}
+
+// Helper to convert kebab-case to Title Case
+const formatSegment = (segment: string): string => {
+  return segment
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
 }
 
 const breadcrumbs = computed<BreadcrumbItem[]>(() => {
@@ -27,17 +35,13 @@ const breadcrumbs = computed<BreadcrumbItem[]>(() => {
   segments.forEach((segment, index) => {
     currentPath += `/${segment}`
 
-    // Format segment: convert kebab-case to Title Case
-    const text = segment
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ')
-
-    // Last segment has no link (current page)
+    // Last segment: use frontmatter title or page title
     if (index === segments.length - 1) {
-      items.push({ text })
+      const pageTitle = frontmatter.value.title || title.value || formatSegment(segment)
+      items.push({ text: pageTitle })
     } else {
-      items.push({ text, link: currentPath })
+      // Intermediate segments: convert kebab-case to Title Case
+      items.push({ text: formatSegment(segment), link: currentPath })
     }
   })
 

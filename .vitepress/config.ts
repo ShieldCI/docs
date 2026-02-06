@@ -24,7 +24,7 @@ export default defineConfig({
     // Head configuration for fonts, favicon, meta tags, and analytics
     head: [
         ['link', { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }],
-        ['meta', { name: 'theme-color', content: '#2563eb' }],
+        ['meta', { name: 'theme-color', content: '#7F22FE' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
         ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }],
