@@ -1,6 +1,7 @@
 ---
 title: Troubleshooting
 description: Common issues and solutions when using ShieldCI
+tags: troubleshooting,errors,debugging,memory,php
 icon: wrench
 outline: [2, 3]
 ---

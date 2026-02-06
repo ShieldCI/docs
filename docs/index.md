@@ -1,11 +1,13 @@
 ---
 title: AI-powered Laravel code analysis
+description: ShieldCI is an AI-powered static analysis tool for Laravel with analyzers across security, performance, reliability, code quality, and best practices.
+tags: laravel,code-analysis,security,performance,static-analysis,ci-cd,code-quality,vulnerability-scanner
 layout: home
 
 hero:
   name: ShieldCI
   text: AI-powered Laravel code analysis
-  tagline: Modern security and code quality analysis for Laravel applications with 73 comprehensive analyzers.
+  tagline: Modern security and code quality analysis for Laravel applications with comprehensive analyzers.
   image:
     src: /shieldci-laravel.svg
     alt: ShieldCI
@@ -16,25 +18,5 @@ hero:
     - theme: sponsor
       text: Get Started
       link: /getting-started/installation
-
-features:
-  - icon: 🛡️
-    title: Security First
-    details: Detect and fix security vulnerabilities before they reach production
-  - icon: ⚡
-    title: Performance Optimized
-    details: Identify performance bottlenecks and optimization opportunities
-  - icon: 🔍
-    title: Comprehensive Analysis
-    details: 73 analyzers covering security, performance, reliability, best practices, and code quality
-  - icon: 🚀
-    title: CI/CD Ready
-    details: Seamlessly integrate into your existing CI/CD pipeline
-  - icon: 💻
-    title: Recommendations on your terminal
-    details: Get actionable recommendations directly in your terminal with clear explanations and code examples
-  - icon: 👥
-    title: Collaborate with team mates
-    details: Share analysis results, track issues, and work together to improve code quality across your team
 ---
 

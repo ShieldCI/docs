@@ -1,6 +1,7 @@
 ---
 title: Security Analyzers
 description: Analyzers detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more
+tags: security,sql-injection,xss,csrf,authentication,vulnerabilities,laravel
 icon: lock
 outline: [2, 3]
 ---

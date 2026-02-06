@@ -1,6 +1,7 @@
 ---
 title: Contributing
 description: Learn how to contribute to ShieldCI - bug reports, feature requests, documentation improvements, and code contributions.
+tags: contributing,open-source,community,pull-requests,bug-reports
 ---
 
 # Contributing to ShieldCI
