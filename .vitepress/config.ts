@@ -21,28 +21,90 @@ export default defineConfig({
         transformItems: (items) => items.filter(item => !item.url.includes('README'))
     },
 
-    // Head configuration for fonts, favicon, and meta tags
+    // Head configuration for fonts, favicon, meta tags, and analytics
     head: [
         ['link', { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }],
-        ['meta', { name: 'theme-color', content: '#2563eb' }],
+        ['meta', { name: 'theme-color', content: '#7F22FE' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-        ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }]
+        ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }],
+        // Google Analytics
+        ['script', { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-GLS144XXN3' }],
+        ['script', {}, `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GLS144XXN3');`]
     ],
 
-    // Dynamic per-page OG/Twitter meta from frontmatter
+    // Dynamic per-page OG/Twitter meta and JSON-LD structured data
     transformHead({ pageData }) {
         const head: HeadConfig[] = []
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
         const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
+        const siteUrl = 'https://docs.shieldci.com'
+        const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
+        const pageUrl = `${siteUrl}/${relativePath}`
 
+        // OG and Twitter meta tags
         head.push(['meta', { property: 'og:title', content: title }])
         head.push(['meta', { property: 'og:description', content: description }])
         head.push(['meta', { property: 'og:type', content: 'article' }])
         head.push(['meta', { property: 'og:site_name', content: 'ShieldCI' }])
+        head.push(['meta', { property: 'og:url', content: pageUrl }])
+        head.push(['meta', { property: 'og:image', content: `${siteUrl}/og-image.png` }])
+        head.push(['meta', { property: 'og:image:width', content: '1200' }])
+        head.push(['meta', { property: 'og:image:height', content: '630' }])
         head.push(['meta', { name: 'twitter:card', content: 'summary_large_image' }])
         head.push(['meta', { name: 'twitter:title', content: title }])
         head.push(['meta', { name: 'twitter:description', content: description }])
+        head.push(['meta', { name: 'twitter:image', content: `${siteUrl}/og-image.png` }])
+
+        // Build breadcrumb items for JSON-LD
+        const pathSegments = relativePath.split('/').filter(Boolean)
+        const breadcrumbItems = [
+            { '@type': 'ListItem', position: 1, name: 'Home', item: siteUrl }
+        ]
+
+        let currentPath = ''
+        pathSegments.forEach((segment, index) => {
+            currentPath += `/${segment}`
+            const name = segment.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')
+            breadcrumbItems.push({
+                '@type': 'ListItem',
+                position: index + 2,
+                name: index === pathSegments.length - 1 ? title : name,
+                item: index === pathSegments.length - 1 ? undefined : `${siteUrl}${currentPath}`
+            })
+        })
+
+        // BreadcrumbList JSON-LD (for all pages with depth > 0)
+        if (pathSegments.length > 0) {
+            const breadcrumbSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                itemListElement: breadcrumbItems
+            }
+            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(breadcrumbSchema)])
+        }
+
+        // TechArticle JSON-LD (for analyzer documentation pages)
+        if (relativePath.startsWith('analyzers/') && pathSegments.length > 1) {
+            const techArticleSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'TechArticle',
+                headline: title,
+                description: description,
+                url: pageUrl,
+                author: {
+                    '@type': 'Organization',
+                    name: 'ShieldCI',
+                    url: 'https://shieldci.com'
+                },
+                publisher: {
+                    '@type': 'Organization',
+                    name: 'ShieldCI',
+                    url: 'https://shieldci.com'
+                }
+            }
+            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(techArticleSchema)])
+        }
 
         return head
     },
@@ -206,6 +268,13 @@ export default defineConfig({
                         },
                     ]
                 },
+                {
+                    text: 'Community',
+                    collapsed: true,
+                    items: [
+                        { text: 'Contributing', link: '/contributing' },
+                    ]
+                },
             ],
         },
 
@@ -222,11 +291,15 @@ export default defineConfig({
 
         // Social links
         socialLinks: [
-            {
-                icon: 'github',
-                link: 'https://github.com/shieldci/laravel'
-            }
+            { icon: 'github', link: 'https://github.com/shieldci/laravel' },
+            { icon: 'discord', link: 'https://discord.gg/2u6neGqD' }
         ],
+
+        // Edit on GitHub link
+        editLink: {
+            pattern: 'https://github.com/ShieldCI/docs/edit/master/docs/:path',
+            text: 'Edit this page on GitHub'
+        },
 
         // Footer
         footer: {
