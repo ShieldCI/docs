@@ -1,6 +1,7 @@
 ---
 title: Performance Analyzers
 description: Analyzers identifying bottlenecks and optimization opportunities in Laravel applications
+tags: performance,optimization,caching,opcache,laravel,queries,bottlenecks
 icon: zap
 outline: [2, 3]
 ---

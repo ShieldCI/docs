@@ -1,6 +1,7 @@
 ---
 title: How It Works
 description: Technical overview of how ShieldCI analyzes Laravel applications
+tags: laravel,static-analysis,architecture,analyzers,code-analysis
 icon: code
 outline: [2, 3]
 ---

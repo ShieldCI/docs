@@ -1,6 +1,7 @@
 ---
 title: Code Quality Analyzers
 description: Analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+tags: code-quality,maintainability,psr,conventions,laravel,refactoring
 icon: code
 outline: [2, 3]
 ---

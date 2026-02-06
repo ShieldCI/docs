@@ -1,6 +1,7 @@
 ---
 title: What is ShieldCI?
 description: Overview of ShieldCI - a comprehensive Laravel code analysis and security auditing platform
+tags: laravel,security,analysis,code-quality,static-analysis,vulnerability-scanner
 icon: shield
 outline: [2, 3]
 ---

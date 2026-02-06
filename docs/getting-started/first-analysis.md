@@ -1,6 +1,7 @@
 ---
 title: First Analysis
 description: Run your first ShieldCI analysis and understand the results
+tags: laravel,analysis,tutorial,getting-started,artisan
 icon: play
 outline: [2, 3]
 ---

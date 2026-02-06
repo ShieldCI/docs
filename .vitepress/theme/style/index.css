@@ -119,6 +119,10 @@ code {
   color: var(--color-violet-400);
 }
 
+.VPHome {
+    @apply mb-0!;
+}
+
 .VPNav {
   box-shadow: rgba(29, 30, 32, 0.08) 0px 0px 16px 0px, rgba(29, 30, 32, 0.04) 0px 0px 12px 0px;
 }

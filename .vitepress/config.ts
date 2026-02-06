@@ -18,13 +18,22 @@ export default defineConfig({
     // Sitemap generation
     sitemap: {
         hostname: 'https://docs.shieldci.com',
-        transformItems: (items) => items.filter(item => !item.url.includes('README'))
+        transformItems: (items) => items
+            .filter(item => !item.url.includes('README'))
+            .map(item => ({
+                ...item,
+                changefreq: item.url.includes('analyzers/') ? 'weekly' : 'monthly',
+                priority: item.url === '' ? 1.0 : item.url.includes('analyzers/') ? 0.8 : 0.6
+            }))
     },
 
     // Head configuration for fonts, favicon, meta tags, and analytics
     head: [
         ['link', { rel: 'icon', href: '/icon.svg', type: 'image/svg+xml' }],
         ['meta', { name: 'theme-color', content: '#7F22FE' }],
+        ['meta', { name: 'author', content: 'ShieldCI' }],
+        ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
+        ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
         ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }],
@@ -42,7 +51,26 @@ export default defineConfig({
         const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
 
-        // OG and Twitter meta tags
+        // Canonical URL
+        head.push(['link', { rel: 'canonical', href: pageUrl }])
+
+        // Robots meta with rich snippet directives
+        head.push(['meta', { name: 'robots', content: 'index, follow, max-snippet:-1, max-image-preview:large' }])
+
+        // Keywords meta from frontmatter tags
+        if (pageData.frontmatter.tags) {
+            head.push(['meta', { name: 'keywords', content: pageData.frontmatter.tags }])
+        }
+
+        // Article date metadata
+        if (pageData.frontmatter.date) {
+            head.push(['meta', { property: 'article:published_time', content: pageData.frontmatter.date }])
+        }
+        if (pageData.lastUpdated) {
+            head.push(['meta', { property: 'article:modified_time', content: new Date(pageData.lastUpdated).toISOString() }])
+        }
+
+        // OG meta tags
         head.push(['meta', { property: 'og:title', content: title }])
         head.push(['meta', { property: 'og:description', content: description }])
         head.push(['meta', { property: 'og:type', content: 'article' }])
@@ -51,7 +79,10 @@ export default defineConfig({
         head.push(['meta', { property: 'og:image', content: `${siteUrl}/og-image.png` }])
         head.push(['meta', { property: 'og:image:width', content: '1200' }])
         head.push(['meta', { property: 'og:image:height', content: '630' }])
+
+        // Twitter card meta tags
         head.push(['meta', { name: 'twitter:card', content: 'summary_large_image' }])
+        head.push(['meta', { name: 'twitter:site', content: '@shieldci' }])
         head.push(['meta', { name: 'twitter:title', content: title }])
         head.push(['meta', { name: 'twitter:description', content: description }])
         head.push(['meta', { name: 'twitter:image', content: `${siteUrl}/og-image.png` }])
@@ -104,6 +135,22 @@ export default defineConfig({
                 }
             }
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(techArticleSchema)])
+        }
+
+        // Organization JSON-LD (homepage only)
+        if (relativePath === '' || relativePath === 'index') {
+            const orgSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: 'ShieldCI',
+                url: 'https://shieldci.com',
+                logo: `${siteUrl}/logo.svg`,
+                sameAs: [
+                    'https://github.com/shieldci/laravel',
+                    'https://discord.gg/2u6neGqD'
+                ]
+            }
+            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(orgSchema)])
         }
 
         return head

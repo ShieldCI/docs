@@ -1,6 +1,7 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's 73 analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's analyzers across 5 categories
+tags: analyzers,security,performance,reliability,code-quality,best-practices,laravel
 icon: shield-check
 outline: [2, 3]
 ---
