@@ -83,12 +83,12 @@ const steps = [
       </p>
     </div>
 
-    <div data-reveal data-reveal-stagger class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div data-reveal data-reveal-stagger class="flex flex-wrap justify-center gap-4">
       <a
         v-for="cat in categories"
         :key="cat.name"
         :href="cat.href"
-        class="group relative no-underline! rounded-xl border border-gray-200 dark:border-neutral-700/80 bg-white dark:bg-neutral-800/50 p-5 transition-all duration-200 hover:border-gray-300 dark:hover:border-neutral-600 hover:shadow-md dark:hover:shadow-neutral-900/40"
+        class="group relative no-underline! rounded-xl border border-gray-200 dark:border-neutral-700/80 bg-white dark:bg-neutral-800/50 p-5 transition-all duration-200 hover:border-gray-300 dark:hover:border-neutral-600 hover:shadow-md dark:hover:shadow-neutral-900/40 w-full sm:w-[calc(50%-0.5rem)] lg:w-[calc(33.333%-0.667rem)]"
       >
         <!-- Top row: icon + name + count -->
         <div class="flex items-center gap-3 mb-3">
