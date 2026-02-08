@@ -181,7 +181,7 @@ const steps = [
         <!-- Connector arrow (between steps, hidden on mobile) -->
         <div
           v-if="Number(step.number) < 3"
-          class="hidden md:flex absolute top-1/2 -right-3 -translate-y-1/2 z-10 text-gray-300 dark:text-neutral-600"
+          class="hidden md:flex absolute top-1/2 -right-6 -translate-y-1/2 z-10 text-gray-300 dark:text-neutral-600"
         >
           <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
         </div>
