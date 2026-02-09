@@ -16,7 +16,7 @@
     "noFallthroughCasesInSwitch": true,
     "types": ["node"]
   },
-  "include": [".vitepress/**/*.ts", ".vitepress/**/*.vue", ".vitepress/**/*.tsx"],
+  "include": [".vitepress/**/*.ts", ".vitepress/**/*.vue", ".vitepress/**/*.tsx", "__tests__/**/*.ts"],
   "exclude": ["node_modules"]
 }
 
