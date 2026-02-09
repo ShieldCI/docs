@@ -7,16 +7,22 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "serve": "vitepress serve"
+    "serve": "vitepress serve",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
+    "@vitejs/plugin-vue": "^6.0.4",
+    "@vue/test-utils": "^2.4.6",
     "@vueuse/core": "^11.0.0",
     "gray-matter": "^4.0.3",
+    "jsdom": "^28.0.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5.6.0",
     "vitepress": "^1.6.0",
     "vitepress-plugin-llms": "^1.9.3",
+    "vitest": "^4.0.18",
     "vue": "^3.5.0"
   }
 }
