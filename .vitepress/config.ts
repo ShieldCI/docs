@@ -224,7 +224,7 @@ export default defineConfig({
                                 { text: 'HSTS Header', link: '/analyzers/security/hsts-header' },
                                 { text: 'Login Throttling', link: '/analyzers/security/login-throttling' },
                                 { text: 'Mass Assignment', link: '/analyzers/security/mass-assignment-vulnerabilities' },
-                                { text: 'Hashing Strength', link: '/analyzers/security/hashing-strength' },
+                                { text: 'Password Security', link: '/analyzers/security/password-security' },
                                 { text: 'PHP Configuration', link: '/analyzers/security/php-ini' },
                                 { text: 'SQL Injection', link: '/analyzers/security/sql-injection' },
                                 { text: 'Stable Dependencies', link: '/analyzers/security/stable-dependencies' },
