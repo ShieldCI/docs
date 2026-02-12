@@ -30,7 +30,6 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - ✅ Allows simple calculations (`{{ $price * $quantity }}`)
 - ✅ Excludes config/session/cache helper calls
 - ✅ Detects relationship queries (`$user->posts()->get()`)
-- ✅ Three-tier class name classification to avoid false positives (NON_ELOQUENT_CLASSES, DEFINITE_NON_MODEL_SUFFIXES, AMBIGUOUS_SUFFIXES)
 - ✅ Tracks 9 different issue types with appropriate severity levels
 - ✅ Configurable thresholds for @php block complexity and arithmetic operator sensitivity
 
