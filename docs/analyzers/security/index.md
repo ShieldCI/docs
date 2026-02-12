@@ -242,10 +242,10 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <div class="grid gap-4 md:grid-cols-2 mt-4">
 
 <AnalyzerCard
-  title="Password Hashing Strength"
-  description="Validates that password hashing configuration uses secure parameters"
-  severity="high"
-  link="/analyzers/security/hashing-strength"
+  title="Password Security"
+  description="Validates password hashing, policy enforcement, plain-text storage, validation rules, and rehash usage"
+  severity="critical"
+  link="/analyzers/security/password-security"
 />
 
 <AnalyzerCard

@@ -241,6 +241,7 @@ export default defineConfig({
                                 { text: 'Nova Security', link: '/analyzers/security/nova-security' },
                                 { text: 'Object Injection', link: '/analyzers/security/object-injection' },
                                 { text: 'Open Redirection', link: '/analyzers/security/open-redirection' },
+                                { text: 'Password Security', link: '/analyzers/security/password-security' },
                                 { text: 'PHP Configuration', link: '/analyzers/security/php-ini' },
                                 { text: 'RCE', link: '/analyzers/security/rce' },
                                 { text: 'Regex DoS', link: '/analyzers/security/regex-dos' },
