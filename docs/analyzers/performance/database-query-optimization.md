@@ -4,6 +4,7 @@ description: Detects inefficient database query patterns that impact performance
 icon: database
 outline: [2, 3]
 tags: database,queries,performance,optimization,n+1
+pro: true
 ---
 
 # Database Query Optimization Analyzer

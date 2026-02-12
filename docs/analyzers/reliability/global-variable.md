@@ -4,6 +4,7 @@ description: Detects use of PHP superglobals and global functions that should us
 icon: globe
 outline: [2, 3]
 tags: global-variable,state,reliability,code-quality
+pro: true
 ---
 
 # Global Variable Analyzer

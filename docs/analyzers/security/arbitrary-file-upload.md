@@ -4,6 +4,7 @@ description: Detects arbitrary file upload vulnerabilities that could lead to re
 icon: file-warning
 outline: [2, 3]
 tags: file-upload,rce,remote-code-execution,security,validation
+pro: true
 ---
 
 # Arbitrary File Upload Analyzer

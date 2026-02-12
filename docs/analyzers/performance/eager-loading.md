@@ -4,6 +4,7 @@ description: Detects missing eager loading that causes N+1 query problems
 icon: layers
 outline: [2, 3]
 tags: n+1,eager-loading,relationships,eloquent,performance
+pro: true
 ---
 
 # Eager Loading Analyzer

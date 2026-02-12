@@ -4,6 +4,7 @@ description: Detects routes pointing to non-existent or invalid controllers and 
 icon: link-2
 outline: [2, 3]
 tags: routes,dead-code,controllers,reliability
+pro: true
 ---
 
 # Dead Route Analyzer

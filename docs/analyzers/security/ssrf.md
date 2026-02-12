@@ -4,6 +4,7 @@ description: Detects SSRF vulnerabilities where user input controls outbound HTT
 icon: globe
 outline: [2, 3]
 tags: ssrf,server-side-request-forgery,security,http
+pro: true
 ---
 
 # Server-Side Request Forgery (SSRF) Analyzer

@@ -4,6 +4,7 @@ description: Checks if a CDN is configured for serving static assets
 icon: globe
 outline: [2, 3]
 tags: cdn,assets,performance,optimization,infrastructure
+pro: true
 ---
 
 # CDN Configuration Analyzer

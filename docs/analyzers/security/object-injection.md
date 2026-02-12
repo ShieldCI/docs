@@ -4,6 +4,7 @@ description: Detects PHP object injection vulnerabilities through unsafe deseria
 icon: box
 outline: [2, 3]
 tags: object-injection,unserialize,deserialization,security
+pro: true
 ---
 
 # Object Injection Analyzer

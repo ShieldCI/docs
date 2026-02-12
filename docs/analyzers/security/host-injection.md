@@ -4,6 +4,7 @@ description: Detects Host header injection vulnerabilities in URL generation and
 icon: server
 outline: [2, 3]
 tags: host-injection,header,security,cache-poisoning
+pro: true
 ---
 
 # Host Header Injection Analyzer

@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Performance Analyzers
 
-**30 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
+**33 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
 
 ## Overview
 
@@ -60,6 +60,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures event discovery is cached for optimal performance"
   severity="medium"
   link="/analyzers/performance/event-caching"
+  pro
 />
 
 </div>
@@ -94,6 +95,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures Redis is configured optimally for single-server setups using Unix sockets"
   severity="low"
   link="/analyzers/performance/redis-single-server"
+  pro
 />
 
 <AnalyzerCard
@@ -101,6 +103,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures Redis is used for rate limiting in production environments"
   severity="medium"
   link="/analyzers/performance/redis-rate-limiting"
+  pro
 />
 
 <AnalyzerCard
@@ -108,6 +111,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures Redis is used for request throttling in production"
   severity="medium"
   link="/analyzers/performance/redis-throttling"
+  pro
 />
 
 </div>
@@ -141,6 +145,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects inefficient database query patterns that can be optimized"
   severity="medium"
   link="/analyzers/performance/database-query-optimization"
+  pro
 />
 
 <AnalyzerCard
@@ -148,6 +153,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures relationships are eager loaded to prevent N+1 query problems"
   severity="high"
   link="/analyzers/performance/eager-loading"
+  pro
 />
 
 <AnalyzerCard
@@ -189,6 +195,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects CDN configuration for optimal asset delivery"
   severity="low"
   link="/analyzers/performance/cdn-configuration"
+  pro
 />
 
 <AnalyzerCard
@@ -196,6 +203,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Ensures compression is enabled for HTTP responses"
   severity="medium"
   link="/analyzers/performance/compression-headers"
+  pro
 />
 
 <AnalyzerCard
@@ -203,6 +211,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects HTTP/2 support for improved performance"
   severity="low"
   link="/analyzers/performance/http2-support"
+  pro
 />
 
 </div>
@@ -244,6 +253,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects if Xdebug is enabled in production, which severely impacts performance"
   severity="critical"
   link="/analyzers/performance/xdebug-enabled"
+  pro
 />
 
 <AnalyzerCard
@@ -251,6 +261,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects heavy service injection in Artisan command constructors"
   severity="low"
   link="/analyzers/performance/command-constructor-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -258,6 +269,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects fallback routes that may harm SEO by returning 200 for non-existent pages"
   severity="low"
   link="/analyzers/performance/fallback-routes"
+  pro
 />
 
 </div>

@@ -4,6 +4,7 @@ description: Validates X-Content-Type-Options header to prevent browser MIME sni
 icon: file
 outline: [2, 3]
 tags: mime-sniffing,headers,content-type,security
+pro: true
 ---
 
 # MIME Sniffing Protection Analyzer

@@ -4,6 +4,7 @@ description: Detects missing clickjacking protection via X-Frame-Options or CSP 
 icon: shield-x
 outline: [2, 3]
 tags: clickjacking,x-frame-options,csp,frame-ancestors,security,headers
+pro: true
 ---
 
 # Clickjacking Protection Analyzer

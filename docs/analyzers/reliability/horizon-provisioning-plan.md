@@ -4,6 +4,7 @@ description: Validates Horizon has a properly configured provisioning plan for t
 icon: settings
 outline: [2, 3]
 tags: horizon,provisioning,supervisor,reliability,queue
+pro: true
 ---
 
 # Horizon Provisioning Plan Analyzer

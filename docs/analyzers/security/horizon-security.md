@@ -4,6 +4,7 @@ description: Validates that Laravel Horizon dashboard is properly secured with a
 icon: shield
 outline: [2, 3]
 tags: horizon,dashboard,authentication,security,authorization
+pro: true
 ---
 
 # Horizon Security Analyzer

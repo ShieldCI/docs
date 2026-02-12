@@ -4,6 +4,7 @@ description: Verifies frontend assets use cache busting to prevent stale asset d
 icon: refresh-cw
 outline: [2, 3]
 tags: cache-busting,assets,versioning,reliability,deployment
+pro: true
 ---
 
 # Cache Busting Analyzer

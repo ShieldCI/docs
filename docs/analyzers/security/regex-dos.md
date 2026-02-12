@@ -4,6 +4,7 @@ description: Detects regular expressions vulnerable to catastrophic backtracking
 icon: clock
 outline: [2, 3]
 tags: regex,redos,denial-of-service,security,performance
+pro: true
 ---
 
 # Regular Expression DoS Analyzer

@@ -4,6 +4,7 @@ description: Monitors Horizon runtime status including master process, superviso
 icon: activity
 outline: [2, 3]
 tags: horizon,status,queue,monitoring,reliability
+pro: true
 ---
 
 # Horizon Status Analyzer

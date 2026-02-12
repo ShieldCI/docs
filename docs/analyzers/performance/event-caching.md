@@ -4,6 +4,7 @@ description: Validates that events are cached in production for optimal performa
 icon: bell
 outline: [2, 3]
 tags: events,caching,performance,optimization
+pro: true
 ---
 
 # Event Caching Analyzer

@@ -4,6 +4,7 @@ description: Detects remote code execution vulnerabilities including dangerous s
 icon: terminal
 outline: [2, 3]
 tags: rce,remote-code-execution,security,code-execution
+pro: true
 ---
 
 # Remote Code Execution (RCE) Analyzer

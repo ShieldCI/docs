@@ -4,6 +4,7 @@ description: Detects SQL injection vulnerabilities where user input controls col
 icon: shield-x
 outline: [2, 3]
 tags: sql-injection,column-names,security,database,pdo
+pro: true
 ---
 
 # Column Name SQL Injection Analyzer

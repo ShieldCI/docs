@@ -4,6 +4,7 @@ description: Detects command injection vulnerabilities where user input is passe
 icon: terminal
 outline: [2, 3]
 tags: command-injection,rce,shell,exec,security,remote-code-execution
+pro: true
 ---
 
 # Command Injection Analyzer

@@ -4,6 +4,7 @@ description: Verifies Redis connectivity, health, and configuration across all c
 icon: database
 outline: [2, 3]
 tags: redis,status,connection,reliability,cache
+pro: true
 ---
 
 # Redis Status Analyzer

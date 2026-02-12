@@ -4,6 +4,7 @@ description: Suggests using RateLimitedWithRedis for job rate limiting when Redi
 icon: clock
 outline: [2, 3]
 tags: redis,jobs,queue,rate-limiting,performance
+pro: true
 ---
 
 # Redis Rate Limiting Analyzer

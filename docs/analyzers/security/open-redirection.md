@@ -4,6 +4,7 @@ description: Detects open redirect vulnerabilities where user input controls red
 icon: external-link
 outline: [2, 3]
 tags: open-redirect,redirect,phishing,security
+pro: true
 ---
 
 # Open Redirection Analyzer

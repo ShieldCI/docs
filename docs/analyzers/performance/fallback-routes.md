@@ -4,6 +4,7 @@ description: Detects fallback routes that can cause soft 404 issues and hurt SEO
 icon: route
 outline: [2, 3]
 tags: seo,routes,fallback,404,performance
+pro: true
 ---
 
 # Fallback Route SEO Check

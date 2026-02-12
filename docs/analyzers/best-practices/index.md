@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Best Practices Analyzers
 
-**15 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 ## Overview
 

@@ -4,6 +4,7 @@ description: Detects usage of eval() and other dynamic code execution functions 
 icon: code
 outline: [2, 3]
 tags: eval,code-execution,security,dynamic-code
+pro: true
 ---
 
 # Eval Usage Analyzer

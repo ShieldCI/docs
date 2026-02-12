@@ -4,6 +4,7 @@ description: Checks if gzip or brotli compression is enabled for static assets
 icon: archive
 outline: [2, 3]
 tags: compression,gzip,brotli,headers,performance
+pro: true
 ---
 
 # Compression Headers Analyzer

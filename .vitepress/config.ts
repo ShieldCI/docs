@@ -230,7 +230,7 @@ export default defineConfig({
                                 { text: 'Fillable Foreign Key', link: '/analyzers/security/fillable-foreign-key' },
                                 { text: 'Frontend Dependencies', link: '/analyzers/security/frontend-vulnerable-dependencies' },
                                 { text: 'Hardcoded Credentials', link: '/analyzers/security/hardcoded-credentials' },
-                                { text: 'Hashing Strength', link: '/analyzers/security/hashing-strength' },
+                                { text: 'Password Security', link: '/analyzers/security/password-security' },
                                 { text: 'Horizon Security', link: '/analyzers/security/horizon-security' },
                                 { text: 'Host Injection', link: '/analyzers/security/host-injection' },
                                 { text: 'HSTS Header', link: '/analyzers/security/hsts-header' },

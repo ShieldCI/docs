@@ -4,6 +4,7 @@ description: Suggests using ThrottleRequestsWithRedis for more accurate rate lim
 icon: shield
 outline: [2, 3]
 tags: redis,throttling,rate-limiting,middleware,performance
+pro: true
 ---
 
 # Redis Throttling Analyzer

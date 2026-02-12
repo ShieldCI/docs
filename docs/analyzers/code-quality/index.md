@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Code Quality Analyzers
 
-**5 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
+**8 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
 
 ## Overview
 

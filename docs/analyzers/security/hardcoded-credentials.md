@@ -4,6 +4,7 @@ description: Detects hardcoded passwords, API keys, and other secrets embedded i
 icon: key
 outline: [2, 3]
 tags: credentials,secrets,hardcoded,api-key,password,security
+pro: true
 ---
 
 # Hardcoded Credentials Analyzer

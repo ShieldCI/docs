@@ -4,6 +4,7 @@ description: Verifies that required PHP extensions (PCNTL, Redis) are loaded for
 icon: cpu
 outline: [2, 3]
 tags: pcntl,extension,signals,queue,reliability
+pro: true
 ---
 
 # PCNTL Extension Analyzer

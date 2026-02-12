@@ -4,6 +4,7 @@ description: Validates Laravel Telescope debug tool is properly secured and disa
 icon: eye
 outline: [2, 3]
 tags: telescope,debug,authentication,security,production
+pro: true
 ---
 
 # Telescope Security Analyzer

@@ -4,6 +4,7 @@ description: Detects constructor dependency injection in Artisan commands that p
 icon: terminal
 outline: [2, 3]
 tags: artisan,commands,dependency-injection,lazy-loading,performance
+pro: true
 ---
 
 # Command Constructor Injection Analyzer

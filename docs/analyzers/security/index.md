@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Security Analyzers
 
-**46 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
+**67 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
 
 ## Overview
 
@@ -32,6 +32,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects SQL injection vulnerabilities where user input controls column names"
   severity="critical"
   link="/analyzers/security/column-name-sql-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -39,6 +40,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects SQL injection vulnerabilities in validation rules"
   severity="critical"
   link="/analyzers/security/validation-sql-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -46,6 +48,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects command injection vulnerabilities where user input is passed to shell execution functions"
   severity="critical"
   link="/analyzers/security/command-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -53,6 +56,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects path traversal vulnerabilities that allow accessing files outside intended directories"
   severity="critical"
   link="/analyzers/security/directory-traversal"
+  pro
 />
 
 <AnalyzerCard
@@ -60,6 +64,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects code execution vulnerabilities that allow arbitrary code execution"
   severity="critical"
   link="/analyzers/security/rce"
+  pro
 />
 
 <AnalyzerCard
@@ -67,6 +72,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects unsafe deserialization that can lead to object injection attacks"
   severity="critical"
   link="/analyzers/security/object-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -74,6 +80,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects SSRF vulnerabilities where user input controls server-side requests"
   severity="critical"
   link="/analyzers/security/ssrf"
+  pro
 />
 
 <AnalyzerCard
@@ -81,6 +88,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects dangerous eval usage that can execute arbitrary code"
   severity="critical"
   link="/analyzers/security/eval"
+  pro
 />
 
 <AnalyzerCard
@@ -88,6 +96,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects unsafe extract usage that can overwrite variables"
   severity="high"
   link="/analyzers/security/extract"
+  pro
 />
 
 <AnalyzerCard
@@ -95,6 +104,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects XML External Entity injection vulnerabilities"
   severity="critical"
   link="/analyzers/security/xxe-vulnerabilities"
+  pro
 />
 
 <AnalyzerCard
@@ -102,6 +112,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns"
   severity="high"
   link="/analyzers/security/regex-dos"
+  pro
 />
 
 <AnalyzerCard
@@ -123,6 +134,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects file upload vulnerabilities that could lead to remote code execution"
   severity="critical"
   link="/analyzers/security/arbitrary-file-upload"
+  pro
 />
 
 <AnalyzerCard
@@ -164,6 +176,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Ensures session lifetime is configured appropriately for security"
   severity="medium"
   link="/analyzers/security/session-timeout"
+  pro
 />
 
 </div>
@@ -184,6 +197,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects hardcoded passwords, API keys, and secrets in source code"
   severity="critical"
   link="/analyzers/security/hardcoded-credentials"
+  pro
 />
 
 <AnalyzerCard
@@ -219,6 +233,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Ensures Laravel Telescope is properly secured in production"
   severity="high"
   link="/analyzers/security/telescope-security"
+  pro
 />
 
 <AnalyzerCard
@@ -226,6 +241,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Ensures Laravel Nova admin panel is properly secured"
   severity="high"
   link="/analyzers/security/nova-security"
+  pro
 />
 
 <AnalyzerCard
@@ -233,6 +249,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Ensures Laravel Horizon dashboard is properly secured"
   severity="high"
   link="/analyzers/security/horizon-security"
+  pro
 />
 
 </div>
@@ -260,6 +277,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects unnecessary cookie domain configuration that makes cookies less restrictive"
   severity="medium"
   link="/analyzers/security/cookie-domain"
+  pro
 />
 
 <AnalyzerCard
@@ -274,6 +292,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects weak cryptographic algorithms and insecure random number generation"
   severity="high"
   link="/analyzers/security/cryptographic-weakness"
+  pro
 />
 
 </div>
@@ -287,6 +306,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects missing clickjacking protection via X-Frame-Options or CSP frame-ancestors"
   severity="high"
   link="/analyzers/security/clickjacking"
+  pro
 />
 
 <AnalyzerCard
@@ -301,6 +321,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Ensures X-Content-Type-Options header prevents MIME type sniffing"
   severity="medium"
   link="/analyzers/security/mime-sniffing"
+  pro
 />
 
 <AnalyzerCard
@@ -308,6 +329,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects server information leakage through HTTP headers"
   severity="low"
   link="/analyzers/security/web-server-fingerprinting"
+  pro
 />
 
 <AnalyzerCard
@@ -315,6 +337,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks"
   severity="high"
   link="/analyzers/security/host-injection"
+  pro
 />
 
 <AnalyzerCard
@@ -322,6 +345,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects open redirect vulnerabilities that can be used for phishing attacks"
   severity="medium"
   link="/analyzers/security/open-redirection"
+  pro
 />
 
 </div>

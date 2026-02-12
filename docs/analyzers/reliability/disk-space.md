@@ -4,6 +4,7 @@ description: Monitors disk space and inode usage across application directories 
 icon: hard-drive
 outline: [2, 3]
 tags: disk-space,storage,monitoring,reliability,infrastructure
+pro: true
 ---
 
 # Disk Space Analyzer

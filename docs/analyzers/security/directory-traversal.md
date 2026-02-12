@@ -4,6 +4,7 @@ description: Detects path traversal vulnerabilities where user input can access 
 icon: folder
 outline: [2, 3]
 tags: directory-traversal,path-traversal,file-access,security,lfi
+pro: true
 ---
 
 # Directory Traversal Analyzer

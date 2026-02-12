@@ -4,6 +4,7 @@ description: Detects unnecessary cookie domain configuration that makes cookies 
 icon: lock
 outline: [2, 3]
 tags: cookies,domain,subdomain,security,configuration,session
+pro: true
 ---
 
 # Cookie Domain Analyzer

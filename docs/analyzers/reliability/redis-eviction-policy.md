@@ -4,6 +4,7 @@ description: Checks Redis eviction policy is properly configured for the workloa
 icon: trash-2
 outline: [2, 3]
 tags: redis,eviction,memory,reliability,configuration
+pro: true
 ---
 
 # Redis Eviction Policy Analyzer

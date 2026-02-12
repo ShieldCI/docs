@@ -4,6 +4,7 @@ description: Suggests using Unix sockets for local Redis connections to improve 
 icon: database
 outline: [2, 3]
 tags: redis,sockets,performance,optimization,infrastructure
+pro: true
 ---
 
 # Redis Single Server Optimization

@@ -4,6 +4,7 @@ description: Detects when multiple Laravel services share the same Redis databas
 icon: layers
 outline: [2, 3]
 tags: redis,database,shared,isolation,reliability
+pro: true
 ---
 
 # Redis Shared Database Analyzer

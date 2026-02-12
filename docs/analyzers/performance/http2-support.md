@@ -4,6 +4,7 @@ description: Verifies that HTTP/2 protocol is enabled for improved performance
 icon: zap
 outline: [2, 3]
 tags: http2,protocol,performance,infrastructure
+pro: true
 ---
 
 # HTTP/2 Support Analyzer

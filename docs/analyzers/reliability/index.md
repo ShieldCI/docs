@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Reliability Analyzers
 
-**25 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
+**28 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
 
 ## Overview
 
@@ -81,6 +81,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Monitors available disk space and warns when storage is running low"
   severity="medium"
   link="/analyzers/reliability/disk-space"
+  pro
 />
 
 </div>
@@ -135,6 +136,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Detects routes pointing to non-existent controllers or methods"
   severity="medium"
   link="/analyzers/reliability/dead-route"
+  pro
 />
 
 </div>
@@ -148,6 +150,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Detects cache invalidation issues and stale cache problems"
   severity="medium"
   link="/analyzers/reliability/cache-busting"
+  pro
 />
 
 <AnalyzerCard
@@ -155,6 +158,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Ensures Redis eviction policy is configured appropriately"
   severity="high"
   link="/analyzers/reliability/redis-eviction-policy"
+  pro
 />
 
 <AnalyzerCard
@@ -162,6 +166,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Detects when multiple services share the same Redis database"
   severity="medium"
   link="/analyzers/reliability/redis-shared-database"
+  pro
 />
 
 <AnalyzerCard
@@ -169,6 +174,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Validates Redis connectivity and health"
   severity="high"
   link="/analyzers/reliability/redis-status"
+  pro
 />
 
 </div>
@@ -182,6 +188,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Ensures Horizon prefix is configured to avoid job collisions"
   severity="medium"
   link="/analyzers/reliability/horizon-prefix"
+  pro
 />
 
 <AnalyzerCard
@@ -189,6 +196,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Validates Horizon supervisor provisioning configuration"
   severity="high"
   link="/analyzers/reliability/horizon-provisioning-plan"
+  pro
 />
 
 <AnalyzerCard
@@ -196,6 +204,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Checks if Horizon is running and processing jobs"
   severity="high"
   link="/analyzers/reliability/horizon-status"
+  pro
 />
 
 </div>
@@ -209,6 +218,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Ensures PCNTL extension is available for queue workers and signal handling"
   severity="medium"
   link="/analyzers/reliability/pcntl"
+  pro
 />
 
 <AnalyzerCard
@@ -216,6 +226,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Detects usage of global variables which can cause unpredictable behavior"
   severity="medium"
   link="/analyzers/reliability/global-variable"
+  pro
 />
 
 </div>

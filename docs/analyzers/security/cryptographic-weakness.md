@@ -4,6 +4,7 @@ description: Detects use of weak or deprecated cryptographic algorithms includin
 icon: lock
 outline: [2, 3]
 tags: cryptography,encryption,hashing,weak-algorithms,security
+pro: true
 ---
 
 # Cryptographic Weakness Analyzer
@@ -201,7 +202,7 @@ $token = bin2hex(random_bytes(32));
 
 ## Related Analyzers
 
-- [Hashing Strength Analyzer](/analyzers/security/hashing-strength) - Validates password hashing configuration
+- [Password Security Analyzer](/analyzers/security/password-security) - Validates password hashing configuration
 - [App Key Analyzer](/analyzers/security/app-key) - Checks application encryption key
 - [Cookie Analyzer](/analyzers/security/cookie) - Checks cookie encryption settings
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token security

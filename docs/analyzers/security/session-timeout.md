@@ -4,6 +4,7 @@ description: Validates session timeout and lifetime configuration to prevent una
 icon: timer
 outline: [2, 3]
 tags: session,timeout,lifetime,security,configuration
+pro: true
 ---
 
 # Session Timeout Analyzer

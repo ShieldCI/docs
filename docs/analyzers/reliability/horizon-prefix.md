@@ -4,6 +4,7 @@ description: Validates Horizon uses a unique prefix to prevent Redis collisions 
 icon: hash
 outline: [2, 3]
 tags: horizon,prefix,redis,reliability,configuration
+pro: true
 ---
 
 # Horizon Prefix Analyzer

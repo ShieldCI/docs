@@ -4,6 +4,7 @@ description: Validates that Laravel Nova admin panel is properly secured with au
 icon: shield
 outline: [2, 3]
 tags: nova,admin,authentication,security,authorization
+pro: true
 ---
 
 # Nova Security Analyzer

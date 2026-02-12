@@ -4,6 +4,7 @@ description: Detects SQL injection vulnerabilities in validation rules and custo
 icon: database
 outline: [2, 3]
 tags: sql-injection,validation,security,database
+pro: true
 ---
 
 # Validation SQL Injection Analyzer

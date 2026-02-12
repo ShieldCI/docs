@@ -4,6 +4,7 @@ description: Detects XML External Entity injection vulnerabilities in XML parsin
 icon: file-code
 outline: [2, 3]
 tags: xxe,xml,external-entity,injection,security
+pro: true
 ---
 
 # XXE Injection Vulnerabilities Analyzer

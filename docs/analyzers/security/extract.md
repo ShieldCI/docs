@@ -4,6 +4,7 @@ description: Detects use of PHP extract() function which can overwrite variables
 icon: alert-triangle
 outline: [2, 3]
 tags: extract,variable-overwrite,security,php
+pro: true
 ---
 
 # Extract Function Analyzer

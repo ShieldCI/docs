@@ -4,6 +4,7 @@ description: Detects information disclosure via Server HTTP header that aids att
 icon: fingerprint
 outline: [2, 3]
 tags: fingerprinting,headers,server,information-disclosure,security
+pro: true
 ---
 
 # Web Server Fingerprinting Analyzer

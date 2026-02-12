@@ -4,6 +4,7 @@ description: Ensures Xdebug and other debugging extensions are not loaded in pro
 icon: bug
 outline: [2, 3]
 tags: php,xdebug,debugging,performance,production
+pro: true
 ---
 
 # Xdebug Production Check
