@@ -214,7 +214,6 @@ Ready to improve your Laravel application's security and quality?
 
 ## Community & Support
 
-- **Documentation** - docs.shieldci.com
 - **GitHub** - github.com/shieldci/laravel
 
 ## Comparison
