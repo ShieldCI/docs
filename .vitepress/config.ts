@@ -19,12 +19,18 @@ export default defineConfig({
     sitemap: {
         hostname: 'https://docs.shieldci.com',
         transformItems: (items) => items
-            .filter(item => !item.url.includes('README'))
-            .map(item => ({
-                ...item,
-                changefreq: item.url.includes('analyzers/') ? 'weekly' : 'monthly',
-                priority: item.url === '' ? 1.0 : item.url.includes('analyzers/') ? 0.8 : 0.6
-            }))
+            .filter(item => !item.url.includes('README')
+                && item.url !== 'introduction/'
+                && item.url !== 'getting-started/')
+            .map(item => {
+                const url = item.url.replace(/\/$/, '')
+                return {
+                    ...item,
+                    url,
+                    changefreq: url.includes('analyzers/') ? 'weekly' : 'monthly',
+                    priority: url === '' ? 1.0 : url.includes('analyzers/') ? 0.8 : 0.6
+                }
+            })
     },
 
     // Head configuration for fonts, favicon, meta tags, and analytics
@@ -48,7 +54,7 @@ export default defineConfig({
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
         const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
         const siteUrl = 'https://docs.shieldci.com'
-        const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
+        const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '').replace(/\/$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
 
         // Canonical URL

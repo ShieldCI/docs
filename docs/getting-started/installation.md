@@ -314,5 +314,4 @@ php artisan cache:clear
 
 ## Getting Help
 
-- **Documentation:** [docs.shieldci.com](https://docs.shieldci.com)
 - **GitHub Issues:** [github.com/shieldci/laravel/issues](https://github.com/shieldci/laravel/issues)
