@@ -25,12 +25,14 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - **Unclosed @php blocks**: Missing @endphp directives
 
 **Smart Detection Features:**
+- ✅ **Hybrid regex + AST analysis** — structural checks on raw Blade, logic detection via compiled PHP AST
 - ✅ Distinguishes between presentation logic and business logic
 - ✅ Allows simple calculations (`{{ $price * $quantity }}`)
 - ✅ Excludes config/session/cache helper calls
 - ✅ Detects relationship queries (`$user->posts()->get()`)
-- ✅ Tracks 7 different issue types with appropriate severity levels
-- ✅ Configurable threshold for @php block complexity
+- ✅ Three-tier class name classification to avoid false positives (NON_ELOQUENT_CLASSES, DEFINITE_NON_MODEL_SUFFIXES, AMBIGUOUS_SUFFIXES)
+- ✅ Tracks 9 different issue types with appropriate severity levels
+- ✅ Configurable thresholds for @php block complexity and arithmetic operator sensitivity
 
 **Detected Operations by Severity:**
 
@@ -442,6 +444,10 @@ Then in `config/shieldci.php`:
             // Maximum lines allowed in @php blocks before flagging
             // Default: 10
             'max_php_block_lines' => 10,
+
+            // Minimum arithmetic operators to flag a calculation in {{ }} expressions
+            // Default: 2 (e.g., {{ ($a * $b) + $c }} triggers, {{ $a * $b }} does not)
+            'min_arithmetic_operators' => 2,
         ],
     ],
 ],
