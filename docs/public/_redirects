@@ -1,0 +1,5 @@
+# Section index redirects
+/introduction /introduction/what-is-shieldci 301
+/introduction/ /introduction/what-is-shieldci 301
+/getting-started /getting-started/installation 301
+/getting-started/ /getting-started/installation 301
