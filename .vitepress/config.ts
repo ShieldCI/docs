@@ -208,12 +208,12 @@ export default defineConfig({
                 },
                 {
                     text: 'Analyzers',
-                    link: '/analyzers/',
+                    link: '/analyzers',
                     collapsed: false,
                     items: [
                         {
                             text: 'Security',
-                            link: '/analyzers/security/',
+                            link: '/analyzers/security',
                             collapsed: true,
                             items: [
                                 { text: 'Application Key', link: '/analyzers/security/app-key' },
@@ -242,7 +242,7 @@ export default defineConfig({
                         },
                         {
                             text: 'Performance',
-                            link: '/analyzers/performance/',
+                            link: '/analyzers/performance',
                             collapsed: true,
                             items: [
                                 { text: 'Asset Cache Headers', link: '/analyzers/performance/asset-cache-headers' },
@@ -267,7 +267,7 @@ export default defineConfig({
                         },
                         {
                             text: 'Reliability',
-                            link: '/analyzers/reliability/',
+                            link: '/analyzers/reliability',
                             collapsed: true,
                             items: [
                                 { text: 'Cache Prefix', link: '/analyzers/reliability/cache-prefix-configuration' },
@@ -287,7 +287,7 @@ export default defineConfig({
                         },
                         {
                             text: 'Code Quality',
-                            link: '/analyzers/code-quality/',
+                            link: '/analyzers/code-quality',
                             collapsed: true,
                             items: [
                                 { text: 'Commented Code', link: '/analyzers/code-quality/commented-code' },
@@ -299,7 +299,7 @@ export default defineConfig({
                         },
                         {
                             text: 'Best Practices',
-                            link: '/analyzers/best-practices/',
+                            link: '/analyzers/best-practices',
                             collapsed: true,
                             items: [
                                 { text: 'N+1 Query', link: '/analyzers/best-practices/eloquent-n-plus-one' },
