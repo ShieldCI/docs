@@ -4,7 +4,7 @@ import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
     title: 'ShieldCI',
-    description: 'Comprehensive security and performance analysis for Laravel applications',
+    description: 'AI-powered comprehensive code analysis for Laravel applications',
 
     // Source directory
     srcDir: 'docs',
