@@ -48,7 +48,11 @@ function linkToFile(link: string): string {
     return path.join(DOCS_DIR, rel, 'index.md')
   }
 
-  return path.join(DOCS_DIR, `${rel}.md`)
+  // Try <rel>.md first, fall back to <rel>/index.md (directory index pages)
+  const directFile = path.join(DOCS_DIR, `${rel}.md`)
+  if (fs.existsSync(directFile)) return directFile
+
+  return path.join(DOCS_DIR, rel, 'index.md')
 }
 
 /** Collect all non-index .md files under analyzers/<category>/ */
