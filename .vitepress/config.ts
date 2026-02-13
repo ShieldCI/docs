@@ -4,7 +4,7 @@ import llmstxt from 'vitepress-plugin-llms'
 
 export default defineConfig({
     title: 'ShieldCI',
-    description: 'Comprehensive security and performance analysis for Laravel applications',
+    description: 'AI-powered comprehensive code analysis for Laravel applications',
 
     // Source directory
     srcDir: 'docs',
@@ -23,7 +23,7 @@ export default defineConfig({
                 && item.url !== 'introduction/'
                 && item.url !== 'getting-started/')
             .map(item => {
-                const url = item.url.replace(/\/$/, '')
+                const url = item.url
                 return {
                     ...item,
                     url,
@@ -54,7 +54,7 @@ export default defineConfig({
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
         const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
         const siteUrl = 'https://docs.shieldci.com'
-        const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '').replace(/\/$/, '')
+        const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
 
         // Canonical URL
