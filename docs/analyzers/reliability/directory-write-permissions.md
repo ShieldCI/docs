@@ -181,11 +181,19 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'writable_directories' => [
-    'storage',
-    'bootstrap/cache',
-    'public/uploads',      // If you store uploads here
-    'resources/compiled',  // Custom compiled assets
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+        
+        'directory-write-permissions' => [
+            'writable_directories' => [
+                'storage',
+                'bootstrap/cache',
+                'public/uploads',      // If you store uploads here
+                'resources/compiled',  // Custom compiled assets
+            ],
+        ],
+    ],
 ],
 ```
 
@@ -217,7 +225,15 @@ If you want to disable symlink verification or check custom symlinks:
 
 ```php
 // config/shieldci.php
-'check_symlinks' => true,  // Set to false to disable
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+        
+        'directory-write-permissions' => [
+            'check_symlinks' => true,  // Set to false to disable
+        ],
+    ],
+],
 
 // Or use Laravel's filesystems config:
 // config/filesystems.php

@@ -148,11 +148,17 @@ By default, only the default connection is checked. To verify multiple connectio
 
 ```php
 // config/shieldci.php
-'database' => [
-    'connections' => ['mysql', 'tenant_db', 'analytics'],
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+        
+        'database-status' => [
+            'connections' => ['mysql', 'tenant_db', 'analytics'],
 
-    // Or as comma-separated string
-    'connections' => 'mysql,tenant_db,analytics',
+            // Or as comma-separated string
+            'connections' => 'mysql,tenant_db,analytics',
+        ],
+    ],
 ],
 ```
 

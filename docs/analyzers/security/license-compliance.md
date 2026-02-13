@@ -66,12 +66,16 @@ composer show vendor/package --all | grep source
 
 ```php
 // config/shieldci.php
-return [
-    'license_compliance' => [
-        // Dev-only tools are usually safe
-        'ignored_models' => [],
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'license-compliance' => [
+            // Dev-only tools are usually safe
+            'ignored_models' => [],
+        ],
     ],
-];
+],
 ```
 
 ### Proper Fix (120 minutes)
@@ -113,33 +117,39 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'license_compliance' => [
-    // Add licenses your legal team approves
-    'whitelisted_licenses' => [
-        'MIT',
-        'Apache-2.0',
-        'BSD-2-Clause',
-        'BSD-3-Clause',
-        'ISC',
-        'LGPL-2.1',  // Lesser GPL is usually acceptable
-        'LGPL-3.0',
-        'CC0-1.0',
-        'Unlicense',
-        // Add your organization's approved licenses
-    ],
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'license-compliance' => [
+            // Add licenses your legal team approves
+            'whitelisted_licenses' => [
+                'MIT',
+                'Apache-2.0',
+                'BSD-2-Clause',
+                'BSD-3-Clause',
+                'ISC',
+                'LGPL-2.1',  // Lesser GPL is usually acceptable
+                'LGPL-3.0',
+                'CC0-1.0',
+                'Unlicense',
+                // Add your organization's approved licenses
+            ],
 
-    // Customize restrictive licenses
-    'restrictive_licenses' => [
-        'GPL-2.0',
-        'GPL-2.0-only',
-        'GPL-2.0-or-later',
-        'GPL-3.0',
-        'GPL-3.0-only',
-        'GPL-3.0-or-later',
-        'AGPL-3.0',
-        'AGPL-3.0-only',
-        'AGPL-3.0-or-later',
-        // Add licenses your legal team flags
+            // Customize restrictive licenses
+            'restrictive_licenses' => [
+                'GPL-2.0',
+                'GPL-2.0-only',
+                'GPL-2.0-or-later',
+                'GPL-3.0',
+                'GPL-3.0-only',
+                'GPL-3.0-or-later',
+                'AGPL-3.0',
+                'AGPL-3.0-only',
+                'AGPL-3.0-or-later',
+                // Add licenses your legal team flags
+            ],
+        ],
     ],
 ],
 ```
