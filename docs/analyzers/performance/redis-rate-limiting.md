@@ -216,4 +216,4 @@ php artisan horizon
 
 - [Redis Throttling Analyzer](/analyzers/performance/redis-throttling) - For HTTP request rate limiting
 - [Queue Driver Analyzer](/analyzers/performance/queue-driver) - Ensures optimal queue driver
-- [Queue Timeout Analyzer](/analyzers/reliability/queue-timeout) - Ensures proper job timeouts
+- [Queue Timeout Analyzer](/analyzers/reliability/queue-timeout-configuration) - Ensures proper job timeouts

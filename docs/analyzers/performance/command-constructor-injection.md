@@ -225,4 +225,4 @@ time php artisan inspire
 ## Related Analyzers
 
 - [Service Container Resolution Analyzer](/analyzers/best-practices/service-container-resolution) - Checks service resolution patterns
-- [Queue Timeout Analyzer](/analyzers/reliability/queue-timeout) - Ensures proper job timeouts
+- [Queue Timeout Analyzer](/analyzers/reliability/queue-timeout-configuration) - Ensures proper job timeouts

@@ -136,5 +136,5 @@ This analyzer runs in **all environments including CI** since it checks route de
 
 ## Related Analyzers
 
-- [Dead Route Analyzer](/analyzers/reliability/dead-routes) - Detects routes pointing to non-existent controllers
+- [Dead Route Analyzer](/analyzers/reliability/dead-route) - Detects routes pointing to non-existent controllers
 - [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures routes are cached in production
