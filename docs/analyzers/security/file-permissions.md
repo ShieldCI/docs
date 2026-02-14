@@ -134,18 +134,24 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'file_permissions' => [
-    // Add custom files/directories to check
-    'custom/sensitive/file.php' => [
-        'type' => 'file',
-        'max' => octdec('644'),
-        'recommended' => octdec('600'),
-        'critical' => true,
-    ],
-    'custom/writable/dir' => [
-        'type' => 'directory',
-        'max' => octdec('775'),
-        'recommended' => octdec('775'),
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'file-permissions' => [
+            // Add custom files/directories to check
+            'custom/sensitive/file.php' => [
+                'type' => 'file',
+                'max' => octdec('644'),
+                'recommended' => octdec('600'),
+                'critical' => true,
+            ],
+            'custom/writable/dir' => [
+                'type' => 'directory',
+                'max' => octdec('775'),
+                'recommended' => octdec('775'),
+            ],
+        ],
     ],
 ],
 ```

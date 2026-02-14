@@ -103,7 +103,15 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'build_path' => env('SHIELDCI_BUILD_PATH', public_path('dist')),
+'analyzers' => [
+    'performance' => [
+        'enabled' => true,
+        
+        'asset-minification' => [
+            'build_path' => env('SHIELDCI_BUILD_PATH', public_path('dist')),
+        ],
+    ],
+],
 ```
 
 Or via environment variable:
@@ -114,7 +122,7 @@ SHIELDCI_BUILD_PATH=/var/www/html/public/build
 ```
 
 ::: tip
-By default, the analyzer checks the `public` directory. You only need to configure `build_path` if your assets are compiled to a different location (e.g., `public/dist`, `public/build`).
+By default, the analyzer checks the `public` directory. You only need to configure `analyzers.performance.asset-minification.build_path` if your assets are compiled to a different location (e.g., `public/dist`, `public/build`).
 :::
 
 

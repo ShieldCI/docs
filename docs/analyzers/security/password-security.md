@@ -193,12 +193,18 @@ If you use MD5/SHA1 for non-password purposes (cache keys, checksums, ETags):
 
 ```php
 // config/shieldci.php
-'password_security' => [
-    'allowed_weak_hash_patterns' => [
-        'cache',
-        'fingerprint',
-        'checksum',
-        'etag',
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'password-security' => [
+            'allowed_weak_hash_patterns' => [
+                'cache',
+                'fingerprint',
+                'checksum',
+                'etag',
+            ],
+        ],
     ],
 ],
 ```
@@ -211,31 +217,37 @@ MD5 and SHA1 are acceptable for non-cryptographic purposes like cache keys and c
 
 This analyzer is automatically **skipped in CI** environments (`$runInCI = false`) because hashing configuration is environment-specific.
 
-Configuration is read from the `password_security` key in `config/shieldci.php`.
+Configuration is read from `analyzers.security.password-security` in `config/shieldci.php`.
 
 ```php
 // config/shieldci.php
-'password_security' => [
-    // Hashing thresholds
-    'bcrypt_min_rounds' => 12,
-    'argon2_min_memory' => 65536,
-    'argon2_min_time' => 2,
-    'argon2_min_threads' => 2,
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'password-security' => [
+            // Hashing thresholds
+            'bcrypt_min_rounds' => 12,
+            'argon2_min_memory' => 65536,
+            'argon2_min_time' => 2,
+            'argon2_min_threads' => 2,
 
-    // Confirmation timeout ceiling (seconds)
-    'password_confirmation_max_timeout' => 10800,  // 3 hours
+            // Confirmation timeout ceiling (seconds)
+            'password_confirmation_max_timeout' => 10800,  // 3 hours
 
-    // Allow weak hashing for non-password use cases
-    'allowed_weak_hash_patterns' => [
-        'cache',
-        'fingerprint',
-        'checksum',
-        'etag',
-    ],
+            // Allow weak hashing for non-password use cases
+            'allowed_weak_hash_patterns' => [
+                'cache',
+                'fingerprint',
+                'checksum',
+                'etag',
+            ],
 
-    // Ignore specific files from code scanning
-    'ignored_paths' => [
-        'app/Utilities/CacheKeyGenerator.php',
+            // Ignore specific files from code scanning
+            'ignored_paths' => [
+                'app/Utilities/CacheKeyGenerator.php',
+            ],
+        ],
     ],
 ],
 ```
