@@ -241,32 +241,6 @@ Then in `config/shieldci.php`:
 ],
 ```
 
-Or use `@shieldci-ignore` to suppress warnings for specific classes:
-
-```php
-/**
- * @shieldci-ignore php-side-filtering
- */
-class ComplexAnalyticsService
-{
-    public function getAnalytics()
-    {
-        // Legitimate use of filter() with external data
-        return Order::all()->filter(fn($o) => $this->matchesApiCriteria($o));
-    }
-}
-```
-
-Or use general suppression:
-
-```php
-/**
- * @shieldci-ignore
- */
-class LegacyService { ... }
-```
-
-
 **4. Optimize When Database Filtering Isn't Possible**
 
 ```php

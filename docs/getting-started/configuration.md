@@ -511,7 +511,44 @@ These warnings don't block execution but help you fix configuration issues.
 
 ### Inline Suppression
 
-**Note:** Inline suppression via comments is not currently supported. Use the `ignore_errors` configuration or baseline file instead.
+Suppress specific issues directly in your source code with `@shieldci-ignore` comments. Place the comment on the **same line** or the **line immediately above** the flagged code.
+
+**Suppress all analyzers on a line:**
+```php
+// @shieldci-ignore
+$result = DB::select("SELECT * FROM users WHERE id = $id");
+```
+
+**Suppress a specific analyzer:**
+```php
+// @shieldci-ignore sql-injection
+$result = DB::select("SELECT * FROM users WHERE id = $id");
+```
+
+**Suppress multiple analyzers (comma-separated, no spaces):**
+```php
+// @shieldci-ignore sql-injection,xss-detection
+echo DB::select("SELECT * FROM users WHERE name = '$name'");
+```
+
+**Same-line placement:**
+```php
+$result = DB::select("SELECT * FROM users"); // @shieldci-ignore sql-injection
+```
+
+**Supported comment styles:**
+```php
+// @shieldci-ignore            (double-slash)
+# @shieldci-ignore             (hash)
+/* @shieldci-ignore */         (block comment)
+/** @shieldci-ignore */        (docblock)
+```
+
+::: tip When to use inline suppression vs config
+- **`@shieldci-ignore`**: Best for isolated false positives where the surrounding code makes the intent clear
+- **`ignore_errors`**: Best for suppressing patterns across multiple files or entire directories
+- **`dont_report`**: Best when you want visibility but don't want CI failures
+:::
 
 ## Performance Configuration
 
