@@ -163,12 +163,18 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'hsts_header' => [
-    'min_max_age' => env('HSTS_MIN_MAX_AGE', 15768000),  // 6 months default
-    'require_include_subdomains' => env('HSTS_REQUIRE_SUBDOMAINS', true),
-    'require_preload' => env('HSTS_REQUIRE_PRELOAD', false),
-    'check_session_secure' => true,
-    'ignored_middleware' => [],  // Middleware files to skip
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'hsts-header' => [
+            'min_max_age' => env('HSTS_MIN_MAX_AGE', 15768000),  // 6 months default
+            'require_include_subdomains' => env('HSTS_REQUIRE_SUBDOMAINS', true),
+            'require_preload' => env('HSTS_REQUIRE_PRELOAD', false),
+            'check_session_secure' => true,
+            'ignored_middleware' => [],  // Middleware files to skip
+        ],
+    ],
 ],
 ```
 

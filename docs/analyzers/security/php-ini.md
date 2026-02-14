@@ -176,20 +176,26 @@ php artisan vendor:publish --tag=shieldci-config
 Then in `config/shieldci.php`:
 
 ```php
-'php_configuration' => [
-    // Path to your php.ini file (auto-detected if not set)
-    'ini_path' => null,
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'php-ini' => [
+            // Path to your php.ini file (auto-detected if not set)
+            'ini_path' => null,
 
-    // Custom secure settings to validate
-    'secure_settings' => [
-        'allow_url_fopen' => false,
-        'allow_url_include' => false,
-        'expose_php' => false,
-        'display_errors' => false,
-        'display_startup_errors' => false,
-        'log_errors' => true,
-        'ignore_repeated_errors' => false,
-        // Add your organization's requirements
+            // Custom secure settings to validate
+            'php_configuration' => [
+                'allow_url_fopen' => false,
+                'allow_url_include' => false,
+                'expose_php' => false,
+                'display_errors' => false,
+                'display_startup_errors' => false,
+                'log_errors' => true,
+                'ignore_repeated_errors' => false,
+                // Add your organization's requirements
+            ],
+        ],
     ],
 ],
 ```
