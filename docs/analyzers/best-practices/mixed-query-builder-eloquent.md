@@ -456,32 +456,6 @@ class ReportService
 // If you use QB for orders here, use it everywhere in this class.
 ```
 
-**6. Document Legitimate Query Builder Usage**
-
-```php
-/**
- * Analytics repository using Query Builder for performance.
- *
- * SECURITY NOTE: This repository uses DB::table() for complex analytics
- * queries that don't need model events or global scopes. All queries here
- * are read-only and don't bypass security scopes since they aggregate
- * across all tenants for admin reporting.
- *
- * @shieldci-ignore mixed-query-builder-eloquent
- */
-class AnalyticsRepository
-{
-    public function getTenantStatistics()
-    {
-        return DB::table('tenants')
-            ->select('tenant_id', DB::raw('COUNT(*) as order_count'))
-            ->join('orders', 'tenants.id', '=', 'orders.tenant_id')
-            ->groupBy('tenant_id')
-            ->get();
-    }
-}
-```
-
 ## References
 
 - [Laravel Eloquent ORM](https://laravel.com/docs/eloquent) - Official Eloquent documentation
