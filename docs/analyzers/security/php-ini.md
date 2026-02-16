@@ -240,6 +240,37 @@ RUN php -r "exit(ini_get('allow_url_include') === 'Off' ? 0 : 1);" \
     || (echo "❌ Insecure PHP configuration!" && exit 1)
 ```
 
+**7. Laravel Vapor / Serverless Deployments**
+
+On **Laravel Vapor** (AWS Lambda), the system `php.ini` is read-only. ShieldCI automatically detects Vapor and adjusts its recommendations accordingly.
+
+To override PHP settings on Vapor, create a `php/conf.d/php.ini` file in your **project root**:
+
+```bash
+mkdir -p php/conf.d
+```
+
+```ini
+; php/conf.d/php.ini
+allow_url_fopen = Off
+allow_url_include = Off
+expose_php = Off
+display_errors = Off
+display_startup_errors = Off
+log_errors = On
+ignore_repeated_errors = Off
+```
+
+After adding or changing this file, **redeploy** your application for changes to take effect:
+
+```bash
+vapor deploy {environment}
+```
+
+::: tip
+ShieldCI auto-detects Vapor via `vapor.yml`, the `laravel/vapor-core` package, or Lambda environment variables. No configuration is needed — recommendations will automatically point to `php/conf.d/php.ini` instead of the system `php.ini`.
+:::
+
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
