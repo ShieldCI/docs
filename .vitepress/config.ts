@@ -1,6 +1,17 @@
 import { defineConfig, type HeadConfig } from 'vitepress'
+import { loadEnv } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import llmstxt from 'vitepress-plugin-llms'
+
+// Load env vars from .env files (local dev) merged with process.env (CloudFlare Pages)
+const env = loadEnv('production', process.cwd(), '')
+
+const siteUrl = env.SITE_URL || 'https://docs.shieldci.com'
+const gaMeasurementId = env.GA_MEASUREMENT_ID || ''
+const algoliaAppId = env.ALGOLIA_APP_ID || ''
+const algoliaApiKey = env.ALGOLIA_API_KEY || ''
+const algoliaIndexName = env.ALGOLIA_INDEX_NAME || 'shieldci_docs'
+const algoliaAskAiId = env.ALGOLIA_ASK_AI_ID || ''
 
 export default defineConfig({
     title: 'ShieldCI',
@@ -17,7 +28,7 @@ export default defineConfig({
 
     // Sitemap generation
     sitemap: {
-        hostname: 'https://docs.shieldci.com',
+        hostname: siteUrl,
         transformItems: (items) => items
             .filter(item => !item.url.includes('README')
                 && item.url !== 'introduction/'
@@ -43,9 +54,11 @@ export default defineConfig({
         ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
         ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
         ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }],
-        // Google Analytics
-        ['script', { async: '', src: 'https://www.googletagmanager.com/gtag/js?id=G-GLS144XXN3' }],
-        ['script', {}, `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GLS144XXN3');`]
+        // Google Analytics (conditional — disabled when GA_MEASUREMENT_ID is unset)
+        ...(gaMeasurementId ? [
+            ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}` }],
+            ['script', {}, `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${gaMeasurementId}');`],
+        ] as HeadConfig[] : []),
     ],
 
     // Dynamic per-page OG/Twitter meta and JSON-LD structured data
@@ -53,7 +66,6 @@ export default defineConfig({
         const head: HeadConfig[] = []
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
         const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
-        const siteUrl = 'https://docs.shieldci.com'
         const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
 
@@ -335,10 +347,10 @@ export default defineConfig({
         search: {
             provider: 'algolia',
             options: {
-                appId: 'XVN8IXORZF',
-                apiKey: '86f0c3b09d78172f3cc3cac991c10af0',
-                indexName: 'shieldci_docs',
-                askAi: 'vm0ybu30QDS3'
+                appId: algoliaAppId,
+                apiKey: algoliaApiKey,
+                indexName: algoliaIndexName,
+                ...(algoliaAskAiId && { askAi: algoliaAskAiId }),
             }
         },
 
