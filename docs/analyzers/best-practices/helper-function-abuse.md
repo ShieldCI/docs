@@ -21,12 +21,13 @@ Detects excessive use of Laravel helper functions that hide dependencies and vio
 - **Severity escalation**: Low severity for moderate violations, Medium for 10+ over threshold, High for 20+ over threshold
 - **Per-helper tracking**: Shows which specific helpers are used and how many times
 
-**Tracked Helpers** (25 dependency-hiding helpers):
+**Tracked Helpers** (23 dependency-hiding helpers):
 
-`app`, `auth`, `cache`, `config`, `cookie`, `event`, `logger`, `old`, `redirect`, `request`, `response`, `route`, `session`, `storage_path`, `url`, `view`, `abort`, `abort_if`, `abort_unless`, `dispatch`, `info`, `policy`, `resolve`, `validator`, `report`
+`app`, `auth`, `cache`, `config`, `cookie`, `event`, `logger`, `old`, `redirect`, `request`, `response`, `session`, `storage_path`, `view`, `abort`, `abort_if`, `abort_unless`, `dispatch`, `info`, `policy`, `resolve`, `validator`, `report`
 
 **Not Tracked** (intentionally excluded):
 
+- **URL helpers**: `route`, `url` - stateless URL-generation utilities that don't hide testable dependencies
 - **Utility helpers**: `collect`, `tap`, `value`, `optional`, `now`, `today`, `retry`, `throw_if`, `throw_unless` - pure utilities that don't hide dependencies
 - **Debug helpers**: `dd`, `dump` - handled by [Debug Mode Analyzer](/analyzers/security/debug-mode)
 - **Low priority**: `bcrypt` - simple utility, rarely abused
@@ -40,12 +41,23 @@ The analyzer automatically skips certain contexts where helper usage is acceptab
 - `database/migrations/` - Migrations don't support constructor DI
 - `database/seeders/` - Seeders often need dynamic resolution
 - `database/factories/` - Factories may need service resolution
+- `app/Jobs/` - Job constructors are used for serialization, can't DI config/services
+- `app/Listeners/` - Event-driven infrastructure, similar to Jobs
+- `app/Http/Middleware/` - HTTP pipeline infrastructure, needs request/response/config
 
 **Whitelisted Class Patterns** (default):
 - `*ServiceProvider` - Service providers legitimately bootstrap the app
 - `*Command` - Console commands often need conditional resolution
+- `*Controller` - HTTP boundary layer, naturally uses view/response/redirect
+- `*Job` - Queue infrastructure where helpers are the natural pattern
+- `*Listener` - Event listeners often need dynamic resolution
+- `*Middleware` - HTTP pipeline needs request/response/config access
 - `*Seeder` - Database seeders need service resolution
 - `*Test` / `*TestCase` - Test classes need flexibility
+
+::: tip Why both directories and class patterns?
+Directory whitelisting catches classes regardless of naming convention (e.g. `DispatchDealEmail` in `app/Jobs/`). Class pattern whitelisting catches classes in non-standard directories (e.g. a `ProcessOrderJob` in `app/Services/`). Together they provide comprehensive coverage.
+:::
 
 ## Why It Matters
 
@@ -57,8 +69,8 @@ The analyzer automatically skips certain contexts where helper usage is acceptab
 - **Refactoring Resistance**: Hard to refactor when dependencies aren't explicit in constructors
 
 **Real-world impact:**
-- Controllers with 10+ helper calls become untestable without full application bootstrap
-- Services using helpers can't be instantiated independently for unit testing
+- Services with 10+ helper calls become untestable without full application bootstrap
+- Repositories using helpers can't be instantiated independently for unit testing
 - Code reviews miss dependency violations because helpers hide them
 - Refactoring becomes risky without comprehensive integration tests
 
@@ -260,6 +272,9 @@ Then in `config/shieldci.php`:
                 'database/migrations',
                 'database/seeders',
                 'database/factories',
+                'app/Jobs',
+                'app/Listeners',
+                'app/Http/Middleware',
                 'app/Console/Commands',  // Add custom directories
             ],
 
@@ -267,6 +282,10 @@ Then in `config/shieldci.php`:
             'whitelist_classes' => [
                 '*ServiceProvider',
                 '*Command',
+                '*Controller',
+                '*Job',
+                '*Listener',
+                '*Middleware',
                 '*Seeder',
                 '*Test',
                 '*TestCase',
@@ -296,8 +315,8 @@ For legacy codebases:
 // Step 2: Start with services layer
 // Refactor services first as they're easiest to test
 
-// Step 3: Move to controllers
-// Inject Request, use Facades for occasional needs
+// Step 3: Move to repositories and actions
+// Inject contracts, use Facades for occasional needs
 
 // Step 4: Use baseline to ignore legacy code
 php artisan shield:baseline
