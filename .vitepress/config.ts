@@ -191,7 +191,7 @@ export default defineConfig({
             },*/
             {
                 text: 'Changelog',
-                link: 'https://github.com/shieldci/laravel/releases'
+                link: 'https://github.com/shieldci/laravel/blob/master/CHANGELOG.md'
             },
         ],
 
