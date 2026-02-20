@@ -10,7 +10,7 @@ tags: laravel,portability,configuration,paths,deployment,best-practices,helpers,
 
 | Analyzer ID                 | Category           | Severity | Time To Fix |
 | ----------------------------| :----------------: |:--------:| -----------:|
-| `hardcoded-storage-paths`   | ⚡ Best Practices  | Medium   | 10 minutes  |
+| `hardcoded-storage-paths`   | 🏅 Best Practices  | Medium   | 10 minutes  |
 
 ## What This Checks
 

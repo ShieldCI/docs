@@ -10,7 +10,7 @@ tags: complexity,maintainability,code-quality,readability
 
 | Analyzer ID      | Category         | Severity | Time To Fix |
 | -----------------| :--------------: |:--------:| -----------:|
-| `method-length`  | ✅ Code Quality  | Low      | 30 minutes  |
+| `method-length`  | 💻 Code Quality  | Low      | 30 minutes  |
 
 ## What This Checks
 

@@ -10,7 +10,7 @@ tags: error-handling,exceptions,debugging,monitoring,reliability,laravel
 
 | Analyzer ID      |    Category    | Severity | Time To Fix |
 |------------------|:--------------:|:--------:|------------:|
-| `silent-failure` | ⚡ Best Practices |   High   |  20 minutes |
+| `silent-failure` | 🏅 Best Practices |   High   |  20 minutes |
 
 Detects empty catch blocks and error suppression that hide failures, making debugging impossible and masking critical production issues.
 

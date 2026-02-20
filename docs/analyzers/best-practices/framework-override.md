@@ -10,7 +10,7 @@ tags: laravel,framework,upgradability,maintenance,solid,best-practices,macros,se
 
 | Analyzer ID              |     Category      | Severity | Time To Fix |
 | -------------------------|:-----------------:|:--------:|------------:|
-| `framework-override`     | ⚡ Best Practices  | High     | 120 minutes |
+| `framework-override`     | 🏅 Best Practices  | High     | 120 minutes |
 
 ## What This Checks
 

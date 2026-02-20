@@ -10,7 +10,7 @@ tags: complexity,maintainability,code-quality,readability
 
 | Analyzer ID      | Category         | Severity | Time To Fix |
 | -----------------| :--------------: |:--------:| -----------:|
-| `nesting-depth`  | ✅ Code Quality  | Medium   | 20 minutes  |
+| `nesting-depth`  | 💻 Code Quality  | Medium   | 20 minutes  |
 
 ## What This Checks
 

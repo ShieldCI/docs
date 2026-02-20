@@ -10,7 +10,7 @@ tags: laravel,blade,mvc,views,architecture,best-practices,separation-of-concerns
 
 | Analyzer ID                           | Category           | Severity | Time To Fix |
 | ------------------------------------- | :----------------: |:--------:| -----------:|
-| `logic-in-blade`                      | ⚡ Best Practices  | Medium   | 30 minutes  |
+| `logic-in-blade`                      | 🏅 Best Practices  | Medium   | 30 minutes  |
 
 ## What This Checks
 

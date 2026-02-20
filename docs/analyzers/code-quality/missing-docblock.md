@@ -10,7 +10,7 @@ tags: documentation,maintainability,code-quality,readability
 
 | Analyzer ID         | Category         | Severity | Time To Fix |
 | -------------------| :--------------: |:--------:| -----------:|
-| `missing-docblock` | ✅ Code Quality  | Low      | 15 minutes  |
+| `missing-docblock` | 💻 Code Quality  | Low      | 15 minutes  |
 
 ## What This Checks
 

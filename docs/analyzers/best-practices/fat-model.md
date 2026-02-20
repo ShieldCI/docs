@@ -10,7 +10,7 @@ tags: laravel,eloquent,architecture,solid,srp,best-practices,maintainability,ser
 
 | Analyzer ID              | Category           | Severity | Time To Fix |
 | -------------------------| :----------------: |:--------:| -----------:|
-| `fat-model`              | ⚡ Best Practices  | Medium   | 45 minutes  |
+| `fat-model`              | 🏅 Best Practices  | Medium   | 45 minutes  |
 
 ## What This Checks
 

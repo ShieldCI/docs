@@ -10,7 +10,7 @@ tags: laravel,security,eloquent,query-builder,multi-tenant,data-leak,global-scop
 
 | Analyzer ID                         | Category           | Severity | Time To Fix |
 | ------------------------------------| :----------------: |:--------:| -----------:|
-| `mixed-query-builder-eloquent`      | ⚡ Best Practices  | High     | 20 minutes  |
+| `mixed-query-builder-eloquent`      | 🏅 Best Practices  | High     | 20 minutes  |
 
 ## What This Checks
 
