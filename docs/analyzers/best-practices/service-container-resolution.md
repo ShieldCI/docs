@@ -10,7 +10,7 @@ tags: dependency-injection,architecture,testability,laravel,ioc,service-locator
 
 | Analyzer ID                    |      Category      | Severity | Time To Fix |
 |--------------------------------|:------------------:|:--------:|------------:|
-| `service-container-resolution` | ⚡ Best Practices   |  Medium  |  25 minutes |
+| `service-container-resolution` | 🏅 Best Practices   |  Medium  |  25 minutes |
 
 Detects manual service container resolution (Service Locator anti-pattern) and recommends constructor dependency injection for improved testability and maintainability.
 

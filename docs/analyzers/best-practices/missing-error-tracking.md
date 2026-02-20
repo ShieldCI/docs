@@ -10,7 +10,7 @@ tags: laravel,monitoring,production,error-tracking,observability,sentry,bugsnag,
 
 | Analyzer ID                           | Category           | Severity | Time To Fix |
 | ------------------------------------- | :----------------: |:--------:| -----------:|
-| `missing-error-tracking`              | ⚡ Best Practices  | Info     | 30 minutes  |
+| `missing-error-tracking`              | 🏅 Best Practices  | Info     | 30 minutes  |
 
 ## What This Checks
 

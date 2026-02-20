@@ -10,7 +10,7 @@ tags: laravel,performance,eloquent,database,n+1,optimization,eager-loading,best-
 
 | Analyzer ID              | Category           | Severity | Time To Fix |
 | -------------------------| :----------------: |:--------:| -----------:|
-| `eloquent-n-plus-one`    | ⚡ Best Practices  | High     | 30 minutes  |
+| `eloquent-n-plus-one`    | 🏅 Best Practices  | High     | 30 minutes  |
 
 ## What This Checks
 

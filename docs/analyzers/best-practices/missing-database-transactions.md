@@ -10,7 +10,7 @@ tags: laravel,database,transactions,data-integrity,acid,best-practices,eloquent,
 
 | Analyzer ID                           | Category           | Severity | Time To Fix |
 | ------------------------------------- | :----------------: |:--------:| -----------:|
-| `missing-database-transactions`       | ⚡ Best Practices  | High     | 25 minutes  |
+| `missing-database-transactions`       | 🏅 Best Practices  | High     | 25 minutes  |
 
 ## What This Checks
 

@@ -10,7 +10,7 @@ tags: laravel,mvc,routes,architecture,best-practices,separation-of-concerns
 
 | Analyzer ID                 | Category           | Severity | Time To Fix |
 | ----------------------------| :----------------: |:--------:| -----------:|
-| `logic-in-routes`           | ✨ Best Practices  |   High   | 20 minutes  |
+| `logic-in-routes`           | 🏅 Best Practices  |   High   | 20 minutes  |
 
 ## What This Checks
 

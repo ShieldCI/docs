@@ -10,7 +10,7 @@ tags: laravel,testability,dependency-injection,best-practices,helpers,code-quali
 
 | Analyzer ID                 | Category           | Severity | Time To Fix |
 | ----------------------------| :----------------: |:--------:| -----------:|
-| `helper-function-abuse`     | Best Practices  |   Low    | 25 minutes  |
+| `helper-function-abuse`     | 🏅 Best Practices  |   Low    | 25 minutes  |
 
 ## What This Checks
 

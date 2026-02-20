@@ -75,7 +75,7 @@ Ready to contribute code? Here's how:
 1. **Fork the repository** - [shieldci/laravel](https://github.com/shieldci/laravel)
 2. **Create a branch** - `git checkout -b feature/your-feature-name`
 3. **Write tests** - All new features need tests
-4. **Follow coding standards** - Run `composer pint` before committing
+4. **Follow coding standards** - Run `composer format` before committing
 5. **Submit a PR** - Include a clear description of changes
 
 ## Development Setup
@@ -100,10 +100,10 @@ composer install
 composer test
 
 # Run static analysis
-composer phpstan
+composer analyse
 
 # Fix code style
-composer pint
+composer format
 ```
 
 ### Running Tests
@@ -113,18 +113,18 @@ composer pint
 composer test
 
 # Specific test file
-vendor/bin/pest tests/Analyzers/Security/SqlInjectionTest.php
+vendor/bin/phpunit tests/Analyzers/Security/SqlInjectionTest.php
 
 # With coverage
-composer test -- --coverage
+composer test-coverage
 ```
 
 ### Code Quality
 
 All contributions must pass:
 
-- **PHPStan Level 9** - `composer phpstan`
-- **Laravel Pint** - `composer pint`
+- **PHPStan Level 9** - `composer analyse`
+- **Laravel Pint** - `composer format`
 - **All tests** - `composer test`
 
 ## Code of Conduct

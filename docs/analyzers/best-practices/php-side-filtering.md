@@ -10,7 +10,7 @@ tags: laravel,performance,database,memory,optimization,collections,best-practice
 
 | Analyzer ID           |      Category      | Severity | Time To Fix |
 | ----------------------|:------------------:|:--------:| -----------:|
-| `php-side-filtering`  | ⚡ Best Practices   | Critical | 15 minutes  |
+| `php-side-filtering`  | 🏅 Best Practices   | Critical | 15 minutes  |
 
 ## What This Checks
 
