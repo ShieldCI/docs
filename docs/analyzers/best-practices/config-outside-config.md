@@ -10,7 +10,7 @@ tags: laravel,configuration,maintainability,testability,best-practices,environme
 
 | Analyzer ID              | Category           | Severity | Time To Fix |
 | -------------------------| :----------------: |:--------:| -----------:|
-| `config-outside-config`  | ⚡ Best Practices  | Medium   | 10 minutes  |
+| `config-outside-config`  | 🏅 Best Practices  | Medium   | 10 minutes  |
 
 ## What This Checks
 

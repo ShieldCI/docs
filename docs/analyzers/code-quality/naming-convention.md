@@ -10,7 +10,7 @@ tags: conventions,psr,code-quality,readability
 
 | Analyzer ID          | Category         | Severity | Time To Fix |
 | --------------------| :--------------: |:--------:| -----------:|
-| `naming-convention` | ✅ Code Quality  | Low      | 20 minutes  |
+| `naming-convention` | 💻 Code Quality  | Low      | 20 minutes  |
 
 ## What This Checks
 

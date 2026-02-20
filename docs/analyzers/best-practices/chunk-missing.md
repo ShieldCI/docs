@@ -10,7 +10,7 @@ tags: laravel,performance,memory,eloquent,optimization,best-practices
 
 | Analyzer ID      | Category           | Severity | Time To Fix |
 | -----------------| :----------------: |:--------:| -----------:|
-| `chunk-missing`  | ⚡ Best Practices  | High     | 15 minutes  |
+| `chunk-missing`  | 🏅 Best Practices  | High     | 15 minutes  |
 
 ## What This Checks
 

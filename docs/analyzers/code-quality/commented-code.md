@@ -10,7 +10,7 @@ tags: maintainability,code-quality,comments,dead-code,version-control
 
 | Analyzer ID        | Category         | Severity | Time To Fix |
 | ------------------| :--------------: |:--------:| -----------:|
-| `commented-code`  | ✅ Code Quality  | Low      | 5 minutes   |
+| `commented-code`  | 💻 Code Quality  | Low      | 5 minutes   |
 
 ## What This Checks
 
