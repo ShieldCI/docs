@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `middleware-misuse` | ✅ Best Practices  | Medium    | 30 minutes   |
+| `middleware-misuse` | 🏅 Best Practices  | Medium    | 30 minutes   |
 
 ## What This Checks
 

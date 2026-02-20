@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `policy-authorization` | ✅ Best Practices  | Medium    | 20 minutes   |
+| `policy-authorization` | 🏅 Best Practices  | Medium    | 20 minutes   |
 
 ## What This Checks
 

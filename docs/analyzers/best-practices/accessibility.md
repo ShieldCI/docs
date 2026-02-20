@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `accessibility` | ✅ Best Practices  | Medium    | 10 minutes   |
+| `accessibility` | 🏅 Best Practices  | Medium    | 10 minutes   |
 
 ## What This Checks
 

@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `test-quality` | 📝 Code Quality  | Medium    | 15 minutes   |
+| `test-quality` | 💻 Code Quality  | Medium    | 15 minutes   |
 
 ## What This Checks
 

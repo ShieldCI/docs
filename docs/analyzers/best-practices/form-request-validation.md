@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `form-request-validation` | ✅ Best Practices  | Medium    | 15 minutes   |
+| `form-request-validation` | 🏅 Best Practices  | Medium    | 15 minutes   |
 
 ## What This Checks
 

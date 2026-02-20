@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `pennant-config` | ✅ Best Practices  | Medium    | 10 minutes   |
+| `pennant-config` | 🏅 Best Practices  | Medium    | 10 minutes   |
 
 ## What This Checks
 

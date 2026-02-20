@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `test-data-management` | 📝 Code Quality  | Low    | 15 minutes   |
+| `test-data-management` | 💻 Code Quality  | Low    | 15 minutes   |
 
 ## What This Checks
 
