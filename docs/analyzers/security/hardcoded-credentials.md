@@ -195,6 +195,6 @@ php artisan env:decrypt --env=production --key=base64:your-encryption-key
 - [Env File Analyzer](/analyzers/security/env-file) - Ensures .env files are properly configured and not exposed
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Debug mode can leak credentials in error messages
 - [Env HTTP Accessibility Analyzer](/analyzers/security/env-http-accessibility) - Prevents .env files from being publicly accessible
-- [App Key Analyzer](/analyzers/security/app-key) - Ensures the application encryption key is properly set
+- [App Key Analyzer](/analyzers/security/app-key-security) - Ensures the application encryption key is properly set
 
 ---
