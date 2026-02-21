@@ -305,6 +305,6 @@ class AuthenticationTest extends TestCase
 ## Related Analyzers
 
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token requirements
-- [Application Key Analyzer](/analyzers/security/app-key) - Ensures encryption keys are secure
+- [Application Key Analyzer](/analyzers/security/app-key-security) - Ensures encryption keys are secure
 - [Cookie Analyzer](/analyzers/security/cookie) - Validates session cookie security configuration
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production

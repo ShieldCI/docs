@@ -10,7 +10,7 @@ tags: encryption,app-key,security,configuration
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `app-key` | 🛡️ Security  | Critical    | 5 minutes   |
+| `app-key-security` | 🛡️ Security  | Critical    | 5 minutes   |
 
 ## What This Checks
 

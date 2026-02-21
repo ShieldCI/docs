@@ -228,7 +228,7 @@ export default defineConfig({
                             link: '/analyzers/security/',
                             collapsed: true,
                             items: [
-                                { text: 'Application Key', link: '/analyzers/security/app-key' },
+                                { text: 'Application Key', link: '/analyzers/security/app-key-security' },
                                 { text: 'Arbitrary File Upload', link: '/analyzers/security/arbitrary-file-upload' },
                                 { text: 'Audit Logging', link: '/analyzers/security/audit-logging' },
                                 { text: 'Auth & Authorization', link: '/analyzers/security/authentication-authorization' },
