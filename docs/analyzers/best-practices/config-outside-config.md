@@ -322,6 +322,6 @@ Custom domains are merged with the default exclusions (documentation sites, CDNs
 
 ## Related Analyzers
 
-- [App Key Analyzer](/analyzers/security/app-key) - Validates APP_KEY security
+- [App Key Analyzer](/analyzers/security/app-key-security) - Validates APP_KEY security
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Detects debug mode in production
 

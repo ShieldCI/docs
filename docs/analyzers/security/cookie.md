@@ -296,6 +296,6 @@ SESSION_SAME_SITE=lax
 ## Related Analyzers
 
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token implementation
-- [Application Key Analyzer](/analyzers/security/app-key) - Ensures encryption keys are secure
+- [Application Key Analyzer](/analyzers/security/app-key-security) - Ensures encryption keys are secure
 - [Session Driver Configuration Analyzer](/analyzers/performance/session-driver) - Validates session driver for scalability
 - [HSTS Header Analyzer](/analyzers/security/hsts-header) - Ensures HTTPS is required via HSTS headers

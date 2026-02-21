@@ -85,7 +85,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   title="Application Key"
   description="Validates that the application encryption key is properly configured and secure"
   severity="critical"
-  link="/analyzers/security/app-key"
+  link="/analyzers/security/app-key-security"
 />
 
 <AnalyzerCard
