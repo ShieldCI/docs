@@ -225,6 +225,6 @@ Always document why you're ignoring vulnerabilities. This helps during security 
 ## Related Analyzers
 
 - [Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies) - Scans Composer dependencies
-- [Application Key Analyzer](/analyzers/security/app-key) - Validates Laravel encryption keys
+- [Application Key Analyzer](/analyzers/security/app-key-security) - Validates Laravel encryption keys
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug mode in production
 - [CSRF Protection Analyzer](/analyzers/security/csrf-protection) - Validates CSRF token requirements

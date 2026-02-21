@@ -309,5 +309,5 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Validates APP_DEBUG is disabled in production
 - [Environment File Analyzer](/analyzers/security/env-file) - Checks .env file permissions
-- [Application Key Analyzer](/analyzers/security/app-key) - Validates APP_KEY configuration
+- [Application Key Analyzer](/analyzers/security/app-key-security) - Validates APP_KEY configuration
 - [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects SQL injection vulnerabilities

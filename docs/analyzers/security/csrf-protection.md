@@ -376,5 +376,5 @@ axios.interceptors.response.use(
 
 - [Cookie Analyzer](/analyzers/security/cookie) - Validates session cookie security configuration
 - [XSS Vulnerabilities Analyzer](/analyzers/security/xss-vulnerabilities) - Prevents cross-site scripting
-- [Application Key Analyzer](/analyzers/security/app-key) - Validates encryption key security
+- [Application Key Analyzer](/analyzers/security/app-key-security) - Validates encryption key security
 - [Authentication & Authorization Analyzer](/analyzers/security/authentication-authorization) - Validates authentication implementation

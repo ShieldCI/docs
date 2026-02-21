@@ -228,7 +228,7 @@ export default defineConfig({
                             link: '/analyzers/security/',
                             collapsed: true,
                             items: [
-                                { text: 'Application Key', link: '/analyzers/security/app-key' },
+                                { text: 'Application Key', link: '/analyzers/security/app-key-security' },
                                 { text: 'Auth & Authorization', link: '/analyzers/security/authentication-authorization' },
                                 { text: 'Cookie', link: '/analyzers/security/cookie' },
                                 { text: 'CSRF Protection', link: '/analyzers/security/csrf-protection' },
