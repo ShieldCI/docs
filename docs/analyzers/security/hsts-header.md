@@ -63,12 +63,24 @@ class SecurityHeaders
 }
 ```
 
-```php
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+use App\Http\Middleware\SecurityHeaders;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(SecurityHeaders::class);
+    })
+```
+
+```php [Laravel 9–10]
 // app/Http/Kernel.php - Add to global middleware
 protected $middleware = [
     \App\Http\Middleware\SecurityHeaders::class,
 ];
 ```
+:::
 
 **Scenario 2: Weak max-age Value**
 
