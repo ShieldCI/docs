@@ -95,7 +95,38 @@ EOF
 
 **2. Enrich Error Context**
 
-```php
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+use Sentry\State\Scope;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->reportable(function (Throwable $e) {
+            if (app()->bound('sentry')) {
+                \Sentry\configureScope(function (Scope $scope) {
+                    $scope->setUser([
+                        'id' => auth()->id(),
+                        'email' => auth()->user()?->email,
+                        'username' => auth()->user()?->name,
+                    ]);
+
+                    $scope->setTag('environment', app()->environment());
+                    $scope->setTag('php_version', PHP_VERSION);
+                    $scope->setTag('laravel_version', app()->version());
+
+                    $scope->setContext('request', [
+                        'url' => request()->url(),
+                        'method' => request()->method(),
+                        'ip' => request()->ip(),
+                    ]);
+                });
+            }
+        });
+    })
+```
+
+```php [Laravel 9–10]
 // app/Exceptions/Handler.php
 use Sentry\State\Scope;
 
@@ -127,6 +158,7 @@ public function register()
     });
 }
 ```
+:::
 
 **3. Configure Release Tracking**
 
@@ -157,7 +189,38 @@ return [
 
 If you prefer AWS CloudWatch or already have APM:
 
-```php
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->report(function (Throwable $exception) {
+            if (app()->environment('production')) {
+                $cloudwatch = app('cloudwatch');
+                $cloudwatch->putLogEvents([
+                    'logGroupName' => '/aws/laravel/errors',
+                    'logStreamName' => date('Y-m-d'),
+                    'logEvents' => [[
+                        'timestamp' => now()->timestamp * 1000,
+                        'message' => json_encode([
+                            'message' => $exception->getMessage(),
+                            'exception' => get_class($exception),
+                            'file' => $exception->getFile(),
+                            'line' => $exception->getLine(),
+                            'trace' => $exception->getTraceAsString(),
+                            'user_id' => auth()->id(),
+                            'url' => request()->url(),
+                            'method' => request()->method(),
+                            'ip' => request()->ip(),
+                        ]),
+                    ]],
+                ]);
+            }
+        });
+    })
+```
+
+```php [Laravel 9–10]
 // app/Exceptions/Handler.php
 public function report(Throwable $exception)
 {
@@ -187,6 +250,7 @@ public function report(Throwable $exception)
     parent::report($exception);
 }
 ```
+:::
 
 **5. Datadog via Logging Config**
 

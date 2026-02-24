@@ -162,7 +162,33 @@ if (app()->environment('local')) {
 
 **4. Custom Error Pages for Production**
 
-```php
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->render(function (Throwable $exception, Request $request) {
+            if ($request->expectsJson()) {
+                $status = 500;
+
+                // Only expose details in development
+                if (config('app.debug')) {
+                    return response()->json([
+                        'error' => $exception->getMessage(),
+                        'trace' => $exception->getTrace(),
+                    ], $status);
+                }
+
+                return response()->json([
+                    'error' => 'Internal server error',
+                    'status' => $status,
+                ], $status);
+            }
+        });
+    })
+```
+
+```php [Laravel 9–10]
 // app/Exceptions/Handler.php
 public function render($request, Throwable $exception)
 {
@@ -193,6 +219,7 @@ protected function renderApiError(Throwable $exception): JsonResponse
     ], $status);
 }
 ```
+:::
 
 ```blade
 {{-- resources/views/errors/500.blade.php --}}

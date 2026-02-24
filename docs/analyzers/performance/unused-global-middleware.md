@@ -29,7 +29,21 @@ Global middleware executes on every single request. Unused middleware wastes res
 ### Quick Fix (5 minutes)
 
 **Remove unused middleware:**
-```php
+
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->remove([
+            // Remove if not using these features
+            \Illuminate\Http\Middleware\TrustProxies::class,
+            \Illuminate\Http\Middleware\HandleCors::class,
+        ]);
+    })
+```
+
+```php [Laravel 9–10]
 // app/Http/Kernel.php
 protected $middleware = [
     // Remove if not using these features
@@ -37,6 +51,7 @@ protected $middleware = [
     // \Fruitcake\Cors\HandleCors::class,
 ];
 ```
+:::
 
 ### Proper Fix (10 minutes)
 
