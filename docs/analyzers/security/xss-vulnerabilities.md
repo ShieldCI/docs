@@ -15,7 +15,7 @@ tags: xss,cross-site-scripting,security,blade,csp,headers
 
 ## What This Checks
 
-- Scans PHP controllers and Blade views for patterns such as `{!! !!}` output, direct `echo $_GET`/`request()` calls, unescaped `Response::make()`, and unsafe values inside `<script>` tags.
+- Scans PHP controllers and Blade views for patterns such as <code v-pre>{!! !!}</code> output, direct `echo $_GET`/`request()` calls, unescaped `Response::make()`, and unsafe values inside `<script>` tags. Ternary expressions where both branches are literals (e.g. <code v-pre>{{ $check ? 'true' : 'false' }}</code>) are recognised as safe even when the condition references user input.
 - **Detects dangerous HTML attribute contexts** including:
   - `javascript:` protocol in `href`, `src`, `action`, `formaction` attributes (flagged for any usage)
   - `data:` protocol combined with user input in URL attributes
@@ -35,7 +35,7 @@ tags: xss,cross-site-scripting,security,blade,csp,headers
 
 ### Quick Fix (5 minutes)
 
-1. Replace unescaped Blade output `{!! $var !!}` with escaped `{{ $var }}` or explicitly sanitize via `e($var)` / Purifier.
+1. Replace unescaped Blade output <code v-pre>{!! $var !!}</code> with escaped <code v-pre>{{ $var }}</code> or explicitly sanitize via `e($var)` / Purifier.
 2. Wrap `$_GET`, `request()` or other user input in `htmlspecialchars()` / `e()` before echoing or returning from `Response::make()`.
 3. Add a baseline CSP header (preferably via middleware):
 
@@ -45,7 +45,7 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 
 ### Proper Fix (30 minutes)
 
-1. **Audit templates**: Identify components, slots, and Livewire views that use `{!! !!}` or raw echoes—replace with escaped output or whitelist sanitized HTML only where required.
+1. **Audit templates**: Identify components, slots, and Livewire views that use <code v-pre>{!! !!}</code> or raw echoes—replace with escaped output or whitelist sanitized HTML only where required.
 2. **Centralize escaping**: Use form requests or DTOs to normalize/sanitize inputs before they hit the view layer.
 3. **Enforce CSP**: Add a middleware (e.g., `SetSecurityHeaders`) that sets `Content-Security-Policy` without `unsafe-inline`/`unsafe-eval`; use nonces or hashes for required inline scripts.
 4. **Add tests**: Write feature tests ensuring responses include the CSP header and that critical templates escape user-controlled content.
