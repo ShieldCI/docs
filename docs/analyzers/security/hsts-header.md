@@ -16,6 +16,8 @@ tags: hsts,https,headers,security,ssl,tls
 
 Validates that HTTPS-only applications properly implement HTTP Strict Transport Security (HSTS) headers. Checks for HSTS middleware presence, max-age directive (minimum 6 months), includeSubDomains directive, optional preload directive, and secure session cookie configuration.
 
+The analyzer handles multi-line header definitions (e.g. when the header name and value are on separate lines) and performs case-insensitive directive matching per [RFC 6797](https://tools.ietf.org/html/rfc6797).
+
 ## Why It Matters
 
 - **Security Risk:** HIGH - Without HSTS, users are vulnerable to SSL stripping attacks on their first HTTP request
@@ -62,6 +64,10 @@ class SecurityHeaders
     }
 }
 ```
+
+::: tip Multi-line definitions supported
+The analyzer correctly handles both single-line and multi-line header definitions. Whether you write `$response->headers->set('Strict-Transport-Security', 'max-age=...')` on one line or split the arguments across multiple lines, the analyzer will detect all directives. Directive names like `includeSubDomains` and `preload` are matched case-insensitively per RFC 6797.
+:::
 
 ::: code-group
 ```php [Laravel 11+]
