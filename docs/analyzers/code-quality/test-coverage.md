@@ -15,13 +15,25 @@ pro: true
 
 ## What This Checks
 
-Validates that critical application modules have corresponding test files. Checks for:
+Validates that critical application modules have corresponding test files. Recursively scans four key directories and checks each PHP class against your `tests/` directory:
 
 - Missing `tests/` directory entirely
-- Controllers without matching test files
-- Models without matching test files
-- Services and actions without test coverage
-- Critical business logic modules lacking tests
+- Models (`app/Models`) without matching test files
+- Controllers (`app/Http/Controllers`) without matching test files, including nested subdirectories like `Api/`
+- Services (`app/Services`) without matching test files
+- Policies (`app/Policies`) without matching test files
+
+**Automatically skipped:** Abstract/Base-prefixed classes, traits, enums, and interfaces are excluded from the count since they typically don't need dedicated tests.
+
+**Flexible test matching:** Test files don't need to match exactly — `UserModelTest.php` and `ManagePostControllerTest.php` will match `User.php` and `PostController.php` respectively (PascalCase boundary matching).
+
+### Coverage Thresholds
+
+| Coverage | Result | Issue Severity |
+|----------|--------|---------------|
+| >= 75% | Pass | — |
+| 25–74% | Warning | Low |
+| < 25% | Warning | Medium |
 
 ## Why It Matters
 
