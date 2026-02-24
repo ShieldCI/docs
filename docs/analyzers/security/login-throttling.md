@@ -86,7 +86,31 @@ class LoginController extends Controller
 
 **1. Configure Named Rate Limiters**
 
-```php
+::: code-group
+```php [Laravel 11+]
+// app/Providers/AppServiceProvider.php
+
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+public function boot(): void
+{
+    // Login throttling: 5 attempts per minute
+    RateLimiter::for('login', function (Request $request) {
+        return Limit::perMinute(5)->by($request->input('email'));
+    });
+
+    // Stricter throttling for failed attempts
+    RateLimiter::for('login-strict', function (Request $request) {
+        return [
+            Limit::perMinute(3)->by($request->input('email')),
+            Limit::perHour(10)->by($request->ip()),
+        ];
+    });
+}
+```
+
+```php [Laravel 9–10]
 // app/Providers/RouteServiceProvider.php
 
 use Illuminate\Cache\RateLimiting\Limit;
@@ -108,6 +132,7 @@ public function boot()
     });
 }
 ```
+:::
 
 **2. Apply Named Limiter to Routes**
 
@@ -167,7 +192,32 @@ class LoginController extends Controller
 
 **4. Progressive Rate Limiting (Recommended)**
 
-```php
+::: code-group
+```php [Laravel 11+]
+// app/Providers/AppServiceProvider.php
+
+RateLimiter::for('login', function (Request $request) {
+    $email = $request->input('email');
+
+    return [
+        // First 3 attempts: 1 minute lockout
+        Limit::perMinute(3)->by($email)->response(function () {
+            return response('Please wait 1 minute before trying again.', 429);
+        }),
+
+        // Next 5 attempts: 10 minute lockout
+        Limit::perMinutes(10, 5)->by($email),
+
+        // After that: 1 hour lockout
+        Limit::perHour(10)->by($email),
+
+        // Also limit by IP to prevent distributed attacks
+        Limit::perHour(20)->by($request->ip()),
+    ];
+});
+```
+
+```php [Laravel 9–10]
 // app/Providers/RouteServiceProvider.php
 
 RateLimiter::for('login', function (Request $request) {
@@ -190,6 +240,7 @@ RateLimiter::for('login', function (Request $request) {
     ];
 });
 ```
+:::
 
 **5. Add User-Friendly Lockout Messages**
 

@@ -79,9 +79,23 @@ php artisan vendor:publish --tag=laravel-errors
 
 ### Approach 2: Custom Exception Handler
 
-Override the `render()` method in `app/Exceptions/Handler.php`:
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withExceptions(function (Exceptions $exceptions): void {
+        $exceptions->render(function (NotFoundHttpException $e) {
+            return response()->view('errors.custom-404', [], 404);
+        });
 
-```php
+        $exceptions->render(function (AuthorizationException $e) {
+            return response()->view('errors.custom-403', [], 403);
+        });
+    })
+```
+
+```php [Laravel 9–10]
+// app/Exceptions/Handler.php
 public function render($request, Throwable $e)
 {
     if ($e instanceof NotFoundHttpException) {
@@ -95,6 +109,7 @@ public function render($request, Throwable $e)
     return parent::render($request, $e);
 }
 ```
+:::
 
 ### Approach 3: Dynamic Error View
 
