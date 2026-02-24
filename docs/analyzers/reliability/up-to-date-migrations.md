@@ -433,7 +433,18 @@ class CheckMigrations extends Command
 
 **Schedule daily checks:**
 
-```php
+::: code-group
+```php [Laravel 11+]
+// routes/console.php
+use Illuminate\Support\Facades\Schedule;
+
+Schedule::command('migrations:check')
+    ->daily()
+    ->at('09:00')
+    ->environments(['production']);
+```
+
+```php [Laravel 9–10]
 // app/Console/Kernel.php
 protected function schedule(Schedule $schedule)
 {
@@ -443,6 +454,7 @@ protected function schedule(Schedule $schedule)
         ->environments(['production']);
 }
 ```
+:::
 
 #### 9: Create Migration for New Installation
 
