@@ -27,6 +27,10 @@ Validates that critical application modules have corresponding test files. Recur
 
 **Flexible test matching:** Test files don't need to match exactly — `UserModelTest.php` and `ManagePostControllerTest.php` will match `User.php` and `PostController.php` respectively (PascalCase boundary matching).
 
+**Per-directory breakdown:** Results include a per-layer summary so you can see exactly which areas need attention:
+
+> 2 of 4 critical files have tests (50% coverage). Models: 1/2, Controllers: 1/1, Services: 0/1
+
 ### Coverage Thresholds
 
 | Coverage | Result | Issue Severity |
