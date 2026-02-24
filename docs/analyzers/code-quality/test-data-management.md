@@ -15,13 +15,23 @@ pro: true
 
 ## What This Checks
 
-Validates that test files follow proper data management practices. Checks for:
+Validates that test files follow proper data management practices. Works with **PHPUnit**, **Pest PHP**, and **PHPUnit 10 attributes**. Checks for:
 
 - Hardcoded model creation instead of using factories
 - Missing database cleanup traits (`RefreshDatabase`, `DatabaseMigrations`, `DatabaseTransactions`)
 - Raw SQL used in test files for data setup
-- Large factory sequences that may slow tests
+- Large factory sequences (count > 50) that may slow tests
 - Seeder usage in tests that couples tests to seeder state
+
+### Framework Support
+
+| Framework | Detection Method |
+|-----------|-----------------|
+| PHPUnit (class-based) | `extends TestCase`, `function test_` prefix |
+| PHPUnit 10+ | `#[Test]` attribute |
+| Pest PHP | `it()`, `test()`, `describe()` functions |
+
+The analyzer also checks `tests/TestCase.php` and `tests/Pest.php` for globally applied database traits, so individual test files don't need to redeclare them.
 
 ## Why It Matters
 
@@ -36,7 +46,7 @@ Validates that test files follow proper data management practices. Checks for:
 
 Use factories instead of hardcoded data:
 
-**Before (❌):**
+**Before:**
 ```php
 $user = User::create([
     'name' => 'Test User',
@@ -45,7 +55,7 @@ $user = User::create([
 ]);
 ```
 
-**After (✅):**
+**After:**
 ```php
 $user = User::factory()->create();
 ```
@@ -54,7 +64,9 @@ $user = User::factory()->create();
 
 **1. Add database cleanup trait:**
 
-```php
+::: code-group
+
+```php [PHPUnit]
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderTest extends TestCase
@@ -71,21 +83,43 @@ class OrderTest extends TestCase
 }
 ```
 
+```php [Pest (per-file)]
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class);
+
+it('can place an order', function () {
+    $user = User::factory()->create();
+    $product = Product::factory()->create(['price' => 1999]);
+
+    // Test logic...
+});
+```
+
+```php [Pest (global via tests/Pest.php)]
+// tests/Pest.php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+uses(RefreshDatabase::class)->in('Feature');
+```
+
+:::
+
 **2. Replace raw SQL with Eloquent/factories:**
 
-**Before (❌):**
+**Before:**
 ```php
 DB::insert('INSERT INTO users (name, email) VALUES (?, ?)', ['Test', 'test@test.com']);
 ```
 
-**After (✅):**
+**After:**
 ```php
 User::factory()->create(['name' => 'Test', 'email' => 'test@test.com']);
 ```
 
 **3. Remove seeder dependencies:**
 
-**Before (❌):**
+**Before:**
 ```php
 public function setUp(): void
 {
@@ -94,7 +128,7 @@ public function setUp(): void
 }
 ```
 
-**After (✅):**
+**After:**
 ```php
 public function test_admin_can_access_dashboard(): void
 {
@@ -105,10 +139,22 @@ public function test_admin_can_access_dashboard(): void
 }
 ```
 
+### Dynamic Generators (Not Flagged)
+
+The analyzer recognizes these as dynamic data and will **not** flag `Model::create()` calls that use them:
+
+- `fake()` / `fake()->` (Laravel 9+ helper)
+- `$this->faker` (WithFaker trait)
+- `$faker->` (manual Faker variable)
+- `Faker\Factory::create()` (pre-Laravel 9)
+- `Str::random()`, `Uuid::`, `Carbon::`, `now()`
+- `factory()` (legacy factory helper)
+
 ## References
 
 - [Laravel Database Testing](https://laravel.com/docs/database-testing)
 - [Laravel Model Factories](https://laravel.com/docs/eloquent-factories)
+- [Pest PHP Documentation](https://pestphp.com/docs/configuring-tests)
 - [PHPUnit Data Providers](https://docs.phpunit.de/en/11.0/writing-tests-for-phpunit.html#data-providers)
 
 ## Related Analyzers
