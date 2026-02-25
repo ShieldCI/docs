@@ -197,7 +197,7 @@ public function boot(): void
 // app/Models/Order.php
 class Order extends Model
 {
-    // ✅ GOOD: Calculated property in model
+    // ✅ GOOD - Calculated property in model
     public function getTotalWithTaxAttribute(): float
     {
         return $this->subtotal * (1 + $this->tax_rate)
@@ -353,7 +353,7 @@ class WeatherController extends Controller
 // app/Http/Controllers/UserController.php
 public function index()
 {
-    // ✅ GOOD: Eager load relationships
+    // ✅ GOOD - Eager load relationships
     $users = User::with(['posts', 'comments'])
         ->withCount(['posts', 'orders'])
         ->withSum('orders', 'total')

@@ -39,7 +39,7 @@ tags: complexity,maintainability,code-quality,readability
 Use early returns to reduce nesting:
 
 ```php
-// ❌ Before: Deep nesting
+// ❌ BAD - Deep nesting
 if ($user) {
     if ($user->isActive()) {
         if ($user->hasPermission()) {
@@ -51,7 +51,7 @@ if ($user) {
     }
 }
 
-// ✅ After: Early returns
+// ✅ GOOD - Early returns
 if (!$user || !$user->isActive()) {
     return;
 }
@@ -73,7 +73,7 @@ return $resource->process();
 #### 1: Extract Methods
 
 ```php
-// ❌ Before: Deep nesting in single method
+// ❌ BAD - Deep nesting in single method
 public function processOrder(Order $order, User $user)
 {
     if ($order) {
@@ -91,7 +91,7 @@ public function processOrder(Order $order, User $user)
     }
 }
 
-// ✅ After: Extract methods to reduce nesting
+// ✅ GOOD - Extract methods to reduce nesting
 public function processOrder(Order $order, User $user)
 {
     if (!$this->canProcessOrder($order, $user)) {
@@ -125,7 +125,7 @@ private function processOrderItems(Order $order): void
 #### 2: Use Guard Clauses
 
 ```php
-// ❌ Before: Nested conditions
+// ❌ BAD - Nested conditions
 public function calculatePrice(Product $product, User $user, int $quantity)
 {
     if ($product) {
@@ -142,7 +142,7 @@ public function calculatePrice(Product $product, User $user, int $quantity)
     return 0;
 }
 
-// ✅ After: Guard clauses
+// ✅ GOOD - Guard clauses
 public function calculatePrice(Product $product, User $user, int $quantity): float
 {
     if (!$product || !$product->isActive() || $quantity <= 0) {
@@ -160,7 +160,7 @@ public function calculatePrice(Product $product, User $user, int $quantity): flo
 #### 3: Use Strategy Pattern for Complex Conditions
 
 ```php
-// ❌ Before: Deep nesting with multiple conditions
+// ❌ BAD - Deep nesting with multiple conditions
 public function processPayment(Order $order, PaymentMethod $method)
 {
     if ($method->isCreditCard()) {
@@ -180,7 +180,7 @@ public function processPayment(Order $order, PaymentMethod $method)
     }
 }
 
-// ✅ After: Strategy pattern
+// ✅ GOOD - Strategy pattern
 public function processPayment(Order $order, PaymentMethod $method)
 {
     $processor = $this->getPaymentProcessor($method);
@@ -200,7 +200,7 @@ private function getPaymentProcessor(PaymentMethod $method): PaymentProcessor
 #### 4: Combine Conditions
 
 ```php
-// ❌ Before: Multiple nested ifs
+// ❌ BAD - Multiple nested ifs
 if ($user) {
     if ($user->isActive()) {
         if ($user->hasRole('admin')) {
@@ -209,7 +209,7 @@ if ($user) {
     }
 }
 
-// ✅ After: Combined conditions
+// ✅ GOOD - Combined conditions
 if ($user?->isActive() && $user->hasRole('admin')) {
     // Admin logic
 }

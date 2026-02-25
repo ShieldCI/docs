@@ -91,10 +91,10 @@ protected $middleware = [
 **Scenario 2: Weak max-age Value**
 
 ```php
-// ❌ BEFORE: Only 1 day
+// ❌ BAD - Only 1 day
 'Strict-Transport-Security' => 'max-age=86400'
 
-// ✅ AFTER: 1 year (recommended)
+// ✅ GOOD - 1 year (recommended)
 'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains'
 ```
 

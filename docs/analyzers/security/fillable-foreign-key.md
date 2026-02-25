@@ -43,13 +43,13 @@ Mass assignment of foreign keys is one of the most dangerous Laravel security vu
 **Scenario 1: Remove Foreign Keys from $fillable**
 
 ```php
-// ❌ BEFORE: Vulnerable to impersonation
+// ❌ BAD - Vulnerable to impersonation
 class Post extends Model
 {
     protected $fillable = ['title', 'content', 'user_id'];
 }
 
-// ✅ AFTER: Safe
+// ✅ GOOD - Safe
 class Post extends Model
 {
     protected $fillable = ['title', 'content'];
@@ -70,10 +70,10 @@ public function store(Request $request)
 **Scenario 2: Use $guarded Instead of $fillable**
 
 ```php
-// ❌ BEFORE: Long fillable list, easy to miss dangerous fields
+// ❌ BAD - Long fillable list, easy to miss dangerous fields
 protected $fillable = ['title', 'content', 'category_id', 'user_id'];
 
-// ✅ AFTER: Guard only sensitive fields
+// ✅ GOOD - Guard only sensitive fields
 protected $guarded = ['id', 'user_id', 'created_at', 'updated_at'];
 // All other fields fillable except guarded ones
 ```
@@ -81,13 +81,13 @@ protected $guarded = ['id', 'user_id', 'created_at', 'updated_at'];
 **Scenario 3: Multi-Tenancy Protection**
 
 ```php
-// ❌ BEFORE: tenant_id in fillable
+// ❌ BAD - tenant_id in fillable
 class Document extends Model
 {
     protected $fillable = ['name', 'content', 'tenant_id'];
 }
 
-// ✅ AFTER: Remove tenant_id and use global scope
+// ✅ GOOD - Remove tenant_id and use global scope
 class Document extends Model
 {
     protected $fillable = ['name', 'content'];

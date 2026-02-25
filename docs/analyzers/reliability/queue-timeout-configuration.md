@@ -47,7 +47,7 @@ tags: queue,configuration,reliability,jobs
 If you have a timeout configuration error:
 
 ```php
-// ❌ Before: retry_after too small (insufficient buffer)
+// ❌ BAD - retry_after too small (insufficient buffer)
 // config/queue.php
 'connections' => [
     'redis' => [
@@ -68,7 +68,7 @@ If you have a timeout configuration error:
     ],
 ],
 
-// ✅ After: retry_after with proper buffer (at least 10 seconds)
+// ✅ GOOD - retry_after with proper buffer (at least 10 seconds)
 'connections' => [
     'redis' => [
         'driver' => 'redis',

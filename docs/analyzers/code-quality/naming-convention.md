@@ -47,14 +47,14 @@ tags: conventions,psr,code-quality,readability
 Rename to follow conventions:
 
 ```php
-// ❌ Before: Wrong naming
+// ❌ BAD - Wrong naming
 class user_controller {
     public function get_user($id) {
         // ...
     }
 }
 
-// ✅ After: Correct naming
+// ✅ GOOD - Correct naming
 class UserController {
     public function getUser(int $id) {
         // ...
@@ -67,12 +67,12 @@ class UserController {
 #### 1: Class Names (PascalCase)
 
 ```php
-// ❌ Before: Wrong class naming
+// ❌ BAD - Wrong class naming
 class user_service {}
 class OrderProcessor {}
 class payment_gateway {}
 
-// ✅ After: PascalCase
+// ✅ GOOD - PascalCase
 class UserService {}
 class OrderProcessor {}
 class PaymentGateway {}
@@ -81,14 +81,14 @@ class PaymentGateway {}
 #### 2: Method Names (camelCase)
 
 ```php
-// ❌ Before: Wrong method naming
+// ❌ BAD - Wrong method naming
 class UserController {
     public function get_user_by_id() {}
     public function ProcessPayment() {}
     public function send_email_notification() {}
 }
 
-// ✅ After: camelCase
+// ✅ GOOD - camelCase
 class UserController {
     public function getUserById() {}
     public function processPayment() {}
@@ -99,14 +99,14 @@ class UserController {
 #### 3: Property Names (camelCase)
 
 ```php
-// ❌ Before: Wrong property naming
+// ❌ BAD - Wrong property naming
 class User {
     public $first_name;
     public $Last_Name;
     public $is_active;
 }
 
-// ✅ After: camelCase
+// ✅ GOOD - camelCase
 class User {
     public $firstName;
     public $lastName;
@@ -119,13 +119,13 @@ class User {
 **PSR-12 Convention**: Only public constants require SCREAMING_SNAKE_CASE. Private and protected constants may use camelCase (modern PHP convention).
 
 ```php
-// ❌ Before: Wrong public constant naming
+// ❌ BAD - Wrong public constant naming
 class Config {
     public const maxLoginAttempts = 5;  // Public must be SCREAMING_SNAKE_CASE
     public const api_key = 'secret';    // Public must be SCREAMING_SNAKE_CASE
 }
 
-// ✅ After: Correct public constant naming
+// ✅ GOOD - Correct public constant naming
 class Config {
     public const MAX_LOGIN_ATTEMPTS = 5;
     public const API_KEY = 'secret';
@@ -145,11 +145,11 @@ class Config {
 #### 5: Interface and Trait Naming
 
 ```php
-// ❌ Before: Wrong naming
+// ❌ BAD - Wrong naming
 interface user_repository {}
 trait has_timestamps {}
 
-// ✅ After: PascalCase
+// ✅ GOOD - PascalCase
 interface UserRepository {}
 trait HasTimestamps {}
 ```
@@ -157,13 +157,13 @@ trait HasTimestamps {}
 #### 6: Enum Naming (PHP 8.1+)
 
 ```php
-// ❌ Before: Wrong enum naming
+// ❌ BAD - Wrong enum naming
 enum user_status {
     case ACTIVE;
     case INACTIVE;
 }
 
-// ✅ After: PascalCase
+// ✅ GOOD - PascalCase
 enum UserStatus {
     case ACTIVE;
     case INACTIVE;
@@ -175,7 +175,7 @@ enum UserStatus {
 **Laravel Convention**: Table names in `protected $table` should be plural snake_case.
 
 ```php
-// ❌ Before: Wrong table naming
+// ❌ BAD - Wrong table naming
 class User extends Model {
     protected $table = 'user';  // Should be plural
 }
@@ -192,7 +192,7 @@ class Category extends Model {
     protected $table = 'category';  // Should be 'categories'
 }
 
-// ✅ After: Correct Laravel table naming
+// ✅ GOOD - Correct Laravel table naming
 class User extends Model {
     protected $table = 'users';  // Plural snake_case
 }
@@ -226,14 +226,14 @@ This analyzer uses **Laravel's `Str::plural()` and `Str::singular()`** methods -
 #### 8: Boolean Method Names
 
 ```php
-// ❌ Before: Wrong boolean naming
+// ❌ BAD - Wrong boolean naming
 class User {
     public function active() {} // Should be isActive
     public function hasPermission() {} // Good
     public function CanEdit() {} // Wrong case
 }
 
-// ✅ After: Boolean conventions
+// ✅ GOOD - Boolean conventions
 class User {
     public function isActive(): bool {}
     public function hasPermission(): bool {}

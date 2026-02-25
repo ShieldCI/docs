@@ -45,10 +45,10 @@ Brute force attacks are one of the most common attack vectors against web applic
 ```php
 // routes/web.php
 
-// ❌ BEFORE: No rate limiting
+// ❌ BAD - No rate limiting
 Route::post('/login', [LoginController::class, 'login']);
 
-// ✅ AFTER: Throttle to 5 attempts per minute
+// ✅ GOOD - Throttle to 5 attempts per minute
 Route::post('/login', [LoginController::class, 'login'])
      ->middleware('throttle:5,1');
 ```
