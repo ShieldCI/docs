@@ -72,7 +72,7 @@ Business logic in Blade templates violates the **Model-View-Controller (MVC)** a
 
 Move database queries and business logic from Blade to your controller:
 
-**Before:**
+**Before (❌):**
 ```blade
 {{-- resources/views/dashboard.blade.php --}}
 @php
@@ -83,7 +83,7 @@ Move database queries and business logic from Blade to your controller:
 <div>Active Users: {{ $activeUsers }}</div>
 ```
 
-**After:**
+**After (✅):**
 ```php
 // app/Http/Controllers/DashboardController.php
 public function index()

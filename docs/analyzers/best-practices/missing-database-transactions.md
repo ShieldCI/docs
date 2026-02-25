@@ -51,7 +51,7 @@ Without transaction protection, multiple database operations can fail partially,
 
 Wrap your multiple write operations in `DB::transaction()`:
 
-**Before:**
+**Before (❌):**
 ```php
 public function createOrder(array $data)
 {
@@ -61,7 +61,7 @@ public function createOrder(array $data)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function createOrder(array $data)
 {
