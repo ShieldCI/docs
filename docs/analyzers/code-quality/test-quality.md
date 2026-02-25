@@ -15,13 +15,23 @@ pro: true
 
 ## What This Checks
 
-Validates test files for quality issues that reduce their effectiveness. Checks for:
+Validates test files for quality issues that reduce their effectiveness. Supports both PHPUnit class-based tests and Pest PHP function-based tests.
 
+**PHPUnit:**
 - Test classes with no test methods
 - Empty test methods (no body)
 - Test methods with no assertions
 - Test methods that only assert `assertTrue(true)` (placeholder tests)
 - Excessively long test methods that should be split
+- `test_` prefix, `@test` annotation, and `#[Test]` attribute (PHPUnit 10+)
+- All calling styles: `$this->`, `self::`, and `static::`
+
+**Pest PHP:**
+- Empty test closures
+- `it()`/`test()` calls without assertions
+- `expect()` chains recognized as valid assertions
+- `->skip()` chained tests correctly ignored
+- `describe()` block nesting supported
 
 ## Why It Matters
 
@@ -57,6 +67,33 @@ public function test_user_can_register(): void
     $response->assertCreated();
     $this->assertDatabaseHas('users', ['email' => 'john@example.com']);
 }
+```
+
+### Pest PHP
+
+**Before (❌):**
+```php
+it('registers a user', function () {
+    $this->postJson('/api/register', [
+        'name' => 'John',
+        'email' => 'john@example.com',
+        'password' => 'password123',
+    ]);
+});
+```
+
+**After (✅):**
+```php
+it('registers a user', function () {
+    $response = $this->postJson('/api/register', [
+        'name' => 'John',
+        'email' => 'john@example.com',
+        'password' => 'password123',
+    ]);
+
+    $response->assertCreated();
+    expect(User::where('email', 'john@example.com')->exists())->toBeTrue();
+});
 ```
 
 ### Proper Fix (15 minutes)
@@ -98,6 +135,7 @@ done
 ## References
 
 - [PHPUnit Assertions](https://docs.phpunit.de/en/11.0/assertions.html)
+- [Pest PHP Expectations](https://pestphp.com/docs/expectations)
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [Testing Best Practices](https://laravel.com/docs/testing#introduction)
 
