@@ -152,7 +152,7 @@ php artisan up
 Create reversible migrations to enable safe rollbacks:
 
 ```php
-// ❌ Before: No down() method
+// ❌ BAD - No down() method
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -169,7 +169,7 @@ return new class extends Migration
     // Missing down() method!
 };
 
-// ✅ After: Reversible migration
+// ✅ GOOD - Reversible migration
 return new class extends Migration
 {
     public function up(): void

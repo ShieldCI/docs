@@ -72,7 +72,7 @@ Business logic in Blade templates violates the **Model-View-Controller (MVC)** a
 
 Move database queries and business logic from Blade to your controller:
 
-**Before:**
+**Before (❌):**
 ```blade
 {{-- resources/views/dashboard.blade.php --}}
 @php
@@ -83,7 +83,7 @@ Move database queries and business logic from Blade to your controller:
 <div>Active Users: {{ $activeUsers }}</div>
 ```
 
-**After:**
+**After (✅):**
 ```php
 // app/Http/Controllers/DashboardController.php
 public function index()
@@ -197,7 +197,7 @@ public function boot(): void
 // app/Models/Order.php
 class Order extends Model
 {
-    // ✅ GOOD: Calculated property in model
+    // ✅ GOOD - Calculated property in model
     public function getTotalWithTaxAttribute(): float
     {
         return $this->subtotal * (1 + $this->tax_rate)
@@ -353,7 +353,7 @@ class WeatherController extends Controller
 // app/Http/Controllers/UserController.php
 public function index()
 {
-    // ✅ GOOD: Eager load relationships
+    // ✅ GOOD - Eager load relationships
     $users = User::with(['posts', 'comments'])
         ->withCount(['posts', 'orders'])
         ->withSum('orders', 'total')

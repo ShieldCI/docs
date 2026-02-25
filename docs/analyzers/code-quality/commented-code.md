@@ -38,7 +38,7 @@ tags: maintainability,code-quality,comments,dead-code,version-control
 Remove commented code and rely on version control:
 
 ```php
-// ❌ Before: Commented code
+// ❌ BAD - Commented code
 // function oldCalculatePrice($product) {
 //     return $product->price * 1.2;
 // }
@@ -48,7 +48,7 @@ function calculatePrice($product)
     return $product->price * $this->getTaxRate();
 }
 
-// ✅ After: Remove commented code
+// ✅ GOOD - Remove commented code
 function calculatePrice($product)
 {
     return $product->price * $this->getTaxRate();
@@ -60,7 +60,7 @@ function calculatePrice($product)
 #### 1: Remove Old Implementation
 
 ```php
-// ❌ Before: Old implementation commented out
+// ❌ BAD - Old implementation commented out
 // public function processOrder(Order $order)
 // {
 //     $order->status = 'processing';
@@ -73,7 +73,7 @@ public function processOrder(Order $order)
     $this->orderService->process($order);
 }
 
-// ✅ After: Remove commented code
+// ✅ GOOD - Remove commented code
 public function processOrder(Order $order)
 {
     $this->orderService->process($order);
@@ -83,7 +83,7 @@ public function processOrder(Order $order)
 #### 2: Use Git for History
 
 ```php
-// ❌ Before: Keeping old code for reference
+// ❌ BAD - Keeping old code for reference
 // Old validation logic:
 // if (strlen($email) < 5) {
 //     throw new ValidationException('Email too short');
@@ -95,7 +95,7 @@ public function processOrder(Order $order)
 // Current validation
 $request->validate(['email' => 'required|email']);
 
-// ✅ After: Remove and use git log if needed
+// ✅ GOOD - Remove and use git log if needed
 $request->validate(['email' => 'required|email']);
 
 // If you need to see old code:
@@ -105,7 +105,7 @@ $request->validate(['email' => 'required|email']);
 #### 3: Extract to Documentation
 
 ```php
-// ❌ Before: Commented code with explanation
+// ❌ BAD - Commented code with explanation
 // This was the old way to calculate discounts:
 // $discount = 0;
 // if ($order->total > 100) {
@@ -118,7 +118,7 @@ $request->validate(['email' => 'required|email']);
 // Current implementation
 $discount = $this->discountCalculator->calculate($order);
 
-// ✅ After: Move to documentation
+// ✅ GOOD - Move to documentation
 // See docs/discount-calculation.md for historical context
 $discount = $this->discountCalculator->calculate($order);
 ```
@@ -126,7 +126,7 @@ $discount = $this->discountCalculator->calculate($order);
 #### 4: Remove Debug Code
 
 ```php
-// ❌ Before: Commented debug code
+// ❌ BAD - Commented debug code
 // var_dump($user);
 // print_r($order->toArray());
 // die('Debug point');
@@ -136,7 +136,7 @@ public function processOrder(Order $order)
     // Actual code
 }
 
-// ✅ After: Use proper logging
+// ✅ GOOD - Use proper logging
 public function processOrder(Order $order)
 {
     Log::debug('Processing order', ['order_id' => $order->id]);
@@ -147,7 +147,7 @@ public function processOrder(Order $order)
 #### 5: Remove Alternative Implementations
 
 ```php
-// ❌ Before: Multiple commented alternatives
+// ❌ BAD - Multiple commented alternatives
 // Option 1: Direct database query
 // $users = DB::table('users')->where('active', 1)->get();
 
@@ -157,14 +157,14 @@ public function processOrder(Order $order)
 // Option 3: Using repository
 $users = $this->userRepository->getActiveUsers();
 
-// ✅ After: Keep only the chosen implementation
+// ✅ GOOD - Keep only the chosen implementation
 $users = $this->userRepository->getActiveUsers();
 ```
 
 #### 6: Remove Conditional Code Blocks
 
 ```php
-// ❌ Before: Commented conditional logic
+// ❌ BAD - Commented conditional logic
 // if ($feature->isEnabled('new-payment')) {
 //     return $this->processNewPayment($order);
 // } else {
@@ -173,7 +173,7 @@ $users = $this->userRepository->getActiveUsers();
 
 return $this->paymentProcessor->process($order);
 
-// ✅ After: Remove commented code
+// ✅ GOOD - Remove commented code
 return $this->paymentProcessor->process($order);
 ```
 

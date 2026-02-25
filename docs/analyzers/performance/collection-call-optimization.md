@@ -39,28 +39,28 @@ Replace collection aggregations with database queries:
 
 **Count Records:**
 ```php
-// ❌ Before: Loads all records into memory
+// ❌ BAD - Loads all records into memory
 $userCount = User::all()->count();
 
-// ✅ After: Database count
+// ✅ GOOD - Database count
 $userCount = User::count();
 ```
 
 **Sum Values:**
 ```php
-// ❌ Before: Loads all orders, sums in PHP
+// ❌ BAD - Loads all orders, sums in PHP
 $totalRevenue = Order::all()->sum('amount');
 
-// ✅ After: Database aggregation
+// ✅ GOOD - Database aggregation
 $totalRevenue = Order::sum('amount');
 ```
 
 **Average Values:**
 ```php
-// ❌ Before: Loads all products, averages in PHP
+// ❌ BAD - Loads all products, averages in PHP
 $avgPrice = Product::all()->avg('price');
 
-// ✅ After: Database aggregation
+// ✅ GOOD - Database aggregation
 $avgPrice = Product::avg('price');
 ```
 
@@ -69,22 +69,22 @@ $avgPrice = Product::avg('price');
 **1. Query Builder Optimization:**
 
 ```php
-// ❌ Before: Two queries - get() loads data, count() counts in PHP
+// ❌ BAD - Two queries - get() loads data, count() counts in PHP
 $activeUsers = User::where('status', 'active')->get()->count();
 
-// ✅ After: Single database count
+// ✅ GOOD - Single database count
 $activeUsers = User::where('status', 'active')->count();
 ```
 
 **2. Complex Aggregations:**
 
 ```php
-// ❌ Before: Loads all records, groups in PHP memory
+// ❌ BAD - Loads all records, groups in PHP memory
 $ordersByMonth = Order::all()->groupBy(function($order) {
     return $order->created_at->format('Y-m');
 });
 
-// ✅ After: Database grouping
+// ✅ GOOD - Database grouping
 $ordersByMonth = Order::query()
     ->selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
     ->groupBy('month')
@@ -94,12 +94,12 @@ $ordersByMonth = Order::query()
 **3. Conditional Aggregation:**
 
 ```php
-// ❌ Before: Loads all users, filters in PHP
+// ❌ BAD - Loads all users, filters in PHP
 $premiumUserCount = User::all()
     ->where('subscription_type', 'premium')
     ->count();
 
-// ✅ After: Filter at database level
+// ✅ GOOD - Filter at database level
 $premiumUserCount = User::where('subscription_type', 'premium')->count();
 ```
 

@@ -96,11 +96,11 @@ composer show vendor/package --all
 **2. Replace GPL/AGPL Packages**
 
 ```php
-// ❌ BEFORE: GPL package for PDF generation
+// ❌ BAD - GPL package for PDF generation
 composer require tecnickcom/tcpdf  // LGPL-3.0 (acceptable)
 // But some forks are GPL-3.0 (not acceptable)
 
-// ✅ AFTER: MIT alternative
+// ✅ GOOD - MIT alternative
 composer require dompdf/dompdf  // LGPL-2.1 (acceptable)
 // Or
 composer require mpdf/mpdf  // GPL-2.0 (use only if open-source app)

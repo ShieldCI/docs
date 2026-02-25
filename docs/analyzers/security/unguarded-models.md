@@ -33,11 +33,11 @@ tags: eloquent,mass-assignment,models,security,unguard
 1. Remove the blanket `Model::unguard()` call when possible and rely on `$fillable` / `$guarded` properties.
 
 ```php
-// ❌ Before: global unguard in a controller
+// ❌ BAD - global unguard in a controller
 Model::unguard();
 User::create($request->all());
 
-// ✅ After: validate + mass assign only what is allowed
+// ✅ GOOD - validate + mass assign only what is allowed
 $user = User::create($request->validated());
 ```
 

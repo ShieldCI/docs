@@ -30,13 +30,13 @@ When configuration is cached, `env()` always returns `null` outside config files
 
 Replace env() calls with config() calls:
 
-**Before:**
+**Before (❌):**
 ```php
 // ❌ app/Services/PaymentService.php
 $apiKey = env('STRIPE_KEY');
 ```
 
-**After:**
+**After (✅):**
 ```php
 // ✅ app/Services/PaymentService.php
 $apiKey = config('services.stripe.key');

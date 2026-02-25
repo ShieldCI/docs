@@ -41,13 +41,13 @@ tags: documentation,maintainability,code-quality,readability
 Add basic DocBlock to public methods:
 
 ```php
-// ❌ Before: Missing DocBlock
+// ❌ BAD - Missing DocBlock
 public function calculateTotal($items)
 {
     return array_sum(array_column($items, 'price'));
 }
 
-// ✅ After: DocBlock with generic type documentation
+// ✅ GOOD - DocBlock with generic type documentation
 /**
  * Calculate the total price of items.
  *
@@ -66,13 +66,13 @@ public function calculateTotal(array $items): float
 #### 1: Complete DocBlock with Parameters
 
 ```php
-// ❌ Before: Missing or incomplete DocBlock
+// ❌ BAD - Missing or incomplete DocBlock
 public function processOrder(Order $order, User $user, bool $sendEmail)
 {
     // Implementation
 }
 
-// ✅ After: Complete DocBlock (class types documented, scalar types omitted)
+// ✅ GOOD - Complete DocBlock (class types documented, scalar types omitted)
 /**
  * Process an order for a user.
  *
@@ -93,13 +93,13 @@ public function processOrder(Order $order, User $user, bool $sendEmail): Order
 #### 2: Document Generic Return Types
 
 ```php
-// ❌ Before: Missing return documentation for Collection (generic type)
+// ❌ BAD - Missing return documentation for Collection (generic type)
 public function getUserOrders(int $userId)
 {
     return User::find($userId)->orders;
 }
 
-// ✅ After: Document generic collection return type
+// ✅ GOOD - Document generic collection return type
 /**
  * Get all orders for a user.
  *
@@ -116,7 +116,7 @@ public function getUserOrders(int $userId)
 #### 3: Document Exceptions
 
 ```php
-// ❌ Before: Missing exception documentation
+// ❌ BAD - Missing exception documentation
 public function chargePayment(Order $order, float $amount)
 {
     if ($amount <= 0) {
@@ -130,7 +130,7 @@ public function chargePayment(Order $order, float $amount)
     // Charge payment
 }
 
-// ✅ After: Document all exceptions (class param and exceptions only)
+// ✅ GOOD - Document all exceptions (class param and exceptions only)
 /**
  * Charge a payment for an order.
  *
@@ -157,13 +157,13 @@ public function chargePayment(Order $order, float $amount): void
 #### 4: Document Complex Parameters
 
 ```php
-// ❌ Before: Missing documentation for array parameter (generic type)
+// ❌ BAD - Missing documentation for array parameter (generic type)
 public function searchUsers(array $filters, int $limit = 10)
 {
     // Implementation
 }
 
-// ✅ After: Document array structure and generic return type
+// ✅ GOOD - Document array structure and generic return type
 /**
  * Search users with filters.
  *
@@ -181,13 +181,13 @@ public function searchUsers(array $filters, int $limit = 10)
 #### 5: Document Nullable Class Returns
 
 ```php
-// ❌ Before: Missing documentation for nullable class return
+// ❌ BAD - Missing documentation for nullable class return
 public function findUserByEmail(string $email)
 {
     return User::where('email', $email)->first();
 }
 
-// ✅ After: Document nullable class return type
+// ✅ GOOD - Document nullable class return type
 /**
  * Find a user by email address.
  *
@@ -204,7 +204,7 @@ public function findUserByEmail(string $email): ?User
 #### 6: Document Array Shapes
 
 ```php
-// ❌ Before: Missing documentation for array return (generic type)
+// ❌ BAD - Missing documentation for array return (generic type)
 public function getUserStats(int $userId): array
 {
     return [
@@ -214,7 +214,7 @@ public function getUserStats(int $userId): array
     ];
 }
 
-// ✅ After: Document array shape with precise structure
+// ✅ GOOD - Document array shape with precise structure
 /**
  * Get user statistics.
  *

@@ -38,7 +38,7 @@ tags: complexity,maintainability,code-quality,readability
 Extract a small portion of logic into a separate method:
 
 ```php
-// ❌ Before: Long method
+// ❌ BAD - Long method
 public function processOrder(Order $order)
 {
     // 60+ lines of code
@@ -47,7 +47,7 @@ public function processOrder(Order $order)
     // ... many more lines
 }
 
-// ✅ After: Extract one piece
+// ✅ GOOD - Extract one piece
 public function processOrder(Order $order)
 {
     $this->updateOrderStatus($order, 'processing');
@@ -66,7 +66,7 @@ private function updateOrderStatus(Order $order, string $status): void
 #### 1: Extract Related Logic
 
 ```php
-// ❌ Before: Long method with multiple responsibilities
+// ❌ BAD - Long method with multiple responsibilities
 public function processPayment(Order $order, PaymentMethod $method)
 {
     // Validate order (10 lines)
@@ -94,7 +94,7 @@ public function processPayment(Order $order, PaymentMethod $method)
     // ... more updates
 }
 
-// ✅ After: Extract into focused methods
+// ✅ GOOD - Extract into focused methods
 public function processPayment(Order $order, PaymentMethod $method)
 {
     $this->validateOrder($order);
@@ -139,7 +139,7 @@ private function updateOrderStatus(Order $order, string $status): void
 #### 2: Extract Complex Algorithms
 
 ```php
-// ❌ Before: Long method with complex calculation
+// ❌ BAD - Long method with complex calculation
 public function calculateShippingCost(Order $order): float
 {
     $baseCost = 10.0;
@@ -160,7 +160,7 @@ public function calculateShippingCost(Order $order): float
     return $baseCost;
 }
 
-// ✅ After: Extract calculation logic
+// ✅ GOOD - Extract calculation logic
 public function calculateShippingCost(Order $order): float
 {
     $baseCost = $this->getBaseShippingCost();
@@ -201,7 +201,7 @@ private function getDiscountMultiplier(Order $order): float
 #### 3: Use Service Classes
 
 ```php
-// ❌ Before: Long controller method
+// ❌ BAD - Long controller method
 public function store(Request $request)
 {
     // Validation (15 lines)
@@ -220,7 +220,7 @@ public function store(Request $request)
     return response()->json($order);
 }
 
-// ✅ After: Extract to service class
+// ✅ GOOD - Extract to service class
 public function store(StoreOrderRequest $request, OrderService $service)
 {
     $order = $service->createOrder($request->validated());
@@ -258,7 +258,7 @@ class OrderService
 #### 4: Extract Conditional Logic
 
 ```php
-// ❌ Before: Long method with many conditionals
+// ❌ BAD - Long method with many conditionals
 public function processUser(User $user)
 {
     if ($user->isNew()) {
@@ -270,7 +270,7 @@ public function processUser(User $user)
     }
 }
 
-// ✅ After: Strategy pattern or separate methods
+// ✅ GOOD - Strategy pattern or separate methods
 public function processUser(User $user)
 {
     $processor = $this->getUserProcessor($user);

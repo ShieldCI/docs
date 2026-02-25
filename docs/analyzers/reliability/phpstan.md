@@ -54,13 +54,13 @@ php artisan shield:analyze --analyzer=phpstan
 Review the categorized issues and fix the most critical ones first:
 
 ```php
-// ❌ Before: Undefined variable
+// ❌ BAD - Undefined variable
 public function process()
 {
     return $undefinedVariable; // Critical issue
 }
 
-// ✅ After: Variable defined
+// ✅ GOOD - Variable defined
 public function process()
 {
     $result = 'processed';
