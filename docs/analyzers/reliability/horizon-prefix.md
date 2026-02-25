@@ -37,13 +37,13 @@ pro: true
 Set a unique Horizon prefix in `config/horizon.php`:
 
 ```php
-// ❌ Before: Generic prefix (default)
+// ❌ BAD - Generic prefix (default)
 'prefix' => env(
     'HORIZON_PREFIX',
     'laravel_horizon:'
 ),
 
-// ✅ After: App-specific prefix with environment
+// ✅ GOOD - App-specific prefix with environment
 'prefix' => env(
     'HORIZON_PREFIX',
     'myapp_production_horizon:'

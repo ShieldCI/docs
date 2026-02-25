@@ -45,21 +45,21 @@ php artisan route:list
 ```
 
 ```php
-// ❌ Before: Route pointing to non-existent controller
+// ❌ BAD - Route pointing to non-existent controller
 Route::get('/users', [UserController::class, 'index']);
 // UserController class does not exist or was renamed
 
-// ✅ After: Fix the controller reference
+// ✅ GOOD - Fix the controller reference
 use App\Http\Controllers\UserController;
 Route::get('/users', [UserController::class, 'index']);
 ```
 
 ```php
-// ❌ Before: Route referencing non-existent method
+// ❌ BAD - Route referencing non-existent method
 Route::get('/reports', [ReportController::class, 'generate']);
 // 'generate' method does not exist in ReportController
 
-// ✅ After: Use the correct method name
+// ✅ GOOD - Use the correct method name
 Route::get('/reports', [ReportController::class, 'index']);
 ```
 
@@ -68,7 +68,7 @@ Route::get('/reports', [ReportController::class, 'index']);
 #### 1: Fix non-public method references
 
 ```php
-// ❌ Before: Method is private/protected
+// ❌ BAD - Method is private/protected
 class OrderController extends Controller
 {
     private function show(Order $order)
@@ -77,7 +77,7 @@ class OrderController extends Controller
     }
 }
 
-// ✅ After: Method is public
+// ✅ GOOD - Method is public
 class OrderController extends Controller
 {
     public function show(Order $order)
@@ -90,7 +90,7 @@ class OrderController extends Controller
 #### 2: Fix invokable controllers
 
 ```php
-// ❌ Before: Missing __invoke method
+// ❌ BAD - Missing __invoke method
 class ProcessPaymentController extends Controller
 {
     public function handle()
@@ -101,7 +101,7 @@ class ProcessPaymentController extends Controller
 
 Route::post('/payments', ProcessPaymentController::class);
 
-// ✅ After: Implement __invoke
+// ✅ GOOD - Implement __invoke
 class ProcessPaymentController extends Controller
 {
     public function __invoke()
@@ -114,13 +114,13 @@ class ProcessPaymentController extends Controller
 #### 3: Fix route model binding types
 
 ```php
-// ❌ Before: Type-hinted class does not exist
+// ❌ BAD - Type-hinted class does not exist
 public function show(NonExistentModel $model)
 {
     // ...
 }
 
-// ✅ After: Use a valid model class
+// ✅ GOOD - Use a valid model class
 use App\Models\Product;
 
 public function show(Product $product)
@@ -132,10 +132,10 @@ public function show(Product $product)
 #### 4: Clean up stale routes after refactoring
 
 ```php
-// ❌ Before: Old route file with references to deleted controllers
+// ❌ BAD - Old route file with references to deleted controllers
 Route::resource('legacy-items', 'LegacyItemController');
 
-// ✅ After: Remove dead routes or redirect to new endpoints
+// ✅ GOOD - Remove dead routes or redirect to new endpoints
 Route::redirect('/legacy-items', '/items', 301);
 Route::resource('items', ItemController::class);
 ```

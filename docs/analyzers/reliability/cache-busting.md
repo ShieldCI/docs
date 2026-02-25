@@ -39,11 +39,11 @@ pro: true
 Enable versioning in your `webpack.mix.js`:
 
 ```js
-// ❌ Before: No versioning
+// ❌ BAD - No versioning
 mix.js('resources/js/app.js', 'public/js')
    .css('resources/css/app.css', 'public/css');
 
-// ✅ After: Versioning enabled
+// ✅ GOOD - Versioning enabled
 mix.js('resources/js/app.js', 'public/js')
    .css('resources/css/app.css', 'public/css')
    .version();

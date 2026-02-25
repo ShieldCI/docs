@@ -37,7 +37,7 @@ tags: queue,blocking,jobs,reliability,configuration
 Update `block_for` in your `config/queue.php`:
 
 ```php
-// ❌ Before: Busy polling (block_for = 0)
+// ❌ BAD - Busy polling (block_for = 0)
 'connections' => [
     'redis' => [
         'driver' => 'redis',
@@ -48,7 +48,7 @@ Update `block_for` in your `config/queue.php`:
     ],
 ],
 
-// ✅ After: Use BLPOP (block_for = null)
+// ✅ GOOD - Use BLPOP (block_for = null)
 'connections' => [
     'redis' => [
         'driver' => 'redis',

@@ -38,7 +38,7 @@ pro: true
 Replace superglobals with their Laravel equivalents:
 
 ```php
-// ❌ Before: Direct superglobal access
+// ❌ BAD - Direct superglobal access
 $name = $_GET['name'];
 $email = $_POST['email'];
 $token = $_COOKIE['token'];
@@ -47,7 +47,7 @@ $avatar = $_FILES['avatar'];
 $value = $GLOBALS['setting'];
 $dbHost = $_ENV['DB_HOST'];
 
-// ✅ After: Laravel request helpers
+// ✅ GOOD - Laravel request helpers
 $name = request()->query('name');
 $email = request()->post('email');
 $token = request()->cookie('token');
@@ -60,10 +60,10 @@ $dbHost = config('database.connections.mysql.host');
 Replace `filter_input()` with Laravel validation:
 
 ```php
-// ❌ Before: filter_input
+// ❌ BAD - filter_input
 $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-// ✅ After: Laravel validation
+// ✅ GOOD - Laravel validation
 $validated = request()->validate([
     'email' => 'required|email',
 ]);
@@ -73,12 +73,12 @@ $email = $validated['email'];
 Replace native session functions:
 
 ```php
-// ❌ Before: Native session functions
+// ❌ BAD - Native session functions
 session_start();
 $_SESSION['user'] = $userId;
 session_destroy();
 
-// ✅ After: Laravel session helpers
+// ✅ GOOD - Laravel session helpers
 session(['user' => $userId]);
 session()->flush();
 session()->invalidate();
@@ -128,13 +128,13 @@ public function store(StoreUserRequest $request): RedirectResponse
 #### 2: Replace Header Functions with Response Methods
 
 ```php
-// ❌ Before: Native header functions
+// ❌ BAD - Native header functions
 header('Content-Type: application/json');
 header('X-Custom-Header: value');
 setcookie('preference', 'dark', time() + 86400);
 http_response_code(404);
 
-// ✅ After: Laravel response
+// ✅ GOOD - Laravel response
 return response()->json($data)
     ->header('X-Custom-Header', 'value')
     ->cookie('preference', 'dark', 1440);
@@ -143,11 +143,11 @@ return response()->json($data)
 #### 3: Replace Environment Functions with Config
 
 ```php
-// ❌ Before: getenv / putenv
+// ❌ BAD - getenv / putenv
 $apiKey = getenv('API_KEY');
 putenv('TEMP_VAR=value');
 
-// ✅ After: Use config() everywhere except config files
+// ✅ GOOD - Use config() everywhere except config files
 // In config/services.php:
 'api_key' => env('API_KEY'),
 
