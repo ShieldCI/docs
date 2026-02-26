@@ -293,6 +293,47 @@ class AuthenticationTest extends TestCase
 }
 ```
 
+## ShieldCI Configuration
+
+By default, the analyzer automatically recognizes common public route keywords and skips them during analysis:
+
+`login`, `register`, `password`, `forgot-password`, `reset-password`, `verify`, `health`, `status`, `up`, `webhook`
+
+These keywords are matched against both **route URIs** and **route names**, including nested paths (e.g. `/auth/login`, `/api/v1/register`) and dotted names (e.g. `auth.login`, `admin.auth.register`).
+
+To add custom public routes for your application, publish the config and add them to the `public_routes` array:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'security' => [
+        'enabled' => true,
+        
+        'authentication-authorization' => [
+            'public_routes' => [
+                // Add route URI keywords that should be treated as public
+            ],
+        ],
+    ],
+],
+```
+
+::: tip
+Each entry is a keyword, not a full path. Adding `'oauth'` will match `/oauth/callback`, `/api/oauth/token`, `->name('oauth.redirect')`, etc.
+:::
+
+You can also mark individual routes as intentionally public by applying guest middleware:
+
+```php
+Route::post('/custom-public', [CustomController::class, 'store'])
+    ->middleware('guest');
+```
+
 ## References
 
 - [Laravel Authentication Documentation](https://laravel.com/docs/authentication)
