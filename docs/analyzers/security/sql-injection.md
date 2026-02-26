@@ -23,12 +23,22 @@ This analyzer detects potential SQL injection vulnerabilities in your Laravel ap
 - **DB::unprepared()** usage (inherently unsafe)
 - **Native query functions** (`mysqli_query`, `pg_query`) with concatenation/interpolation
 
+::: info Two-Tier Detection
+The analyzer uses context-aware detection to minimize false positives:
+
+- **Full query methods** (`DB::select`, `DB::insert`, `DB::update`, `DB::delete`, `DB::raw`) — flags **all** concatenation/interpolation when no bindings are present. When bindings are provided, only flags concatenation containing direct user input.
+- **Fragment methods** (`whereRaw`, `orderByRaw`, `selectRaw`, `havingRaw`) — only flags concatenation/interpolation that contains **direct user input** (`$_GET`, `$_POST`, `request()`, `Request::input()`, `$request->input()`, etc.). Table/column name concatenation is not flagged.
+
+:::
+
 ::: tip What's NOT Flagged
 The analyzer correctly recognizes these as **safe**:
 - PDO/mysqli instantiation (`new PDO()`, `new mysqli()`) - just connection setup
 - Prepared statement functions (`mysqli_prepare()`, `pg_prepare()`) - secure by design
 - Parameter binding (`DB::select('WHERE id = ?', [$id])`) - the recommended safe pattern
 - Static queries without variables (`DB::select('SELECT * FROM users')`)
+- Table/column name concatenation in query fragment methods (`->orderByRaw('col/' . $table . '.goal ASC')`) — only direct user input is flagged in `*Raw()` methods
+- Structural concatenation with bindings (`DB::select('... IN (' . $placeholders . ')', $bindings)`) — when bindings are present, only direct user input in the SQL string is flagged
 :::
 
 ## Why It Matters
