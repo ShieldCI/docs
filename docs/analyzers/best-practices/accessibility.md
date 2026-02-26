@@ -62,7 +62,10 @@ Add alt attributes to images:
 <label for="email">Email Address</label>
 <input type="email" id="email" name="email" placeholder="Email">
 
-<!-- Or with aria-label for icon-only inputs: -->
+<!-- Or wrap the input inside a label: -->
+<label>Email Address <input type="email" name="email"></label>
+
+<!-- Or use aria-label for icon-only inputs: -->
 <input type="search" aria-label="Search products">
 ```
 
