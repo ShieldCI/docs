@@ -295,13 +295,15 @@ class AuthenticationTest extends TestCase
 
 ## ShieldCI Configuration
 
-By default, the analyzer automatically recognizes common public route keywords and skips them during analysis:
+#### Public Routes (Exact Path Matching)
 
-`login`, `register`, `password`, `forgot-password`, `reset-password`, `verify`, `health`, `status`, `up`, `webhook`
+By default, the analyzer recognizes these exact public route paths and skips them:
 
-These keywords are matched against both **route URIs** and **route names**, including nested paths (e.g. `/auth/login`, `/api/v1/register`) and dotted names (e.g. `auth.login`, `admin.auth.register`).
+`/login`, `/register`, `/password/reset`, `/password/email`, `/forgot-password`, `/reset-password`, `/email/verify`, `/health`, `/status`, `/up`
 
-To add custom public routes for your application, publish the config and add them to the `public_routes` array:
+Each entry is an **exact path** — `/login` matches only `Route::post('/login', ...)`, not `/auth/login` or `/api/v1/login`.
+
+To add custom public routes, publish the config and add exact paths to the `public_routes` array:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
@@ -313,10 +315,14 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'security' => [
         'enabled' => true,
-        
+
         'authentication-authorization' => [
             'public_routes' => [
-                // Add route URI keywords that should be treated as public
+                '/webhooks/stripe',
+                '/webhooks/github',
+                '/satis/auth',
+                '/auth/login',         // If your login route is nested
+                '/api/oauth/token',
             ],
         ],
     ],
@@ -324,8 +330,26 @@ Then in `config/shieldci.php`:
 ```
 
 ::: tip
-Each entry is a keyword, not a full path. Adding `'oauth'` will match `/oauth/callback`, `/api/oauth/token`, `->name('oauth.redirect')`, etc.
+Each entry must be an exact route path starting with `/`. For example, `/webhooks/stripe` matches only `Route::post('/webhooks/stripe', ...)`.
 :::
+
+#### Custom Auth Middleware Detection
+
+The analyzer automatically detects custom middleware classes used via `->middleware(YourMiddleware::class)`. It introspects the middleware source file for authentication signals:
+
+- `$request->bearerToken()` — bearer token extraction
+- `$request->getUser()` / `$request->getPassword()` — HTTP Basic Auth
+- `AuthenticationException` — Laravel's auth exception
+- `AuthenticatesRequests` — Laravel's auth interface
+- `Illuminate\Contracts\Auth\Factory` — Auth factory injection
+
+```php
+// This route will NOT be flagged — ValidateApiToken uses bearerToken()
+Route::post('/reports', [ReportController::class, 'store'])
+    ->middleware(ValidateApiToken::class);
+```
+
+#### Guest Middleware
 
 You can also mark individual routes as intentionally public by applying guest middleware:
 
