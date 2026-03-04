@@ -253,7 +253,7 @@ php artisan shield:analyze --analyzer=some-analyzer
 1. **Environment differences:**
 ```bash
 # Ensure CI mode is enabled
-SHIELDCI_CI_MODE=true php artisan shield:analyze
+php artisan shield:analyze --ci
 ```
 
 2. **Different configurations:**

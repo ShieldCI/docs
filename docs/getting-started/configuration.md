@@ -319,12 +319,14 @@ Options:
 - `'medium'` - Critical + high + medium fail CI
 - `'low'` - Any issue fails CI
 
-**CI Mode Configuration:**
-```php
-'ci_mode' => env('SHIELDCI_CI_MODE', false),
+**CI Mode:**
+
+Activate via the `--ci` flag — no config key or environment variable needed:
+```bash
+php artisan shield:analyze --ci
 ```
 
-When CI mode is enabled, only analyzers that support CI will run. Configure which analyzers run in CI:
+When CI mode is active, only analyzers that support CI run. Optionally tune which analyzers run via config:
 ```php
 'ci_mode_analyzers' => [
     // Whitelist: Only these analyzers run in CI mode
@@ -777,8 +779,7 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `enabled` | bool | `true` | Globally enable/disable ShieldCI |
 | `timeout` | int | `300` | Analysis timeout in seconds |
 | `memory_limit` | string | `'512M'` | PHP memory limit for analysis |
-| `ci_mode` | bool | `false` | Enable CI mode (only CI-compatible analyzers) |
-| `ci_mode_analyzers` | array | `[]` | Whitelist of analyzers to run in CI mode |
+| `ci_mode_analyzers` | array | `[]` | Whitelist of analyzers to run in CI mode (use `--ci` flag to activate CI mode) |
 | `ci_mode_exclude_analyzers` | array | `[]` | Blacklist of analyzers to exclude in CI mode |
 | `environment_mapping` | array | `[]` | Map custom environment names to standard types |
 | `analyzers` | array | All `enabled: true` | Enable/disable analyzer categories and configure analyzer-specific settings |
