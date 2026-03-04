@@ -420,7 +420,7 @@ jobs:
         run: composer install --no-dev
 
       - name: Run ShieldCI
-        run: php artisan shield:analyze --format=json
+        run: php artisan shield:analyze --ci --format=json
 ```
 
 This runs ShieldCI on every commit, blocking merges if critical issues are found.
