@@ -338,24 +338,16 @@ Each entry must be an exact route path starting with `/`. For example, `/webhook
 The analyzer automatically detects custom middleware classes used via `->middleware(YourMiddleware::class)`. It introspects the middleware source file for authentication signals:
 
 - `$request->bearerToken()` — bearer token extraction
-- `$request->getUser()` / `$request->getPassword()` — HTTP Basic Auth
+- `$request->getPassword()` — HTTP Basic Auth password extraction
 - `AuthenticationException` — Laravel's auth exception
 - `AuthenticatesRequests` — Laravel's auth interface
 - `Illuminate\Contracts\Auth\Factory` — Auth factory injection
+- `Auth $auth` — Auth factory injected via constructor type-hint
 
 ```php
 // This route will NOT be flagged — ValidateApiToken uses bearerToken()
 Route::post('/reports', [ReportController::class, 'store'])
     ->middleware(ValidateApiToken::class);
-```
-
-#### Guest Middleware
-
-You can also mark individual routes as intentionally public by applying guest middleware:
-
-```php
-Route::post('/custom-public', [CustomController::class, 'store'])
-    ->middleware('guest');
 ```
 
 ## References
