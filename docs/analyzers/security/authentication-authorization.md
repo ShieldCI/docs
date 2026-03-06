@@ -14,14 +14,14 @@ tags: authentication,authorization,security,middleware
 
 ## What This Checks
 
-Detects missing authentication and authorization protection throughout your Laravel application. Scans routes, controllers, and code for authentication vulnerabilities including unprotected routes (POST, PUT, PATCH, DELETE), controllers with sensitive methods lacking authentication, missing authorization checks, and unsafe `Auth::user()` usage without null safety checks.
+Detects missing authentication and authorization protection throughout your Laravel application. Scans routes, controllers, and code for authentication vulnerabilities including unprotected routes (POST, PUT, PATCH, DELETE), controllers with sensitive methods lacking authentication, missing authorization checks, and unsafe `Auth::user()`, `auth()->user()`, and `$request->user()` usage without null safety checks.
 
 ## Why It Matters
 
 - **Security Risk:** CRITICAL - Unprotected routes allow unauthorized access to sensitive operations
 - **Data Integrity:** Users could modify or delete data they shouldn't have access to
 - **Privacy Violations:** Unprotected routes expose private user data and functionality
-- **Application Crashes:** `Auth::user()` can return null, causing runtime errors
+- **Application Crashes:** `Auth::user()`, `auth()->user()`, and `$request->user()` can return null, causing runtime errors when accessed by unauthenticated users
 
 Authentication and authorization are the first line of defense for your application. Missing protection can lead to:
 - Unauthorized data modification or deletion by anyone accessing unprotected endpoints
@@ -63,32 +63,106 @@ Route::middleware(['auth'])->group(function () {
 });
 ```
 
-**Scenario 3: Unsafe Auth::user() Usage**
+**Scenario 3: Unsafe Auth User Access**
+
+All three patterns are flagged when used in an unprotected context:
 
 ```php
-// BAD - Can crash if user is not authenticated
+// BAD - Any of these can crash if the user is not authenticated
 public function show()
 {
-    $name = Auth::user()->name; // Null pointer if not logged in!
-    return view('profile', ['name' => $name]);
-}
-
-// GOOD - Option 1: Use middleware to ensure authentication
-Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth');
-
-public function show()
-{
-    $name = Auth::user()->name; // Safe because middleware ensures authentication
-    return view('profile', ['name' => $name]);
-}
-
-// GOOD - Option 2: Use null-safe operator (PHP 8.1+)
-public function show()
-{
-    $name = Auth::user()?->name ?? 'Guest';
+    $name = Auth::user()->name;       // Null pointer if not logged in!
+    $name = auth()->user()->name;     // Same risk
+    $name = $request->user()->name;   // Same risk
     return view('profile', ['name' => $name]);
 }
 ```
+
+**Option 1: Protect with auth middleware (recommended)**
+
+When the enclosing controller method is protected by auth middleware — either at the route level or via the controller constructor — the analyzer understands this context and will **not** flag direct property access:
+
+```php
+// Route-level middleware
+Route::get('/profile', [ProfileController::class, 'show'])->middleware('auth');
+
+// OR constructor-level middleware
+public function __construct()
+{
+    $this->middleware('auth');
+}
+
+// Now safe — the analyzer recognizes the auth-protected context
+public function show()
+{
+    $name = Auth::user()->name;      // Not flagged: method is auth-gated
+    $email = auth()->user()->email;  // Not flagged: method is auth-gated
+    return view('profile', compact('name', 'email'));
+}
+```
+
+**Option 2: Use null-safe operator for mixed contexts (PHP 8.0+)**
+
+```php
+// Safe regardless of middleware — works for guest-accessible routes too
+public function show()
+{
+    $name = Auth::user()?->name ?? 'Guest';
+    $email = auth()->user()?->email ?? '';
+    $userId = $request->user()?->id;
+    return view('profile', compact('name', 'email'));
+}
+```
+
+**Scenario 4: FormRequest With Unconditional Authorization**
+
+The analyzer flags `FormRequest::authorize()` methods that return `true` unconditionally, meaning _any_ user — including unauthenticated ones — can submit the form. This is only flagged when the FormRequest is injected into a sensitive, unprotected controller action; orphaned FormRequests and those used in auth-gated actions are skipped.
+
+```php
+// BAD - Anyone can submit, no real authorization check
+class UpdatePostRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return true; // Flagged: anyone can call this action
+    }
+
+    public function rules(): array
+    {
+        return ['title' => 'required|string|max:255'];
+    }
+}
+```
+
+```php
+// GOOD - Check that the user actually owns the resource
+class UpdatePostRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        $post = $this->route('post');
+        return $this->user()->can('update', $post);
+    }
+
+    public function rules(): array
+    {
+        return ['title' => 'required|string|max:255'];
+    }
+}
+
+// GOOD - Delegate to a Gate or Policy
+class UpdatePostRequest extends FormRequest
+{
+    public function authorize(): bool
+    {
+        return Gate::allows('update-post', $this->route('post'));
+    }
+}
+```
+
+::: tip
+If the controller action is already protected by `auth` middleware, the FormRequest `authorize()` returning `true` is not flagged — the middleware already guarantees the user is authenticated. The flag only appears when there is no surrounding auth context.
+:::
 
 ### Proper Fix (25 minutes)
 
