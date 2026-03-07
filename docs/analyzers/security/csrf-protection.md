@@ -75,10 +75,10 @@ $.ajax({
 // If you removed it, re-enable it:
 return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
-        // The 'web' group includes VerifyCsrfToken by default.
+        // The 'web' group includes ValidateCsrfToken by default.
         // Only needed if you previously disabled it:
         $middleware->web(append: [
-            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class,
         ]);
     })
 ```
