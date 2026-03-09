@@ -160,6 +160,30 @@ If you use approaches 2-4, add to `config/shieldci.php`:
 
 This analyzer is automatically skipped for stateless/API-only applications.
 
+**Overriding the required template list**
+
+By default the analyzer requires all 7 templates. If your project only needs a subset you can restrict the list via config — no changes to the published `config/shieldci.php` are required:
+
+```php
+// config/shieldci.php
+return [
+    'analyzers' => [
+        'reliability' => [
+            'enabled' => true,
+        
+            'custom-error-pages' => [
+                'required_templates' => [
+                    '404.blade.php',
+                    '500.blade.php',
+                    '503.blade.php',
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+Only the templates listed here will be checked. The recommendation text will also reflect only the templates that are actually missing.
 
 **Why skip for stateless/API-only apps?**
 - API-only applications return JSON error responses, not HTML pages
