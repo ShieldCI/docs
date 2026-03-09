@@ -513,7 +513,11 @@ These warnings don't block execution but help you fix configuration issues.
 
 ### Inline Suppression
 
-Suppress specific issues directly in your source code with `@shieldci-ignore` comments. Place the comment on the **same line** or the **line immediately above** the flagged code.
+Suppress specific issues directly in your source code with `@shieldci-ignore` comments. Supported placements:
+
+- **Same line** as the flagged code
+- **Line immediately above** the flagged code
+- **Inside a multi-line docblock** immediately above the flagged code
 
 **Suppress all analyzers on a line:**
 ```php
@@ -538,12 +542,33 @@ echo DB::select("SELECT * FROM users WHERE name = '$name'");
 $result = DB::select("SELECT * FROM users"); // @shieldci-ignore sql-injection
 ```
 
+**Standalone suppress docblock:**
+```php
+/**
+ * @shieldci-ignore
+ */
+public function boot(): void { ... }
+```
+
+**Inside an existing docblock** (most common — no need to add a separate comment):
+```php
+/**
+ * @param string $name
+ * @return User
+ * @shieldci-ignore sql-injection
+ */
+public function getUser(string $name): User { ... }
+```
+
 **Supported comment styles:**
 ```php
 // @shieldci-ignore            (double-slash)
 # @shieldci-ignore             (hash)
-/* @shieldci-ignore */         (block comment)
-/** @shieldci-ignore */        (docblock)
+/* @shieldci-ignore */         (block comment, single line)
+/** @shieldci-ignore */        (docblock, single line)
+/**
+ * @shieldci-ignore            (multi-line docblock)
+ */
 ```
 
 ::: tip When to use inline suppression vs config
