@@ -20,7 +20,7 @@ The Service Container Resolution Analyzer identifies usage of `app()`, `resolve(
 
 **Detected Patterns:**
 - `app(OrderRepository::class)` - Shorthand resolution
-- `app()->make()`, `app()->makeWith()`, `app()->get()` - Direct container methods
+- `app()->make()`, `app()->makeWith()` - Direct container methods
 - `resolve(PaymentGateway::class)` - Global resolve helper
 - `App::make()`, `App::makeWith()` - Static facade calls
 - `Container::getInstance()->make()` - Container singleton access
@@ -180,9 +180,9 @@ class OrderService
 5. Consider using interfaces instead of concrete classes for flexibility
 6. Update tests to inject mocks/stubs
 
-**Whitelist to reduce false positives:**
+## Configuration
 
-For legitimate cases where you need to whitelist, publish the config:
+Publish the config to customize behaviour:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
@@ -196,33 +196,82 @@ Then in `config/shieldci.php`:
         'enabled' => true,
 
         'service-container-resolution' => [
-            // Directories to skip
+            // Directories to skip entirely
             'whitelist_dirs' => [
                 'tests',                // Tests legitimately resolve services
                 'database/migrations',  // Migrations don't support constructor DI
                 'database/seeders',     // Seeders need to resolve factories
                 'database/factories',   // Factories may resolve services
+                'routes',               // Route files use closures without DI support
             ],
 
-            // Class patterns to skip (wildcards supported)
+            // Class name patterns to skip (wildcards supported)
             'whitelist_classes' => [
-                '*Command',            // Artisan commands
-                '*Seeder',            // Database seeders
-                'DatabaseSeeder',     // Main seeder
+                '*Command',     // Artisan commands
+                '*Seeder',      // Database seeders
+                'DatabaseSeeder',
+                '*Job',         // Queued jobs
+                '*Listener',    // Event listeners
+                '*Middleware',  // HTTP middleware
+                '*Observer',    // Model observers
+                '*Factory',     // Model factories
+                '*Handler',     // Various handler classes
             ],
 
-            // Methods to skip (environment checks are OK)
+            // app() methods to skip (environment checks, container inspection)
             'whitelist_methods' => [
                 'environment',        // app()->environment()
-                'isLocal',           // app()->isLocal()
-                'isProduction',      // app()->isProduction()
-                'runningInConsole',  // app()->runningInConsole()
-                'runningUnitTests',  // app()->runningUnitTests()
+                'isLocal',            // app()->isLocal()
+                'isProduction',       // app()->isProduction()
+                'runningInConsole',   // app()->runningInConsole()
+                'runningUnitTests',   // app()->runningUnitTests()
+                'bound',              // app()->bound()
+                'has',                // app()->has()
+                'call',               // app()->call() - method injection
+            ],
+
+            // Service aliases that are legitimate to resolve by string
+            'whitelist_services' => [
+                'config', 'request', 'log', 'cache', 'session',
+                'view', 'validator', 'translator', 'events',
+                'router', 'db', 'auth', 'hash', 'url',
+            ],
+
+            // Detect PSR-11 ->get() calls (default: false)
+            'detect_psr_get' => false,
+
+            // Detect manual instantiation of service-like classes (default: false)
+            'detect_manual_instantiation' => false,
+
+            // Class patterns to flag for manual instantiation
+            'manual_instantiation_patterns' => [
+                '*Service',
+                '*Repository',
+                '*Handler',
+            ],
+
+            // Exclusions for manual instantiation (DTOs, value objects, etc.)
+            'manual_instantiation_exclude_patterns' => [
+                '*DTO',
+                '*Data',
+                '*ValueObject',
+                '*Request',
+                '*Response',
+                '*Entity',
+                '*Model',
             ],
         ],
     ],
 ],
 ```
+
+### `detect_manual_instantiation`
+
+When enabled, the analyzer also flags `new SomeService()` patterns for classes matching `manual_instantiation_patterns`. This catches cases where constructor injection is bypassed entirely rather than via `app()`. Disabled by default to avoid noise.
+
+### `detect_psr_get`
+
+When enabled, also detects PSR-11 `->get()` calls on the container. Disabled by default since `get()` is a common method name and false positives are likely without full type information.
 
 ## References
 
