@@ -16,7 +16,7 @@ Detects empty catch blocks and error suppression that hide failures, making debu
 
 ## What This Checks
 
-The Silent Failure Analyzer identifies three dangerous error handling patterns that hide exceptions and errors, making bugs impossible to debug in production:
+The Silent Failure Analyzer identifies four dangerous error handling patterns that hide exceptions and errors, making bugs impossible to debug in production:
 
 **Detected Patterns:**
 
@@ -29,7 +29,13 @@ The Silent Failure Analyzer identifies three dangerous error handling patterns t
    - Missing `Log::error()`, `report()`, or `throw`
    - Silently fails without any trace
 
-3. **Error Suppression Operator** (Medium Severity)
+3. **Broad Exception Catch Without Logging** (High/Medium Severity)
+   - `catch (\Throwable $e) { ... }` — catching `Throwable`, `Exception`, or `Error` is overly broad and can mask fatal programming errors like `TypeError` or `ArgumentCountError`
+   - **High** — no logging at all (genuinely silent failure)
+   - **Medium** — logging present but exception variable unused (error details are lost)
+   - Not flagged when logging is present **and** the exception variable is used (e.g. `Log::error('...', ['error' => $e->getMessage()])`) — this is considered well-handled
+
+4. **Error Suppression Operator** (High/Medium Severity)
    - `@file_get_contents($path)` - Hides all errors and warnings
    - `@mysql_query($sql)` - Suppresses error messages
    - Makes debugging impossible when things go wrong
@@ -171,6 +177,50 @@ class DataImporter
     }
 }
 ```
+
+### 4. **Broad Catches That Mask Programming Errors**
+
+Catching `\Throwable` swallows fatal errors like `TypeError`, `ArgumentCountError`, and `Error` that indicate bugs in your own code:
+
+**Before (❌):**
+```php
+class CheckRunner
+{
+    public function run()
+    {
+        try {
+            $this->executeChecks();
+        } catch (\Throwable $e) {
+            // Masks TypeError, ArgumentCountError, etc.
+            $this->check->markAsFailed('Unknown error');
+        }
+    }
+}
+```
+
+**After (✅):**
+```php
+class CheckRunner
+{
+    public function run()
+    {
+        try {
+            $this->executeChecks();
+        } catch (\Throwable $e) {
+            // Log first — ensures observability even if markAsFailed throws
+            Log::error('Check run failed', [
+                'check_id' => $this->check->id,
+                'error' => $e->getMessage(),
+                'class' => get_class($e),
+            ]);
+
+            $this->check->markAsFailed($e->getMessage());
+        }
+    }
+}
+```
+
+This pattern is common in **Jobs** and **API controllers** where top-level handlers must catch `\Throwable` to update external state. The analyzer does not flag it as long as `Log::error()` (or equivalent) is called and the exception variable is used.
 
 ## How to Fix
 
