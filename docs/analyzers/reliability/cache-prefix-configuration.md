@@ -55,6 +55,19 @@ tags: cache,configuration,reliability,multi-tenant
 4. **Test**: Write integration tests ensuring different `.env` configurations yield different cache keys (e.g., store and retrieve a known key)
 5. **Monitor**: Consider namespacing keys (e.g., `myapp:prod:`) for easier debugging in Redis CLI
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI environments do not run a shared cache server (Redis/Memcached/DynamoDB), so prefix collisions are not possible
+- Prevents irrelevant failures in pipelines where no cache infrastructure is present
+
+**When to run this analyzer:**
+- ✅ **Local development**: Catches misconfigured prefixes before they reach a shared environment
+- ✅ **Staging/Production servers**: Validates that the deployed prefix is unique across applications sharing the cache cluster
+- ❌ **CI/CD pipelines**: Skipped automatically (no shared cache server runs in CI)
+
 ## References
 
 - [Laravel Cache Configuration](https://laravel.com/docs/cache#configuration)

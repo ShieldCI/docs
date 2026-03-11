@@ -273,6 +273,20 @@ jobs:
           php artisan shield:analyze --analyzer=file-permissions
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- File permission bits are set by the CI runner's OS and umask
+- Permissions that look insecure in CI (e.g., broadly readable files from a fresh `git checkout`) are normal and expected in that environment
+- Prevents false failures that would fire on every pipeline run for conditions that are irrelevant outside a deployed server
+
+**When to run this analyzer:**
+- ✅ **Local development**: Catches overly permissive files set by local tooling before they reach a server
+- ✅ **Staging/Production servers**: Validates that sensitive files (`.env`, config) and directories have secure permissions in the actual deployment environment
+- ❌ **CI/CD pipelines**: Skipped automatically (permission bits reflect the runner's environment, not the deployed server)
+
 ## References
 
 - [Laravel Security Best Practices](https://laravel.com/docs/deployment#optimization)

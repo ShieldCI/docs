@@ -243,6 +243,20 @@ If you want to disable symlink verification or check custom symlinks:
 ],
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI runners clone a fresh repository and never run `php artisan storage:link`, so the `public/storage` symlink is always absent — flagging it would be a false positive on every pipeline run
+- Directory write permissions depend on the CI runner's OS and file system setup
+- Prevents misleading failures in pipelines where the deployment steps that create symlinks and set permissions have not yet run
+
+**When to run this analyzer:**
+- ✅ **Local development**: Catches missing write permissions and broken symlinks before they cause runtime errors
+- ✅ **Staging/Production servers**: Validates that storage directories are writable and symlinks are in place after deployment
+- ❌ **CI/CD pipelines**: Skipped automatically (symlinks not created and permissions not set in CI)
+
 ## References
 
 - [Laravel Installation - Directory Permissions](https://laravel.com/docs/installation#directory-permissions)
