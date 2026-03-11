@@ -55,8 +55,8 @@ After displaying all issues, ShieldCI shows a Report Card with analyzer results 
 - **Passed:** Analyzers that found no issues
 - **Failed:** Analyzers that found Critical or High severity issues
 - **Warning:** Analyzers that found Medium or Low severity issues
-- **Not Applicable:** Analyzers skipped because they don't apply to your project (e.g., MySQL analyzer when using PostgreSQL)
 - **Error:** Analyzers that encountered exceptions during execution
+- **Not Applicable:** Analyzers skipped because they don't apply to your project (e.g., MySQL analyzer when using PostgreSQL)
 
 ### Exit Codes
 
@@ -172,14 +172,6 @@ Medium or Low severity issues detected. Address when convenient.
 
 **Examples:** Missing DocBlocks, Unnamed routes, Minor formatting issues
 
-### ⊘ Not Applicable
-Analyzer doesn't apply to your project configuration.
-
-**Examples:**
-- MySQL optimization analyzer when using PostgreSQL
-- Horizon analyzer when not using Laravel Horizon
-- Frontend dependency analyzer when no package.json exists
-
 ### ⚠️ Error
 Analyzer encountered an unexpected error during execution. This typically indicates:
 - Missing dependencies or configuration
@@ -187,6 +179,14 @@ Analyzer encountered an unexpected error during execution. This typically indica
 - Corrupted project files
 
 **Action:** Check the error message and verify your project setup.
+
+### ⊘ Not Applicable
+Analyzer doesn't apply to your project configuration.
+
+**Examples:**
+- MySQL optimization analyzer when using PostgreSQL
+- Horizon analyzer when not using Laravel Horizon
+- Frontend dependency analyzer when no package.json exists
 
 ## Step 4: Fixing Your First Issue
 
@@ -346,23 +346,6 @@ No known vulnerabilities in Composer dependencies
 
 ## Step 7: Export Results
 
-### JSON Export (for automation)
-
-```bash
-php artisan shield:analyze --format=json > results.json
-```
-
-**Use in scripts:**
-```bash
-# Check if critical issues exist
-CRITICAL=$(cat results.json | jq '.summary.critical')
-
-if [ $CRITICAL -gt 0 ]; then
-    echo "❌ Critical issues found - blocking deployment"
-    exit 1
-fi
-```
-
 ### JSON Report Export
 
 ```bash
@@ -396,35 +379,6 @@ protected function schedule(Schedule $schedule)
              ->at('09:00');
 }
 ```
-
-### CI/CD Integration
-
-**GitHub Actions (.github/workflows/shieldci.yml):**
-```yaml
-name: Security Analysis
-
-on: [push, pull_request]
-
-jobs:
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.1
-
-      - name: Install Dependencies
-        run: composer install --no-dev
-
-      - name: Run ShieldCI
-        run: php artisan shield:analyze --ci --format=json
-```
-
-This runs ShieldCI on every commit, blocking merges if critical issues are found.
-
 
 ## Next Steps
 
