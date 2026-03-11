@@ -241,6 +241,20 @@ php artisan cache:clear
 php artisan config:cache
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI environments intentionally do not have a `.env` file — secrets are injected via platform environment variables or secrets managers, not a committed file
+- `.env` permissions, `.gitignore` configuration, and committed-file checks are all moot or false-positive-prone when `.env` is absent by design
+- Prevents irrelevant failures in pipelines where the absence of `.env` is expected
+
+**When to run this analyzer:**
+- ✅ **Local development**: Catches insecure permissions, missing `.gitignore` entries, and accidentally committed `.env` files before they reach version control
+- ✅ **Staging/Production servers**: Validates that `.env` is properly secured and not accessible from the public directory
+- ❌ **CI/CD pipelines**: Skipped automatically (`.env` is intentionally absent; secrets come from CI platform variables)
+
 ## References
 
 - [Laravel Environment Configuration Documentation](https://laravel.com/docs/configuration#environment-configuration)
