@@ -181,6 +181,20 @@ EOF
 php artisan key:generate
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI environments typically do not have a `.env` file — secrets are injected via environment variables or CI platform secrets, not a committed file
+- `.env` presence and readability depend on how the CI runner is set up
+- Prevents false failures in pipelines where the absence of `.env` is expected and intentional
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures developers have a properly configured `.env` before running the application
+- ✅ **Staging/Production servers**: Validates that the `.env` file exists, is readable, and is not empty after deployment
+- ❌ **CI/CD pipelines**: Skipped automatically (`.env` is intentionally absent; secrets come from CI platform variables)
+
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)
