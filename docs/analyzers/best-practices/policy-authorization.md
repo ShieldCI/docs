@@ -19,10 +19,11 @@ Validates that resource controllers use Laravel's Policy system for authorizatio
 
 - Resource controllers without matching Policy classes in `app/Policies/`
 - Resource controllers missing `authorizeResource()` or `authorize()` calls
-- Policy classes that don't type-hint an Eloquent model
+- Policy classes that don't type-hint an Eloquent model (only flagged when at least one policy method has 2+ parameters — intentionally model-less policies are excluded)
 - Policy files where the class name doesn't match the expected policy name
 - `authorizeResource()` called with a model that doesn't match the controller name
 - Recognizes multiple authorization patterns: `Gate` facades, `middleware('can:...')`, `$user->can()`, `Policy::class` references, and FormRequest `authorize()` methods
+- Recognizes route-level authorization: controllers protected by non-throttle middleware in `routes/*.php`
 
 ## Why It Matters
 
