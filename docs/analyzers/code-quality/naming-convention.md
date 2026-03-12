@@ -1,6 +1,6 @@
 ---
 title: Naming Convention Analyzer
-description: Validates PSR and Laravel naming standards for better code consistency
+description: Validates PSR naming standards for better code consistency
 icon: code
 outline: [2, 3]
 tags: conventions,psr,code-quality,readability
@@ -19,7 +19,6 @@ tags: conventions,psr,code-quality,readability
 - Validates property names follow camelCase (e.g., `firstName`, `isActive`)
 - Checks public constant names follow SCREAMING_SNAKE_CASE (e.g., `MAX_LOGIN_ATTEMPTS`)
 - Allows private/protected constants to use camelCase (modern PHP convention)
-- Validates Laravel `protected $table` properties are plural snake_case (e.g., `users`, `order_items`)
 - Skips magic methods (e.g., `__construct`, `__toString`)
 - Reports exact file location and line number of each violation
 - Provides suggestions for correct naming
@@ -170,60 +169,7 @@ enum UserStatus {
 }
 ```
 
-#### 7: Laravel Table Names
-
-**Laravel Convention**: Table names in `protected $table` should be plural snake_case.
-
-```php
-// ❌ BAD - Wrong table naming
-class User extends Model {
-    protected $table = 'user';  // Should be plural
-}
-
-class OrderItem extends Model {
-    protected $table = 'OrderItems';  // Should be snake_case
-}
-
-class Person extends Model {
-    protected $table = 'person';  // Should be 'people' (irregular plural)
-}
-
-class Category extends Model {
-    protected $table = 'category';  // Should be 'categories'
-}
-
-// ✅ GOOD - Correct Laravel table naming
-class User extends Model {
-    protected $table = 'users';  // Plural snake_case
-}
-
-class OrderItem extends Model {
-    protected $table = 'order_items';  // Plural snake_case
-}
-
-class Person extends Model {
-    protected $table = 'people';  // Irregular plural
-}
-
-class Category extends Model {
-    protected $table = 'categories';  // -y becomes -ies
-}
-```
-
-**Pluralization Engine**:
-
-This analyzer uses **Laravel's `Str::plural()` and `Str::singular()`** methods - the same robust pluralization engine that powers Laravel's Eloquent ORM. This automatically handles:
-
-- Regular plurals: `user` → `users`, `product` → `products`
-- Words ending in -y: `category` → `categories`
-- Words ending in -s/-x/-ch/-sh: `class` → `classes`, `box` → `boxes`
-- Irregular plurals: `person` → `people`, `child` → `children`
-- Uncountable words: `sheep`, `fish`, `equipment`
-- Complex compound words: `order_item` → `order_items`
-
-**Note**: Only `protected $table` is checked. Public or private table properties are not validated for Laravel conventions.
-
-#### 8: Boolean Method Names
+#### 7: Boolean Method Names
 
 ```php
 // ❌ BAD - Wrong boolean naming
