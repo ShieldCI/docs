@@ -17,16 +17,14 @@ pro: true
 
 Validates that controllers follow Laravel's FormRequest pattern. Checks for:
 
-- Inline validation in controllers (`$request->validate()` or `$this->validate()`)
-- FormRequest classes without a proper `authorize()` override
-- Controller `store()`/`update()` methods missing FormRequest type-hints
+- Inline validation in controllers (`$request->validate()`, `$this->validate()`, or `Validator::make()`)
+- Controller `store()`/`update()` methods missing a FormRequest type-hint
 
 ## Why It Matters
 
 - **Separation of Concerns:** Validation logic mixed into controllers makes them harder to maintain and test
 - **Reusability:** FormRequest classes can be reused across multiple controllers
-- **Authorization:** FormRequest's `authorize()` method provides a clean hook for authorization logic
-- **Testability:** FormRequest classes can be unit tested independently
+- **Testability:** FormRequest classes can be unit tested independently from the controller
 
 ## How to Fix
 
@@ -40,7 +38,7 @@ php artisan make:request StoreUserRequest
 
 ### Proper Fix (15 minutes)
 
-**1. Extract inline validation to FormRequest:**
+**Extract inline validation to a FormRequest:**
 
 **Before (❌):**
 ```php
@@ -64,11 +62,6 @@ class UserController extends Controller
 // app/Http/Requests/StoreUserRequest.php
 class StoreUserRequest extends FormRequest
 {
-    public function authorize(): bool
-    {
-        return $this->user()->can('create', User::class);
-    }
-
     public function rules(): array
     {
         return [
@@ -89,31 +82,23 @@ class UserController extends Controller
 }
 ```
 
-**2. Override authorize() properly:**
+Multi-line signatures are fully supported:
 
 ```php
-class UpdateOrderRequest extends FormRequest
-{
-    public function authorize(): bool
-    {
-        $order = $this->route('order');
-
-        return $this->user()->can('update', $order);
-    }
-
-    public function rules(): array
-    {
-        return [
-            'status' => 'required|in:pending,processing,completed',
-        ];
-    }
+public function store(
+    StoreUserRequest $request,
+    UserService $service,
+): JsonResponse {
+    return response()->json($service->create($request->validated()));
 }
 ```
+
+> [!TIP]
+> The `authorize()` method is optional. Per the [Laravel docs](https://laravel.com/docs/validation#form-request-validation), you may remove it entirely or simply `return true` if authorization is handled elsewhere.
 
 ## References
 
 - [Laravel Form Request Validation](https://laravel.com/docs/validation#form-request-validation)
-- [Laravel Authorization](https://laravel.com/docs/authorization)
 - [Laravel Validation Rules](https://laravel.com/docs/validation#available-validation-rules)
 
 ## Related Analyzers
