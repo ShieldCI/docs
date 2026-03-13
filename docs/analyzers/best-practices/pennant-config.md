@@ -36,10 +36,11 @@ Validates Laravel Pennant feature flag configuration, driver settings, and usage
 
 ### Quick Fix (2 minutes)
 
-Publish the Pennant config file:
+Publish the Pennant configuration and migration files, then run the migrations:
 
 ```bash
 php artisan vendor:publish --provider="Laravel\Pennant\PennantServiceProvider"
+php artisan migrate
 ```
 
 ### Proper Fix (10 minutes)
