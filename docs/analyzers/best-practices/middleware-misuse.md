@@ -17,10 +17,14 @@ pro: true
 
 Detects business logic in middleware that violates separation of concerns. Checks for:
 
-- Database write operations in middleware (create, update, delete, save)
-- Email or notification sending in middleware
-- Direct model instantiation (`new Model`) in middleware
-- Complex conditional logic (deeply nested conditions) suggesting business logic
+- **Database write operations** — instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
+- **Email/notification sending** — `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
+- **Direct model instantiation** — `new Model()` in middleware (responses, exceptions, dates, and value objects are allowed)
+- **Complex conditional logic** — if-statement nesting 4+ levels deep, suggesting embedded business rules
+
+::: tip What is NOT flagged
+Facade calls that are legitimate in middleware are ignored: `Schema::*`, `Gate::*`, `Log::*`, `Cache::*`, `Response::*`, `Carbon::*`, `CarbonImmutable::*`, and other infrastructure helpers. `Mail::to()` alone is also not flagged — it's a builder, not a send action.
+:::
 
 ## Why It Matters
 
@@ -33,7 +37,7 @@ Detects business logic in middleware that violates separation of concerns. Check
 
 ### Quick Fix (10 minutes)
 
-Move database writes from middleware to controllers:
+Move database writes from middleware to a queued job:
 
 **Before (❌):**
 ```php
@@ -83,7 +87,8 @@ class WelcomeMiddleware
     public function handle(Request $request, Closure $next)
     {
         if ($request->user() && !$request->user()->welcomed) {
-            Mail::to($request->user())->send(new WelcomeEmail());
+            // Mail::send() is flagged — sending belongs in an event listener
+            Mail::send(new WelcomeEmail($request->user()));
             $request->user()->update(['welcomed' => true]);
         }
         return $next($request);
@@ -98,7 +103,7 @@ class SendWelcomeEmail
 {
     public function handle(Registered $event): void
     {
-        Mail::to($event->user)->send(new WelcomeEmail());
+        Mail::send(new WelcomeEmail($event->user));
         $event->user->update(['welcomed' => true]);
     }
 }
@@ -117,7 +122,7 @@ class SubscriptionMiddleware
             if ($user->subscription) {
                 if ($user->subscription->isExpired()) {
                     if ($user->subscription->isGracePeriod()) {
-                        // Complex renewal logic...
+                        // Complex renewal logic... (4+ levels deep = flagged)
                     }
                 }
             }
@@ -141,6 +146,27 @@ class EnsureActiveSubscription
         return $next($request);
     }
 }
+```
+
+**3. Configuration and Customization**
+
+Customize the nesting depth threshold for your project, publish the config:
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'best-practices' => [
+        'enabled' => true,
+        
+        'middleware-misuse' => [
+            'max_nesting_depth' => 4, // default; increase to reduce sensitivity
+        ],
+    ],
+],
 ```
 
 ## References
