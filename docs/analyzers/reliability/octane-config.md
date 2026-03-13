@@ -9,9 +9,9 @@ pro: true
 
 # Octane Configuration Analyzer
 
-| Analyzer ID        | Category     | Severity   | Time To Fix  |
-| -------------------| :----------: |:----------:| ------------:|
-| `octane-config` | 🔄 Reliability  | High    | 15 minutes   |
+| Analyzer ID     |     Category      | Severity | Time To Fix  |
+|-----------------|:-----------------:|:--------:| ------------:|
+| `octane-config` |   ✅ Reliability  | High     | 15 minutes   |
 
 ## What This Checks
 

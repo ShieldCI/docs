@@ -9,9 +9,9 @@ pro: true
 
 # Alerting Configuration Analyzer
 
-| Analyzer ID        | Category     | Severity   | Time To Fix  |
-| -------------------| :----------: |:----------:| ------------:|
-| `alerting-config` | 🔄 Reliability  | Medium    | 15 minutes   |
+| Analyzer ID       |     Category     | Severity  | Time To Fix  |
+| ------------------|:----------------:|:---------:| ------------:|
+| `alerting-config` |  ✅ Reliability  | Medium    | 15 minutes   |
 
 ## What This Checks
 

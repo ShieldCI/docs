@@ -9,9 +9,9 @@ pro: true
 
 # Health Check Analyzer
 
-| Analyzer ID        | Category     | Severity   | Time To Fix  |
-| -------------------| :----------: |:----------:| ------------:|
-| `health-check` | 🔄 Reliability  | Medium    | 10 minutes   |
+| Analyzer ID    |    Category    | Severity   | Time To Fix  |
+| ---------------|:--------------:|:----------:| ------------:|
+| `health-check` | ✅ Reliability  | Medium    | 10 minutes   |
 
 ## What This Checks
 

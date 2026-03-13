@@ -9,9 +9,9 @@ pro: true
 
 # Data Retention Policy Analyzer
 
-| Analyzer ID        | Category     | Severity   | Time To Fix  |
-| -------------------| :----------: |:----------:| ------------:|
-| `data-retention-policy` | 🔄 Reliability  | Medium    | 15 minutes   |
+| Analyzer ID             | Category     | Severity   | Time To Fix  |
+|-------------------------| :----------: |:----------:| ------------:|
+| `data-retention-policy` | ✅ Reliability  | Medium    | 15 minutes   |
 
 ## What This Checks
 
