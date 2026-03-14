@@ -20,7 +20,7 @@ Validates that custom Filament pages have proper authorization. Checks for:
 - Custom pages have `canAccess()` or `authorize()` method
 - Pages with sensitive operations (database writes, config changes) have authorization
 - Pages with forms have authorization to prevent unauthorized data submission
-- Dashboard pages are treated with lower severity (panel-level auth usually covers them)
+- Dashboard pages are skipped entirely (panel-level auth typically covers them)
 
 ## Why It Matters
 
@@ -58,11 +58,6 @@ class ImportUsers extends Page
         return auth()->user()?->can('import', User::class);
     }
 
-    protected function authorizeAccess(): void
-    {
-        abort_unless(static::canAccess(), 403);
-    }
-
     public function import(): void
     {
         $this->authorize('import', User::class);
@@ -79,7 +74,7 @@ class EditSettings extends Page implements HasForms
 {
     public static function canAccess(): bool
     {
-        return auth()->user()?->hasPermission('manage-settings');
+        return auth()->user()?->can('manage-settings');
     }
 
     public function save(): void
