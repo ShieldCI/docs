@@ -346,6 +346,23 @@ No known vulnerabilities in Composer dependencies
 
 ## Step 7: Export Results
 
+### JSON Export (for automation)
+
+```bash
+php artisan shield:analyze --format=json > results.json
+```
+
+**Use in scripts:**
+```bash
+# Check if critical issues exist
+CRITICAL=$(cat results.json | jq '.summary.critical')
+
+if [ $CRITICAL -gt 0 ]; then
+    echo "❌ Critical issues found - blocking deployment"
+    exit 1
+fi
+```
+
 ### JSON Report Export
 
 ```bash
