@@ -1,7 +1,7 @@
 ---
 title: CDN Configuration Analyzer
 description: Checks if a CDN is configured for serving static assets
-icon: globe
+icon: zap
 outline: [2, 3]
 tags: cdn,assets,performance,optimization,infrastructure
 pro: true
@@ -15,166 +15,100 @@ pro: true
 
 ## What This Checks
 
-Validates that the `ASSET_URL` configuration points to a CDN for serving static assets (JavaScript, CSS, images) in production environments.
+Validates that `ASSET_URL` in your `.env` file points to a CDN for serving static assets (JavaScript, CSS, images) in production environments. Checks for:
+
+- `ASSET_URL` not set or empty (assets served from origin)
+- `ASSET_URL` is not a valid absolute URL (missing scheme or host)
+- `ASSET_URL` points to a local address (`localhost`, `127.0.0.1`, `::1`)
+- `ASSET_URL` uses HTTP instead of HTTPS
+- `ASSET_URL` points to the same host as `APP_URL` (not a CDN)
+
+Only runs when compiled assets exist (Mix or Vite manifest detected).
 
 ## Why It Matters
 
-- **Reduced Latency:** CDNs serve assets from edge locations closer to users
-- **Bandwidth Offloading:** Origin server handles less static file traffic
-- **Global Performance:** Consistent fast loading worldwide
-- **Scalability:** CDNs can handle traffic spikes without affecting your origin
-- **Caching:** Edge caching reduces load on your infrastructure
+- **Latency:** CDNs serve assets from edge locations geographically closer to users, reducing round-trip time for every asset request
+- **Bandwidth:** Origin server handles less static file traffic, freeing capacity for dynamic requests
+- **Scalability:** CDN edge networks absorb traffic spikes without impacting your origin
+- **Security:** HTTPS on the CDN prevents mixed-content browser warnings and protects asset integrity in transit
 
-For public-facing applications with global users, a CDN can reduce asset loading times by 50-80%.
+For public-facing applications with global users, a CDN can reduce asset loading times by 50–80%.
 
 ## How to Fix
 
-### 1. Choose a CDN Provider
+### Quick Fix
 
-| Provider | Free Tier | Notes |
-|----------|-----------|-------|
-| Cloudflare | Yes | Easy setup, includes DDoS protection |
-| AWS CloudFront | Pay-as-you-go | Integrates with S3 and Laravel Vapor |
-| Bunny CDN | Very cheap | ~$1/TB, good performance |
-| DigitalOcean Spaces CDN | With Spaces | Simple S3-compatible |
-| Fastly | Pay-as-you-go | Enterprise-grade |
-
-### 2. Configure Laravel
-
-**In `.env`:**
+Set `ASSET_URL` in your `.env` to point to your CDN distribution:
 
 ```env
 ASSET_URL=https://cdn.yourdomain.com
-# or
+# or using a provider-issued hostname:
 ASSET_URL=https://d123456789.cloudfront.net
 ```
 
-**In `config/app.php`:**
+Ensure `config/app.php` reads from the environment:
 
 ```php
 'asset_url' => env('ASSET_URL'),
 ```
 
-### 3. Update Asset References
+Laravel's `asset()` helper and Vite/Mix will automatically prefix all asset URLs with this value — no template changes needed.
 
-**In Blade templates:**
+### Proper Fix
 
-```blade
-{{-- This automatically uses ASSET_URL --}}
-<link href="{{ asset('css/app.css') }}" rel="stylesheet">
-<script src="{{ asset('js/app.js') }}"></script>
-<img src="{{ asset('images/logo.png') }}" alt="Logo">
+**1. Choose a CDN Provider**
 
-{{-- Or with Vite --}}
-@vite(['resources/css/app.css', 'resources/js/app.js'])
-```
+| Provider | Free Tier | Notes |
+|----------|-----------|-------|
+| Cloudflare | Yes | Easy setup, includes DDoS protection |
+| AWS CloudFront | Pay-as-you-go | Integrates with S3 and Laravel Vapor |
+| Bunny CDN | ~$1/TB | Cost-effective, good global performance |
+| DigitalOcean Spaces CDN | With Spaces | Simple S3-compatible storage + CDN |
+| Fastly | Pay-as-you-go | Enterprise-grade |
 
-### CDN Setup Examples
-
-**Cloudflare (Easiest):**
-1. Add your domain to Cloudflare
-2. Enable "Proxy" status for your domain
-3. Assets are automatically cached at edge
-4. No `ASSET_URL` change needed (Cloudflare proxies everything)
+**2. Sync Assets and Configure**
 
 **AWS CloudFront with S3:**
-```bash
-# 1. Create S3 bucket for assets
-aws s3 mb s3://my-app-assets
-
-# 2. Sync public directory
-aws s3 sync public/ s3://my-app-assets/ --exclude "*.php"
-
-# 3. Create CloudFront distribution pointing to S3
-# 4. Update .env
-ASSET_URL=https://d123456789.cloudfront.net
-```
-
-**Laravel Vapor:**
-```yaml
-# vapor.yml
-environments:
-  production:
-    # Vapor automatically configures CloudFront
-    # Assets are uploaded to S3 and served via CDN
-```
-
-**Bunny CDN:**
-```env
-# .env
-ASSET_URL=https://your-zone.b-cdn.net
-```
-
-### Deployment Automation
-
-**Deploy script with asset sync:**
 
 ```bash
-#!/bin/bash
-# deploy.sh
-
 # Build assets
 npm run build
 
-# Sync to S3 (or your CDN origin)
+# Sync to S3 (your CDN origin)
 aws s3 sync public/build s3://my-app-assets/build \
   --cache-control "max-age=31536000,public" \
   --delete
 
-# Invalidate CDN cache (optional, for cache busting)
+# Optionally invalidate cache after deploy
 aws cloudfront create-invalidation \
   --distribution-id E1234567890 \
   --paths "/build/*"
 ```
 
-### Mix/Vite Configuration
-
-**Laravel Mix:**
-```javascript
-// webpack.mix.js
-mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css')
-   .version();  // Adds hash for cache busting
+```env
+ASSET_URL=https://d123456789.cloudfront.net
 ```
 
-**Vite:**
-```javascript
-// vite.config.js
-export default defineConfig({
-    plugins: [laravel(['resources/js/app.js', 'resources/css/app.css'])],
-    build: {
-        manifest: true,  // Required for asset versioning
-    }
-});
+**Cloudflare (proxy mode):**
+
+1. Add your domain to Cloudflare and enable proxy status
+2. Assets are automatically cached at the edge — no `ASSET_URL` change needed
+
+**Bunny CDN:**
+
+```env
+ASSET_URL=https://your-zone.b-cdn.net
 ```
 
-## When Not to Use CDN
+**Laravel Vapor:**
 
-- **Internal applications:** Only accessed from within your network
-- **Development/Staging:** CDN adds complexity; test with origin
-- **Highly dynamic content:** CDN is for static assets only
-- **Simple apps:** Overhead may not be worth it for small apps
+Vapor automatically configures CloudFront and uploads assets to S3 on every deploy — no manual CDN setup required.
 
 ## ShieldCI Configuration
 
-This analyzer:
-- Runs only in **production** environment
-- Skips if no compiled assets exist (no Mix/Vite manifest)
-- Checks if `ASSET_URL` is set
-- Warns if `ASSET_URL` points to the same host as `APP_URL`
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments — CDN setup is a production concern and should not generate noise during local development or testing.
 
-## Verification
-
-```bash
-# Check ASSET_URL configuration
-php artisan tinker
->>> config('app.asset_url')
-=> "https://cdn.yourdomain.com"
-
-# Verify asset helper output
->>> asset('js/app.js')
-=> "https://cdn.yourdomain.com/js/app.js"
-```
+It also skips when no compiled assets are detected (no `public/mix-manifest.json` or `public/build/manifest.json`).
 
 ## References
 
