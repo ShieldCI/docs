@@ -54,7 +54,7 @@ export const proAnalyzerPaths = new Set<string>([
 
   // ── Performance (15) ───────────────────────────────────────
   '/analyzers/performance/cdn-configuration',
-  '/analyzers/performance/command-constructor-injection',
+  '/analyzers/performance/command-eager-loading',
   '/analyzers/performance/compression-headers',
   '/analyzers/performance/database-query-optimization',
   '/analyzers/performance/eager-loading',

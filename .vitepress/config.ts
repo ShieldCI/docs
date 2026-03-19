@@ -308,7 +308,7 @@ export default defineConfig({
                                 { text: 'Cache Driver', link: '/analyzers/performance/cache-driver' },
                                 { text: 'CDN Configuration', link: '/analyzers/performance/cdn-configuration' },
                                 { text: 'Collection Optimization', link: '/analyzers/performance/collection-call-optimization' },
-                                { text: 'Command Constructor Injection', link: '/analyzers/performance/command-constructor-injection' },
+                                { text: 'Command Eager Loading', link: '/analyzers/performance/command-eager-loading' },
                                 { text: 'Compression Headers', link: '/analyzers/performance/compression-headers' },
                                 { text: 'Config Caching', link: '/analyzers/performance/config-caching' },
                                 { text: 'Database Query Optimization', link: '/analyzers/performance/database-query-optimization' },

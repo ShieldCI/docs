@@ -257,10 +257,10 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 />
 
 <AnalyzerCard
-  title="Command Constructor Injection"
-  description="Detects heavy service injection in Artisan command constructors"
+  title="Command Eager Loading"
+  description="Detects Artisan commands without #[AsCommand] that are eagerly instantiated at artisan boot"
   severity="low"
-  link="/analyzers/performance/command-constructor-injection"
+  link="/analyzers/performance/command-eager-loading"
   pro
 />
 
