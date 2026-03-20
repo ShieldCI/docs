@@ -1,7 +1,7 @@
 ---
 title: CDN Configuration Analyzer
 description: Checks if a CDN is configured for serving static assets
-icon: zap
+icon: globe
 outline: [2, 3]
 tags: cdn,assets,performance,optimization,infrastructure
 pro: true

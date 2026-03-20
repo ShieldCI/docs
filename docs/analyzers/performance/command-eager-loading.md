@@ -1,7 +1,7 @@
 ---
 title: Command Eager Loading Analyzer
 description: Detects Artisan commands without #[AsCommand] that are eagerly instantiated at artisan boot
-icon: zap
+icon: terminal
 outline: [2, 3]
 tags: artisan,commands,dependency-injection,lazy-loading,performance
 pro: true
