@@ -1,9 +1,9 @@
 ---
 title: Compression Headers Analyzer
-description: Checks if gzip or brotli compression is enabled for static assets
+description: Checks if gzip, brotli, or zstd compression is enabled for static assets
 icon: archive
 outline: [2, 3]
-tags: compression,gzip,brotli,headers,performance
+tags: compression,gzip,brotli,zstd,headers,performance
 pro: true
 ---
 
@@ -15,199 +15,130 @@ pro: true
 
 ## What This Checks
 
-Verifies that your web server returns compressed responses (gzip or brotli) for static assets like JavaScript, CSS, and HTML files.
+Verifies that your web server returns compressed responses for static assets like JavaScript, CSS, and HTML files. Recognised encodings are `gzip`, `br` (brotli), `zstd` (zstandard), and `deflate`.
+
+Checks for:
+
+- `Content-Encoding` response header present on JS and CSS assets
+- A recognised compression encoding (`gzip`, `br`, `zstd`, `deflate`)
+- Correct `Accept-Encoding` negotiation (brotli is only advertised on HTTPS sites)
+
+> **Note:** Brotli (`br`) is only negotiated over HTTPS. The analyzer reflects this — brotli is only checked on HTTPS sites.
 
 ## Why It Matters
 
-- **Bandwidth Reduction:** Compression reduces transfer size by 60-90% for text-based assets
-- **Faster Load Times:** Smaller files download faster, especially on slow connections
-- **Cost Savings:** Less bandwidth usage reduces hosting costs
-- **Better UX:** Users experience faster page loads
-
-| File Type | Original Size | Gzip | Brotli |
-|-----------|---------------|------|--------|
-| JavaScript (minified) | 500 KB | 150 KB | 125 KB |
-| CSS (minified) | 100 KB | 25 KB | 20 KB |
-| HTML | 50 KB | 10 KB | 8 KB |
-
-Brotli typically provides 15-20% better compression than gzip.
+- **Bandwidth Reduction:** Compression reduces transfer size by 60-90% for text-based assets, directly cutting hosting costs
+- **Faster Load Times:** Smaller files download faster, especially on slow or mobile connections — gzip cuts JS by ~70%, brotli by ~75%
+- **Core Web Vitals:** Faster asset delivery improves LCP and FID scores, which affect SEO rankings
+- **Production Critical:** Uncompressed assets are one of the easiest performance wins to miss in server configuration
 
 ## How to Fix
 
-### Nginx Configuration
+### Quick Fix (5 minutes)
 
+Enable gzip in your web server with the minimum required configuration:
+
+**Nginx:**
 ```nginx
-# /etc/nginx/nginx.conf or /etc/nginx/sites-available/yoursite
-
+# /etc/nginx/nginx.conf
 http {
-    # Enable gzip
+    gzip on;
+    gzip_types text/plain text/css application/javascript application/json image/svg+xml;
+    gzip_min_length 1000;
+}
+```
+
+**Apache:**
+```bash
+sudo a2enmod deflate
+sudo systemctl restart apache2
+```
+
+```apache
+# .htaccess or httpd.conf
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json
+</IfModule>
+```
+
+**CDN (no server config needed):**
+Most CDNs compress automatically — enable "Compress Objects Automatically" in AWS CloudFront, or verify it is on in Cloudflare's Speed settings.
+
+### Proper Fix (30 minutes)
+
+For full compression coverage including brotli (HTTPS only) and pre-compressed asset serving:
+
+**Nginx — gzip + brotli:**
+```nginx
+http {
+    # Gzip (all connections)
     gzip on;
     gzip_vary on;
     gzip_min_length 1000;
     gzip_comp_level 6;
     gzip_proxied any;
     gzip_types
-        text/plain
-        text/css
-        text/javascript
-        application/json
-        application/javascript
-        application/x-javascript
-        application/xml
-        application/xml+rss
-        application/vnd.ms-fontobject
-        font/ttf
-        font/otf
-        font/woff
-        font/woff2
+        text/plain text/css text/javascript
+        application/json application/javascript application/x-javascript
+        application/xml application/xml+rss
+        font/ttf font/otf font/woff font/woff2
         image/svg+xml;
 
-    # Enable brotli (requires ngx_brotli module)
+    # Brotli (requires ngx_brotli module — HTTPS only in browsers)
     brotli on;
     brotli_comp_level 6;
     brotli_types
-        text/plain
-        text/css
-        text/javascript
-        application/json
-        application/javascript
-        application/x-javascript
-        application/xml
-        application/xml+rss
-        font/ttf
-        font/otf
-        font/woff
-        font/woff2
+        text/plain text/css text/javascript
+        application/json application/javascript application/x-javascript
+        application/xml font/ttf font/woff font/woff2
         image/svg+xml;
 }
 ```
 
-**Install Brotli for Nginx:**
+**Install brotli module for Nginx:**
 ```bash
 # Ubuntu/Debian
 sudo apt-get install libnginx-mod-brotli
 
-# Or compile from source
-git clone https://github.com/google/ngx_brotli.git
-cd ngx_brotli && git submodule update --init
-# Add --add-module=/path/to/ngx_brotli when compiling nginx
+# Alpine (Docker)
+apk add --no-cache nginx-mod-http-brotli
 ```
 
-### Apache Configuration
-
+**Apache — mod_deflate + mod_brotli:**
 ```apache
-# .htaccess or httpd.conf
-
-# Enable mod_deflate
 <IfModule mod_deflate.c>
-    # Compress HTML, CSS, JavaScript, Text, XML and fonts
-    AddOutputFilterByType DEFLATE text/html
-    AddOutputFilterByType DEFLATE text/css
-    AddOutputFilterByType DEFLATE text/javascript
-    AddOutputFilterByType DEFLATE application/javascript
-    AddOutputFilterByType DEFLATE application/json
-    AddOutputFilterByType DEFLATE application/xml
-    AddOutputFilterByType DEFLATE font/ttf
-    AddOutputFilterByType DEFLATE font/woff
-    AddOutputFilterByType DEFLATE font/woff2
-    AddOutputFilterByType DEFLATE image/svg+xml
-
-    # Compression level
+    AddOutputFilterByType DEFLATE text/html text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript
+    AddOutputFilterByType DEFLATE application/json application/xml
+    AddOutputFilterByType DEFLATE font/ttf font/woff font/woff2 image/svg+xml
     DeflateCompressionLevel 6
 </IfModule>
 
-# Enable mod_brotli (Apache 2.4.26+)
+# Apache 2.4.26+ only
 <IfModule mod_brotli.c>
     AddOutputFilterByType BROTLI_COMPRESS text/html text/css
     AddOutputFilterByType BROTLI_COMPRESS text/javascript application/javascript
     AddOutputFilterByType BROTLI_COMPRESS application/json application/xml
-    AddOutputFilterByType BROTLI_COMPRESS font/ttf font/woff font/woff2
-    AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+    AddOutputFilterByType BROTLI_COMPRESS font/ttf font/woff font/woff2 image/svg+xml
 </IfModule>
 ```
 
-**Enable Apache modules:**
-```bash
-sudo a2enmod deflate
-sudo a2enmod brotli  # Apache 2.4.26+
-sudo systemctl restart apache2
-```
+**Serve pre-compressed assets (maximum performance):**
 
-### Laravel Vapor / Serverless
-
-Laravel Vapor automatically configures compression through CloudFront. No additional configuration needed.
-
-### Docker with Nginx
-
-```dockerfile
-# Dockerfile
-FROM nginx:alpine
-
-# Install brotli module
-RUN apk add --no-cache nginx-mod-http-brotli
-
-COPY nginx.conf /etc/nginx/nginx.conf
-```
-
-### CDN Configuration
-
-Most CDNs handle compression automatically:
-
-| CDN | Gzip | Brotli | Configuration |
-|-----|------|--------|---------------|
-| Cloudflare | Auto | Auto | Enabled by default |
-| AWS CloudFront | Auto | Config | Enable "Compress Objects Automatically" |
-| Bunny CDN | Auto | Auto | Enabled by default |
-
-## Verification
-
-**Using curl:**
-```bash
-# Check for gzip
-curl -H "Accept-Encoding: gzip" -I https://yoursite.com/js/app.js
-
-# Check for brotli
-curl -H "Accept-Encoding: br" -I https://yoursite.com/js/app.js
-
-# Look for: Content-Encoding: gzip (or br)
-```
-
-**Using browser DevTools:**
-1. Open DevTools (F12)
-2. Go to Network tab
-3. Load your page
-4. Check "Content-Encoding" response header for assets
-
-**Using online tools:**
-- [KeyCDN Compression Test](https://tools.keycdn.com/compression-test)
-- [GTmetrix](https://gtmetrix.com)
-- [Google PageSpeed Insights](https://pagespeed.web.dev)
-
-## Pre-Compressed Assets
-
-For maximum performance, pre-compress assets during build:
-
-**Webpack/Mix:**
+Build pre-compressed versions during your asset pipeline:
 ```javascript
 // webpack.mix.js
 const CompressionPlugin = require('compression-webpack-plugin');
 
 mix.webpackConfig({
     plugins: [
-        new CompressionPlugin({
-            algorithm: 'gzip',
-            test: /\.(js|css|svg)$/,
-        }),
-        new CompressionPlugin({
-            algorithm: 'brotliCompress',
-            test: /\.(js|css|svg)$/,
-            filename: '[path][base].br',
-        }),
+        new CompressionPlugin({ algorithm: 'gzip', test: /\.(js|css|svg)$/ }),
+        new CompressionPlugin({ algorithm: 'brotliCompress', test: /\.(js|css|svg)$/, filename: '[path][base].br' }),
     ],
 });
 ```
 
-**Nginx serving pre-compressed:**
+Then tell Nginx to serve them directly instead of compressing on the fly:
 ```nginx
 location ~* \.(js|css)$ {
     gzip_static on;
@@ -215,22 +146,42 @@ location ~* \.(js|css)$ {
 }
 ```
 
+**Verify compression is working:**
+```bash
+curl -H "Accept-Encoding: gzip, br" -I https://yoursite.com/js/app.js
+# Look for: Content-Encoding: gzip (or br)
+```
+
 ## ShieldCI Configuration
 
-This analyzer:
-- Runs only in **production** and **staging** environments
-- Makes HTTP requests to verify actual compression
-- Checks JS and CSS assets from your Mix/Vite manifest
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- Compression is a web server configuration — it cannot be verified without a running server
+- Local and CI environments typically serve assets without a web server in front of them
+- Production and staging should have a properly configured web server (Nginx, Apache, or CDN)
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
 
 ## References
 
 - [Nginx gzip Module](https://nginx.org/en/docs/http/ngx_http_gzip_module.html)
 - [Apache mod_deflate](https://httpd.apache.org/docs/current/mod/mod_deflate.html)
-- [Brotli Compression](https://github.com/google/brotli)
+- [ngx_brotli Module](https://github.com/google/ngx_brotli)
 - [Web.dev Compression Guide](https://web.dev/reduce-network-payloads-using-text-compression/)
 
 ## Related Analyzers
 
 - [CDN Configuration Analyzer](/analyzers/performance/cdn-configuration) - Ensures CDN is configured
-- [Asset Minification Analyzer](/analyzers/performance/asset-minification) - Ensures assets are minified
-- [Cache Headers Analyzer](/analyzers/performance/asset-cache-headers) - Ensures proper cache headers
+- [Asset Minification Analyzer](/analyzers/performance/asset-minification) - Ensures assets are minified before compression
+- [Cache Headers Analyzer](/analyzers/performance/asset-cache-headers) - Ensures proper cache headers are set
