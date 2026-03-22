@@ -21,7 +21,7 @@ tags: permissions,filesystem,reliability,deployment,symlinks
 - Validates both relative and absolute paths from configuration
 - Reports all failed directories with actionable fix commands
 - Supports symlinked directories
-- Verifies storage symlinks exist (from `config('filesystems.links')`)
+- Verifies storage symlinks exist (from `config('filesystems.links')`) — skipped automatically for API-only apps
 - Detects broken symlinks (link exists but target doesn't)
 - Validates symlink targets are directories
 - Default: checks `public/storage` → `storage/app/public`
