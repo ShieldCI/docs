@@ -16,12 +16,12 @@ tags: documentation,maintainability,code-quality,readability
 
 - Detects public methods missing PHPDoc comments
 - Requires `@param` tags for parameters with **generic types** (array, iterable, object, mixed, callable) or no type hints
-- Requires `@return` tag for **generic return types** or class names (not needed for scalar types like void, string, int, bool, float)
+- Requires `@return` tag for **generic return types** (array, mixed, iterable, callable, object) or unions containing them — not needed for scalars (void, string, int, bool, float), concrete class names, or unions of concrete classes
 - Requires `@throws` tags for exceptions (when applicable)
 - Excludes simple getter/setter methods (get*, set*, is*, has*)
 - Reports exact file location and line number of each issue
 
-**Follows PSR-2 conventions**: `@param` and `@return` tags are redundant for non-generic native types but required for generic types to specify their structure.
+**Follows PSR-12 / PSR-5 conventions**: `@param` and `@return` tags are redundant for non-generic native types but required for generic types to specify their structure.
 
 ## Why It Matters
 
@@ -199,9 +199,42 @@ public function findUserByEmail(string $email): ?User
 }
 ```
 
-**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag IS required because `User` is a class name (even when nullable).
+**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag is optional for concrete class names — `?User` is self-documenting. Including it (as shown) is encouraged for readability but will not be flagged if omitted.
 
-#### 6: Document Array Shapes
+#### 6: Union Types of Concrete Classes
+
+```php
+// ✅ GOOD - No @return needed, union is fully self-documenting
+/**
+ * Handle the request.
+ */
+public function handle(): Response|JsonResponse
+{
+    return response()->json([]);
+}
+
+// ❌ BAD - @return required because array is a generic type needing shape documentation
+/** Doc */
+public function search(): string|array
+{
+    return [];
+}
+
+// ✅ GOOD - @return documents the array shape
+/**
+ * Search for results.
+ *
+ * @return string|array<int, string>
+ */
+public function search(): string|array
+{
+    return [];
+}
+```
+
+**Note**: A PHP 8 union type of concrete classes (e.g., `Response|JsonResponse`) is fully enforced by the runtime — `@return` adds no information. A union containing a generic type (e.g., `string|array`) still requires `@return` to document the array shape. Adding a redundant `@return` to a concrete union would also conflict with Laravel Pint, which strips it as superfluous via the `no_superfluous_phpdoc_tags` rule.
+
+#### 7: Document Array Shapes
 
 ```php
 // ❌ BAD - Missing documentation for array return (generic type)
@@ -234,7 +267,7 @@ public function getUserStats(int $userId): array
 
 ## References
 
-- [PSR-2 Coding Style Guide](https://www.php-fig.org/psr/psr-2/) - Laravel follows PSR-2 conventions
+- [PSR-12 Coding Style Guide](https://www.php-fig.org/psr/psr-12/) - Extended coding style standard (supersedes PSR-2)
 - [PSR-5 PHPDoc Standard](https://github.com/php-fig/fig-standards/blob/master/proposed/phpdoc.md) - PHPDoc documentation standard
 - [PHP DocBlock Documentation](https://docs.phpdoc.org/3.0/guide/getting-started/what-is-a-docblock.html) - Complete DocBlock guide
 - [PHPDoc Types](https://docs.phpdoc.org/3.0/guide/guides/types.html) - Type annotation reference

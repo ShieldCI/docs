@@ -18,16 +18,18 @@ Detects methods that perform multiple database write operations without transact
 
 - **Multiple write operations**: Methods with 2+ database writes (create, update, delete, increment, etc.)
 - **Missing transaction wrapper**: No `DB::transaction()` or `DB::beginTransaction()` protection
-- **Scope validation**: Writes occurring outside transaction closures or try-catch blocks
+- **Scope validation**: Writes occurring outside `DB::transaction()` closures or `DB::beginTransaction()` / `DB::commit()` blocks
 - **Mixed protection**: Some writes protected while others are not
 
 **Smart Detection Features:**
-- ✅ Tracks transaction scope depth (closures and try-catch blocks)
+- ✅ Tracks transaction scope depth (`DB::transaction()` closures and manual `beginTransaction` / `commit`)
 - ✅ Detects Eloquent model operations (static and instance methods)
 - ✅ Detects query builder operations (`DB::table()->update()`)
 - ✅ Detects relationship operations (sync, attach, detach)
 - ✅ Distinguishes protected vs unprotected writes
 - ✅ Configurable threshold (default: 2 writes)
+- ✅ Ignores guard clauses and mutually exclusive `if/else` branches (writes that can never co-execute are not summed toward the threshold)
+- ✅ Ignores external service client calls (e.g. `$this->stripe->customers->update()`) that match write method names but are not database operations
 
 **Detected Write Operations:**
 - Eloquent: `create()`, `insert()`, `update()`, `delete()`, `save()`, `forceDelete()`, `upsert()`, `updateOrCreate()`, `increment()`, `decrement()`, `touch()`
