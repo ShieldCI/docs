@@ -112,6 +112,20 @@ echo "NEW_API_KEY=your_api_key_here" >> .env.example
 echo "NEW_SERVICE_URL=https://example.com" >> .env.example
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI runners inject secrets via environment variables or a secrets manager — a `.env` file is intentionally absent
+- Flagging a missing `.env` as Critical in CI would be a false positive on every pipeline run
+- The check is meaningful only where a `.env` file is expected to be manually maintained
+
+**When to run this analyzer:**
+- ✅ **Local development**: Catches missing variables before you hit a runtime error
+- ✅ **Staging/Production servers**: Ensures all required variables from `.env.example` are configured before deploy
+- ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent)
+
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)

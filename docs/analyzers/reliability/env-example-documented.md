@@ -144,6 +144,20 @@ These variables were added during recent feature development."
 git push origin main
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI runners do not check out `.env` (it is gitignored) — the analyzer would warn on every pipeline run for a missing file that is intentionally absent
+- Documentation completeness of `.env.example` is a developer workflow concern, not a CI gate
+- The companion check ([Environment Variables Complete](/analyzers/reliability/env-variables-complete)) is also skipped in CI for the same reason
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures every variable you add to `.env` gets documented for your teammates
+- ✅ **Pre-commit / code review**: Catches undocumented variables before they reach the main branch
+- ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent in CI)
+
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)
