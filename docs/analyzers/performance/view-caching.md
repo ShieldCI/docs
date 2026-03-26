@@ -95,7 +95,7 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
 
-### Include Package Views
+**Include Package Views**
 
 By default, package views (registered via `loadViewsFrom()` in service providers) are **excluded** from the freshness check. This prevents false positives when `composer install` or `composer update` changes vendor file timestamps.
 
