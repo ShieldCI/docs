@@ -248,14 +248,19 @@ If you want to disable symlink verification or check custom symlinks:
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI runners clone a fresh repository and never run `php artisan storage:link`, so the `public/storage` symlink is always absent — flagging it would be a false positive on every pipeline run
+- CI runners clone a fresh repository and never run `php artisan storage:link`, so the `public/storage` symlink is always absent
 - Directory write permissions depend on the CI runner's OS and file system setup
 - Prevents misleading failures in pipelines where the deployment steps that create symlinks and set permissions have not yet run
+
+**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms — directory write permissions are managed by the platform and cannot be changed by the user.
+
+**API-only / Stateless applications:** Symlink checks are additionally skipped for API-only applications — symlinks are web-specific and not meaningful when the app serves no browser requests. Write-permission checks for `storage/` and `bootstrap/cache/` still run.
 
 **When to run this analyzer:**
 - ✅ **Local development**: Catches missing write permissions and broken symlinks before they cause runtime errors
 - ✅ **Staging/Production servers**: Validates that storage directories are writable and symlinks are in place after deployment
 - ❌ **CI/CD pipelines**: Skipped automatically (symlinks not created and permissions not set in CI)
+- ❌ **Laravel Vapor / Serverless**: Skipped automatically (platform manages permissions)
 
 ## References
 

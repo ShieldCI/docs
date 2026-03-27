@@ -59,6 +59,22 @@ SQS_QUEUE=your-queue-url
 php artisan queue:work redis --tries=3
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- Queue backends (Redis, SQS) are typically unavailable in CI pipelines
+- CI environments commonly use the `sync` or `database` driver for simplicity, which would trigger false warnings
+- Driver choice is a deployment concern, not a code-correctness concern that CI should gate on
+
+**Testing environment note:** When `APP_ENV=testing`, the `database` driver warning is also suppressed at the check level — `testing` is treated the same as `local` for this driver.
+
+**When to run this analyzer:**
+- ✅ **Local development**: Ensures your queue driver is set up for realistic job processing
+- ✅ **Staging/Production servers**: Confirms a production-grade driver (Redis, SQS) is configured
+- ❌ **CI/CD pipelines**: Skipped automatically (queue backends typically unavailable)
+
 ## References
 
 - [Laravel Queues](https://laravel.com/docs/queues)

@@ -51,25 +51,22 @@ SESSION_ENCRYPT=false
 SESSION_CONNECTION=default
 ```
 
-## Common Mistakes to Avoid
+## ShieldCI Configuration
 
-1. **File driver in load-balanced production:**
-   ```ini
-   # ❌ Sessions lost between servers
-   SESSION_DRIVER=file
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
-   # ✅ Shared sessions
-   SESSION_DRIVER=redis
-   ```
+**Why skip in CI?**
+- Session backends (Redis, database) may not be available or configured in CI pipelines
+- CI environments typically use the `array` or `file` session driver, which would trigger false warnings
+- Session driver choice is a deployment concern that doesn't need to be gated in CI
 
-2. **Cookie driver with large session data:**
-   ```ini
-   # ❌ Cookie size limit (4KB)
-   SESSION_DRIVER=cookie
+**API-only / Stateless applications:** This analyzer is also skipped for stateless applications — detected via middleware analysis. If your app has no session middleware registered, session driver checks do not apply.
 
-   # ✅ No size limit
-   SESSION_DRIVER=redis
-   ```
+**When to run this analyzer:**
+- ✅ **Local development**: Confirms your session driver matches your production setup
+- ✅ **Staging/Production servers**: Ensures a scalable driver (Redis, database) is configured for multi-server deployments
+- ❌ **CI/CD pipelines**: Skipped automatically (session backends typically unavailable)
+- ❌ **API-only apps**: Skipped automatically (no session middleware detected)
 
 ## References
 

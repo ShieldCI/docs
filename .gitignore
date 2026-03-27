@@ -5,7 +5,6 @@ docs/.vitepress/dist
 docs/.vitepress/cache
 .DS_Store
 *.log
-CLAUDE.md
 .claude
 .env
 .env.local

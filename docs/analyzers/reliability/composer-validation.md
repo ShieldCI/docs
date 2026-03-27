@@ -47,6 +47,18 @@ composer validate --no-check-publish
 4. **Tooling**: Consider `composer normalize` to standardize ordering and improve diff readability
 5. **Documentation**: Record dependency policy (allowed licenses, stability flags) so contributors adhere to standards
 
+## ShieldCI Configuration
+
+This analyzer runs in CI environments by default.
+
+**Serverless runtimes (Lambda, Cloud Functions):** On serverless platforms where the Composer binary is not installed, the `composer validate` subprocess is automatically skipped. JSON syntax validation still runs — the analyzer confirms `composer.json` is valid JSON and has the required structure without invoking the Composer CLI.
+
+**When to run this analyzer:**
+- ✅ **Local development**: Confirms `composer.json` is schema-valid before pushing
+- ✅ **CI/CD pipelines**: Catches schema regressions before build artifacts are created
+- ✅ **Staging/Production servers**: Full validation including Composer CLI subprocess (when available)
+- ⚠️ **Serverless**: Partial validation only (JSON syntax, no subprocess)
+
 ## References
 
 - [Composer Schema](https://getcomposer.org/doc/04-schema.md)
