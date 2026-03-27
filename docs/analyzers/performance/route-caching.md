@@ -273,10 +273,13 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - CI pipelines may run with uncached routes for test flexibility
 - Prevents false failures when CI environments legitimately skip route caching
 
+**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms — route caching is not supported on Vapor and is blocked by the Vapor CLI build process.
+
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures you haven't accidentally cached routes locally
 - ✅ **Staging/Production servers**: Validates route caching is properly enabled
 - ❌ **CI/CD pipelines**: Skipped automatically (deployment-specific check)
+- ❌ **Laravel Vapor / Serverless**: Skipped automatically (not supported on the platform)
 
 ## References
 

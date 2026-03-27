@@ -14,7 +14,27 @@ tags: permissions,file-security,security,access-control
 
 ## What This Checks
 
-Validates that your Laravel application's files and directories use secure Unix permissions. Checks for world-writable files and directories, overly permissive permissions exceeding recommended levels, sensitive files like `.env` with weak permissions, group-writable critical files, and executable permissions on non-executable files like PHP and configuration files.
+Validates that your Laravel application's files and directories use secure Unix permissions. Checks for world-writable files and directories, overly permissive permissions exceeding recommended levels, sensitive files like `.env` with weak permissions, group-writable critical files, and executable permissions on non-executable files.
+
+**Default checked paths:**
+
+| Path | Type | Max Allowed | Recommended |
+|------|------|-------------|-------------|
+| `app/` | directory | `775` | `755` |
+| `config/` | directory | `775` | `755` |
+| `database/` | directory | `775` | `755` |
+| `resources/` | directory | `775` | `755` |
+| `routes/` | directory | `775` | `755` |
+| `bootstrap/` | directory | `775` | `755` |
+| `public/` | directory | `775` | `755` |
+| `storage/` | directory | `775` | `775` |
+| `storage/app/` | directory | `775` | `775` |
+| `storage/framework/` | directory | `775` | `775` |
+| `storage/logs/` | directory | `775` | `775` |
+| `.env` | file | `600` | `600` |
+| `artisan` | file | `775` | `755` |
+
+Individual config files (e.g., `config/app.php`) and `.env` variant files (e.g., `.env.example`) are not checked by default to avoid false positives in environments where these files have broader permissions.
 
 ## Why It Matters
 
