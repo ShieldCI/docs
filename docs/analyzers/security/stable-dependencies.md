@@ -10,7 +10,7 @@ tags: dependencies,composer,stability,versions,production
 
 | Analyzer ID           | Category     | Severity | Time To Fix  |
 | ----------------------| :----------: |:--------:| ------------:|
-| `stable-dependencies` | 🛡️ Security  |  Medium  | 30 minutes   |
+| `stable-dependencies` | 🛡️ Security  |  Low  | 30 minutes   |
 
 ## What This Checks
 
@@ -25,7 +25,7 @@ tags: dependencies,composer,stability,versions,production
 
 - **Installed package verification**:
   - Parses `composer.lock` (both `packages` and `packages-dev`) for installed unstable versions
-  - Executes `composer update --dry-run --prefer-stable` to detect if updates would change packages
+  - Executes `composer update --dry-run --prefer-stable` to detect if updates would change packages — this subprocess is **skipped** when `prefer-stable: true` is already set in `composer.json`, since the flag would have no additional effect on resolution
   - Uses locale-independent pattern matching (works with non-English Composer output)
 
 ## Why It Matters
