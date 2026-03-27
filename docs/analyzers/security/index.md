@@ -186,7 +186,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Stable Dependencies"
   description="Validates that all dependencies use stable versions rather than dev/alpha/beta releases"
-  severity="medium"
+  severity="low"
   link="/analyzers/security/stable-dependencies"
 />
 
