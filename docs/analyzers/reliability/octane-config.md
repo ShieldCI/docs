@@ -15,106 +15,95 @@ pro: true
 
 ## What This Checks
 
-Validates Laravel Octane configuration for safe long-running server operation. Checks for:
+Validates Laravel Octane 2.x configuration for safe long-running server operation. Checks:
 
-- Singleton bindings in service providers that may leak state between requests
-- Max execution time configuration (missing or too high)
-- Max requests setting to prevent memory leaks (workers that never restart)
-- Listener resets for stateful services (auth, translator, etc.)
-- Warm services for performance optimization
+- `config/octane.php` is present when `laravel/octane` is installed
+- `server` driver is one of the valid Octane 2.x drivers: `roadrunner`, `swoole`, `frankenphp`
+- `max_execution_time` is configured, non-zero, and within a sane bound
+- `garbage` (memory-leak guardrail, in MB) is configured, non-zero, and within a sane bound
+- Service-provider singletons that capture per-request services (`Application`, `Request`, `Auth\Guard`, `Session`, `Authenticatable`) and therefore leak stale state across Octane requests
+
+The analyzer reads `config/octane.php` via AST, so it is comment-safe and correctly resolves `env()`-wrapped values.
+
+### Checks intentionally not performed
+
+- **`max_requests`** — this is a `php artisan octane:start --max-requests=N` CLI flag, not a config key. Set it in Supervisor or your Procfile, not `config/octane.php`.
+- **`warm`, `flush`, `listeners` presence** — Octane's published stub ships sane defaults for all three. Their presence is not flagged.
+- **Blanket singleton detection** — stateless singletons (Repository, Service, Gateway) are the recommended Laravel pattern and are Octane-safe. Only singletons that capture per-request services are flagged.
+
+### Platforms skipped
+
+The analyzer is automatically skipped on Laravel Vapor (serverless architecture is incompatible with Octane).
 
 ## Why It Matters
 
-- **State Leakage:** Singleton bindings persist across requests, potentially leaking user data between sessions
-- **Memory Leaks:** Without max request limits, workers accumulate memory until the server crashes
-- **Runaway Requests:** Without execution time limits, a single slow request can block a worker indefinitely
-- **Security:** Stateful services (auth guards, etc.) must be reset between requests to prevent user impersonation
+- **State leakage:** Singletons that capture per-request services (Request, Auth Guard, Session) persist across requests, leaking user data between sessions.
+- **Memory growth:** Without a `garbage` threshold, workers that leak memory are never recycled until the server OOMs.
+- **Runaway requests:** `max_execution_time = 0` (or missing) means a single slow request can block a worker forever.
+- **Wrong driver:** `openswoole` was dropped in Octane 2.x. A config that still references it will fail to boot.
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
-
-Publish and configure Octane:
+### Publish the config
 
 ```bash
 php artisan vendor:publish --tag=octane-config
 ```
 
-Set basic safety limits:
+### Set sane limits
 
 ```php
 // config/octane.php
-'max_execution_time' => 30,
-'max_requests' => 500,
+'server'             => env('OCTANE_SERVER', 'roadrunner'),
+'max_execution_time' => 30,  // seconds; 0 disables (not recommended)
+'garbage'            => 50,  // MB; recycle worker once heap exceeds this
 ```
 
-### Proper Fix (15 minutes)
+### Avoid stale-capture singletons
 
-**1. Configure state isolation:**
+**Before (❌)** — captures `Application`, which carries per-request container state:
 
 ```php
-// config/octane.php
-'flush' => [
-    // Services to reset between requests
-    'auth',
-    'auth.driver',
-    'translator',
-    'session',
-    'session.store',
-],
+$this->app->singleton('cart', function (Application $app) {
+    return new CartService($app->make(Request::class));
+});
+```
 
-'listeners' => [
-    RequestReceived::class => [
-        // Custom listeners to reset state
-        ResetSingletons::class,
+**After (✅)** — use `scoped()` (Octane-aware per-request binding) or resolve fresh services at call time:
+
+```php
+// Resets automatically between Octane requests
+$this->app->scoped('cart', function ($app) {
+    return new CartService();
+});
+```
+
+## Configuration
+
+Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to override:
+
+```php
+'analyzers' => [
+    'reliability' => [
+        'octane-config' => [
+            // Warn when max_execution_time exceeds this (Octane default is 30 s)
+            'max_execution_time_threshold' => 60,
+
+            // Warn when garbage >= this many MB (Octane default is 50)
+            'garbage_threshold_mb' => 256,
+        ],
     ],
 ],
-```
-
-**2. Avoid problematic singletons:**
-
-**Before (❌):**
-```php
-// app/Providers/AppServiceProvider.php
-$this->app->singleton(CartService::class, function () {
-    return new CartService(); // State leaks between requests!
-});
-```
-
-**After (✅):**
-```php
-$this->app->bind(CartService::class, function () {
-    return new CartService(); // Fresh instance per request
-});
-```
-
-**3. Configure warm services for performance:**
-
-```php
-// config/octane.php
-'warm' => [
-    // Services to pre-resolve for all workers
-    DatabaseManager::class,
-    CacheManager::class,
-],
-```
-
-**4. Set appropriate limits:**
-
-```php
-// config/octane.php
-'max_execution_time' => 30,      // 30 seconds per request
-'max_requests' => 500,            // Restart worker after 500 requests
 ```
 
 ## References
 
 - [Laravel Octane Documentation](https://laravel.com/docs/octane)
-- [Laravel Octane Configuration](https://laravel.com/docs/octane#dependency-injection-and-octane)
-- [Swoole Documentation](https://wiki.swoole.com/)
+- [Laravel Octane — Dependency Injection](https://laravel.com/docs/octane#dependency-injection-and-octane)
+- [Laravel Octane config source (2.x)](https://github.com/laravel/octane/blob/2.x/config/octane.php)
 
 ## Related Analyzers
 
 - [Vapor Configuration](/analyzers/reliability/vapor-config) - Validates serverless deployment config
-- [Queue Timeout](/analyzers/reliability/queue-timeout-configuration) - Checks queue timeout settings
-- [Session Driver](/analyzers/performance/session-driver) - Validates session configuration
+- [Horizon Reliability](/analyzers/reliability/horizon-reliability) - Validates Horizon prefix, provisioning, and runtime health
+- [Job Queue Configuration](/analyzers/reliability/job-queue-config) - Validates queue driver, blocking, and failed job handling
