@@ -21,7 +21,6 @@ Verifies that your web server supports HTTP/2 protocol, which provides significa
 
 - **Multiplexing:** Multiple requests over a single connection (no head-of-line blocking)
 - **Header Compression:** HPACK reduces header overhead by 30-90%
-- **Server Push:** Proactively send resources before the browser requests them
 - **Binary Protocol:** More efficient parsing than text-based HTTP/1.1
 - **Stream Prioritization:** Important resources loaded first
 
@@ -37,10 +36,12 @@ Verifies that your web server supports HTTP/2 protocol, which provides significa
 
 ```nginx
 # /etc/nginx/sites-available/yoursite
+# Nginx 1.25.1+ (modern syntax)
 
 server {
-    listen 443 ssl http2;  # Add http2 here
-    listen [::]:443 ssl http2;
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    http2 on;
 
     server_name example.com;
 
@@ -55,6 +56,17 @@ server {
     # ... rest of configuration
 }
 ```
+
+::: details Legacy syntax for Nginx 1.9.5–1.25.0
+```nginx
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    # ...
+}
+```
+The `http2` parameter on the `listen` directive was deprecated in Nginx 1.25.1 (June 2023).
+:::
 
 **Verify Nginx HTTP/2 support:**
 ```bash
@@ -77,11 +89,6 @@ Protocols h2 http/1.1
 
     # HTTP/2 specific settings
     Protocols h2 http/1.1
-    H2Push on
-    H2PushPriority * after
-    H2PushPriority text/css before
-    H2PushPriority image/jpeg after 32
-    H2PushPriority image/png after 32
 
     SSLEngine on
     SSLCertificateFile /path/to/certificate.crt
@@ -172,8 +179,9 @@ HTTP/3 uses QUIC protocol for even better performance:
 **Nginx HTTP/3 (experimental):**
 ```nginx
 server {
-    listen 443 ssl http2;
+    listen 443 ssl;
     listen 443 quic reuseport;
+    http2 on;
 
     ssl_protocols TLSv1.3;
 
