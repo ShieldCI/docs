@@ -18,8 +18,8 @@ pro: true
 Identifies collection operations that load all records into memory when lazy alternatives exist. Checks for:
 
 - `Model::all()` loading entire tables into memory
-- `Model::all()` chained with collection processing (filter, map, etc.)
-- `->get()->count()` fetching all records just to count them
+- `Model::all()` chained with collection processing (filter, map, sort, toArray, etc.)
+- `->get()->count()/sum()/avg()/max()/min()` fetching all records just to aggregate them
 - Large chunk sizes that could use `->lazy()` instead
 - `->get()` without pagination or limiting on potentially large datasets
 
@@ -72,14 +72,16 @@ $active = User::all()->filter(fn ($u) => $u->isActive());
 $active = User::lazy()->filter(fn ($u) => $u->isActive());
 ```
 
-**3. Use query builder for counting:**
+**3. Use query builder for aggregates:**
 
 ```php
-// Before: fetches all records just to count
+// Before: fetches all records just to count/sum/avg
 $count = User::get()->count();
+$total = Order::where('paid', true)->get()->sum();
 
-// After: database-level COUNT query
+// After: database-level aggregate queries
 $count = User::count();
+$total = Order::where('paid', true)->sum('amount');
 ```
 
 **4. Replace large chunks with lazy:**
@@ -88,8 +90,19 @@ $count = User::count();
 // Before: chunk processes 5000 at a time
 User::chunk(5000, function ($users) { /* ... */ });
 
-// After: lazy processes one at a time
+// After: lazy() uses chunking internally (default 1000) but returns
+// a LazyCollection for a cleaner, more composable API
 User::lazy()->each(function ($user) { /* ... */ });
+```
+
+**5. Use query-level operations instead of collection buffering:**
+
+```php
+// Before: loads all records then sorts in PHP (defeats lazy loading)
+$sorted = User::all()->sort();
+
+// After: let the database handle sorting
+$sorted = User::orderBy('name')->cursor();
 ```
 
 ## References
