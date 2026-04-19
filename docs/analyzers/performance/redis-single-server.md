@@ -1,7 +1,7 @@
 ---
 title: Redis Single Server Optimization
 description: Suggests using Unix sockets for local Redis connections to improve performance
-icon: database
+icon: zap
 outline: [2, 3]
 tags: redis,sockets,performance,optimization,infrastructure
 pro: true
@@ -28,7 +28,13 @@ When Redis is on the same host, using TCP adds unnecessary overhead. Unix socket
 
 ## How to Fix
 
-### 1. Configure Redis to Listen on Socket
+### Quick Fix (5 minutes)
+
+If you're aware Redis is local and want to keep TCP for now, this is informational. No immediate action required — TCP works correctly, just with slightly more overhead.
+
+### Proper Fix (15 minutes)
+
+#### 1. Configure Redis to Listen on Socket
 
 **Edit `/etc/redis/redis.conf`:**
 
@@ -54,7 +60,7 @@ sudo systemctl restart redis
 ls -la /var/run/redis/redis.sock
 ```
 
-### 2. Update Laravel Configuration
+#### 2. Update Laravel Configuration
 
 **In `config/database.php`:**
 
@@ -155,25 +161,49 @@ php artisan tinker
 
 ## Performance Comparison
 
+Illustrative figures from `redis-benchmark` on a typical Linux server:
+
 | Connection Type | Requests/sec | Latency (avg) |
 |-----------------|--------------|---------------|
 | TCP localhost   | ~100,000     | 0.15ms        |
 | Unix socket     | ~120,000     | 0.12ms        |
 | **Improvement** | **~20%**     | **~20%**      |
 
-*Benchmarks vary by hardware and workload*
+*Actual results vary by hardware, Redis version, and workload. Run `redis-benchmark -s /var/run/redis/redis.sock` vs `redis-benchmark -h 127.0.0.1` to measure your own environment.*
 
 ## ShieldCI Configuration
 
-This analyzer:
-- Runs only in **production** and **staging** environments
-- Skips if Redis is not used by the application
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- Redis server configuration is not applicable in CI
+- Local/Development/Testing environments may use TCP connections, which is acceptable
+- Production and staging should use Unix sockets for optimal performance
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
+**Additional behavior:**
 - Checks all Redis connections in `config/database.php`
 - Reports higher severity for the default/primary connection
 
 ## References
 
-- [Redis Unix Socket Documentation](https://redis.io/docs/manual/config/)
+- [Redis Unix Socket Documentation](https://redis.io/docs/latest/operate/oss_and_stack/management/config/)
 - [PhpRedis Unix Socket Support](https://github.com/phpredis/phpredis#connection)
 - [Predis Unix Socket Configuration](https://github.com/predis/predis#connecting-to-redis)
 
