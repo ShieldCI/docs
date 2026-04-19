@@ -17,9 +17,9 @@ pro: true
 
 Validates that security-sensitive operations have proper audit logging. Checks for:
 
-- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset)
-- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice)
-- Admin action logging in admin controllers
+- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) — supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
+- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) — detects audit traits and Observer-based logging
+- Admin action logging in admin controllers, backend controllers, and Filament resources
 - Dedicated audit/security log channel configuration
 
 ## Why It Matters
@@ -35,6 +35,8 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 
 Register authentication event listeners:
 
+**Laravel 9/10 (EventServiceProvider):**
+
 ```php
 // app/Providers/EventServiceProvider.php
 protected $listen = [
@@ -48,6 +50,29 @@ protected $listen = [
         \App\Listeners\LogSuccessfulLogout::class,
     ],
 ];
+```
+
+**Laravel 11+ (AppServiceProvider or bootstrap/app.php):**
+
+```php
+// Option A: bootstrap/app.php with event discovery
+return Application::configure(basePath: dirname(__DIR__))
+    ->withEvents(discover: [
+        __DIR__.'/../app/Listeners',
+    ])
+    ->create();
+
+// Option B: AppServiceProvider::boot()
+use Illuminate\Auth\Events\Login;
+use Illuminate\Support\Facades\Event;
+
+public function boot(): void
+{
+    Event::listen(Login::class, function ($event) {
+        logger()->info('User logged in', ['user_id' => $event->user->id]);
+    });
+}
+```
 ```
 
 ### Proper Fix (20 minutes)
@@ -89,7 +114,33 @@ class User extends Authenticatable
 }
 ```
 
-**3. Log admin actions:**
+**3. Alternative: Use Model Observers for audit logging:**
+
+```php
+// app/Observers/UserObserver.php
+class UserObserver
+{
+    public function created(User $user): void
+    {
+        Log::channel('audit')->info('User created', ['user_id' => $user->id]);
+    }
+
+    public function updated(User $user): void
+    {
+        Log::channel('audit')->info('User updated', [
+            'user_id' => $user->id,
+            'changes' => $user->getChanges(),
+        ]);
+    }
+
+    public function deleted(User $user): void
+    {
+        Log::channel('audit')->info('User deleted', ['user_id' => $user->id]);
+    }
+}
+```
+
+**4. Log admin actions (controllers and Filament resources):**
 
 ```php
 class AdminUserController extends Controller

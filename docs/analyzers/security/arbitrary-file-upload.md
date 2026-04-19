@@ -15,7 +15,9 @@ pro: true
 
 ## What This Checks
 
-Detects arbitrary file upload vulnerabilities that could lead to remote code execution (RCE). Validates that file uploads have proper MIME type validation, file extension whitelisting, size limits, and are not stored in publicly executable locations. Also checks for dangerous file types, missing filename sanitization, and direct `$_FILES` access without validation.
+Detects arbitrary file upload vulnerabilities that could lead to remote code execution (RCE). Validates that file uploads have proper MIME type validation, file extension whitelisting, size limits, and are not stored in publicly executable locations. Also checks for dangerous file types (`.php`, `.phar`, `.exe`, `.sh`, `.shtml`, etc.), missing filename sanitization, ZIP/XML bomb susceptibility, and direct `$_FILES` access without validation.
+
+Recognizes all Laravel validation approaches across versions 9–12, including `mimes:`, `mimetypes:`, `image`, and the `extensions:` rule (Laravel 11+).
 
 ## Why It Matters
 
@@ -83,9 +85,25 @@ $request->validate([
     'document' => 'required|max:5120'  // ❌ Only size limit, any extension allowed
 ]);
 
-// AFTER - Protected
+// AFTER - Protected (Option A: mimes rule, all Laravel versions)
 $request->validate([
     'document' => 'required|mimes:pdf,doc,docx|max:5120'  // ✅ Whitelist specific extensions
+]);
+
+// AFTER - Protected (Option B: extensions rule, Laravel 11+)
+$request->validate([
+    'document' => 'required|extensions:pdf,doc,docx|max:5120'  // ✅ Validates guessed extension from MIME
+]);
+```
+
+**Scenario 4: Image Upload (using `image` rule)**
+
+```php
+// The `image` rule restricts to jpeg, png, bmp, gif, svg, and webp
+// It provides both MIME type and extension validation in one rule.
+
+$request->validate([
+    'avatar' => 'required|image|max:2048'  // ✅ MIME + extension + size validation
 ]);
 ```
 
@@ -397,6 +415,17 @@ public function verifyAndStore(Request $request)
     return response()->json(['path' => $path]);
 }
 ```
+
+## Laravel Version Notes
+
+| Rule | Laravel Version | Behavior |
+|------|:--------------:|----------|
+| `mimes:jpg,png` | 9+ | Validates file extension against allowed list |
+| `mimetypes:image/jpeg` | 9+ | Validates actual MIME type of file content |
+| `image` | 9+ | Restricts to jpeg, png, bmp, gif, svg, webp |
+| `extensions:pdf,docx` | 11+ | Validates guessed extension from MIME type detection |
+
+> **Tip:** `mimes:` checks the file extension, while `mimetypes:` checks the actual file content. For maximum security, use both or use `extensions:` (Laravel 11+) which validates the guessed extension based on MIME type detection.
 
 ## References
 
