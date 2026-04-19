@@ -1,7 +1,7 @@
 ---
 title: Redis Rate Limiting Analyzer
 description: Suggests using RateLimitedWithRedis for job rate limiting when Redis is available
-icon: clock
+icon: zap
 outline: [2, 3]
 tags: redis,jobs,queue,rate-limiting,performance
 pro: true
@@ -37,6 +37,7 @@ When multiple queue workers process jobs simultaneously, non-Redis rate limiting
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 
 class ProcessPodcast implements ShouldQueue
@@ -64,6 +65,7 @@ class ProcessPodcast implements ShouldQueue
 namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\Middleware\RateLimitedWithRedis;
 
 class ProcessPodcast implements ShouldQueue
@@ -117,7 +119,7 @@ public function boot(): void
 
 ### WithoutOverlapping Middleware
 
-If using `WithoutOverlapping` for job locks, ensure your cache driver is Redis:
+If using `WithoutOverlapping` for job locks, use a cache driver that supports atomic locks (Redis recommended, but Memcached and DynamoDB also work):
 
 ```php
 use Illuminate\Queue\Middleware\WithoutOverlapping;
@@ -131,8 +133,11 @@ public function middleware(): array
 ```
 
 ```env
-# .env - WithoutOverlapping uses the cache driver
+# .env - WithoutOverlapping uses the cache driver for distributed locks
+# Laravel 10 and below:
 CACHE_DRIVER=redis
+# Laravel 11+:
+CACHE_STORE=redis
 ```
 
 ## Common Rate Limiting Patterns
@@ -163,33 +168,40 @@ public function middleware(): array
 
 ## Configuration Requirements
 
-Ensure Redis is configured for caching:
+`RateLimitedWithRedis` connects to Redis directly (not via the cache layer), so you need Redis configured in `config/database.php`:
 
 ```env
-# .env
-CACHE_DRIVER=redis
-QUEUE_CONNECTION=redis  # Recommended when using Redis
+# .env - Redis connection (used by RateLimitedWithRedis directly)
+REDIS_HOST=127.0.0.1
+REDIS_PORT=6379
+REDIS_PASSWORD=null
 ```
+
+The queue driver can be any driver (Redis, SQS, database, etc.) — the rate limiting middleware is independent of the queue connection.
 
 ## How It Works
 
-**RateLimited (cache-based):**
+**RateLimited (cache-based, two separate cache calls):**
 ```
-Worker 1: READ count → CHECK → WRITE (race window)
-Worker 2: READ count → CHECK → WRITE (race window)
+Worker 1: CHECK count (cache read) → DECIDE → INCREMENT (cache write)
+Worker 2: CHECK count (cache read) → DECIDE → INCREMENT (cache write)
+         ↑ Both workers may read the same count before either increments
 ```
 
 **RateLimitedWithRedis (atomic Lua script):**
 ```
-Worker 1: INCR + CHECK in single atomic operation
-Worker 2: Waits for accurate count from Redis
+Worker 1: INCREMENT + CHECK in single atomic Lua script → accurate count
+Worker 2: INCREMENT + CHECK in single atomic Lua script → accurate count
+         ↑ Each operation is indivisible — count is always accurate
 ```
+
+Under low concurrency the race window with `RateLimited` is extremely small. The difference becomes significant at high worker counts processing many jobs simultaneously.
 
 ## ShieldCI Configuration
 
 This analyzer:
 - Runs in **all environments including CI**
-- Skips if Redis is not used by the application
+- Skips if Redis is not used for queue or cache
 - Scans `app/Jobs` directory for `RateLimited` usage
 - Recommends `RateLimitedWithRedis` when Redis is available
 
@@ -210,7 +222,7 @@ php artisan horizon
 
 - [Laravel Job Middleware Documentation](https://laravel.com/docs/queues#job-middleware)
 - [RateLimitedWithRedis Source](https://github.com/laravel/framework/blob/master/src/Illuminate/Queue/Middleware/RateLimitedWithRedis.php)
-- [Rate Limiting Configuration](https://laravel.com/docs/routing#rate-limiting)
+- [Queue Rate Limiting](https://laravel.com/docs/queues#rate-limiting)
 
 ## Related Analyzers
 
