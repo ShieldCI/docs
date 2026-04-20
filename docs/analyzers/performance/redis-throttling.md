@@ -1,7 +1,7 @@
 ---
 title: Redis Throttling Analyzer
 description: Suggests using ThrottleRequestsWithRedis for more accurate rate limiting
-icon: shield
+icon: zap
 outline: [2, 3]
 tags: redis,throttling,rate-limiting,middleware,performance
 pro: true
@@ -19,7 +19,7 @@ When your application uses Redis, this analyzer suggests using `ThrottleRequests
 
 ## Why It Matters
 
-- **Atomic Operations:** Redis-based throttling uses MULTI/EXEC transactions for atomic rate limiting
+- **Atomic Operations:** Redis-based throttling uses atomic Lua scripts for rate limiting
 - **Race Condition Prevention:** Standard throttling can allow bursts due to cache read/write race conditions
 - **High Concurrency:** More accurate under heavy load when multiple requests arrive simultaneously
 - **Distributed Systems:** Works correctly across multiple application servers
@@ -30,7 +30,7 @@ The standard `ThrottleRequests` middleware reads the current count, checks if li
 
 ### Option 1: Update Middleware Alias (Recommended)
 
-**In `app/Http/Kernel.php`:**
+**Laravel 10 and below — In `app/Http/Kernel.php`:**
 
 ```php
 protected $middlewareAliases = [
@@ -44,6 +44,19 @@ protected $middlewareAliases = [
 ];
 ```
 
+**Laravel 11+ — In `bootstrap/app.php`:**
+
+```php
+use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
+
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->throttleApi(ThrottleRequestsWithRedis::class);
+    })
+    // ...
+```
+
 All routes using `throttle:60,1` will now use the Redis version automatically.
 
 ### Option 2: Use Explicit Middleware on Routes
@@ -55,25 +68,6 @@ use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
 });
-```
-
-### Option 3: Laravel 11+ Rate Limiting
-
-Laravel 11 uses a different approach with the RateLimiter facade:
-
-```php
-// app/Providers/AppServiceProvider.php
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
-
-public function boot(): void
-{
-    RateLimiter::for('api', function (Request $request) {
-        return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
-    });
-}
-
-// The rate limiter automatically uses Redis if it's your cache driver
 ```
 
 ### Configuration Requirements
@@ -103,8 +97,8 @@ Both Request 1 and 2 might pass because they read before either wrote.
 
 **ThrottleRequestsWithRedis (atomic):**
 ```
-Request 1: INCR + CHECK in single Redis transaction → PASS (count=60)
-Request 2: INCR + CHECK in single Redis transaction → BLOCKED (count=61, over limit)
+Request 1: INCR + CHECK in atomic Lua script → PASS (count=60)
+Request 2: INCR + CHECK in atomic Lua script → BLOCKED (count=61, over limit)
 ```
 
 ## Rate Limiting Best Practices
@@ -152,7 +146,7 @@ for i in {1..65}; do curl -s -o /dev/null -w "%{http_code}\n" http://yourapp.tes
 
 - [Laravel Rate Limiting Documentation](https://laravel.com/docs/routing#rate-limiting)
 - [ThrottleRequestsWithRedis Source](https://github.com/laravel/framework/blob/master/src/Illuminate/Routing/Middleware/ThrottleRequestsWithRedis.php)
-- [Redis Transactions](https://redis.io/docs/manual/transactions/)
+- [Redis Lua Scripting](https://redis.io/docs/latest/develop/interact/programmability/eval-intro/)
 
 ## Related Analyzers
 
