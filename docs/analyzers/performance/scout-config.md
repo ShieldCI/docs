@@ -21,7 +21,8 @@ Validates Laravel Scout search configuration for performance and security. Check
 - Soft delete handling when models use `SoftDeletes`
 - Sensitive data exposure in `toSearchableArray()` returning full model
 - Development-only search drivers in production (null, collection)
-- Excessive chunk sizes that may cause memory issues during imports
+- Excessive chunk sizes (searchable and unsearchable) that may cause memory issues during imports
+- Queue disabled via `env()` wrapper with `false` default
 
 ## Why It Matters
 
@@ -47,6 +48,7 @@ Enable queued indexing:
 
 ```php
 // config/scout.php
+// Supported production drivers: algolia, meilisearch, typesense, database
 'driver' => env('SCOUT_DRIVER', 'meilisearch'),
 ```
 
@@ -89,6 +91,11 @@ public function toSearchableArray(): array
     'unsearchable' => 500,
 ],
 ```
+
+## Known Limitations
+
+- The `env()` wrapper detection for queue checks the static default value in the config file. If your production environment always sets the `SCOUT_QUEUE` environment variable, you can safely ignore this warning.
+- Driver detection only flags literal string assignments (`'driver' => 'null'`). Drivers configured via `env()` wrapper are assumed to be overridden in production.
 
 ## References
 
