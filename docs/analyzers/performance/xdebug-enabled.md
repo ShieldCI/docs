@@ -106,8 +106,8 @@ php -m | grep -iE 'xdebug|blackfire|tideways|pcov'
 
 | Extension  | Severity | Notes |
 |------------|----------|-------|
-| Xdebug     | Critical | Significant performance impact |
-| Blackfire  | Medium   | Profiler, overhead when enabled |
+| Xdebug     | Critical | Significant performance impact (up to 50% slower) |
+| Blackfire  | Low      | Probe designed for production; minimal overhead when idle |
 | Tideways   | Medium   | Profiler, overhead when enabled |
 | PCOV       | High     | Code coverage driver, testing only |
 
@@ -127,7 +127,7 @@ This analyzer only runs in **production** and **staging** environments. It is sk
 
 - [Xdebug Documentation](https://xdebug.org/docs/)
 - [Xdebug 3 Upgrade Guide](https://xdebug.org/docs/upgrade_guide)
-- [PHP Performance Best Practices](https://www.php.net/manual/en/opcache.installation.php)
+- [Xdebug Settings Reference](https://xdebug.org/docs/all_settings)
 
 ## Related Analyzers
 
