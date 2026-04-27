@@ -41,7 +41,7 @@ Validates that critical application modules have corresponding test files. Recur
 
 ## Why It Matters
 
-- **Reliability Risk:** Medium - Untested code is more likely to contain bugs that reach production
+- **Unreliable Deployments:** Untested code is more likely to contain bugs that reach production
 - **Regression Prevention:** Without tests, code changes can break existing functionality silently
 - **Confidence in Deployments:** Adequate test coverage enables faster, safer deployments
 - **Code Documentation:** Tests serve as living documentation of expected behavior
@@ -66,6 +66,8 @@ php artisan make:test Models/UserTest --unit
 
 ```php
 // tests/Feature/Http/Controllers/UserControllerTest.php
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
@@ -86,6 +88,8 @@ class UserControllerTest extends TestCase
 
 ```php
 // tests/Unit/Models/UserTest.php
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 class UserTest extends TestCase
 {
     public function test_user_has_orders_relationship(): void
@@ -107,7 +111,7 @@ php artisan test --coverage --min=80
 
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
 - [PHPUnit Documentation](https://docs.phpunit.de/)
-- [Laravel Testing Best Practices](https://laravel.com/docs/testing#introduction)
+- [Pest PHP Testing Framework](https://pestphp.com/docs/writing-tests)
 
 ## Related Analyzers
 
