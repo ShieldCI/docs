@@ -22,7 +22,7 @@ Validates test files for quality issues that reduce their effectiveness. Support
 - Empty test methods (no body)
 - Test methods with no assertions
 - Test methods that only assert `assertTrue(true)` (placeholder tests)
-- Excessively long test methods that should be split
+- Test methods exceeding 80 lines (configurable)
 - `test_` prefix, `@test` annotation, and `#[Test]` attribute (PHPUnit 10+)
 - All calling styles: `$this->`, `self::`, and `static::`
 
@@ -32,6 +32,10 @@ Validates test files for quality issues that reduce their effectiveness. Support
 - `expect()` chains recognized as valid assertions
 - `->skip()` chained tests correctly ignored
 - `describe()` block nesting supported
+
+::: tip Assertion Detection Scope
+The analyzer checks assertions directly within each test method body. Assertions delegated to private helper methods called from the test are not detected. If you centralise assertions in helpers, ensure each test method also has at least one direct assertion call.
+:::
 
 ## Why It Matters
 
@@ -69,7 +73,7 @@ public function test_user_can_register(): void
 }
 ```
 
-### Pest PHP
+**Pest PHP**
 
 **Before (❌):**
 ```php
@@ -123,14 +127,31 @@ public function test_creates_user_on_success(): void { /* ... */ }
 public function test_sends_welcome_email(): void { /* ... */ }
 ```
 
-**3. Remove or implement empty test classes:**
+**3. Customize ShieldCI Settings (Optional)**
+
+Publish the config file if you haven't already:
 
 ```bash
-# Find empty test classes
-grep -rn "class.*Test.*{" tests/ | while read line; do
-    # Check if it has any test methods
-done
+php artisan vendor:publish --tag=shieldci-config
 ```
+
+Then adjust the threshold in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'code-quality' => [
+        'enabled' => true,
+        
+        'test-quality' => [
+            'max_method_lines' => 80,  // Default: 80. Increase for data-heavy integration tests.
+        ],
+    ],
+],
+```
+
+::: tip When to Change the Threshold
+The default of 80 lines suits most unit and feature tests. Integration tests or tests with large inline fixtures may legitimately exceed this. Raise the threshold rather than splitting tests that lose clarity when broken apart.
+:::
 
 ## References
 
