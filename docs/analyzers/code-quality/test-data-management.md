@@ -17,13 +17,13 @@ pro: true
 
 Validates that test files follow proper data management practices. Works with **PHPUnit**, **Pest PHP**, and **PHPUnit 10 attributes**. Checks for:
 
-- Hardcoded model creation instead of using factories
+- Hardcoded model creation instead of using factories (requires 2 or more hardcoded string field values)
 - Missing database cleanup traits (`RefreshDatabase`, `DatabaseMigrations`, `DatabaseTransactions`)
-- Raw SQL used in test files for data setup
-- Large factory sequences (count > 50) that may slow tests
-- Seeder usage in tests that couples tests to seeder state
+- Raw SQL used in test files for data setup (`DB::insert()`, `DB::statement()`, `DB::unprepared()`, `DB::table()->insert()`)
+- Large factory sequences (count > 50) that may slow tests — both `->count(N)` and `Model::factory(N)` syntax
+- Seeder usage in tests via `$this->seed()` or `Artisan::call('db:seed')`
 
-### Framework Support
+**Framework Support**
 
 | Framework | Detection Method |
 |-----------|-----------------|
@@ -46,7 +46,7 @@ The analyzer also checks `tests/TestCase.php` and `tests/Pest.php` for globally 
 
 Use factories instead of hardcoded data:
 
-**Before:**
+**Before (❌):**
 ```php
 $user = User::create([
     'name' => 'Test User',
@@ -55,7 +55,7 @@ $user = User::create([
 ]);
 ```
 
-**After:**
+**After (✅):**
 ```php
 $user = User::factory()->create();
 ```
@@ -66,12 +66,46 @@ $user = User::factory()->create();
 
 ::: code-group
 
-```php [PHPUnit]
+```php [PHPUnit — RefreshDatabase]
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase; // Rolls back and re-migrates after each test
+
+    public function test_order_can_be_placed(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create(['price' => 1999]);
+
+        // Test logic...
+    }
+}
+```
+
+```php [PHPUnit — DatabaseTransactions]
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+
+class OrderTest extends TestCase
+{
+    use DatabaseTransactions; // Wraps each test in a transaction and rolls back
+
+    public function test_order_can_be_placed(): void
+    {
+        $user = User::factory()->create();
+        $product = Product::factory()->create(['price' => 1999]);
+
+        // Test logic...
+    }
+}
+```
+
+```php [PHPUnit — DatabaseMigrations]
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+
+class OrderTest extends TestCase
+{
+    use DatabaseMigrations; // Runs fresh migrations before each test
 
     public function test_order_can_be_placed(): void
     {
@@ -107,28 +141,29 @@ uses(RefreshDatabase::class)->in('Feature');
 
 **2. Replace raw SQL with Eloquent/factories:**
 
-**Before:**
+**Before (❌):**
 ```php
 DB::insert('INSERT INTO users (name, email) VALUES (?, ?)', ['Test', 'test@test.com']);
 ```
 
-**After:**
+**After (✅):**
 ```php
 User::factory()->create(['name' => 'Test', 'email' => 'test@test.com']);
 ```
 
 **3. Remove seeder dependencies:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function setUp(): void
 {
     parent::setUp();
     $this->seed(RolesSeeder::class);
+    // Also flagged: Artisan::call('db:seed', ['--class' => 'RolesSeeder']);
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function test_admin_can_access_dashboard(): void
 {
@@ -139,16 +174,31 @@ public function test_admin_can_access_dashboard(): void
 }
 ```
 
-### Dynamic Generators (Not Flagged)
+**4. Customize ShieldCI Settings (Optional)**
 
-The analyzer recognizes these as dynamic data and will **not** flag `Model::create()` calls that use them:
+The factory sequence threshold is configurable. To customize it, publish the config:
 
-- `fake()` / `fake()->` (Laravel 9+ helper)
-- `$this->faker` (WithFaker trait)
-- `$faker->` (manual Faker variable)
-- `Faker\Factory::create()` (pre-Laravel 9)
-- `Str::random()`, `Uuid::`, `Carbon::`, `now()`
-- `factory()` (legacy factory helper)
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'code-quality' => [
+        'enabled' => true,
+    
+        'test-data-management' => [
+            'factory_count_threshold' => 50, // Default: flag sequences with count > 50
+        ],
+    ],
+],
+```
+
+::: tip When to Change the Threshold
+The default of 50 works well for most projects. You may want to increase it if your integration test suite legitimately creates larger datasets (e.g. pagination tests that need > 50 rows). Keep in mind that large factory sequences slow your CI — consider whether the test truly needs that many records.
+:::
 
 ## References
 
