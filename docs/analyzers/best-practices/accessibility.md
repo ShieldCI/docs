@@ -67,7 +67,14 @@ Add alt attributes to images:
 
 <!-- Or use aria-label for icon-only inputs: -->
 <input type="search" aria-label="Search products">
+
+<!-- Or use aria-labelledby to reference another element's text: -->
+<span id="email-hint">Email Address</span>
+<input type="email" name="email" aria-labelledby="email-hint">
 ```
+
+> [!NOTE]
+> The following input types are automatically exempt from the label requirement: `hidden`, `submit`, `button`, `reset`.
 
 **2. Add lang attribute:**
 
