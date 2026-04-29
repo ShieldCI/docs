@@ -19,10 +19,12 @@ Validates Laravel Pennant feature flag configuration, driver settings, and usage
 
 - Unpublished `config/pennant.php` — driver configuration cannot be verified
 - Explicit use of the `array` driver — feature flag state is not persisted between requests
-- Stale feature flag references — flags checked via `Feature::active()`, `inactive()`, `when()`, `unless()`, `value()`, and bulk methods (`allAreActive()`, `someAreActive()`, etc.) that have no corresponding definition
+- Stale feature flag references — flags checked via `Feature::active()`, `inactive()`, `when()`, `unless()`, `value()`, and bulk methods (`allAreActive()`, `someAreActive()`, `allAreInactive()`, `someAreInactive()`) that have no corresponding definition
 - Feature definitions without a type hint on the scope parameter (including PHP 8 union types such as `User|null`)
 - Feature definitions with empty closures or bare `return;` statements — no default value when the store is unavailable
 - Class-based features in `app/Features/` (with a `resolve()` method) are recognised as definitions, including those using the `#[Name('...')]` attribute
+
+> **Severity note:** Missing scope type hints raise a **Low** severity issue; all other findings are **Medium**.
 
 ## Why It Matters
 
@@ -104,7 +106,21 @@ Feature::define('guest-banner', function (User|null $scope): bool {
 });
 ```
 
-**4. Clean up stale flags:**
+**4. Provide a return value in every feature definition:**
+
+**Before (❌):**
+```php
+Feature::define('maintenance-banner', function (User $scope) {});
+```
+
+**After (✅):**
+```php
+Feature::define('maintenance-banner', function (User $scope): bool {
+    return false; // safe default when store is unavailable
+});
+```
+
+**5. Clean up stale flags:**
 
 ```bash
 # Remove stored values for a specific feature
