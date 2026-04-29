@@ -19,11 +19,22 @@ Detects business logic in middleware that violates separation of concerns. Check
 
 - **Database write operations** — instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
 - **Email/notification sending** — `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
-- **Direct model instantiation** — `new Model()` in middleware (responses, exceptions, dates, and value objects are allowed)
+- **Event/job dispatching via facades** — `Event::dispatch()`, `Event::fire()`, `Bus::dispatch()`, `Bus::dispatchSync()`, `Bus::dispatchNow()`
+- **Direct model instantiation** — `new Model()` in middleware (responses (`Response`, `JsonResponse`, `RedirectResponse`), exceptions (`RuntimeException`, `ValidationException`, HTTP exceptions, etc.), dates (`Carbon`, `DateTime`), and utilities (`Closure`, `stdClass`, `Collection`) are allowed)
 - **Complex conditional logic** — if-statement nesting 4+ levels deep, suggesting embedded business rules
 
+| Check | Issue Severity |
+| ----- | :------------: |
+| Database write operations | Medium |
+| Email / notification sending | Medium |
+| Event / job dispatching via facades | Low |
+| Direct model instantiation | Low |
+| Complex conditional logic (4+ levels) | Low |
+
 ::: tip What is NOT flagged
-Facade calls that are legitimate in middleware are ignored: `Schema::*`, `Gate::*`, `Log::*`, `Cache::*`, `Response::*`, `Carbon::*`, `CarbonImmutable::*`, and other infrastructure helpers. `Mail::to()` alone is also not flagged — it's a builder, not a send action.
+- **Safe infrastructure facades** (for write method names): `Schema`, `Gate`, `Auth`, `Log`, `Cache`, `Config`, `Session`, `Cookie`, `Hash`, `Crypt`, `Storage`, `Route`, `View`, `Redirect`, `Validator`, `Queue`, `Event`, `Http`, `Request`, `Str`, `Arr`, `Collection`, `Response`, `JsonResponse`, `RedirectResponse`, `Carbon`, `CarbonImmutable`, `DateTime`, `DateTimeImmutable`
+- **`Mail::to()`** alone — it's a builder, not a send action
+- **`dispatch()` / `dispatch_sync()` global helpers** — dispatching async jobs from middleware is the accepted Laravel pattern for offloading work (e.g., background tracking)
 :::
 
 ## Why It Matters
