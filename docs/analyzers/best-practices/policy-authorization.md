@@ -28,14 +28,6 @@ Validates that resource controllers use Laravel's Policy system for authorizatio
 > [!TIP]
 > A "model-less policy" is one whose methods only receive the `$user` parameter (e.g., `viewAny`, `create`). These are valid for user-scoped permissions and are not flagged by this analyzer.
 
-### Passes When
-
-- No `app/Http/Controllers/` directory exists
-- Controllers that don't have `store()`, `update()`, or `destroy()` methods (non-resource controllers)
-- Controllers that don't extend `Controller` (utility classes ending in `Controller.php`)
-- Controllers where the implied model name has no corresponding file under `app/`
-- Controllers protected by route-level authentication middleware in `routes/*.php`
-
 ## Why It Matters
 
 - **Authorization Gaps:** Controllers without policies may allow unauthorized access to CRUD operations
