@@ -23,7 +23,18 @@ Validates that resource controllers use Laravel's Policy system for authorizatio
 - Policy files where the class name doesn't match the expected policy name
 - `authorizeResource()` called with a model that doesn't match the controller name
 - Recognizes multiple authorization patterns: `Gate` facades, `middleware('can:...')`, `$user->can()`, `Policy::class` references, and FormRequest `authorize()` methods
-- Recognizes route-level authorization: controllers protected by non-throttle middleware in `routes/*.php`
+- Recognizes route-level authorization: controllers where `->middleware()` is chained directly on the route definition, or within a `Route::middleware()->group()` closure in `routes/*.php`
+
+> [!TIP]
+> A "model-less policy" is one whose methods only receive the `$user` parameter (e.g., `viewAny`, `create`). These are valid for user-scoped permissions and are not flagged by this analyzer.
+
+### Passes When
+
+- No `app/Http/Controllers/` directory exists
+- Controllers that don't have `store()`, `update()`, or `destroy()` methods (non-resource controllers)
+- Controllers that don't extend `Controller` (utility classes ending in `Controller.php`)
+- Controllers where the implied model name has no corresponding file under `app/`
+- Controllers protected by route-level authentication middleware in `routes/*.php`
 
 ## Why It Matters
 
@@ -46,6 +57,24 @@ php artisan make:policy PostPolicy --model=Post
 
 **1. Create policies for all resource controllers:**
 
+**Before (❌):**
+```php
+class PostController extends Controller
+{
+    public function update(Request $request, Post $post)
+    {
+        // No authorization check — anyone can update any post
+        $post->update($request->validated());
+    }
+
+    public function destroy(Post $post)
+    {
+        $post->delete();
+    }
+}
+```
+
+**After (✅):**
 ```php
 // app/Policies/PostPolicy.php
 class PostPolicy
@@ -105,6 +134,29 @@ public function update(Request $request, Post $post)
 
     return redirect()->route('posts.show', $post);
 }
+```
+
+**4. Other accepted patterns:**
+
+```php
+// Gate facade
+Gate::authorize('update', $post);
+
+// User can() method
+if (! $request->user()->can('update', $post)) {
+    abort(403);
+}
+
+// Middleware-based (constructor or route definition)
+public function __construct()
+{
+    $this->middleware('can:update,post')->only(['update', 'destroy']);
+}
+
+// Route-group middleware — all controllers inside are suppressed
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('posts', PostController::class);
+});
 ```
 
 ## References
