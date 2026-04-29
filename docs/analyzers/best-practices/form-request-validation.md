@@ -17,7 +17,11 @@ pro: true
 
 Validates that controllers follow Laravel's FormRequest pattern. Checks for:
 
-- Inline validation in controllers (`$request->validate()`, `$this->validate()`, or `Validator::make()`)
+- Inline validation in controllers:
+  - `$request->validate()`, `$request->validateWithBag()`, `$request->validateWithoutBag()`
+  - `request()->validate()` (Laravel helper form)
+  - `$this->validate()`
+  - `Validator::make()`, `Validator::validate()`
 - Controller `store()`/`update()` methods missing a FormRequest type-hint
 
 ## Why It Matters
