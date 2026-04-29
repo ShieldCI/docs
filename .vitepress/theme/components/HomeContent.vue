@@ -76,7 +76,7 @@ const steps = [
   <section class="mx-auto px-6 sm:px-12 md:px-16 pt-16 pb-8">
     <div data-reveal class="text-center mb-10">
       <h2 class="text-2xl! sm:text-3xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
-          AI-powered Analyzers Across 5 Categories
+          73 Purpose-Built Analyzers Across 5 Categories
       </h2>
       <p class="mt-3! text-base! text-gray-600! dark:text-gray-400! m-0! leading-relaxed!">
         Comprehensive Laravel static analysis and vulnerability scanning covering everything from SQL injection to N+1 queries.
