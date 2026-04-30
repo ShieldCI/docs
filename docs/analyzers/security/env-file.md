@@ -14,14 +14,13 @@ tags: env,environment,secrets,security,configuration
 
 ## What This Checks
 
-Validates that Laravel environment files are properly secured against exposure and credential leaks. Detects `.env` files in public directories, real credentials in `.env.example`, missing `.gitignore` entries, files committed to git repositories, and insecure file permissions that could expose database passwords, API keys, and other sensitive configuration data.
+Validates that Laravel environment files are properly secured against exposure and credential leaks. Detects `.env` files in public directories, real credentials in `.env.example`, missing `.gitignore` entries, and files committed to git repositories that could expose database passwords, API keys, and other sensitive configuration data.
 
 ## Why It Matters
 
 - **Security Risk:** CRITICAL - Exposed .env files leak all application secrets instantly
 - **HTTP Accessibility:** .env files in public directories can be downloaded directly via browser
 - **Git History:** Once committed, credentials persist in version control history forever
-- **File Permissions:** World-readable permissions allow any server user to read secrets
 - **Compliance:** GDPR, PCI DSS, and SOC 2 require proper access controls for sensitive data
 
 A single exposed `.env` file can compromise your entire application. Real-world impacts include:
@@ -57,41 +56,22 @@ git check-ignore .env
 # Should output: .env
 ```
 
-**Scenario 3: Insecure File Permissions**
-
-```bash
-# Set secure permissions (owner read/write only)
-chmod 600 .env
-
-# Verify
-ls -la .env
-# Should show: -rw------- (600)
-
-# For production with web server
-chown www-data:www-data .env
-chmod 600 .env
-```
-
 ### Proper Fix (10 minutes)
 
 Implement comprehensive environment file security:
 
-**1. Secure File Location and Permissions**
+**1. Secure File Location**
 
 ```bash
 # Ensure .env is in application root, not public directory
 # Correct structure:
 /var/www/
-├── .env              ← Here (600 permissions)
+├── .env              ← Here (application root)
 ├── app/
 ├── config/
 └── public/
     ├── index.php
     └── .htaccess
-
-# Set secure permissions
-chmod 600 .env
-chown www-data:www-data .env
 
 # Verify not accessible via web
 curl https://yoursite.com/.env          # Should 404
@@ -223,17 +203,8 @@ set -e
 # Copy environment template
 cp .env.example .env
 
-# Set secure permissions BEFORE adding secrets
-chmod 600 .env
-
 # Load secrets from secure vault (recommended)
 # aws secretsmanager get-secret-value --secret-id prod/app/env
-
-# Verify permissions
-if [ "$(stat -c %a .env)" != "600" ]; then
-    echo "Error: .env must have 600 permissions"
-    exit 1
-fi
 
 # Clear caches
 php artisan config:clear
@@ -247,12 +218,12 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
 - CI environments intentionally do not have a `.env` file — secrets are injected via platform environment variables or secrets managers, not a committed file
-- `.env` permissions, `.gitignore` configuration, and committed-file checks are all moot or false-positive-prone when `.env` is absent by design
+- `.gitignore` configuration and committed-file checks are all moot or false-positive-prone when `.env` is absent by design
 - Prevents irrelevant failures in pipelines where the absence of `.env` is expected
 
 **When to run this analyzer:**
-- ✅ **Local development**: Catches insecure permissions, missing `.gitignore` entries, and accidentally committed `.env` files before they reach version control
-- ✅ **Staging/Production servers**: Validates that `.env` is properly secured and not accessible from the public directory
+- ✅ **Local development**: Catches missing `.gitignore` entries and accidentally committed `.env` files before they reach version control
+- ✅ **Staging/Production servers**: Validates that `.env` is not accessible from the public directory and has no real credentials in `.env.example`
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` is intentionally absent; secrets come from CI platform variables)
 
 ## References
@@ -264,6 +235,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 ## Related Analyzers
 
+- [File Permissions Analyzer](/analyzers/security/file-permissions) - Validates `.env` and directory permissions
 - [Application Key Analyzer](/analyzers/security/app-key-security) - Validates encryption key configuration
 - [Debug Mode Analyzer](/analyzers/security/debug-mode) - Prevents debug information exposure
 - [Configuration Caching Analyzer](/analyzers/performance/config-caching) - Ensures config is cached in production
