@@ -77,22 +77,28 @@ public function upload(Request $request)
 }
 ```
 
-**Scenario 3: Missing Extension Validation**
+**Scenario 3: Missing Extension and MIME Validation**
 
 ```php
 // BEFORE - Vulnerable
 $request->validate([
-    'document' => 'required|max:5120'  // ❌ Only size limit, any extension allowed
+    'document' => 'required|max:5120'  // ❌ Only size limit, any file type allowed
 ]);
 
-// AFTER - Protected (Option A: mimes rule, all Laravel versions)
+// AFTER - Option A: mimes: (validates MIME type, all Laravel versions)
+// Lists extensions as aliases — Laravel resolves them to MIME types via finfo
 $request->validate([
-    'document' => 'required|mimes:pdf,doc,docx|max:5120'  // ✅ Whitelist specific extensions
+    'document' => 'required|mimes:pdf,doc,docx|max:5120'  // ✅ MIME type + size
 ]);
 
-// AFTER - Protected (Option B: extensions rule, Laravel 11+)
+// AFTER - Option B: mimetypes: (validates full MIME type string directly)
 $request->validate([
-    'document' => 'required|extensions:pdf,doc,docx|max:5120'  // ✅ Validates guessed extension from MIME
+    'document' => 'required|mimetypes:application/pdf,application/msword|max:5120'  // ✅ Explicit MIME
+]);
+
+// AFTER - Option C: extensions: (validates guessed extension from MIME type, Laravel 11+)
+$request->validate([
+    'document' => 'required|extensions:pdf,doc,docx|max:5120'  // ✅ Server-side extension detection
 ]);
 ```
 
@@ -306,11 +312,10 @@ class UploadController extends Controller
         // ✅ Sanitize and validate file content (not just extension)
         $image = Image::make($file);
 
-        // ✅ Re-encode to strip malicious metadata
-        $image->encode('jpg', 90);
-
-        // ✅ Store with controlled filename
-        $path = $image->save(storage_path('app/private/avatars/' . $filename));
+        // ✅ Re-encode to strip malicious metadata — chain encode() into save()
+        // encode() returns a new instance; calling save() on the original would
+        // bypass the re-encode step.
+        $image->encode('jpg', 90)->save(storage_path('app/private/avatars/' . $filename));
 
         // Save reference in database
         auth()->user()->update([
@@ -380,7 +385,7 @@ public function verifyAndStore(Request $request)
 
     $file = $request->file('file');
 
-    // ✅ Server-side MIME type detection
+    // ✅ Server-side MIME type detection via finfo (Laravel delegates to this internally)
     $finfo = finfo_open(FILEINFO_MIME_TYPE);
     $mimeType = finfo_file($finfo, $file->getRealPath());
     finfo_close($finfo);
@@ -399,8 +404,10 @@ public function verifyAndStore(Request $request)
         ]);
     }
 
-    // Additional extension validation
-    $extension = strtolower($file->getClientOriginalExtension());
+    // ✅ Use extension() — guesses the extension from MIME type detection (server-side, not spoofable).
+    // Avoid getClientOriginalExtension() here: it returns the extension from the client-supplied
+    // filename, which an attacker can set to anything (e.g., name shell.php as shell.jpg).
+    $extension = strtolower($file->extension());
     $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'pdf'];
 
     if (!in_array($extension, $allowedExtensions)) {
@@ -416,16 +423,16 @@ public function verifyAndStore(Request $request)
 }
 ```
 
-## Laravel Version Notes
+**Laravel Version Notes**
 
 | Rule | Laravel Version | Behavior |
 |------|:--------------:|----------|
-| `mimes:jpg,png` | 9+ | Validates file extension against allowed list |
-| `mimetypes:image/jpeg` | 9+ | Validates actual MIME type of file content |
-| `image` | 9+ | Restricts to jpeg, png, bmp, gif, svg, webp |
-| `extensions:pdf,docx` | 11+ | Validates guessed extension from MIME type detection |
+| `mimes:jpg,png` | 9+ | Validates actual file MIME type; the listed extensions map to allowed MIME types via finfo |
+| `mimetypes:image/jpeg` | 9+ | Validates actual MIME type of file content using the full MIME type string |
+| `image` | 9+ | Restricts to jpeg, png, bmp, gif, svg, webp via MIME type detection |
+| `extensions:pdf,docx` | 11+ | Validates the extension guessed from MIME type detection (server-side) |
 
-> **Tip:** `mimes:` checks the file extension, while `mimetypes:` checks the actual file content. For maximum security, use both or use `extensions:` (Laravel 11+) which validates the guessed extension based on MIME type detection.
+> **Tip:** Both `mimes:` and `mimetypes:` use finfo to read actual file content — neither trusts the client-supplied filename. The difference: `mimes:` accepts extension aliases (e.g., `jpg`), while `mimetypes:` requires the full MIME type string (e.g., `image/jpeg`). For maximum security, combine both or use `extensions:` (Laravel 11+) which validates the guessed extension from MIME type detection.
 
 ## References
 
