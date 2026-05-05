@@ -261,6 +261,8 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Staging/Production servers**: Validates that storage directories are writable and symlinks are in place after deployment
 - ❌ **CI/CD pipelines**: Skipped automatically (symlinks not created and permissions not set in CI)
 - ❌ **Laravel Vapor / Serverless**: Skipped automatically (platform manages permissions)
+- ❌ **Laravel Cloud**: Skipped automatically (filesystem changes not persisted)
+- ❌ **Docker**: Skipped automatically (permissions managed by container image)
 
 ## References
 

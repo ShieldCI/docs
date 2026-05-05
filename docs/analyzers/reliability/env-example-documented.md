@@ -157,6 +157,8 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Local development**: Ensures every variable you add to `.env` gets documented for your teammates
 - ✅ **Pre-commit / code review**: Catches undocumented variables before they reach the main branch
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent in CI)
+- ❌ **Laravel Cloud**: Skipped automatically (platform-injected variables should not be in `.env.example`)
+- ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
 
 ## References
 

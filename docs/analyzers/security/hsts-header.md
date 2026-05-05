@@ -223,6 +223,11 @@ This analyzer is automatically skipped in CI environments.
 - CI environments typically don't have a publicly accessible HTTPS web server
 - Requires actual HTTP requests to verify HSTS headers are present
 
+**When to run this analyzer:**
+- ✅ **HTTPS-only applications**: Runs when ShieldCI detects HTTPS enforcement via `session.secure`, `APP_URL=https://...`, `FORCE_HTTPS=true`, `force_https` in `config/app.php`, `URL::forceScheme('https')` / `URL::forceHttps()` in `AppServiceProvider`, or a `ForceHttps` middleware in `Kernel.php`
+- ❌ **Non-HTTPS-only applications**: Skipped automatically (HSTS has no effect unless the app enforces HTTPS)
+- ❌ **CI/CD pipelines**: Skipped automatically (requires a live web server)
+
 ## References
 
 - [Laravel HTTPS Configuration](https://laravel.com/docs/requests#configuring-trusted-proxies)

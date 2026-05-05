@@ -64,6 +64,13 @@ stdout_logfile=/path/to/horizon.log
 stopwaitsecs=3600
 ```
 
+## ShieldCI Configuration
+
+**When to run this analyzer:**
+- ✅ **Local/Staging/Production**: Runs when you are on a Redis queue driver and not on Vapor
+- ❌ **Laravel Vapor / Serverless**: Skipped automatically (incompatible architecture)
+- ❌ **Non-Redis queue drivers**: Skipped automatically (Horizon requires Redis)
+
 ## References
 
 - [Laravel Horizon](https://laravel.com/docs/horizon)
