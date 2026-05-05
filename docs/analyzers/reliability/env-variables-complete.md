@@ -125,6 +125,8 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Local development**: Catches missing variables before you hit a runtime error
 - ✅ **Staging/Production servers**: Ensures all required variables from `.env.example` are configured before deploy
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent)
+- ❌ **Laravel Cloud**: Skipped automatically (platform-managed `.env`)
+- ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
 
 ## References
 

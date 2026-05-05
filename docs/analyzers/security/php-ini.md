@@ -299,6 +299,8 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 **Laravel Vapor / Serverless:** On Vapor and other serverless platforms, the `log_errors` and `display_startup_errors` checks are additionally skipped — the platform manages PHP error output via stderr/CloudWatch and these settings are not user-controllable there. All other checks (`allow_url_fopen`, `allow_url_include`, `expose_php`, `display_errors`) still run and point to `php/conf.d/php.ini` for remediation.
 
+**Docker:** In Docker environments, the `PHP_INI_SYSTEM` directives (`allow_url_fopen`, `allow_url_include`, `expose_php`) are automatically excluded from the check — these settings are baked into the Docker image and cannot be changed by the application at runtime. The remaining directives (`display_errors`, `display_startup_errors`, `log_errors`, `ignore_repeated_errors`) are still checked, as they can be overridden via `.user.ini` or application-level configuration.
+
 **Explicit `Off` vs empty string:** A PHP ini setting explicitly set to `Off` (or `0`, `no`, `false`) is treated as intentionally disabled — no issue is raised. An empty value is treated as ambiguous and flagged separately, since `ini_get()` returns an empty string for both a genuine `Off` and a setting that may not be applied correctly.
 
 ## References

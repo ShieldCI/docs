@@ -77,6 +77,8 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
 
+**Laravel Cloud:** This analyzer is automatically skipped on Laravel Cloud — asset cache headers are managed by the platform and cannot be configured by the application.
+
 ## References
 
 - [HTTP Caching](https://web.dev/http-cache/)
