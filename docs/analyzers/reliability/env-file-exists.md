@@ -194,6 +194,8 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Local development**: Ensures developers have a properly configured `.env` before running the application
 - ✅ **Staging/Production servers**: Validates that the `.env` file exists, is readable, and is not empty after deployment
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` is intentionally absent; secrets come from CI platform variables)
+- ❌ **Laravel Cloud**: Skipped automatically (platform-managed `.env`)
+- ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
 
 ## References
 

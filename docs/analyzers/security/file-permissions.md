@@ -306,6 +306,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Local development**: Catches overly permissive files set by local tooling before they reach a server
 - ✅ **Staging/Production servers**: Validates that sensitive files (`.env`, config) and directories have secure permissions in the actual deployment environment
 - ❌ **CI/CD pipelines**: Skipped automatically (permission bits reflect the runner's environment, not the deployed server)
+- ❌ **Docker**: Skipped automatically (permissions managed by container image and volume mounts)
 
 ## References
 

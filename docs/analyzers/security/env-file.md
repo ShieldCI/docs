@@ -225,6 +225,8 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ✅ **Local development**: Catches missing `.gitignore` entries and accidentally committed `.env` files before they reach version control
 - ✅ **Staging/Production servers**: Validates that `.env` is not accessible from the public directory and has no real credentials in `.env.example`
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` is intentionally absent; secrets come from CI platform variables)
+- ❌ **Laravel Cloud**: Skipped automatically (platform-managed `.env` permissions)
+- ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
 
 ## References
 

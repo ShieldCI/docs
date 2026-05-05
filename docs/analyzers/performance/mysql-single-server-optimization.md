@@ -78,6 +78,10 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
 
+**Docker:** This analyzer is automatically skipped in Docker environments — MySQL runs in a separate container and communicates over TCP; Unix socket optimization is not applicable for inter-container communication.
+
+**Non-MySQL database driver:** This analyzer is automatically skipped when the default database connection is not `mysql` — Unix socket optimization is MySQL-specific.
+
 ## References
 
 - [Laravel Database Read/Write](https://laravel.com/docs/database#read-and-write-connections)
