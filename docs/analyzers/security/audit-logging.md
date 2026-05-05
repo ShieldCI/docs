@@ -21,6 +21,9 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 - Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) — detects audit traits and Observer-based logging
 - Admin action logging in admin controllers, backend controllers, and Filament resources
 - Dedicated audit/security log channel configuration
+- API token lifecycle logging — Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
+- Data export/download operations — `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
+- Bulk model operations that bypass observers — `saveQuietly()`, `updateQuietly()`, and `withoutEvents()` skip audit traits; explicit logging is required at the call site
 
 ## Why It Matters
 
@@ -28,6 +31,8 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 - **Compliance:** SOC 2, HIPAA, PCI-DSS, and GDPR all require audit trails for sensitive operations
 - **Forensics:** Audit logs provide the timeline needed to understand what happened during a breach
 - **Accountability:** Logging admin actions creates accountability and deters misuse
+- **Token security:** Unlogged token creation/revocation means credential theft may go undetected for months
+- **Data sovereignty:** GDPR Article 30 requires records of data processing activities, including exports
 
 ## How to Fix
 
@@ -72,7 +77,6 @@ public function boot(): void
         logger()->info('User logged in', ['user_id' => $event->user->id]);
     });
 }
-```
 ```
 
 ### Proper Fix (20 minutes)
@@ -156,6 +160,75 @@ class AdminUserController extends Controller
         $user->delete();
     }
 }
+```
+
+**5. Log API token lifecycle (Sanctum):**
+
+```php
+// In your token creation controller
+public function createToken(Request $request)
+{
+    $token = $request->user()->createToken($request->name, $request->abilities ?? ['*']);
+
+    Log::channel('audit')->info('API token created', [
+        'user_id' => $request->user()->id,
+        'token_name' => $request->name,
+        'abilities' => $request->abilities ?? ['*'],
+        'ip' => $request->ip(),
+    ]);
+
+    return response()->json(['token' => $token->plainTextToken]);
+}
+
+// In your token revocation controller
+public function revokeToken(Request $request)
+{
+    $request->user()->currentAccessToken()->delete();
+
+    Log::channel('audit')->info('API token revoked', [
+        'user_id' => $request->user()->id,
+        'ip' => $request->ip(),
+    ]);
+}
+```
+
+**6. Log data export operations:**
+
+```php
+// In your export controller or Filament action
+public function export(Request $request)
+{
+    Log::channel('audit')->info('Data exported', [
+        'user_id' => auth()->id(),
+        'format' => 'xlsx',
+        'filters' => $request->only(['date_from', 'date_to', 'status']),
+        'ip' => $request->ip(),
+    ]);
+
+    return Excel::download(new UsersExport($request->filters), 'users.xlsx');
+}
+```
+
+**7. Log bulk operations that bypass observers:**
+
+```php
+// When you must use saveQuietly(), add explicit logging
+$user->saveQuietly();
+Log::channel('audit')->info('User saved quietly (observers bypassed)', [
+    'user_id' => $user->id,
+    'changes' => $user->getChanges(),
+    'actor_id' => auth()->id(),
+]);
+
+// When you must use withoutEvents()
+User::withoutEvents(function () use ($users) {
+    // batch update
+    $users->each->update(['status' => 'inactive']);
+});
+Log::channel('audit')->info('Bulk user status change (events bypassed)', [
+    'count' => $users->count(),
+    'actor_id' => auth()->id(),
+]);
 ```
 
 ## References
