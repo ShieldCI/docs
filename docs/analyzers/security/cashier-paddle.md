@@ -22,6 +22,9 @@ Validates Laravel Cashier Paddle integration security. Supports both Paddle Clas
 - Sandbox mode is not enabled in production
 - Vendor/seller ID and API key use `env()` rather than hardcoded values
 - Price IDs are stored in config/env rather than hardcoded in source (Controllers, Services, Actions, Livewire components)
+- Webhook secret (`webhook_secret`) is configured and not hardcoded or empty
+- Server-side Paddle credentials (API key, webhook secret) are not present in Blade, JS, Vue, or TypeScript frontend files
+- Return URL passed to `returnTo()` in checkout flows is not derived from user-controlled request input (open redirect prevention)
 
 ## Why It Matters
 
@@ -68,6 +71,7 @@ php artisan route:list --name=cashier
 # .env
 PADDLE_VENDOR_ID=your-vendor-id
 PADDLE_API_KEY=your-api-key
+PADDLE_WEBHOOK_SECRET=your-webhook-secret
 PADDLE_SANDBOX=false  # true only in development
 ```
 
@@ -84,11 +88,49 @@ return [
 $user->subscribe(config('pricing.monthly'));
 ```
 
+**4. Configure the webhook secret:**
+
+```php
+// config/cashier.php
+'webhook_secret' => env('PADDLE_WEBHOOK_SECRET'),
+```
+
+Copy the signing secret from your Paddle dashboard under **Developer Tools → Notifications → your endpoint → Secret key** and set it in `.env`:
+
+```env
+PADDLE_WEBHOOK_SECRET=pdl_ntfset_your_secret_here
+```
+
+**5. Keep server-side credentials out of frontend files:**
+
+Never place `api_key` or webhook secret values in Blade templates, JavaScript, Vue, or TypeScript files. Only client-side tokens belong in frontend code:
+
+```js
+// WRONG — exposes server key to browser
+const apiKey = 'live_pdl_api_abc123';
+
+// RIGHT — pass only what the client needs
+const clientToken = "{{ config('cashier.client_side_token') }}";
+```
+
+**6. Use a fixed route for `returnTo()` in checkout flows:**
+
+```php
+// WRONG — open redirect risk after payment
+return $request->user()->checkout('pri_monthly')
+    ->returnTo($request->input('next'));
+
+// RIGHT — always use an application-controlled route
+return $request->user()->checkout('pri_monthly')
+    ->returnTo(route('billing.success'));
+```
+
 ## References
 
 - [Laravel Cashier Paddle Documentation](https://laravel.com/docs/cashier-paddle)
 - [Paddle Webhook Verification](https://developer.paddle.com/webhooks/signature-verification)
 - [OWASP Payment Security](https://owasp.org/www-project-web-security-testing-guide/)
+- [OWASP Unvalidated Redirects and Forwards](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)
 
 ## Related Analyzers
 
