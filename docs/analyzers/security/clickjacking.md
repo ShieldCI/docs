@@ -16,11 +16,17 @@ pro: true
 ## What This Checks
 
 Detects missing clickjacking protection in Laravel applications. Validates that the application is protected from clickjacking attacks through one of these methods:
-- FrameGuard middleware (sets X-Frame-Options header)
-- Manual X-Frame-Options header configuration
-- Content-Security-Policy frame-ancestors directive
+- FrameGuard middleware (sets `X-Frame-Options: SAMEORIGIN` by default)
+- Manual `X-Frame-Options` header in middleware or service providers
+- Content-Security-Policy `frame-ancestors` directive in middleware, config, or service providers
+- `spatie/laravel-csp` package configuration with `frame-ancestors`
+- `bepsvpt/secure-headers` package configuration with X-Frame-Options or CSP
+- Server-level protection via `.htaccess` or `nginx.conf`
 
-Also detects deprecated ALLOW-FROM directive usage.
+Also detects and warns about:
+- Deprecated `ALLOW-FROM` directive (not supported by modern browsers)
+- Overly permissive `frame-ancestors *` wildcard (effectively disables protection)
+- `Content-Security-Policy-Report-Only` used without an enforcing policy (logs violations but does not block framing)
 
 ## Why It Matters
 
@@ -183,6 +189,8 @@ class SecurityHeaders
 }
 ```
 
+> **Browser compatibility note:** `Content-Security-Policy: frame-ancestors` is the modern standard and takes precedence in all current browsers. For maximum compatibility with legacy browsers (Internet Explorer), keep both `X-Frame-Options` and the CSP header — as shown above.
+
 **Option 4: Configuration-Based Approach**
 
 Store CSP configuration in a config file:
@@ -274,19 +282,31 @@ public function index()
 
 **Option 6: Environment-Based CSP Configuration**
 
+Store CSP values in a config file (never call `env()` directly in middleware — it returns `null` after `php artisan config:cache`):
+
 ```php
-// .env
+// config/security.php
+return [
+    'csp_frame_ancestors' => env('CSP_FRAME_ANCESTORS', "'self'"),
+    'csp_default_src' => env('CSP_DEFAULT_SRC', "'self'"),
+];
+```
+
+```env
+# .env
 CSP_FRAME_ANCESTORS="'self' https://trusted-partner.com"
 CSP_DEFAULT_SRC="'self'"
+```
 
+```php
 // app/Http/Middleware/SecurityHeaders.php
 public function handle(Request $request, Closure $next)
 {
     $response = $next($request);
 
-    // Build CSP from environment variables
-    $frameAncestors = env('CSP_FRAME_ANCESTORS', "'self'");
-    $defaultSrc = env('CSP_DEFAULT_SRC', "'self'");
+    // ✅ Read from config — works correctly after config:cache
+    $frameAncestors = config('security.csp_frame_ancestors', "'self'");
+    $defaultSrc = config('security.csp_default_src', "'self'");
 
     $csp = "default-src {$defaultSrc}; frame-ancestors {$frameAncestors}";
     $response->headers->set('Content-Security-Policy', $csp);
@@ -331,13 +351,18 @@ public function handle(Request $request, Closure $next)
 {
     $response = $next($request);
 
-    // Allow framing for widget/embed endpoints
+    // Allow framing from specific trusted origins for embed/widget routes
     if ($request->is('embed/*') || $request->is('widget/*')) {
-        // More permissive for embed routes
-        $response->headers->set('X-Frame-Options', 'SAMEORIGIN');
+        // ✅ CSP frame-ancestors for precise cross-origin control (ALLOW-FROM is deprecated)
+        $response->headers->set(
+            'Content-Security-Policy',
+            "frame-ancestors 'self' https://trusted-partner.com"
+        );
+        // Note: X-Frame-Options is omitted for embed routes to avoid conflicts
     } else {
-        // Strict for all other routes
+        // ✅ Strict for all other routes
         $response->headers->set('X-Frame-Options', 'DENY');
+        $response->headers->set('Content-Security-Policy', "frame-ancestors 'none'");
     }
 
     return $response;
@@ -346,7 +371,7 @@ public function handle(Request $request, Closure $next)
 
 ## References
 
-- [Laravel FrameGuard Middleware Documentation](https://laravel.com/docs/middleware#middleware-groups)
+- [Laravel FrameGuard Middleware](https://laravel.com/docs/middleware)
 - [MDN: X-Frame-Options](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 - [MDN: CSP frame-ancestors](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/frame-ancestors)
 - [OWASP Clickjacking Defense](https://cheatsheetseries.owasp.org/cheatsheets/Clickjacking_Defense_Cheat_Sheet.html)
