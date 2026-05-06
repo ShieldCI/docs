@@ -36,7 +36,7 @@ Specifically checks for:
 
 ## How to Fix
 
-### HandleCors — configure paths or disable
+### HandleCors - configure paths or disable
 
 The most common fix is to configure CORS properly rather than remove the middleware.
 
@@ -49,14 +49,14 @@ return [
 ];
 ```
 
-```php [Laravel 11+ — disable if not needed]
+```php [Laravel 11+ - disable if not needed]
 // bootstrap/app.php
 ->withMiddleware(function (Middleware $middleware): void {
     $middleware->remove(\Illuminate\Http\Middleware\HandleCors::class);
 })
 ```
 
-```php [Laravel 9–10 — remove from Kernel]
+```php [Laravel 9–10 - remove from Kernel]
 // app/Http/Kernel.php
 protected $middleware = [
     // Comment out or remove:
@@ -65,7 +65,7 @@ protected $middleware = [
 ```
 :::
 
-### TrustProxies — configure or remove (Laravel 9–10 only)
+### TrustProxies - configure or remove (Laravel 9–10 only)
 
 ::: code-group
 ```php [Configure proxies]
@@ -82,7 +82,7 @@ protected $middleware = [
 ```
 :::
 
-### TrustHosts — add TrustProxies or remove (Laravel 9–10 only)
+### TrustHosts - add TrustProxies or remove (Laravel 9–10 only)
 
 `TrustHosts` only works when `TrustProxies` is also registered and configured. Either configure `TrustProxies` alongside it, or remove both if you are not behind a proxy.
 

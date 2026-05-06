@@ -21,7 +21,7 @@ tags: permissions,filesystem,reliability,deployment,symlinks
 - Validates both relative and absolute paths from configuration
 - Reports all failed directories with actionable fix commands
 - Supports symlinked directories
-- Verifies storage symlinks exist (from `config('filesystems.links')`) — skipped automatically for API-only apps
+- Verifies storage symlinks exist (from `config('filesystems.links')`), skipped automatically for API-only apps
 - Detects broken symlinks (link exists but target doesn't)
 - Validates symlink targets are directories
 - Default: checks `public/storage` → `storage/app/public`
@@ -252,9 +252,9 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - Directory write permissions depend on the CI runner's OS and file system setup
 - Prevents misleading failures in pipelines where the deployment steps that create symlinks and set permissions have not yet run
 
-**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms — directory write permissions are managed by the platform and cannot be changed by the user.
+**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms (directory write permissions are managed by the platform and cannot be changed by the user).
 
-**API-only / Stateless applications:** Symlink checks are additionally skipped for API-only applications — symlinks are web-specific and not meaningful when the app serves no browser requests. Write-permission checks for `storage/` and `bootstrap/cache/` still run.
+**API-only / Stateless applications:** Symlink checks are additionally skipped for API-only applications, since symlinks are web-specific and not meaningful when the app serves no browser requests. Write-permission checks for `storage/` and `bootstrap/cache/` still run.
 
 **When to run this analyzer:**
 - ✅ **Local development**: Catches missing write permissions and broken symlinks before they cause runtime errors

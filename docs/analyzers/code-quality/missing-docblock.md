@@ -16,7 +16,7 @@ tags: documentation,maintainability,code-quality,readability
 
 - Detects public methods missing PHPDoc comments
 - Requires `@param` tags for parameters with **generic types** (array, iterable, object, mixed, callable) or no type hints
-- Requires `@return` tag for **generic return types** (array, mixed, iterable, callable, object) or unions containing them — not needed for scalars (void, string, int, bool, float), concrete class names, or unions of concrete classes
+- Requires `@return` tag for **generic return types** (array, mixed, iterable, callable, object) or unions containing them, not needed for scalars (void, string, int, bool, float), concrete class names, or unions of concrete classes
 - Requires `@throws` tags for exceptions (when applicable)
 - Excludes simple getter/setter methods (get*, set*, is*, has*)
 - Reports exact file location and line number of each issue
@@ -199,7 +199,7 @@ public function findUserByEmail(string $email): ?User
 }
 ```
 
-**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag is optional for concrete class names — `?User` is self-documenting. Including it (as shown) is encouraged for readability but will not be flagged if omitted.
+**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag is optional for concrete class names (`?User` is self-documenting). Including it (as shown) is encouraged for readability but will not be flagged if omitted.
 
 #### 6: Union Types of Concrete Classes
 
@@ -232,7 +232,7 @@ public function search(): string|array
 }
 ```
 
-**Note**: A PHP 8 union type of concrete classes (e.g., `Response|JsonResponse`) is fully enforced by the runtime — `@return` adds no information. A union containing a generic type (e.g., `string|array`) still requires `@return` to document the array shape. Adding a redundant `@return` to a concrete union would also conflict with Laravel Pint, which strips it as superfluous via the `no_superfluous_phpdoc_tags` rule.
+**Note**: A PHP 8 union type of concrete classes (e.g., `Response|JsonResponse`) is fully enforced by the runtime, so `@return` adds no information. A union containing a generic type (e.g., `string|array`) still requires `@return` to document the array shape. Adding a redundant `@return` to a concrete union would also conflict with Laravel Pint, which strips it as superfluous via the `no_superfluous_phpdoc_tags` rule.
 
 #### 7: Document Array Shapes
 

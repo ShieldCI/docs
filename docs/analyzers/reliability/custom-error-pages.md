@@ -162,7 +162,7 @@ This analyzer is automatically skipped for stateless/API-only applications.
 
 **Overriding the required template list**
 
-By default the analyzer requires all 7 templates. If your project only needs a subset you can restrict the list via config — no changes to the published `config/shieldci.php` are required:
+By default the analyzer requires all 7 templates. If your project only needs a subset you can restrict the list via config, with no changes to the published `config/shieldci.php` required:
 
 ```php
 // config/shieldci.php

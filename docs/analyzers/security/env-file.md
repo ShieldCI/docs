@@ -217,7 +217,7 @@ php artisan config:cache
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI environments intentionally do not have a `.env` file — secrets are injected via platform environment variables or secrets managers, not a committed file
+- CI environments intentionally do not have a `.env` file, since secrets are injected via platform environment variables or secrets managers, not a committed file
 - `.gitignore` configuration and committed-file checks are all moot or false-positive-prone when `.env` is absent by design
 - Prevents irrelevant failures in pipelines where the absence of `.env` is expected
 

@@ -25,7 +25,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - **Unclosed @php blocks**: Missing @endphp directives
 
 **Smart Detection Features:**
-- ✅ **Hybrid regex + AST analysis** — structural checks on raw Blade, logic detection via compiled PHP AST
+- ✅ **Hybrid regex + AST analysis** - structural checks on raw Blade, logic detection via compiled PHP AST
 - ✅ Distinguishes between presentation logic and business logic
 - ✅ Allows simple calculations (`{{ $price * $quantity }}`)
 - ✅ Excludes config/session/cache helper calls

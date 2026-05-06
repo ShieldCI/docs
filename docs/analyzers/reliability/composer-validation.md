@@ -51,7 +51,7 @@ composer validate --no-check-publish
 
 This analyzer runs in CI environments by default.
 
-**Serverless runtimes (Lambda, Cloud Functions):** On serverless platforms where the Composer binary is not installed, the `composer validate` subprocess is automatically skipped. JSON syntax validation still runs — the analyzer confirms `composer.json` is valid JSON and has the required structure without invoking the Composer CLI.
+**Serverless runtimes (Lambda, Cloud Functions):** On serverless platforms where the Composer binary is not installed, the `composer validate` subprocess is automatically skipped. JSON syntax validation still runs. The analyzer confirms `composer.json` is valid JSON and has the required structure without invoking the Composer CLI.
 
 **When to run this analyzer:**
 - ✅ **Local development**: Confirms `composer.json` is schema-valid before pushing

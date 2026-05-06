@@ -71,6 +71,6 @@ Model::reguard();
 
 ## Related Analyzers
 
-- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) — detects missing `$fillable`/`$guarded` definitions.
-- [Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key) — ensures relationship IDs aren't mass assignable.
-- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) — keeps your vendor libraries on predictable, secure releases.
+- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) - detects missing `$fillable`/`$guarded` definitions.
+- [Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key) - ensures relationship IDs aren't mass assignable.
+- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) - keeps your vendor libraries on predictable, secure releases.

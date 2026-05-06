@@ -1,6 +1,6 @@
 ---
 title: Static code analysis for Laravel
-description: ShieldCI is a static code analysis platform for Laravel — 73 purpose-built analyzers across security, performance, reliability, code quality, and best practices.
+description: ShieldCI is a static code analysis platform for Laravel with 73 purpose-built analyzers across security, performance, reliability, code quality, and best practices.
 tags: laravel,code-analysis,security,performance,static-analysis,ci-cd,code-quality,vulnerability-scanner
 layout: home
 

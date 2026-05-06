@@ -68,7 +68,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - CI environments commonly use the `sync` or `database` driver for simplicity, which would trigger false warnings
 - Driver choice is a deployment concern, not a code-correctness concern that CI should gate on
 
-**Testing environment note:** When `APP_ENV=testing`, the `database` driver warning is also suppressed at the check level — `testing` is treated the same as `local` for this driver.
+**Testing environment note:** When `APP_ENV=testing`, the `database` driver warning is also suppressed at the check level (`testing` is treated the same as `local` for this driver).
 
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures your queue driver is set up for realistic job processing

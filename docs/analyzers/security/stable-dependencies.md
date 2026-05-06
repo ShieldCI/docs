@@ -25,7 +25,7 @@ tags: dependencies,composer,stability,versions,production
 
 - **Installed package verification**:
   - Parses `composer.lock` (both `packages` and `packages-dev`) for installed unstable versions
-  - Executes `composer update --dry-run --prefer-stable` to detect if updates would change packages — this subprocess is **skipped** when `prefer-stable: true` is already set in `composer.json`, since the flag would have no additional effect on resolution
+  - Executes `composer update --dry-run --prefer-stable` to detect if updates would change packages (this subprocess is **skipped** when `prefer-stable: true` is already set in `composer.json`, since the flag would have no additional effect on resolution)
   - Uses locale-independent pattern matching (works with non-English Composer output)
 
 ## Why It Matters
@@ -175,5 +175,5 @@ With strict mode enabled, missing `minimum-stability` will be flagged with **Low
 
 ## Related Analyzers
 
-- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — scans npm/yarn lock files for known CVEs.
-- [Dependency License Compliance Analyzer](/analyzers/security/license-compliance) — validates OSS license requirements for all dependencies.
+- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - scans npm/yarn lock files for known CVEs.
+- [Dependency License Compliance Analyzer](/analyzers/security/license-compliance) - validates OSS license requirements for all dependencies.

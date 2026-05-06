@@ -24,7 +24,7 @@ tags: database,infrastructure,reliability,availability
 ## Why It Matters
 
 - **Data integrity**: Applications cannot read/write data if database connections fail; users see cryptic errors or white screens
-- **Deployment surprises**: Misconfigured database hosts, credentials, or firewall rules show up only at runtime—this analyzer surfaces them before production deploys
+- **Deployment surprises**: Misconfigured database hosts, credentials, or firewall rules show up only at runtime. This analyzer surfaces them before production deploys
 - **Multi-tenant environments**: Applications using multiple database connections (tenant isolation, read replicas) need all connections validated
 - **Silent failures**: Laravel's lazy connection means errors only appear when queries execute, potentially deep in the request lifecycle
 

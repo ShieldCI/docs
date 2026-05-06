@@ -60,7 +60,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - CI environments typically use the `array` or `file` session driver, which would trigger false warnings
 - Session driver choice is a deployment concern that doesn't need to be gated in CI
 
-**API-only / Stateless applications:** This analyzer is also skipped for stateless applications — detected via middleware analysis. If your app has no session middleware registered, session driver checks do not apply.
+**API-only / Stateless applications:** This analyzer is also skipped for stateless applications (detected via middleware analysis). If your app has no session middleware registered, session driver checks do not apply.
 
 **When to run this analyzer:**
 - ✅ **Local development**: Confirms your session driver matches your production setup

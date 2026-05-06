@@ -60,6 +60,6 @@ composer update
 
 ## Related Analyzers
 
-- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) — ensures you stick to stable tagged releases.
-- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) — keeps npm/yarn packages patched.
-- [Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies) — scans composer.lock for known CVEs.
+- [Stable Dependencies Analyzer](/analyzers/security/stable-dependencies) - ensures you stick to stable tagged releases.
+- [Frontend Vulnerable Dependencies Analyzer](/analyzers/security/frontend-vulnerable-dependencies) - keeps npm/yarn packages patched.
+- [Vulnerable Dependencies Analyzer](/analyzers/security/vulnerable-dependencies) - scans composer.lock for known CVEs.

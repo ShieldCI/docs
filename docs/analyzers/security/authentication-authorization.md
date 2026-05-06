@@ -80,7 +80,7 @@ public function show()
 
 **Option 1: Protect with auth middleware (recommended)**
 
-When the enclosing controller method is protected by auth middleware — either at the route level or via the controller constructor — the analyzer understands this context and will **not** flag direct property access:
+When the enclosing controller method is protected by auth middleware (either at the route level or via the controller constructor), the analyzer understands this context and will **not** flag direct property access:
 
 ```php
 // Route-level middleware
@@ -116,7 +116,7 @@ public function show()
 
 **Scenario 4: FormRequest With Unconditional Authorization**
 
-The analyzer flags `FormRequest::authorize()` methods that return `true` unconditionally, meaning _any_ user — including unauthenticated ones — can submit the form. This is only flagged when the FormRequest is injected into a sensitive, unprotected controller action; orphaned FormRequests and those used in auth-gated actions are skipped.
+The analyzer flags `FormRequest::authorize()` methods that return `true` unconditionally, meaning _any_ user (including unauthenticated ones) can submit the form. This is only flagged when the FormRequest is injected into a sensitive, unprotected controller action; orphaned FormRequests and those used in auth-gated actions are skipped.
 
 ```php
 // BAD - Anyone can submit, no real authorization check
@@ -161,7 +161,7 @@ class UpdatePostRequest extends FormRequest
 ```
 
 ::: tip
-If the controller action is already protected by `auth` middleware, the FormRequest `authorize()` returning `true` is not flagged — the middleware already guarantees the user is authenticated. The flag only appears when there is no surrounding auth context.
+If the controller action is already protected by `auth` middleware, the FormRequest `authorize()` returning `true` is not flagged (the middleware already guarantees the user is authenticated). The flag only appears when there is no surrounding auth context.
 :::
 
 ### Proper Fix (25 minutes)
@@ -375,7 +375,7 @@ By default, the analyzer recognizes these exact public route paths and skips the
 
 `/login`, `/register`, `/password/reset`, `/password/email`, `/forgot-password`, `/reset-password`, `/email/verify`, `/health`, `/status`, `/up`
 
-Each entry is an **exact path** — `/login` matches only `Route::post('/login', ...)`, not `/auth/login` or `/api/v1/login`.
+Each entry is an **exact path**: `/login` matches only `Route::post('/login', ...)`, not `/auth/login` or `/api/v1/login`.
 
 To add custom public routes, publish the config and add exact paths to the `public_routes` array:
 
@@ -411,12 +411,12 @@ Each entry must be an exact route path starting with `/`. For example, `/webhook
 
 The analyzer automatically detects custom middleware classes used via `->middleware(YourMiddleware::class)`. It introspects the middleware source file for authentication signals:
 
-- `$request->bearerToken()` — bearer token extraction
-- `$request->getPassword()` — HTTP Basic Auth password extraction
-- `AuthenticationException` — Laravel's auth exception
-- `AuthenticatesRequests` — Laravel's auth interface
-- `Illuminate\Contracts\Auth\Factory` — Auth factory injection
-- `Auth $auth` — Auth factory injected via constructor type-hint
+- `$request->bearerToken()` - bearer token extraction
+- `$request->getPassword()` - HTTP Basic Auth password extraction
+- `AuthenticationException` - Laravel's auth exception
+- `AuthenticatesRequests` - Laravel's auth interface
+- `Illuminate\Contracts\Auth\Factory` - Auth factory injection
+- `Auth $auth` - Auth factory injected via constructor type-hint
 
 ```php
 // This route will NOT be flagged — ValidateApiToken uses bearerToken()
