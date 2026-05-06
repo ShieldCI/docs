@@ -39,7 +39,7 @@ Clickjacking (also known as "UI redressing") occurs when an attacker embeds your
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (2 minutes)
 
 **Laravel 10+ (Using bootstrap/app.php)**
 
