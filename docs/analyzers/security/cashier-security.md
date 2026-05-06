@@ -18,10 +18,14 @@ pro: true
 Validates Laravel Cashier Stripe integration security. Checks for:
 
 - Webhook routes verify signatures via `VerifyWebhookSignature` middleware
-- `STRIPE_WEBHOOK_SECRET` is configured
-- `IncompletePaymentException` is handled for subscribe/charge calls
-- No Stripe secret keys (`sk_live_`, `sk_test_`) in Blade/JS files
-- Cashier migrations are published and customized
+- `STRIPE_WEBHOOK_SECRET` is configured with a valid webhook signing secret (`whsec_*`)
+- `STRIPE_WEBHOOK_SECRET` is not accidentally set to an API key (`sk_*`, `pk_*`, or `rk_*`)
+- `IncompletePaymentException` is handled for subscribe/charge/newSubscription calls
+- No Stripe secret keys (`sk_live_`, `sk_test_`) or restricted keys (`rk_*`) in Blade/JS/TS files
+- No Stripe secret or restricted keys hardcoded in PHP config or source files
+- Checkout and billing portal redirect URLs are not derived from user-controlled request input
+- Payment fulfillment does not trust client-side success redirect params without server-side Stripe verification
+- Cashier migrations are published and reviewed for your billing model
 
 ## Why It Matters
 
@@ -78,6 +82,60 @@ try {
 
 ```bash
 php artisan vendor:publish --tag=cashier-migrations
+```
+
+**4. Use the correct webhook signing secret format:**
+
+```env
+# CORRECT — webhook signing secret from Stripe Dashboard → Webhooks → Signing secret
+STRIPE_WEBHOOK_SECRET=whsec_your_signing_secret_here
+
+# WRONG — these will be flagged as Critical issues
+STRIPE_WEBHOOK_SECRET=sk_live_xxxxx    # API secret key
+STRIPE_WEBHOOK_SECRET=pk_live_xxxxx    # Publishable key
+STRIPE_WEBHOOK_SECRET=rk_live_xxxxx    # Restricted key
+```
+
+**5. Use fixed routes for checkout redirect URLs:**
+
+```php
+// WRONG — user-controlled URL is an open redirect risk
+return $request->user()->checkout('price_monthly', [
+    'success_url' => $request->input('return_to'),  // ❌ user input
+]);
+
+// CORRECT — fixed application route
+return $request->user()->checkout('price_monthly', [
+    'success_url' => route('billing.success'),       // ✅ fixed route
+    'cancel_url'  => route('billing'),
+]);
+```
+
+**6. Verify payments server-side before fulfilling orders:**
+
+```php
+// WRONG — trusting client-side redirect params for fulfillment
+public function success(Request $request)
+{
+    $paymentIntentId = $request->input('payment_intent');
+    Order::where('stripe_payment_id', $paymentIntentId)
+        ->update(['status' => 'paid']); // ❌ no verification
+}
+
+// CORRECT — verify via Stripe API before fulfilling
+public function success(Request $request)
+{
+    $intent = \Stripe\PaymentIntent::retrieve(
+        $request->input('payment_intent')
+    );
+
+    if ($intent->status === 'succeeded') {
+        Order::where('stripe_payment_id', $intent->id)
+            ->update(['status' => 'paid']); // ✅ verified
+    }
+}
+
+// BEST — use verified webhook events instead of success URL callbacks
 ```
 
 ## References
