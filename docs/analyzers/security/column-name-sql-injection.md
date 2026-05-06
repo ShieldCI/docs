@@ -17,16 +17,29 @@ pro: true
 
 Detects SQL injection vulnerabilities where user input controls column names in Laravel database queries. PDO does not support binding column names, only values, making column name injection a unique and dangerous vulnerability.
 
-**Covered methods (6 total):**
-- `orderBy`, `orderByDesc` - Position-aware detection (only flags 1st argument)
-- `select`, `addSelect` - Any request usage flagged
-- `groupBy` - Any request usage flagged
-- `pluck` - Any request usage flagged
+**Covered methods (14 + joins):**
+
+Column name methods (first argument checked):
+- `orderBy`, `orderByDesc` — column name in first argument
+- `select`, `addSelect` — any request usage flagged
+- `groupBy` — any request usage flagged
+- `pluck` — first argument and second argument (`$key` column) checked
+- `where`, `whereColumn` — first argument (column name) checked
+- `latest`, `oldest`, `reorder` — column name argument checked
+- `value` — column name argument checked
+- `having`, `orHaving` — first argument (column name) checked
+
+Join methods (second and fourth arguments checked):
+- `join`, `leftJoin`, `rightJoin` — `$first` and `$second` column args in ON clause
+
+Additional detection:
+- `when()` closures — detects user input inside closures including concatenated input (`$prefix . $request->sort`)
 
 **Excluded from detection:**
-- `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`) - Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
-- `having()`, `havingRaw()` - Often operate on aggregates (COUNT, SUM), high false-positive rate
-- `value()` - Typically uses hardcoded column names, low real-world risk
+- `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`, `havingRaw`) — Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
+
+**Allowlist suppression:**
+- A file containing `in_array($var, $allowed, true)` (strict comparison) is treated as allowlist-validated and skipped. For per-line suppression, add `// @shieldci-ignore` on the affected line.
 
 ## Why It Matters
 
@@ -61,7 +74,7 @@ class UserController extends Controller
         $allowedColumns = ['name', 'email', 'created_at'];
         $sortColumn = $request->input('sort', 'created_at');
 
-        if (!in_array($sortColumn, $allowedColumns)) {
+        if (!in_array($sortColumn, $allowedColumns, true)) {
             $sortColumn = 'created_at';
         }
 
@@ -161,7 +174,7 @@ class UserController extends Controller
 
         // Optional: Whitelist allowed columns even after schema check
         $allowedColumns = ['name', 'email', 'created_at'];
-        if (!in_array($sortColumn, $allowedColumns)) {
+        if (!in_array($sortColumn, $allowedColumns, true)) {
             abort(400, 'Column not allowed for sorting');
         }
 
