@@ -321,7 +321,7 @@ Options:
 
 **CI Mode:**
 
-Activate via the `--ci` flag — no config key or environment variable needed:
+Activate via the `--ci` flag. No config key or environment variable needed:
 ```bash
 php artisan shield:analyze --ci
 ```
@@ -550,7 +550,7 @@ $result = DB::select("SELECT * FROM users"); // @shieldci-ignore sql-injection
 public function boot(): void { ... }
 ```
 
-**Inside an existing docblock** (most common — no need to add a separate comment):
+**Inside an existing docblock** (most common - no need to add a separate comment):
 ```php
 /**
  * @param string $name

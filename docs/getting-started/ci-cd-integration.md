@@ -313,7 +313,7 @@ jobs:
 
 - **Security** issues pose immediate risk (exploits, data breaches) and should block *any* branch from being deployed or merged accidentally
 - **Performance/Reliability** issues affect production quality but are most relevant when code is about to be deployed (PRs targeting main, or the main branch itself)
-- **Code Quality/Best Practices** issues are about maintainability, not immediate risk—they're most actionable during code review when someone is actively looking at the changes
+- **Code Quality/Best Practices** issues are about maintainability, not immediate risk. They're most actionable during code review when someone is actively looking at the changes
 - Running all checks on every push to every branch adds CI time/cost with diminishing returns for WIP feature branches
 
 ::: tip Simplified Alternative

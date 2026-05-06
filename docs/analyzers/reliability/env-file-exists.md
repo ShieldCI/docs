@@ -186,7 +186,7 @@ php artisan key:generate
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI environments typically do not have a `.env` file — secrets are injected via environment variables or CI platform secrets, not a committed file
+- CI environments typically do not have a `.env` file, since secrets are injected via environment variables or CI platform secrets, not a committed file
 - `.env` presence and readability depend on how the CI runner is set up
 - Prevents false failures in pipelines where the absence of `.env` is expected and intentional
 

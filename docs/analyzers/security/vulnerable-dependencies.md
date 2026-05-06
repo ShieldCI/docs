@@ -21,7 +21,7 @@ tags: dependencies,composer,vulnerabilities,cve,security
 
 ## Why It Matters
 
-- **Actively exploited CVEs**: Packagist libraries receive coordinated disclosures—ignoring them leads to remote code execution, SQL injection, or privilege escalation.
+- **Actively exploited CVEs**: Packagist libraries receive coordinated disclosures, and ignoring them leads to remote code execution, SQL injection, or privilege escalation.
 - **Transitive exposure**: You may not be aware of a vulnerable subdependency; OSV catches both direct and transitive hits because it analyzes the lock file.
 - **Abandoned libraries**: Packages without maintainers never receive patches, forcing you to fork or replace them before a vulnerability is published.
 - **Compliance**: Security questionnaires often require proof that you monitor upstream CVEs; this analyzer produces that evidence.

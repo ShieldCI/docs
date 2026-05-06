@@ -22,7 +22,7 @@ tags: cache,infrastructure,reliability,availability
 ## Why It Matters
 
 - **Session stability**: Laravel sessions, rate limiters, and queues often depend on Redis/Memcached; if cache is offline, user logins fail silently
-- **Deployment surprises**: Misconfigured cache hosts or credentials show up only at runtime—this analyzer surfaces them before production deploys
+- **Deployment surprises**: Misconfigured cache hosts or credentials show up only at runtime. This analyzer surfaces them before production deploys
 - **Shared environments**: Platform-as-a-service providers require explicit configuration; forgetting a prefix or host leads to cross-tenant leaks
 
 ## How to Fix

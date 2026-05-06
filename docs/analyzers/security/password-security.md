@@ -16,18 +16,18 @@ tags: password,hashing,bcrypt,argon2,security,policy,validation,rehash
 
 Validates password hashing configuration, code-level hashing practices, password policy enforcement, and rehash usage across your Laravel application:
 
-- **Weak hashing drivers** — MD5, SHA1, or SHA256 configured in `config/hashing.php`
-- **Insufficient bcrypt/Argon2 parameters** — bcrypt rounds below 12, weak Argon2 memory/time/threads
-- **Weak hashing in code** — `md5()`, `sha1()`, `hash()`, or `password_hash()` with weak algorithms on password arguments
-- **Plain-text password storage** — password assignments and Eloquent/DB calls that store unhashed input
-- **Missing password policy** — no `Password::defaults()` in service providers, or missing length/complexity/breach checks
-- **Weak validation rules** — password fields with minimum length below 8 in Form Requests or Controllers
-- **Long confirmation timeout** — `password_timeout` in `config/auth.php` exceeding 3 hours
-- **Missing rehash on login** — no `Hash::needsRehash()` usage or `rehash_on_login` disabled in hashing config
+- **Weak hashing drivers** - MD5, SHA1, or SHA256 configured in `config/hashing.php`
+- **Insufficient bcrypt/Argon2 parameters** - bcrypt rounds below 12, weak Argon2 memory/time/threads
+- **Weak hashing in code** - `md5()`, `sha1()`, `hash()`, or `password_hash()` with weak algorithms on password arguments
+- **Plain-text password storage** - password assignments and Eloquent/DB calls that store unhashed input
+- **Missing password policy** - no `Password::defaults()` in service providers, or missing length/complexity/breach checks
+- **Weak validation rules** - password fields with minimum length below 8 in Form Requests or Controllers
+- **Long confirmation timeout** - `password_timeout` in `config/auth.php` exceeding 3 hours
+- **Missing rehash on login** - no `Hash::needsRehash()` usage or `rehash_on_login` disabled in hashing config
 
 ## Why It Matters
 
-- **Breach Impact**: Weak hashing lets attackers crack passwords in seconds — LinkedIn (2012) saw 90% of 6.5 M SHA1 hashes cracked in hours
+- **Breach Impact**: Weak hashing lets attackers crack passwords in seconds. LinkedIn (2012) saw 90% of 6.5 M SHA1 hashes cracked in hours
 - **Plain-Text Catastrophe**: Storing raw passwords means a single database leak exposes every credential with zero effort
 - **Weak Policies**: Short or simple passwords are the first to fall in credential-stuffing and dictionary attacks
 - **Compliance**: OWASP, PCI DSS, and NIST SP 800-63B all mandate strong hashing (bcrypt 12+/Argon2id) and minimum password complexity

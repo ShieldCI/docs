@@ -45,7 +45,7 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 
 ### Proper Fix (30 minutes)
 
-1. **Audit templates**: Identify components, slots, and Livewire views that use <code v-pre>{!! !!}</code> or raw echoes—replace with escaped output or whitelist sanitized HTML only where required.
+1. **Audit templates**: Identify components, slots, and Livewire views that use <code v-pre>{!! !!}</code> or raw echoes; replace with escaped output or whitelist sanitized HTML only where required.
 2. **Centralize escaping**: Use form requests or DTOs to normalize/sanitize inputs before they hit the view layer.
 3. **Enforce CSP**: Add a middleware (e.g., `SetSecurityHeaders`) that sets `Content-Security-Policy` without `unsafe-inline`/`unsafe-eval`; use nonces or hashes for required inline scripts.
 4. **Add tests**: Write feature tests ensuring responses include the CSP header and that critical templates escape user-controlled content.

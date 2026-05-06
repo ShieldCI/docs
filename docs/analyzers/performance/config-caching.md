@@ -179,7 +179,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - CI pipelines may run with uncached config for test flexibility
 - Prevents false failures when CI environments legitimately skip config caching
 
-**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms — config is always cached by the platform regardless of the environment value, so the check is not meaningful there.
+**Laravel Vapor / Serverless:** This analyzer is automatically skipped on Laravel Vapor and other serverless platforms (config is always cached by the platform regardless of the environment value, so the check is not meaningful there).
 
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures you haven't accidentally cached config locally

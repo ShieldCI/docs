@@ -30,10 +30,10 @@ The Silent Failure Analyzer identifies four dangerous error handling patterns th
    - Silently fails without any trace
 
 3. **Broad Exception Catch Without Logging** (High/Medium Severity)
-   - `catch (\Throwable $e) { ... }` — catching `Throwable`, `Exception`, or `Error` is overly broad and can mask fatal programming errors like `TypeError` or `ArgumentCountError`
-   - **High** — no logging at all (genuinely silent failure)
-   - **Medium** — logging present but exception variable unused (error details are lost)
-   - Not flagged when logging is present **and** the exception variable is used (e.g. `Log::error('...', ['error' => $e->getMessage()])`) — this is considered well-handled
+   - `catch (\Throwable $e) { ... }` - catching `Throwable`, `Exception`, or `Error` is overly broad and can mask fatal programming errors like `TypeError` or `ArgumentCountError`
+   - **High** - no logging at all (genuinely silent failure)
+   - **Medium** - logging present but exception variable unused (error details are lost)
+   - Not flagged when logging is present **and** the exception variable is used (e.g. `Log::error('...', ['error' => $e->getMessage()])`) - this is considered well-handled
 
 4. **Error Suppression Operator** (High/Medium Severity)
    - `@file_get_contents($path)` - Hides all errors and warnings

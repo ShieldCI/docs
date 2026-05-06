@@ -149,7 +149,7 @@ git push origin main
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI runners do not check out `.env` (it is gitignored) — the analyzer would warn on every pipeline run for a missing file that is intentionally absent
+- CI runners do not check out `.env` (it is gitignored); the analyzer would warn on every pipeline run for a missing file that is intentionally absent
 - Documentation completeness of `.env.example` is a developer workflow concern, not a CI gate
 - The companion check ([Environment Variables Complete](/analyzers/reliability/env-variables-complete)) is also skipped in CI for the same reason
 

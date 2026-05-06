@@ -117,7 +117,7 @@ echo "NEW_SERVICE_URL=https://example.com" >> .env.example
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why skip in CI?**
-- CI runners inject secrets via environment variables or a secrets manager — a `.env` file is intentionally absent
+- CI runners inject secrets via environment variables or a secrets manager, so a `.env` file is intentionally absent
 - Flagging a missing `.env` as Critical in CI would be a false positive on every pipeline run
 - The check is meaningful only where a `.env` file is expected to be manually maintained
 
