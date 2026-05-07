@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID         | Category     | Severity   | Time To Fix  |
 | ------------------- | :----------: |:----------:| ------------:|
-| `command-injection` | 🛡️ Security  | High       | 5 minutes    |
+| `command-injection` | 🛡️ Security  | Critical   | 30 minutes   |
 
 ## What This Checks
 
@@ -31,8 +31,13 @@ This analyzer detects command injection vulnerabilities in your Laravel applicat
 #### Shell Operators (1)
 - **Backtick operator** (\`cmd\`) - Executes shell command (often overlooked!)
 
-#### Process Classes (1)
-- **Symfony Process** - Laravel's wrapper for shell commands
+#### Laravel APIs
+- **Process facade**: `Process::run()`, `::command()`, `::pipe()`, `::pool()`, `::start()` with string commands
+- **process() helper** (Laravel 10+): `process($cmd)` with a string command
+- **Artisan facade**: `Artisan::call()` / `::queue()` — Critical if command name is user-controlled, Medium if only parameters are
+
+#### Symfony Process Component
+- `new Process($cmd)` instantiated with a string command
 
 
 ::: tip What's NOT Flagged
@@ -84,7 +89,7 @@ public function processFile(Request $request)
 }
 ```
 
-### Proper Fix (15 minutes)
+### Proper Fix (30 minutes)
 
 **Avoid shell execution entirely** - Use PHP native functions:
 
