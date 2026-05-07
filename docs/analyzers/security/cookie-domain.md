@@ -86,8 +86,6 @@ return [
 ];
 ```
 
-### When Domain Configuration IS Appropriate
-
 **Only set `session.domain` when you have legitimate subdomain routing:**
 
 ```php
