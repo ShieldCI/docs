@@ -11,42 +11,21 @@ pro: true
 
 | Analyzer ID              | Category     | Severity   | Time To Fix  |
 | ------------------------ | :----------: |:----------:| ------------:|
-| `cryptographic-weakness` | 🛡️ Security  | High       | 30 minutes   |
+| `cryptographic-weakness` | 🛡️ Security  | Critical   | 30 minutes   |
 
 ## What This Checks
 
-This analyzer detects weak cryptographic algorithms, insecure encryption ciphers, dangerous block cipher modes, and non-cryptographic random number generators in your Laravel application.
+Detects weak cryptographic algorithms, insecure cipher usage, and unsafe implementations in PHP code. Checks for:
 
-**Detected Vulnerable Patterns:**
-
-#### Weak Hash Functions (3)
-- `md5()` - MD5 is cryptographically broken (collision attacks demonstrated)
-- `sha1()` - SHA1 is deprecated and vulnerable to collision attacks
-- `crc32()` - CRC32 is a checksum, not cryptographically secure
-
-#### Weak Encryption Ciphers (5)
-- `DES` / `3DES` - Data Encryption Standard is obsolete and easily cracked
-- `RC2` - Vulnerable to related-key attacks
-- `RC4` - Multiple known vulnerabilities, prohibited in TLS
-- `BLOWFISH` - Block size too small for modern security requirements
-
-#### Insecure Block Cipher Modes (1)
-- `ECB` (Electronic Codebook) - Identical plaintext blocks produce identical ciphertext (pattern leakage)
-
-#### Weak Random Number Generators (4)
-- `rand()` - Predictable pseudo-random number generator
-- `mt_rand()` - Mersenne Twister is not cryptographically secure
-- `srand()` - Seeding non-cryptographic PRNG
-- `mt_srand()` - Seeding Mersenne Twister PRNG
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- `password_hash()` / `password_verify()` with bcrypt or Argon2
-- `hash_hmac()` with SHA-256 or stronger algorithms
-- `openssl_encrypt()` with AES-256-GCM or ChaCha20-Poly1305
-- `random_bytes()` / `random_int()` for cryptographically secure random numbers
-- Laravel's `Hash::make()` and `Crypt::encrypt()` facades
-:::
+- Direct use of `md5()`, `sha1()`, or `crc32()` in a security context (cache keys and ETags are excluded)
+- `hash()` or `hash_hmac()` called with a weak first-argument algorithm: `md5`, `md4`, `md2`, `sha1`, `crc32`, `crc32b`
+- Weak ciphers in `openssl_encrypt()` / `openssl_decrypt()`: `DES`, `3DES`, `RC2`, `RC4`, `BF-*` (Blowfish)
+- `ECB` mode in any cipher string — identical plaintext blocks produce identical ciphertext
+- Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` — IVs must be random per encryption
+- Deprecated `mcrypt_*` functions (`mcrypt_encrypt`, `mcrypt_decrypt`, `mcrypt_cbc`, `mcrypt_cfb`, `mcrypt_ecb`, `mcrypt_ofb`) removed in PHP 7.2
+- Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` — none provide cryptographic randomness
+- `===` / `==` comparison of hash or HMAC output — vulnerable to timing side-channel attacks
+- Non-cryptographic random functions: `rand()`, `mt_rand()`, `srand()`, `mt_srand()`
 
 ## Why It Matters
 
