@@ -15,37 +15,15 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects dangerous usage of PHP's `extract()` function, which imports variables from an array into the current symbol table and can lead to variable overwriting attacks.
+Detects dangerous usage of PHP's `extract()` function and related scope-polluting functions that import variables from an array into the current symbol table. Checks for:
 
-**Detected Vulnerable Patterns:**
-
-#### extract() with User Input (Critical)
-- `extract($_GET)` - Imports all GET parameters as variables
-- `extract($_POST)` - Imports all POST parameters as variables
-- `extract($_REQUEST)` - Imports all request parameters as variables
-- `extract($_COOKIE)` - Imports all cookies as variables
-- `extract($request->all())` - Imports all Laravel request data
-- `extract(request()->all())` - Imports via request helper
-- `extract(Request::all())` - Imports via Request facade
-
-#### extract() without Safe Flags (High)
-- `extract($data)` - Single-argument extract without protection flags
-- Any `extract()` call missing `EXTR_SKIP`, `EXTR_IF_EXISTS`, `EXTR_PREFIX_ALL`, `EXTR_PREFIX_SAME`, or `EXTR_PREFIX_INVALID`
-
-#### extract() with EXTR_OVERWRITE (Critical)
-- `extract($data, EXTR_OVERWRITE)` - Explicitly allows overwriting existing variables
-
-#### compact() with User Data (Medium)
-- `compact($request->input('keys'))` - Variable names from user input
-- `compact(...$userKeys)` - Spread operator with user-controlled keys
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- `extract($data, EXTR_SKIP)` - Only imports new variables, never overwrites
-- `extract($data, EXTR_IF_EXISTS)` - Only updates existing variables
-- `extract($data, EXTR_PREFIX_ALL, 'prefix')` - All variables are prefixed
-- Lines that are comments (single-line, multi-line, or docblock)
-:::
+- `extract()` called with direct user input (`$_GET`, `$_POST`, `$request->all()`, `Request::all()`)
+- `extract()` called with a variable tainted by user input (`$data = $request->all(); extract($data)`)
+- `extract()` called without safe flags — missing `EXTR_SKIP`, `EXTR_IF_EXISTS`, `EXTR_PREFIX_ALL`, `EXTR_PREFIX_SAME`, or `EXTR_PREFIX_INVALID`
+- `extract()` called with dangerous flags — `EXTR_OVERWRITE`, `EXTR_REFS`, or BitOr combinations
+- `compact()` called with user-controlled variable names or a spread operator
+- `parse_str()` called without a result argument (imports variables directly into scope)
+- `parse_str()` called with user input as the first argument
 
 ## Why It Matters
 
@@ -57,15 +35,6 @@ The `extract()` function is one of the most dangerous built-in PHP functions bec
 - **Authorization Bypass** - Overwrite permission flags and role checks
 - **Logic Manipulation** - Change control flow by overwriting boolean flags
 - **Session Hijacking** - Overwrite session-related variables
-
-```php
-// Classic vulnerability demonstration:
-$isAdmin = false;
-extract($_GET); // Attacker sends ?isAdmin=1
-if ($isAdmin) {
-    // Attacker now has admin access!
-}
-```
 
 ## How to Fix
 
@@ -200,6 +169,27 @@ public function exportData(Request $request)
 }
 ```
 
+**Fix parse_str() usage:**
+
+**Before (❌):**
+```php
+// VULNERABLE: imports variables directly into the current scope
+parse_str($_GET['filter']);
+// $name, $sort, $order are now global variables from user input!
+```
+
+**After (✅):**
+```php
+// SAFE: result goes into an isolated array
+parse_str($_GET['filter'], $params);
+
+// Validate before use
+$allowedSort = ['name', 'email', 'created_at'];
+$sort = in_array($params['sort'] ?? '', $allowedSort, true)
+    ? $params['sort']
+    : 'name';
+```
+
 
 ## References
 
@@ -207,7 +197,6 @@ public function exportData(Request $request)
 - [CWE-621: Variable Extraction Error](https://cwe.mitre.org/data/definitions/621.html)
 - [CWE-473: PHP External Variable Modification](https://cwe.mitre.org/data/definitions/473.html)
 - [OWASP PHP Security Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/PHP_Configuration_Cheat_Sheet.html)
-- [PHP Internals - extract() Considered Harmful](https://wiki.php.net/rfc/deprecations_php_8_1)
 
 ## Related Analyzers
 
