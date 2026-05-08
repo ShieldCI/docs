@@ -15,7 +15,7 @@ const algoliaAskAiId = env.ALGOLIA_ASK_AI_ID || ''
 
 export default defineConfig({
     title: 'ShieldCI',
-    description: 'AI-powered comprehensive code analysis for Laravel applications',
+    description: 'Automated code analysis for Laravel applications — 73 analyzers covering security, performance, reliability, best practices, and code quality.',
 
     // Source directory
     srcDir: 'docs',
@@ -65,7 +65,7 @@ export default defineConfig({
     transformHead({ pageData }) {
         const head: HeadConfig[] = []
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
-        const description = pageData.frontmatter.description || 'Comprehensive security and performance analysis for Laravel applications'
+        const description = pageData.frontmatter.description || 'Automated code analysis for Laravel applications — security, performance, reliability, best practices, and code quality.'
         const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
 
