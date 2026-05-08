@@ -1,7 +1,7 @@
 ---
 title: Directory Traversal Analyzer
 description: Detects path traversal vulnerabilities where user input can access files outside intended directories via file operations, includes, and Laravel Storage
-icon: folder
+icon: folder-open
 outline: [2, 3]
 tags: directory-traversal,path-traversal,file-access,security,lfi
 pro: true
@@ -15,54 +15,36 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects path traversal vulnerabilities where user input is used to construct file paths without proper validation, allowing attackers to access files outside the intended directory using sequences like `../`.
+This analyzer detects path traversal vulnerabilities where user input constructs file paths without proper validation, allowing attackers to escape intended directories using sequences like `../`.
 
 **Detected Vulnerable Patterns:**
 
-#### File Operations (11)
-- `fopen()` - Opening files with user-controlled paths
-- `file_get_contents()` - Reading files with user input
-- `file_put_contents()` - Writing files to user-controlled locations
-- `readfile()` - Outputting files with traversal risk
-- `file()` - Reading files into arrays
-- `unlink()` - Deleting files with user-controlled paths
-- `rmdir()` - Removing directories with user input
-- `rename()` - Renaming/moving files to user-controlled destinations
-- `copy()` - Copying files with user-controlled paths
-- `move_uploaded_file()` - Moving uploads to user-controlled paths
+#### PHP File & Directory Operations (High / Critical)
+- `file_get_contents($request->input('path'))` — reads an arbitrary file from the filesystem
+- `fopen($_GET['file'], 'r')` — opens a user-controlled file path
+- `unlink($request->input('name'))` — deletes a user-specified file
+- Also covers: `file_put_contents()`, `readfile()`, `rename()`, `copy()`, `move_uploaded_file()`, `scandir()`, `opendir()`, `glob()`
 
-#### Include/Require (4)
-- `include` - Local/Remote File Inclusion with user input
-- `include_once` - File inclusion with dynamic paths
-- `require` - File inclusion with concatenated paths
-- `require_once` - File inclusion with interpolated strings
+#### Include / Require with User Input (Critical)
+- `include $request->input('module')` — remote or local file inclusion
+- `require "{$base}/{$userModule}"` — dynamic include without path validation
 
-#### Directory Operations (4)
-- `scandir()` - Listing directory contents with user input
-- `opendir()` - Opening directories with user-controlled paths
-- `readdir()` - Reading directory entries
-- `glob()` - Pattern matching with user-controlled paths
+#### Laravel Storage & File Facades (High)
+- `Storage::get($request->input('path'))` — reads an arbitrary storage path
+- `Storage::disk($request->input('disk'))` — switches storage disk, bypassing root directory restrictions
+- `File::delete($_GET['path'])` — deletes a user-specified file via File facade
+- Also covers all `Storage::` methods (`put`, `delete`, `exists`, `download`, `path`, `url`, `temporaryUrl`) and `File::` methods (`get`, `copy`, `move`, `put`, `append`, `link`) with user input
 
-#### Laravel Storage Facade (6)
-- `Storage::get()` - Reading files with user input
-- `Storage::put()` - Writing files with user-controlled paths
-- `Storage::delete()` - Deleting files with user input
-- `Storage::exists()` - Checking file existence with user paths
-- `Storage::download()` - Downloading files with user input
-- `Storage::path()` - Resolving paths with user input
+#### File Uploads (High)
+- `$file->store($request->input('dir'))` — stores upload in user-controlled directory
+- `$file->storeAs('uploads', $request->input('name'))` — user-controlled filename without `basename()` protection
 
-#### File Upload Handling (2)
-- `$file->store()` - Storing uploads with user-controlled directory
-- `$file->storeAs()` - Storing with user-controlled filename without `basename()` protection
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- Paths wrapped in `realpath()` -- validates against actual filesystem
-- Paths wrapped in `basename()` -- strips directory components
-- Paths wrapped in `pathinfo()` -- extracts specific path parts
-- Static string literals with no user input or concatenation
-- Storage operations with hardcoded paths
-:::
+#### Response, Archives & Symlinks (Critical / High)
+- `response()->download($request->input('path'))` — serves an arbitrary file for download
+- `response()->file($request->input('path'))` — serves an arbitrary file inline
+- `symlink($_GET['target'], ...)` — creates a symlink to an attacker-controlled path
+- `->open($_GET['archive'])` / `->extractTo($_GET['dest'])` — zip-slip archive extraction
+- `str_replace('../', '', $input)` — naive traversal strip, bypassed with `....//`, `%2e%2e%2f`, or mixed separators
 
 ## Why It Matters
 
