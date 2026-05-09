@@ -18,15 +18,23 @@ pro: true
 Validates Filament admin panel security configuration. Checks for:
 
 - Panel provider exists in `app/Providers/Filament/`
-- Authentication middleware is configured
-- Login page is enabled
-- Auth guard is configured for multi-panel setups
+- Authentication middleware is configured (`Authenticate::class` in `->authMiddleware()`)
+- Login page is enabled (`->login()`)
+- Auth guard is configured for multi-panel setups (`->authGuard()`)
+- Public registration on admin/staff panels (`->registration()` on privileged surfaces)
+- Registration without email verification (`->emailVerification()` absent)
+- Revealable passwords enabled (`->revealablePasswords()`)
+- No model implements `FilamentUser` — any authenticated user can access all panels
 
 ## Why It Matters
 
 - **Public Admin Access:** Without auth middleware, anyone can access your admin panel
 - **Guard Confusion:** Multiple panels without custom guards can share authentication state
 - **Missing Login:** Panels without login pages may be accessible to unauthenticated users
+- **Unrestricted Panel Access:** Without `FilamentUser::canAccessPanel()`, all authenticated users reach all panels regardless of role
+- **Admin Self-Registration:** Allowing self-signup on admin panels lets untrusted users create privileged accounts
+- **Unverified Accounts:** Registration without email verification allows throwaway accounts to access protected resources
+- **Credential Exposure:** Revealable passwords increase risk via shoulder surfing or screen recording
 - **Data Exposure:** Admin panels expose sensitive data, user records, and configuration options
 
 ## How to Fix
@@ -90,10 +98,27 @@ public function panel(Panel $panel): Panel
 ],
 ```
 
+**3. Restrict panel access per user with FilamentUser:**
+
+```php
+// app/Models/User.php
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
+
+class User extends Authenticatable implements FilamentUser
+{
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->hasVerifiedEmail() && $this->hasRole('admin');
+    }
+}
+```
+
 ## References
 
 - [Filament Panel Configuration](https://filamentphp.com/docs/panels/configuration)
 - [Filament Authentication](https://filamentphp.com/docs/panels/users)
+- [Filament Panel Users & Access](https://filamentphp.com/docs/panels/users#authorizing-access-to-the-panel)
 - [Laravel Authentication Guards](https://laravel.com/docs/authentication#adding-custom-guards)
 
 ## Related Analyzers
