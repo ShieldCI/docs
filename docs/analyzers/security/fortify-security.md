@@ -18,23 +18,28 @@ pro: true
 Validates Laravel Fortify authentication configuration. Checks for:
 
 - Two-factor authentication is enabled in Fortify features
+- Two-factor authentication has `confirm` and/or `confirmPassword` options set
 - Password validation rules are configured (`Features::updatePasswords` or `Password::defaults`)
 - Email verification is enabled and User model implements `MustVerifyEmail`
 - Password reset routes have rate limiting applied
-- Custom authentication pipelines include rate limiting and lockout checks
+- Custom `authenticateUsing()` includes rate limiting or lockout checks
+- Custom `authenticateThrough()` pipeline includes `EnsureLoginIsNotThrottled`, `AttemptToAuthenticate`, and `PrepareAuthenticatedSession`
+- Registration feature has `Fortify::createUsersUsing()` or `CreateNewUser` action configured
 
 ## Why It Matters
 
 - **Account Takeover:** Without 2FA, compromised passwords mean compromised accounts
+- **Unverified 2FA Setup:** Without `confirm`, 2FA activates immediately — users may lock themselves out if their authenticator is misconfigured
 - **Weak Passwords:** Without password validation, users can set trivially guessable passwords
 - **Fake Accounts:** Without email verification, bots can register with invalid emails
 - **Brute Force:** Unprotected password reset routes allow email flooding attacks
+- **Session Fixation:** Custom `authenticateThrough()` pipelines missing `PrepareAuthenticatedSession` do not regenerate the session ID after login, enabling session fixation attacks
 
 ## How to Fix
 
 ### Quick Fix (5 minutes)
 
-Enable two-factor authentication:
+Enable two-factor authentication with both confirmation options:
 
 ```php
 // config/fortify.php
@@ -45,8 +50,8 @@ Enable two-factor authentication:
     Features::updateProfileInformation(),
     Features::updatePasswords(),
     Features::twoFactorAuthentication([
-        'confirm' => true,
-        'confirmPassword' => true,
+        'confirm' => true,           // Requires TOTP code confirmation before 2FA activates
+        'confirmPassword' => true,   // Requires password re-entry before enabling/disabling 2FA
     ]),
 ],
 ```
@@ -91,7 +96,7 @@ RateLimiter::for('password-reset', function (Request $request) {
 });
 ```
 
-**4. Secure custom authentication pipelines:**
+**4. Secure custom `authenticateUsing` pipelines:**
 
 ```php
 Fortify::authenticateUsing(function (Request $request) {
@@ -106,6 +111,29 @@ Fortify::authenticateUsing(function (Request $request) {
     }
 });
 ```
+
+**5. Secure custom `authenticateThrough` pipelines:**
+
+Always include all three critical classes to prevent brute force and session fixation:
+
+```php
+Fortify::authenticateThrough(function (Request $request) {
+    return array_filter([
+        EnsureLoginIsNotThrottled::class,   // Brute force protection
+        AttemptToAuthenticate::class,        // Credential validation
+        PrepareAuthenticatedSession::class,  // Session ID regeneration (prevents session fixation)
+    ]);
+});
+```
+
+**6. Configure registration action:**
+
+```php
+// app/Providers/FortifyServiceProvider.php
+Fortify::createUsersUsing(CreateNewUser::class);
+```
+
+Or create `app/Actions/Fortify/CreateNewUser.php` with validation logic.
 
 ## References
 
