@@ -15,12 +15,24 @@ pro: true
 
 ## What This Checks
 
-Validates basic GDPR compliance patterns in your Laravel application. Checks for:
+Scans `app/Models/User.php`, `app/Models/Profile.php`, `app/Models/Customer.php`,
+`database/migrations/`, `routes/web.php`, `routes/api.php`, and `config/logging.php`
+for technical GDPR compliance signals. Checks for:
 
-- Data deletion capability (Article 17: Right to Erasure)
-- Encryption at rest for sensitive personal data fields
-- Consent tracking mechanism (models, migrations, or columns)
-- Privacy policy route definition
+- **Data deletion capability (Article 17)** — `SoftDeletes` trait, or `anonymize` / `purge` / `erasePersonalData` method on the User model
+- **Encryption at rest** — `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields
+- **Consent tracking (Article 7)** — a `Consent` / `UserConsent` model, a consent-related migration, or consent columns on the users table
+- **Privacy policy route** — a `/privacy` or `/privacy-policy` route in web or API route files
+- **Data export capability (Article 20)** — an export controller, export route, `app/Exports/` directory, or `export` / `downloadData` method on the User model
+- **PII protection in logs** — log sanitization (`SanitizeLog`, `mask`, `redact`, `scrub`, `replace_placeholders`) in `config/logging.php` or a custom processor in `app/Logging/`
+
+::: tip SoftDeletes is not sufficient for true erasure
+`SoftDeletes` preserves all personal data in the database — soft-deleted records are still
+readable by database admins and analytical tools. GDPR Article 17 requires that data be
+**truly erased or anonymized**. Add an `anonymize()` method alongside `SoftDeletes`, or
+use the `Prunable` / `MassPrunable` traits to schedule automatic hard-deletion of
+soft-deleted records after a retention period.
+:::
 
 ## Why It Matters
 
@@ -67,21 +79,42 @@ class User extends Authenticatable
 class User extends Authenticatable
 {
     protected $casts = [
-        'phone' => 'encrypted',
-        'address' => 'encrypted',
+        'phone'         => 'encrypted',
+        'address'       => 'encrypted',
         'date_of_birth' => 'encrypted:date',
     ];
 }
 ```
 
-**2. Implement consent tracking:**
+**2. Implement true erasure alongside SoftDeletes:**
+
+```php
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+class User extends Authenticatable
+{
+    use SoftDeletes;
+
+    public function anonymize(): void
+    {
+        $this->update([
+            'name'  => 'Deleted User',
+            'email' => 'deleted-' . $this->id . '@anonymized.local',
+            'phone' => null,
+        ]);
+        $this->delete(); // soft-delete after anonymization
+    }
+}
+```
+
+**3. Implement consent tracking:**
 
 ```bash
 php artisan make:model Consent -m
 ```
 
 ```php
-// database/migrations/create_consents_table.php
+// database/migrations/xxxx_create_consents_table.php
 Schema::create('consents', function (Blueprint $table) {
     $table->id();
     $table->foreignId('user_id')->constrained()->cascadeOnDelete();
@@ -94,18 +127,19 @@ Schema::create('consents', function (Blueprint $table) {
 });
 ```
 
-**3. Add data export (Article 20: Right to Portability):**
+**4. Add data export endpoint (Article 20: Right to Data Portability):**
 
 ```php
+// app/Http/Controllers/UserDataExportController.php
 class UserDataExportController extends Controller
 {
-    public function export(Request $request)
+    public function export(Request $request): JsonResponse
     {
         $user = $request->user();
 
         $data = [
             'personal' => $user->only(['name', 'email', 'phone']),
-            'orders' => $user->orders->toArray(),
+            'orders'   => $user->orders->toArray(),
             'consents' => $user->consents->toArray(),
         ];
 
@@ -115,12 +149,57 @@ class UserDataExportController extends Controller
 }
 ```
 
+```php
+// routes/web.php
+Route::get('/user/export', [UserDataExportController::class, 'export'])
+    ->middleware('auth')
+    ->name('user.data.export');
+```
+
+**5. Add PII protection to logging:**
+
+```php
+// app/Logging/SanitizePiiProcessor.php
+use Monolog\LogRecord;
+use Monolog\Processor\ProcessorInterface;
+
+class SanitizePiiProcessor implements ProcessorInterface
+{
+    private array $keys = ['email', 'phone', 'ip', 'password', 'token'];
+
+    public function __invoke(LogRecord $record): LogRecord
+    {
+        $extra = $record->extra;
+        foreach ($this->keys as $key) {
+            if (isset($extra[$key])) {
+                $extra[$key] = '***';
+            }
+        }
+
+        return $record->with(extra: $extra);
+    }
+}
+```
+
+```php
+// config/logging.php — register the processor on your default channel
+'channels' => [
+    'stack' => [
+        'driver'     => 'stack',
+        'channels'   => ['daily'],
+        'processors' => [SanitizePiiProcessor::class],
+    ],
+],
+```
+
 ## References
 
 - [GDPR Official Text](https://gdpr-info.eu/)
-- [GDPR Article 17 - Right to Erasure](https://gdpr-info.eu/art-17-gdpr/)
-- [Laravel Encryption](https://laravel.com/docs/encryption)
-- [OWASP GDPR Checklist](https://owasp.org/www-project-web-security-testing-guide/)
+- [GDPR Article 17 — Right to Erasure](https://gdpr-info.eu/art-17-gdpr/)
+- [GDPR Article 20 — Right to Data Portability](https://gdpr-info.eu/art-20-gdpr/)
+- [Laravel Encryption Casts](https://laravel.com/docs/eloquent-mutators#encrypted-casting)
+- [Laravel Model Pruning (SoftDeletes)](https://laravel.com/docs/eloquent#pruning-models)
+- [OWASP Privacy Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Privacy_Cheat_Sheet.html)
 
 ## Related Analyzers
 
