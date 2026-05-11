@@ -15,38 +15,20 @@ pro: true
 
 ## What This Checks
 
-This analyzer scans your Laravel application source code for hardcoded credentials, secrets, and sensitive tokens that should never be committed to version control.
+Detects hardcoded credentials in source code across two detection strategies:
 
-**Detected Credential Patterns (9):**
+**By variable/property/array key name** — flags literal string values assigned to credential-named identifiers (`password`, `passwd`, `pwd`, `api_key`, `apiKey`, `access_token`, `secret`, `private_key`, `encryption_key`, `jwt_secret`, `webhook_secret`, `client_secret`, `oauth_token`, `aws_key`, `aws_secret`, and camelCase/snake_case variants).
 
-#### Authentication Credentials
-- **Passwords** - Variables or assignments containing `password`, `passwd`, `pwd` with literal string values
-- **API Keys** - `api_key`, `apikey`, `api_token`, `access_token` with long alphanumeric strings
-- **Bearer Tokens** - `Bearer` authorization headers with embedded tokens
-- **Basic Auth** - `Basic` authorization headers with embedded credentials
+**By value format** — flags strings whose content matches known credential patterns regardless of variable name:
+- AWS Access Key IDs (`AKIA` + 16 uppercase alphanumerics)
+- PEM private keys (`-----BEGIN PRIVATE KEY-----`)
+- Bearer and Basic auth header values
+- GitHub tokens (`ghp_`, `github_pat_`) and GitLab tokens (`glpat-`)
+- Slack webhook URLs (`hooks.slack.com/services/…`)
+- Database URLs with embedded credentials (`mysql://user:pass@host/db`)
+- ADO.NET connection strings with inline `Password=` values
 
-#### Cloud & Infrastructure Secrets
-- **AWS Access Keys** - AWS access key IDs (starting with `AKIA`) and secret access keys
-- **Private Keys** - PEM-formatted private keys (`-----BEGIN PRIVATE KEY-----`)
-- **Database URLs** - Connection strings containing embedded usernames and passwords
-- **Connection Strings** - Server/Data Source strings with inline passwords
-
-#### Application Secrets
-- **JWT Secrets** - `jwt_secret`, `jwt_key` with hardcoded values
-
-**Variable Name Detection:**
-
-The analyzer also detects suspicious variable assignments by name, checking both `snake_case` and `camelCase` patterns for: `password`, `secret`, `api_key`, `aws_key`, `private_key`, `encryption_key`, `app_key`, `jwt_secret`, `webhook_secret`, and their variants.
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- Environment variable usage: `env('API_KEY')`, `config('services.key')`, `getenv('SECRET')`
-- References to `.env` files
-- Placeholder values: `example`, `test`, `fake`, `dummy`, `placeholder`, `your_`, `xxx`, `todo`, `fixme`
-- Config directory files (intended to have defaults with `env()` fallbacks)
-- Test files (often contain fake credentials for testing)
-- Database migration files (often contain example data)
-:::
+Both strategies scan class properties, variable assignments, array literals, class constants, and `config/*.php` files.
 
 ## Why It Matters
 
