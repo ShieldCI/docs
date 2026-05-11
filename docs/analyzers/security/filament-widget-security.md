@@ -15,11 +15,14 @@ pro: true
 
 ## What This Checks
 
-Validates that Filament widgets have proper authorization. Checks for:
+Validates that Filament widgets have proper authorization and safe data handling. Checks for:
 
 - Widget classes have `canView()` method or `authorize()` method
-- Sensitive data queries are protected by authorization
-- Stats overview widgets with financial data have access controls
+- `canView()` is not a weak allow-all gate (`return true` or `return auth()->check()`) when the widget displays sensitive data
+- Sensitive data queries (financial aggregations on `amount`, `revenue`, `total`, etc.) are protected by authorization
+- `StatsOverviewWidget` classes referencing financial models (`Payment`, `Transaction`, `Invoice`, etc.) have access controls
+- `TableWidget` classes with a custom `getTableQuery()` have proper record scoping (tenant/user filtering)
+- Widgets using `InteractsWithPageFilters` validate filter values before using them in database queries
 
 ## Why It Matters
 
@@ -66,11 +69,12 @@ class FinancialStats extends StatsOverviewWidget
 }
 ```
 
-**2. Use lazy loading for performance:**
+**2. Optionally combine with lazy loading (performance only — not a substitute for authorization):**
 
 ```php
 class UserStatsWidget extends Widget
 {
+    // $isLazy defers rendering for performance; it does NOT restrict who can view the widget
     protected static bool $isLazy = true;
 
     public static function canView(): bool
@@ -104,10 +108,45 @@ class OrderChart extends ChartWidget
 }
 ```
 
+**4. Validate filter values when using `InteractsWithPageFilters`:**
+
+Filament's page filters are **not validated automatically** — values from the dashboard filter form land directly in `$this->pageFilters`. Always validate before using in queries:
+
+```php
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Carbon\Carbon;
+
+class OrderStats extends StatsOverviewWidget
+{
+    use InteractsWithPageFilters;
+
+    public static function canView(): bool
+    {
+        return auth()->user()?->hasRole('admin') ?? false;
+    }
+
+    protected function getStats(): array
+    {
+        $rawDate = $this->pageFilters['startDate'] ?? null;
+        // Validate format before trusting the value
+        $startDate = ($rawDate !== null && Carbon::hasFormat($rawDate, 'Y-m-d'))
+            ? Carbon::parse($rawDate)->startOfDay()
+            : null;
+
+        return [
+            Stat::make('Orders', Order::query()
+                ->when($startDate, fn ($q) => $q->where('created_at', '>=', $startDate))
+                ->count()),
+        ];
+    }
+}
+```
+
 ## References
 
-- [Filament Widgets](https://filamentphp.com/docs/panels/dashboard#conditionally-hiding-widgets)
-- [Filament Stats Overview](https://filamentphp.com/docs/widgets/stats-overview)
+- [Filament Widgets — Conditionally Hiding](https://filamentphp.com/docs/4.x/panels/dashboard#conditionally-hiding-widgets)
+- [Filament Stats Overview](https://filamentphp.com/docs/4.x/widgets/stats-overview)
+- [Filament Page Filters (unvalidated data warning)](https://filamentphp.com/docs/4.x/panels/dashboard#filtering-dashboard-widgets)
 - [Laravel Authorization](https://laravel.com/docs/authorization)
 
 ## Related Analyzers
