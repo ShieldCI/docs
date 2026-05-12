@@ -15,12 +15,12 @@ pro: true
 
 ## What This Checks
 
-This analyzer validates that your application sends the `X-Content-Type-Options: nosniff` header to prevent browsers from performing MIME type sniffing on responses:
+This analyzer validates that your application sends the `X-Content-Type-Options: nosniff` header to prevent browsers from performing MIME type sniffing on responses. It makes a live HTTP request to a guest route (login page or homepage) to verify the header at the server level:
 
 - **Missing header** - Checks if the `X-Content-Type-Options` header is present in HTTP responses
-- **Invalid value** - Verifies the header is set to `nosniff` (the only valid value)
-- **Live HTTP check** - Makes an actual HTTP request to a guest route (login page or homepage) to verify server-level headers
-- **Environment awareness** - Only runs in production/staging environments (skips local and testing)
+- **Invalid value** - Verifies the header value is `nosniff` (the only valid value per spec)
+- **Duplicate headers** - Detects multiple `X-Content-Type-Options` headers that can cause inconsistent browser behavior
+- **Non-2xx response** - Warns when the header check is performed against an error response, as results may not reflect normal app behavior
 
 ## Why It Matters
 
