@@ -21,6 +21,8 @@ Validates Livewire component security. Checks for:
 - Missing authorization in components that perform write operations
 - File uploads without validation (`WithFileUploads` trait without rules)
 - Identity properties missing `#[Locked]` attribute (userId, orderId, isAdmin, etc.)
+- Livewire v3 Form Object scanning — sensitive property detection extends into Form classes
+- Version-aware identity property handling: v3 requires `#[Locked]`; v2 warns about unprotected mutable properties
 
 ## Why It Matters
 
