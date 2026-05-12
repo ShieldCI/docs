@@ -15,36 +15,12 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects PHP object injection vulnerabilities by identifying unsafe deserialization patterns and exploitable magic methods that can be used in Property-Oriented Programming (POP) gadget chains.
+Detects PHP object injection vulnerabilities through unsafe deserialization patterns and exploitable magic methods used in Property-Oriented Programming (POP) gadget chains:
 
-**Detected Vulnerable Patterns:**
-
-#### Unsafe Deserialization Functions (2)
-- `unserialize()` - Deserializes data into PHP objects; Critical severity when user input is detected, High severity otherwise
-- `unserialize_callback_func` - Callback function triggered during deserialization
-
-#### Dangerous Magic Methods (10)
-The analyzer inspects classes for magic methods that contain dangerous operations, which can be exploited as POP gadget chain links:
-- `__wakeup()` - Called when unserialize() recreates an object
-- `__destruct()` - Called when an object is destroyed
-- `__toString()` - Called when an object is cast to string
-- `__call()` / `__callStatic()` - Called on inaccessible method calls
-- `__get()` / `__set()` - Called on inaccessible property access
-- `__isset()` / `__unset()` - Called on inaccessible property checks
-- `__invoke()` - Called when an object is used as a function
-
-**Dangerous operations detected in magic methods:**
-- File operations: `file_get_contents`, `file_put_contents`, `fopen`, `unlink`, `rmdir`, `rename`
-- Code execution: `system`, `exec`, `passthru`, `shell_exec`, `proc_open`
-- Database operations: `DB::raw`, `DB::select`, `DB::insert`, `DB::update`, `DB::delete`
-
-#### Phar Deserialization (5)
-File operations that accept `phar://` stream wrappers with user-controlled paths:
-- `file_get_contents()`, `fopen()`, `file()`, `readfile()`, `file_exists()`
-
-::: tip AST-Based Analysis
-This analyzer uses PHP-Parser AST analysis for accurate detection. It recursively inspects function arguments and traces user input through `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, and `$request->` method calls.
-:::
+- `unserialize()` with user input — Critical without `allowed_classes` restriction; Medium when `allowed_classes => false` is present; High when input source is unknown
+- `call_user_func('unserialize', ...)` / `call_user_func_array('unserialize', ...)` — High; indirect deserialization via dynamic dispatch
+- Magic methods (`__wakeup`, `__unserialize`, `__destruct`, `__toString`, `__call`, `__callStatic`, `__get`, `__set`, `__isset`, `__unset`, `__invoke`) containing dangerous file, exec, eval, or database operations — High when sinks consume `$this->` properties, Medium otherwise
+- Filesystem functions (`file_get_contents`, `fopen`, `getimagesize`, `md5_file`, etc.) with user-controlled paths — High; vulnerable to `phar://` stream wrapper deserialization
 
 ## Why It Matters
 
