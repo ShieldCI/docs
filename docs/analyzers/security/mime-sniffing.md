@@ -21,15 +21,6 @@ This analyzer validates that your application sends the `X-Content-Type-Options:
 - **Invalid value** - Verifies the header is set to `nosniff` (the only valid value)
 - **Live HTTP check** - Makes an actual HTTP request to a guest route (login page or homepage) to verify server-level headers
 - **Environment awareness** - Only runs in production/staging environments (skips local and testing)
-- **Stateful apps only** - Skips API-only (stateless) applications where MIME sniffing is not a concern
-
-::: tip When This Analyzer Runs
-This analyzer requires a live HTTP server and only runs in production/staging. It is automatically skipped in:
-- Local development environments
-- CI/CD pipelines (`$runInCI = false`)
-- API-only applications (stateless, no web middleware)
-- Applications with session driver set to `array`
-:::
 
 ## Why It Matters
 
