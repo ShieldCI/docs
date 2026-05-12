@@ -18,16 +18,18 @@ pro: true
 This analyzer detects Host header injection vulnerabilities where the application trusts the HTTP `Host` header without proper validation. It scans for three categories of issues:
 
 **Code-level checks:**
-- **Direct `$_SERVER` usage** - Detects `$_SERVER['HTTP_HOST']` and `$_SERVER['SERVER_NAME']` in application code
-- **Unvalidated request methods** - Flags `request()->getHost()` and `request()->header('Host')` usage without nearby validation (e.g., `in_array`, `===`, `config('app.url')` checks)
+- **Direct `$_SERVER` usage** - Detects `$_SERVER['HTTP_HOST']`, `$_SERVER['SERVER_NAME']`, and `$_SERVER['HTTP_X_FORWARDED_HOST']` in application code
+- **Unvalidated request methods** - Flags `request()->getHost()`, `getHttpHost()`, `getSchemeAndHttpHost()`, `header('Host')`, `header('X-Forwarded-Host')`, `server('HTTP_HOST')`, and `headers->get('host')` calls without nearby validation (e.g., `in_array`, `===`, `config('app.url')` checks)
+- **URL methods in sensitive contexts** - Flags `request()->url()`, `fullUrl()`, and `root()` when used in security-sensitive operations such as redirects, cache keys, signed routes, or email notifications
 - **Email URL generation** - Detects URLs generated using the Host header near email-sending code (`Mail::to`, `->send()`, `new ...Mail()`), which can lead to password reset poisoning
 
 **Configuration checks (only if unsafe code patterns are found):**
 - **APP_URL configuration** - Verifies `.env.example` does not use placeholder values and `config/app.php` references `APP_URL`
-- **TrustHosts middleware** - Checks if the `TrustHosts` middleware exists with a properly configured `hosts()` method
+- **TrustHosts middleware** - Checks if the `TrustHosts` middleware exists with a properly configured `hosts()` method (L9/10), or `trustHosts()` is called in `bootstrap/app.php` (L11/12)
+- **Wildcard host patterns** - Flags overly broad regex patterns (e.g., `.*`, `.+`, or plain `*`) that disable host validation entirely
 
 ::: tip Smart Detection
-Configuration checks are only performed when unsafe code patterns are detected. If your application uses safe patterns like `config('app.url')` and `url()` consistently, the analyzer passes without raising configuration warnings.
+Configuration checks are only performed when unsafe code patterns are detected. If your application uses safe patterns like `config('app.url')` and `url()` consistently, the analyzer passes without raising configuration warnings. Additionally, `URL::forceRootUrl()` in a service provider is recognized as a global mitigation and suppresses configuration-level warnings.
 :::
 
 ## Why It Matters
@@ -90,7 +92,9 @@ $link = route('verification.verify', ['token' => $token]);
 $domain = config('app.url');
 ```
 
-2. **Configure the TrustHosts middleware** (Laravel 9+):
+2. **Configure trusted hosts**:
+
+For **Laravel 9/10**, publish and configure the `TrustHosts` middleware:
 
 ```php
 // app/Http/Middleware/TrustHosts.php
@@ -104,12 +108,23 @@ class TrustHosts extends Middleware
     {
         return [
             $this->allSubdomainsOfApplicationUrl(),
-            'yourdomain.com',
-            '*.yourdomain.com',
+            '^(.+\.)?yourdomain\.com$',  // anchored regex, not glob syntax
         ];
     }
 }
 ```
+
+For **Laravel 11/12**, configure trusted hosts in `bootstrap/app.php`:
+
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->trustHosts(at: ['^(.+\.)?yourdomain\.com$']);
+})
+```
+
+::: warning Use Regex, Not Glob
+`TrustHosts` passes host patterns directly to `preg_match()`. Glob-style patterns like `*.yourdomain.com` are invalid regexes and will silently fail, leaving host validation disabled. Always use anchored regex patterns: `^(.+\.)?yourdomain\.com$`.
+:::
 
 3. **Set APP_URL in production `.env`**:
 
