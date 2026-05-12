@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | ------------------ | :----------: |:----------:| ------------:|
-| `horizon-security` | 🛡️ Security  | Critical   | 10 minutes   |
+| `horizon-security` | 🛡️ Security  | High       | 10 minutes   |
 
 ## What This Checks
 
@@ -22,16 +22,16 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 #### Service Provider Validation
 - **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
 - **Horizon::auth() gate** - Checks that an authorization gate is defined to restrict dashboard access
-- **Hardcoded boolean returns** - Flags `return true;` or `return false;` in the auth gate as insecure
+- **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone)
 - **Environment-aware checks** - Verifies production-specific authorization logic is present (e.g., `isProduction()`, `environment()`)
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
 
 #### Configuration File Validation
 - **Middleware configuration** - Flags when `config/horizon.php` only includes `web` middleware without `auth`
 
-::: tip When This Analyzer Runs
-This analyzer only runs when Laravel Horizon is installed (detected via `composer.json` or `vendor/` directory). If Horizon is not installed, the analyzer is automatically skipped.
-:::
+#### Redis Configuration Validation
+- **Redis password** - Flags when `config/database.php` has a hardcoded `null` or empty password for the Redis connection instead of using `env('REDIS_PASSWORD')`
+
 
 ## Why It Matters
 
@@ -154,6 +154,39 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 }
 ```
 
+
+### Fix Redis Authentication
+
+Ensure the Redis password is read from environment variables, not hardcoded:
+
+**Before:**
+```php
+// config/database.php
+'redis' => [
+    'default' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => null,  // Unauthenticated Redis
+        'port' => env('REDIS_PORT', 6379),
+    ],
+],
+```
+
+**After:**
+```php
+// config/database.php
+'redis' => [
+    'default' => [
+        'host' => env('REDIS_HOST', '127.0.0.1'),
+        'password' => env('REDIS_PASSWORD'),
+        'port' => env('REDIS_PORT', 6379),
+    ],
+],
+```
+
+```ini
+# .env
+REDIS_PASSWORD=your-strong-redis-password
+```
 
 ## References
 
