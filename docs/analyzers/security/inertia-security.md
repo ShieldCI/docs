@@ -18,15 +18,21 @@ pro: true
 Validates Inertia.js shared data exposure and middleware configuration. Checks for:
 
 - Sensitive data in shared props (passwords, tokens, secrets, API keys)
-- Missing `HandleInertiaRequests` middleware
+- Missing or unregistered `HandleInertiaRequests` middleware
 - Unfiltered user model in shared data (exposes hashed password, `remember_token`)
 - Redundant CSRF token sharing (Inertia handles this automatically)
 - Application version exposure in `version()` method
+- Sensitive data in `Inertia::render()` props and the `inertia()` helper
+- Sensitive data shared via `Inertia::share()` in controllers and service providers
+- Inertia v2 APIs: `defer()`, `merge()`, `optional()`, `always()`
+- Dangerous values: `config('app.key')`, `env()`, `->bearerToken()`
 
 ## Why It Matters
 
 - **Data Exposure:** Shared props are serialized into every page response and visible in browser DevTools
-- **Password Leakage:** Sharing the full User model exposes the hashed password and remember_token
+- **Password Leakage:** Sharing the full User model exposes the hashed password and `remember_token`
+- **Render Props:** Props passed to `Inertia::render()` and the `inertia()` helper are also serialized and sent to the browser
+- **Global Data Sharing:** `Inertia::share()` in service providers applies globally, making sensitive data visible on every page
 - **Attack Surface:** Application version exposure helps attackers target known vulnerabilities
 - **Unnecessary Code:** Manually sharing CSRF tokens duplicates what Inertia does automatically
 
@@ -92,7 +98,8 @@ public function share(Request $request): array
 ```php
 public function version(Request $request): ?string
 {
-    return md5_file(public_path('mix-manifest.json')) ?: null;
+    return Vite::manifestHash() ?: null;
+    // or: md5_file(public_path('build/manifest.json')) ?: null
 }
 ```
 
@@ -101,6 +108,31 @@ public function version(Request $request): ?string
 ```php
 // Remove this - Inertia handles CSRF automatically:
 // 'csrf_token' => csrf_token(),
+```
+
+**5. Avoid sensitive data in controller render calls and global shares:**
+
+```php
+// ❌ Sensitive data in Inertia::render() props
+return Inertia::render('Profile', [
+    'token' => $user->api_token,
+]);
+
+// ✅ Share only what the view needs
+return Inertia::render('Profile', [
+    'user' => $user->only(['id', 'name', 'email']),
+]);
+
+// ❌ Global share in a service provider
+Inertia::share('config', [
+    'app_key' => config('app.key'),
+]);
+
+// ✅ Share only non-sensitive config
+Inertia::share('config', [
+    'app_name' => config('app.name'),
+    'locale' => app()->getLocale(),
+]);
 ```
 
 ## References
