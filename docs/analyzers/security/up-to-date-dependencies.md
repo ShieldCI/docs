@@ -14,7 +14,7 @@ tags: dependencies,composer,updates,maintenance,security-patches
 
 ## What This Checks
 
-- Runs `composer install --dry-run` (with and without `--no-dev`) to detect pending updates within your declared version constraints.
+- Runs `composer install --dry-run` to detect pending updates within your declared version constraints.
 - Warns when `composer.lock` is missing so you don’t lose reproducible builds.
 - Differentiates between production-only updates and dev-only updates for precise severity and recommendation messaging.
 - Surfaces actionable metadata (scope, command used) so you know exactly what to run next.
@@ -51,6 +51,20 @@ composer update
 3. **Pin risky packages**: if a dependency frequently ships breaking patches, constrain it more tightly (e.g., `^2.4.3`).
 4. **Combine with security scanning**: run `composer audit` or a SaaS scanner (like ShieldCI’s own vulnerable dependency analyzer) immediately after updating.
 5. **Automate notifications**: if this analyzer reports failures, wire it into Slack/Email so the team can act quickly.
+
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in live serverless runtimes.
+
+**Why skip in live serverless runtimes?**
+- Composer is not installed in deployed Lambda containers — the dry-run exits immediately with an error
+- Packages are frozen at build time and cannot be updated at runtime
+- Running the check there would always fail and produce a false positive
+
+**When to run this analyzer:**
+- ✅ **Standard environments**: Runs normally and reports any pending updates within your declared constraints
+- ✅ **Laravel Vapor / Laravel Cloud (local dev or CI)**: Runs with `--ignore-platform-reqs` — your machine and the deployment target differ in OS and PHP extensions, so platform-specific packages are excluded from the diff to prevent false positives
+- ❌ **Live serverless runtimes** (Vapor Lambda, Cloud Functions, Azure Functions): Skipped automatically
 
 ## References
 
