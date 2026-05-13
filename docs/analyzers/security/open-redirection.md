@@ -15,39 +15,16 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects open redirection vulnerabilities where user-controlled input determines redirect destinations, allowing attackers to redirect users to malicious websites.
+This analyzer detects open redirection vulnerabilities where user-controlled input determines redirect destinations, allowing attackers to redirect users to malicious websites. Checks for:
 
-**Detected Vulnerable Patterns:**
+- **`redirect()` helpers with user input** — `redirect($input)`, `redirect()->to()`, `->away()`, `->guest()`, `->secure()`, and the `Redirect` facade equivalents (`Redirect::to()`, `::away()`, `::guest()`, `::secure()`) when the URL argument is user-supplied or a tainted variable
+- **Raw `header('Location:')` calls** with user input — flagged as Critical; bypasses Laravel's response pipeline entirely
+- **`new RedirectResponse()`** constructed directly with user input (both short and fully-qualified Symfony/Illuminate forms)
+- **`redirect()->intended()`** with a user-controlled fallback argument instead of a hardcoded route
+- **Referer-based redirects** — `$_SERVER['HTTP_REFERER']`, `$request->header('Referer')`, or `$request->headers->get('referer')` used as redirect targets
+- **`url()->previous()` / `URL::previous()`** in redirect context — both helpers derive their value from the Referer header, not session history, making them attacker-influenced
 
-#### redirect() with User Input (High)
-- `redirect($request->input('url'))` - Direct redirect from request input
-- `redirect($request->get('next'))` - Redirect from query parameter
-- `redirect(request('return_url'))` - Redirect via request helper
-- `redirect($_GET['redirect'])` - Redirect from superglobal
-
-#### Redirect Facade with User Input (High)
-- `Redirect::to($request->input('url'))` - Facade redirect to user URL
-- `Redirect::away($request->get('next'))` - Explicit external redirect
-- `redirect()->to($request->input('url'))` - Fluent redirect to user URL
-- `redirect()->away($request->get('url'))` - Fluent external redirect
-
-#### Raw Location Header (Critical)
-- `header('Location: ' . $request->input('url'))` - Raw header redirect with user input
-- `header('Location: ' . $_GET['url'])` - Raw header with superglobal
-- `header('Location: ' . $userUrl)` - Raw header with any variable
-
-#### Intended Redirect with User Fallback (Medium)
-- `redirect()->intended($request->input('fallback'))` - User-controlled fallback URL
-- `redirect()->intended($_GET['next'])` - Fallback from superglobal
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- `redirect()->route('dashboard')` - Named routes are always safe
-- `redirect()->action('HomeController@index')` - Controller actions are safe
-- `redirect(route('profile'))` - Using route() helper inside redirect
-- Static URL strings: `redirect('/dashboard')`
-- Lines that are comments
-:::
+All checks also perform simple variable taint tracking (e.g. `$url = $request->input('next'); redirect($url)`) and recognise validation guards such as `Str::startsWith($url, '/')` or a `parse_url` host comparison as safe.
 
 ## Why It Matters
 
@@ -229,6 +206,77 @@ public function postLogin(Request $request)
 }
 ```
 
+**Replace new RedirectResponse() with validated redirect:**
+
+**Before (❌):**
+```php
+use Illuminate\Http\RedirectResponse;
+
+public function go(Request $request): RedirectResponse
+{
+    // VULNERABLE: Direct constructor with user input
+    return new RedirectResponse($request->input('url'));
+}
+```
+
+**After (✅):**
+```php
+public function go(Request $request): RedirectResponse
+{
+    $url = $request->input('url', '/');
+
+    if (!$this->isInternalUrl($url)) {
+        return redirect()->route('home');
+    }
+
+    // SAFE: use redirect() helper with validated URL
+    return redirect($url);
+}
+```
+
+**Avoid redirecting to the Referer header:**
+
+**Before (❌):**
+```php
+public function back(Request $request)
+{
+    // VULNERABLE: Referer is attacker-controlled via a crafted link
+    return redirect($_SERVER['HTTP_REFERER']);
+}
+```
+
+**After (✅):**
+```php
+public function back(Request $request)
+{
+    // SAFE: Laravel's back() validates against your session history
+    return redirect()->back();
+
+    // OR if you must use Referer, validate it:
+    // $referer = $request->header('Referer', '/');
+    // return $this->isInternalUrl($referer) ? redirect($referer) : redirect('/');
+}
+```
+
+**Replace url()->previous() with redirect()->back():**
+
+**Before (❌):**
+```php
+public function cancel()
+{
+    // VULNERABLE: url()->previous() reads the Referer header directly
+    return redirect(url()->previous());
+}
+```
+
+**After (✅):**
+```php
+public function cancel()
+{
+    // SAFE: redirect()->back() uses the session-stored previous URL
+    return redirect()->back();
+}
+```
 
 ## References
 
