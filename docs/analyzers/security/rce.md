@@ -1,6 +1,6 @@
 ---
 title: Remote Code Execution (RCE) Analyzer
-description: Detects remote code execution vulnerabilities including dangerous system calls, variable functions, and unsafe code patterns
+description: Detects remote code execution vulnerabilities including eval, preg_replace /e modifier, variable functions, unsafe callbacks, and Reflection-based execution
 icon: terminal
 outline: [2, 3]
 tags: rce,remote-code-execution,security,code-execution
@@ -15,33 +15,19 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects Remote Code Execution (RCE) vulnerabilities by identifying dangerous function calls and code patterns that allow attackers to run arbitrary code on the server.
+This analyzer detects Remote Code Execution (RCE) vulnerabilities by identifying dangerous function calls and code patterns that allow attackers to run arbitrary code on the server:
 
-**Detected Vulnerable Patterns:**
-
-#### Code Execution Functions (3)
-- `eval()` - Runs a string as PHP code (language construct, detected via AST `Eval_` node)
-- `assert()` - Can run code when passed a string argument
-- `create_function()` - Deprecated function that internally uses dynamic evaluation
-
-#### System Command Functions (6)
-- `system()` - Runs command and displays output
-- `exec()` - Runs command and returns last line of output
-- `passthru()` - Runs command and passes raw output
-- `shell_exec()` - Runs command via shell and returns complete output
-- `proc_open()` - Runs a command with full I/O control
-- `popen()` - Opens a process file pointer
-
-#### Variable Functions (1)
-- **Variable function calls** - `$func()` where the function name is stored in a variable (potential RCE if user-controlled)
+- **`eval()`** — executes string argument as PHP code
+- **`assert()`** — string argument evaluates as PHP code in PHP < 8.0; only flagged when argument is a string or user-controlled
+- **`create_function()`** — creates a function from a string body; inherently dangerous
+- **Variable function calls** (`$func()`) — flagged when the function name is user-controlled
+- **`preg_replace()` with `/e` modifier** — replacement string is evaluated as PHP code (deprecated PHP 5.5, removed PHP 7.0)
+- **`call_user_func()`** / **`call_user_func_array()`** — flagged when callback is user-controlled or a plain variable
+- **`new ReflectionFunction()`** / **`new ReflectionMethod()`** — invokes arbitrary function or method when arguments are user-controlled
 
 **Severity Classification:**
-- **Critical** - Any dangerous function called with user input (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `$request->`)
-- **High** - Any use of dangerous functions without detected user input (still a risk if data flows from untrusted sources)
-
-::: tip AST-Based Analysis
-This analyzer uses PHP-Parser AST analysis for precise detection. It distinguishes between language constructs and regular function calls, recursively traces user input through expressions, and detects variable function patterns like `$func()`.
-:::
+- **Critical** — dangerous pattern called with user input (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `$request->`)
+- **High** — dangerous pattern without detected user input (still a risk if data flows from untrusted sources)
 
 ## Why It Matters
 
@@ -88,37 +74,6 @@ public function executeTemplate(Request $request)
 
 ### Proper Fix (20 minutes)
 
-**Replace system command execution with PHP native functions:**
-
-**Before:**
-```php
-public function convertImage(Request $request)
-{
-    $file = $request->input('file');
-
-    // VULNERABLE: system() with user input
-    system("convert {$file} output.png");
-}
-```
-
-**After:**
-```php
-use Intervention\Image\Facades\Image;
-
-public function convertImage(Request $request)
-{
-    $validated = $request->validate([
-        'file' => 'required|file|image|max:10240',
-    ]);
-
-    // SAFE: Use a PHP image library instead of shell commands
-    $image = Image::make($validated['file']);
-    $image->save(storage_path('app/output.png'));
-
-    return response()->json(['status' => 'converted']);
-}
-```
-
 **Replace variable functions with explicit dispatch:**
 
 **Before:**
@@ -153,48 +108,47 @@ public function handle(Request $request)
 }
 ```
 
-**If shell commands are unavoidable, use Symfony Process with array arguments:**
+**Replace `preg_replace()` /e with `preg_replace_callback()`:**
 
 **Before:**
 ```php
-use Symfony\Component\Process\Process;
+// VULNERABLE: /e modifier evaluates replacement as PHP code
+$output = preg_replace('/\{(\w+)\}/e', '$this->resolve("$1")', $template);
+```
 
-public function runCommand(Request $request)
+**After:**
+```php
+// SAFE: callback receives the match array, no code evaluation
+$output = preg_replace_callback('/\{(\w+)\}/', function (array $m) {
+    return $this->resolve($m[1]);
+}, $template);
+```
+
+**Replace user-controlled `call_user_func()` with an allowlist:**
+
+**Before:**
+```php
+public function format(Request $request)
 {
-    $arg = $request->input('argument');
-
-    // VULNERABLE: String interpolation in shell command
-    $process = Process::fromShellCommandline("ffmpeg -i {$arg} output.mp4");
-    $process->run();
+    // VULNERABLE: user controls which function executes
+    $result = call_user_func($_GET['formatter'], $data);
 }
 ```
 
 **After:**
 ```php
-use Symfony\Component\Process\Process;
-
-public function runCommand(Request $request)
+public function format(Request $request)
 {
     $validated = $request->validate([
-        'argument' => 'required|string|regex:/^[a-zA-Z0-9_\-\.]+$/',
+        'formatter' => 'required|in:html,json,plain',
     ]);
 
-    // SAFE: Array arguments prevent shell interpretation
-    $process = new Process([
-        'ffmpeg',
-        '-i',
-        storage_path('app/uploads/' . $validated['argument']),
-        storage_path('app/output/output.mp4'),
-    ]);
-
-    $process->setTimeout(120);
-    $process->run();
-
-    if (!$process->isSuccessful()) {
-        throw new \RuntimeException('Conversion failed: ' . $process->getErrorOutput());
-    }
-
-    return response()->json(['status' => 'success']);
+    // SAFE: explicit map — user can only pick from known safe callables
+    $result = match ($validated['formatter']) {
+        'html'  => $this->formatHtml($data),
+        'json'  => $this->formatJson($data),
+        'plain' => $this->formatPlain($data),
+    };
 }
 ```
 
@@ -203,10 +157,9 @@ public function runCommand(Request $request)
 
 - [OWASP Code Injection](https://owasp.org/www-community/attacks/Code_Injection)
 - [CWE-94: Improper Control of Generation of Code](https://cwe.mitre.org/data/definitions/94.html)
-- [CWE-78: OS Command Injection](https://cwe.mitre.org/data/definitions/78.html)
 - [CWE-95: Eval Injection](https://cwe.mitre.org/data/definitions/95.html)
+- [CWE-470: Use of Externally-Controlled Input to Select Classes or Code](https://cwe.mitre.org/data/definitions/470.html)
 - [PHP Variable Functions](https://www.php.net/manual/en/functions.variable-functions.php)
-- [Symfony Process Component](https://symfony.com/doc/current/components/process.html)
 - [OWASP Top 10 - Injection](https://owasp.org/www-project-top-ten/)
 
 ## Related Analyzers
