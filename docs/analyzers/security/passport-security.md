@@ -18,14 +18,18 @@ pro: true
 Validates Laravel Passport OAuth2 configuration. Checks for:
 
 - Token lifetimes are configured and not overly long (default is 1 year)
+- Insecure OAuth grant types (implicit grant, password grant) are not enabled
 - PKCE is enforced via hashed client secrets
 - OAuth encryption keys exist with proper permissions
 - Scopes are defined via `Passport::tokensCan()`
 - Expired token pruning is scheduled
+- Auth guard in `config/auth.php` uses the `passport` driver
+- User model uses the `HasApiTokens` trait
 
 ## Why It Matters
 
 - **Long-Lived Tokens:** Default 1-year access tokens provide an extended window for token theft
+- **Insecure Grant Types:** The implicit grant exposes tokens in URL fragments; the password grant sends user credentials directly to clients — both are deprecated in current OAuth 2.0 security recommendations
 - **Key Exposure:** OAuth private keys with world-readable permissions allow token forgery
 - **Unlimited Scopes:** Without defined scopes, any token can access all API endpoints
 - **Database Bloat:** Without pruning, expired tokens accumulate and slow queries
@@ -80,6 +84,26 @@ chmod 644 storage/oauth-public.key
 ```php
 // routes/console.php (Laravel 11+)
 Schedule::command('passport:purge')->daily();
+```
+
+**5. Configure the API auth guard:**
+
+```php
+// config/auth.php
+'guards' => [
+    'api' => ['driver' => 'passport', 'provider' => 'users'],
+],
+```
+
+**6. Add the `HasApiTokens` trait to your User model:**
+
+```php
+use Laravel\Passport\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Notifiable;
+}
 ```
 
 ## References
