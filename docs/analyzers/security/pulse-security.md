@@ -1,7 +1,7 @@
 ---
 title: Pulse Security Analyzer
 description: Validates Laravel Pulse dashboard authorization, data retention, and security settings
-icon: lock
+icon: shield
 outline: [2, 3]
 tags: security,pulse,monitoring,dashboard,authorization
 pro: true
@@ -17,76 +17,85 @@ pro: true
 
 Validates Laravel Pulse dashboard security. Checks for:
 
-- Dashboard authorization gate is configured (`Pulse::auth`)
-- Sensitive data is not leaked through recorder configuration
-- Data retention and trimming settings are appropriate
-- Sampling rate is tuned for production environments
+- `viewPulse` gate defined in a service provider (AppServiceProvider, AuthServiceProvider, or PulseServiceProvider)
+- Gate callback is not trivially permissive (`return true`, `fn() => true`, auth-only, `?? true` fallback)
+- Data retention (`keep` config) is 7 days or less
+- Data trimming lottery is not disabled (`lottery` not set to `[0, …]`)
 
 ## Why It Matters
 
-- **Public Dashboard:** Without authorization, Pulse exposes application performance data to anyone
-- **Data Leakage:** SlowQuery recorder with `report_bindings` can expose passwords and tokens in query parameters
-- **Database Growth:** Without data trimming, Pulse's `telescope_entries` table grows unbounded
-- **Performance Overhead:** 100% sampling rate adds unnecessary overhead in production
+- **Public Dashboard** — Without the `viewPulse` gate, the `/pulse` route is accessible to any authenticated user in non-local environments, exposing slow queries, job timings, request data, and exception counts
+- **Weak Authorization** — A gate that returns `true` or only checks `auth()->check()` grants the full dashboard to every logged-in user, not just administrators
+- **Sensitive Query Data** — Pulse records slow query text and timing; this information can reveal table names, column names, and data patterns useful to attackers
+- **Database Growth** — Without data trimming, Pulse's storage tables grow unbounded and can exhaust disk space in high-traffic applications
+- **Data Minimisation** — Retaining monitoring data longer than necessary increases the blast radius of a database breach
 
 ## How to Fix
 
 ### Quick Fix (5 minutes)
 
-Add dashboard authorization:
+Define the `viewPulse` gate in `AppServiceProvider::boot()`:
 
+**Before (❌):**
 ```php
 // app/Providers/AppServiceProvider.php
-use Laravel\Pulse\Facades\Pulse;
+public function boot(): void
+{
+    // No viewPulse gate — dashboard open to all authenticated users
+}
+```
+
+**After (✅):**
+```php
+// app/Providers/AppServiceProvider.php
+use Illuminate\Support\Facades\Gate;
 
 public function boot(): void
 {
-    Pulse::auth(function (Request $request) {
-        return $request->user()?->isAdmin();
+    Gate::define('viewPulse', function (User $user) {
+        return $user->isAdmin();
     });
 }
 ```
 
 ### Proper Fix (10 minutes)
 
-**1. Disable query binding reporting:**
+**1. Fix a permissive gate:**
 
+**Before (❌):**
 ```php
-// config/pulse.php
-'recorders' => [
-    \Laravel\Pulse\Recorders\SlowQueries::class => [
-        'threshold' => 1000,
-        'report_bindings' => false, // Don't expose query parameters
-    ],
-],
+Gate::define('viewPulse', function ($user) {
+    return true; // Grants access to everyone
+});
 ```
 
-**2. Configure data retention:**
+**After (✅):**
+```php
+Gate::define('viewPulse', function (User $user) {
+    return in_array($user->email, [
+        'admin@example.com',
+        'devops@example.com',
+    ], true);
+});
+```
 
+**2. Configure data retention and trimming:**
+
+**Before (❌):**
 ```php
 // config/pulse.php
 'trim' => [
-    'lottery' => [1, 1000], // 0.1% chance per request
-    'keep' => CarbonInterval::days(7),
+    'lottery' => [0, 100], // Trimming disabled
+    'keep'    => CarbonInterval::days(30), // Excessive retention
 ],
 ```
 
-**3. Reduce sampling rate for production:**
-
+**After (✅):**
 ```php
 // config/pulse.php
-'sample_rate' => env('PULSE_SAMPLE_RATE', 0.1), // 10% of requests
-```
-
-**4. Review custom recorders:**
-
-```php
-// Ensure custom recorders don't log PII
-'recorders' => [
-    App\Pulse\CustomRecorder::class => [
-        'enabled' => true,
-        // Never log passwords, API keys, or personal data
-    ],
+'trim' => [
+    'lottery' => [1, 1000], // Trim on ~0.1% of requests
+    'keep'    => CarbonInterval::days(7),
 ],
 ```
 
@@ -94,10 +103,14 @@ public function boot(): void
 
 - [Laravel Pulse Documentation](https://laravel.com/docs/pulse)
 - [Laravel Pulse Authorization](https://laravel.com/docs/pulse#dashboard-authorization)
-- [OWASP Sensitive Data Exposure](https://owasp.org/www-project-top-ten/)
+- [OWASP Access Control Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html)
+- [CWE-284: Improper Access Control](https://cwe.mitre.org/data/definitions/284.html)
+- [CWE-359: Exposure of Private Personal Information](https://cwe.mitre.org/data/definitions/359.html)
 
 ## Related Analyzers
 
 - [Telescope Security](/analyzers/security/telescope-security) - Validates Telescope debug tool security
 - [Horizon Security](/analyzers/security/horizon-security) - Validates Horizon dashboard security
 - [Debug Mode](/analyzers/security/debug-mode) - Validates debug mode configuration
+
+---
