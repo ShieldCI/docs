@@ -18,10 +18,12 @@ pro: true
 Validates that public API endpoints have rate limiting. Checks for:
 
 - Custom rate limiter definitions in service providers (`RateLimiter::for()`)
+- `Limit::none()` usage in rate limiter definitions (effectively disables limiting)
 - API routes without throttle middleware
-- Login/register routes without strict throttle (brute force risk)
-- Webhook routes without throttle middleware
+- Login, register, password reset, email verification, and 2FA/OTP routes without strict throttle (reported as **High** severity — brute force risk)
+- Webhook routes without throttle middleware (severity reduced to Low when webhook signature verification middleware is present)
 - Global rate limiter in API middleware group
+- Skips auth route checks automatically when Laravel Fortify or Jetstream is installed (they provide built-in throttling)
 
 ## Why It Matters
 
@@ -90,9 +92,7 @@ Route::post('/webhooks/stripe', WebhookController::class)
 ```php
 // bootstrap/app.php (Laravel 11+)
 ->withMiddleware(function (Middleware $middleware) {
-    $middleware->api(prepend: [
-        \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
-    ]);
+    $middleware->api(prepend: ['throttle:api']);
 })
 ```
 
