@@ -39,7 +39,7 @@ export default defineConfig({
                     ...item,
                     url,
                     changefreq: url.includes('analyzers/') ? 'weekly' : 'monthly',
-                    priority: url === '' ? 1.0 : url.includes('analyzers/') ? 0.8 : 0.6
+                    priority: url === '' ? 1.0 : url.includes('analyzers/') ? 0.8 : url.includes('api/') ? 0.7 : 0.6
                 }
             })
     },
@@ -186,12 +186,22 @@ export default defineConfig({
         // Navigation
         nav: [
             {
-                text: 'Home',
+                text: 'Documentation',
+                link: '/introduction/what-is-shieldci',
+                activeMatch: '^(?!/api/)'
+            },
+            {
+                text: 'API Reference',
+                link: '/api/',
+                activeMatch: '/api/'
+            },
+            {
+                text: 'shieldci.com',
                 link: 'https://shieldci.com'
             },
             {
                 text: 'Changelog',
-                link: 'https://github.com/shieldci/laravel/blob/master/CHANGELOG.md'
+                link: 'https://shieldci.com/changelog'
             },
         ],
 
@@ -423,6 +433,29 @@ export default defineConfig({
                     collapsed: true,
                     items: [
                         { text: 'Contributing', link: '/contributing' },
+                    ]
+                },
+            ],
+            '/api/': [
+                {
+                    text: 'API Reference',
+                    link: '/api/',
+                    items: [
+                        { text: 'Overview', link: '/api/' },
+                        { text: 'Authentication', link: '/api/authentication' },
+                        { text: 'Rate Limits', link: '/api/rate-limits' },
+                        { text: 'Errors', link: '/api/errors' },
+                        {
+                            text: 'Resources',
+                            collapsed: false,
+                            items: [
+                                { text: 'Users', link: '/api/users' },
+                                { text: 'Tokens', link: '/api/tokens' },
+                                { text: 'Projects', link: '/api/projects' },
+                                { text: 'Reports', link: '/api/reports' },
+                                { text: 'Teams', link: '/api/teams' },
+                            ]
+                        },
                     ]
                 },
             ],
