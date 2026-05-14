@@ -165,7 +165,7 @@ export default defineConfig({
                 logo: `${siteUrl}/logo.svg`,
                 sameAs: [
                     'https://github.com/shieldci/laravel',
-                    'https://discord.gg/2u6neGqD'
+                    'https://discord.gg/JtYHEAS2aK'
                 ]
             }
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(orgSchema)])
@@ -357,7 +357,7 @@ export default defineConfig({
         // Social links
         socialLinks: [
             { icon: 'github', link: 'https://github.com/shieldci/laravel' },
-            { icon: 'discord', link: 'https://discord.gg/2u6neGqD' }
+            { icon: 'discord', link: 'https://discord.gg/JtYHEAS2aK' }
         ],
 
         // Edit on GitHub link
