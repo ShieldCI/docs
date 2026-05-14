@@ -105,5 +105,5 @@ Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to o
 ## Related Analyzers
 
 - [Vapor Configuration](/analyzers/reliability/vapor-config) - Validates serverless deployment config
-- [Horizon Reliability](/analyzers/reliability/horizon-reliability) - Validates Horizon prefix, provisioning, and runtime health
-- [Job Queue Configuration](/analyzers/reliability/job-queue-config) - Validates queue driver, blocking, and failed job handling
+- [Horizon Status](/analyzers/reliability/horizon-status) - Validates Horizon runtime health
+- [Queue Blocking](/analyzers/reliability/queue-blocking) - Validates queue driver and blocking configuration
