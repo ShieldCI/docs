@@ -147,7 +147,7 @@ Violations may result in temporary or permanent bans from the community.
 
 ## Getting Help
 
-- **Discord** - Join our [Discord community](https://discord.gg/2u6neGqD) for real-time help
+- **Discord** - Join our [Discord community](https://discord.gg/JtYHEAS2aK) for real-time help
 - **GitHub Discussions** - For questions and general discussions
 - **Documentation** - Check the docs for answers to common questions
 
