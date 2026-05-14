@@ -19,6 +19,7 @@ Validates Laravel Reverb WebSocket configuration. Checks for:
 
 - Channel authorization callbacks defined for private/presence channels
 - Presence channel callbacks returning minimal user data (not full `toArray()`)
+- Hardcoded or weak-default app credentials in `config/reverb.php` (`key` / `secret`)
 - SSL/TLS configured for production (wss:// secure WebSockets)
 - Allowed origins explicitly listed (no wildcards)
 
@@ -26,8 +27,9 @@ Validates Laravel Reverb WebSocket configuration. Checks for:
 
 - **Unauthorized Access:** Without channel authorization, anyone can listen to private channels
 - **Data Exposure:** Presence channels returning full user data expose passwords and tokens to all subscribers
+- **Credential Exposure:** Hardcoded Reverb secrets allow any client to forge events and impersonate the server
 - **Man-in-the-Middle:** Unencrypted ws:// connections can be intercepted on public networks
-- **Cross-Origin Abuse:** Wildcard origins allow malicious sites to connect to your WebSocket server
+- **Cross-Origin Abuse:** Wildcard origins allow malicious sites to connect to your WebSocket server — the official published config ships with `allowed_origins: ['*']` by default
 
 ## How to Fix
 
@@ -67,17 +69,17 @@ Broadcast::channel('chat.{roomId}', function (User $user, int $roomId) {
 **2. Enable secure WebSockets:**
 
 ```php
-// config/reverb.php
-'servers' => [
-    'reverb' => [
-        'host' => env('REVERB_HOST', '0.0.0.0'),
-        'port' => env('REVERB_PORT', 8080),
-        'scheme' => env('REVERB_SCHEME', 'https'),
-        'tls' => [
-            'local_cert' => env('REVERB_TLS_CERT'),
-            'local_pk' => env('REVERB_TLS_KEY'),
+'apps' => [
+    'provider' => 'config',
+    'apps' => [[
+        'key'    => env('REVERB_APP_KEY'),
+        'secret' => env('REVERB_APP_SECRET'),
+        'app_id' => env('REVERB_APP_ID'),
+        'options' => [
+            'scheme' => env('REVERB_SCHEME', 'https'),
+            'useTLS' => env('REVERB_SCHEME', 'https') === 'https',
         ],
-    ],
+    ]],
 ],
 ```
 
@@ -85,11 +87,15 @@ Broadcast::channel('chat.{roomId}', function (User $user, int $roomId) {
 
 ```php
 // config/reverb.php
+// Note: the official published config defaults allowed_origins to ['*'] — always restrict this.
 'apps' => [
-    [
-        'allowed_origins' => [
-            'https://app.example.com',
-            'https://admin.example.com',
+    'provider' => 'config',
+    'apps' => [
+        [
+            'allowed_origins' => [
+                'https://app.example.com',
+                'https://admin.example.com',
+            ],
         ],
     ],
 ],
