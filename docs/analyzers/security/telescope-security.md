@@ -15,43 +15,22 @@ pro: true
 
 ## What This Checks
 
-This analyzer validates that Laravel Telescope, a powerful debugging and profiling tool, is properly secured so it cannot leak sensitive data in production environments.
+Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production. Checks for:
 
-**Detected Vulnerable Patterns:**
-
-#### Production Usage (1)
-- Telescope in `require` instead of `require-dev` in `composer.json` -- will be installed in production
-
-#### Service Provider Registration (3)
-- Telescope package auto-discovery enabled (not in `dont-discover` array)
-- `TelescopeServiceProvider` registered in `config/app.php` (loads in all environments)
-- Telescope registered in `AppServiceProvider` without environment check
-
-#### Authorization Issues (3)
-- Missing `TelescopeServiceProvider` entirely -- dashboard may be publicly accessible
-- No `Telescope::auth()` gate configured -- dashboard is open to everyone
-- `Telescope::auth()` returns hardcoded `true` -- bypasses authorization
-
-#### Environment Checks (1)
-- No environment checks (`isLocal()`, `isProduction()`) -- Telescope may run in production
-
-#### Configuration Issues (3)
-- `enabled` config defaults to `true` -- Telescope active when env var is missing
-- Middleware only includes `web` without `auth` -- missing authentication layer
-- Predictable `/telescope` path increases exposure risk (Info level)
-
-#### Domain Security (2)
-- Telescope domain set to `null` -- shares cookies with main application (session hijacking risk)
-- Session cookies shared between main app and Telescope subdomain
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- Telescope in `require-dev` with auto-discovery disabled
-- `Telescope::auth()` with proper user validation
-- `Telescope::night()` as a safe alternative (only shows in local)
-- Environment-gated registration with `isLocal()` checks
-- `'enabled' => env('TELESCOPE_ENABLED', false)` (defaults to disabled)
-:::
+- **`composer.json`**: Telescope in `require` instead of `require-dev` — will be installed in production
+- **`composer.json`**: Auto-discovery not disabled (missing `dont-discover` entry) — registered in all environments
+- **`config/app.php`**: `TelescopeServiceProvider` listed in providers array — loads in all environments
+- **`bootstrap/providers.php`**: `TelescopeServiceProvider` registered unconditionally — loads in all environments
+- **`AppServiceProvider`**: Telescope registration without an `environment('local')` guard
+- **`TelescopeServiceProvider`**: File missing entirely — no gate or access control in place
+- **`TelescopeServiceProvider`**: No `viewTelescope` gate defined — dashboard open to everyone
+- **`TelescopeServiceProvider`**: `gate()` method exists but `Gate::define('viewTelescope', ...)` is absent
+- **`TelescopeServiceProvider`**: Authorization callback returns hardcoded `true` — anyone can access the dashboard
+- **`config/telescope.php`**: `enabled` defaults to `true` — Telescope active when `TELESCOPE_ENABLED` env var is unset
+- **`config/telescope.php`**: Middleware only includes `web` — no authentication layer protecting the dashboard
+- **`config/telescope.php`**: Default `/telescope` path — predictable and increases exposure risk (Info)
+- **Scheduler**: `telescope:prune` not scheduled — `telescope_entries` table grows indefinitely
+- **`TelescopeServiceProvider`**: `hideSensitiveRequestDetails()` not called — passwords and tokens may be recorded
 
 ## Why It Matters
 
@@ -150,30 +129,14 @@ protected function gate(): void
 **After (✅):**
 ```php
 // app/Providers/TelescopeServiceProvider.php
-public function boot(): void
+protected function gate(): void
 {
-    parent::boot();
-
-    Telescope::auth(function (Request $request) {
-        return app()->environment('local')
-            || $request->user()?->isAdmin() ?? false;
+    Gate::define('viewTelescope', function (User $user) {
+        return in_array($user->email, [
+            'admin@example.com',
+        ]);
     });
 }
-```
-
-**Best Practice: Separate Domain for Telescope (✅✅):**
-
-```php
-// config/telescope.php
-'domain' => env('TELESCOPE_DOMAIN', null),
-'path' => 'telescope',
-'middleware' => ['web', 'auth'],
-```
-
-```env
-# .env.local
-TELESCOPE_ENABLED=true
-TELESCOPE_DOMAIN=telescope.myapp.test
 ```
 
 
