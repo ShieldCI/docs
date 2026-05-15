@@ -19,17 +19,9 @@ This analyzer detects SQL injection vulnerabilities that arise specifically thro
 
 - **Dynamic table/column names** in `exists` and `unique` rules (e.g., `"exists:$table,col"` or `"unique:{$var},col"`)
 - **Request input in validation rules** (e.g., `"exists:users,$request->column"`)
-- **Rule builder with string concatenation** (e.g., `Rule::exists('table' . $var)` or `Rule::unique("table" . $var)`)
+- **Rule builder with string concatenation** (e.g., `Rule::exists('table' . $var)` or `Rule::unique("table" . $var)`) — reported at **Critical** severity
 - **Custom validation functions** that contain database queries (`DB::`, `->get()`, `->first()`)
 - **Validator::extend()** calls that include database queries without parameter binding
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- Hardcoded `exists:users,email` rules with static table and column names
-- `Rule::exists('users', 'email')` with static string arguments
-- Standard Laravel validation rules like `required`, `string`, `max:255`
-- Eloquent queries in custom validators that use parameter binding
-:::
 
 ## Why It Matters
 
@@ -43,7 +35,7 @@ Validation-layer SQL injection is particularly dangerous because:
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Replace dynamic table/column names with hardcoded values:
 
@@ -73,7 +65,7 @@ public function rules(Request $request)
 }
 ```
 
-### Proper Fix
+### Proper Fix (15 minutes)
 
 Use the `Rule` builder with `where()` constraints instead of string concatenation:
 
