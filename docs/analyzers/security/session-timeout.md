@@ -15,13 +15,15 @@ pro: true
 
 ## What This Checks
 
-This analyzer validates session timeout and token lifetime configuration across your Laravel application to ensure sessions do not remain active longer than recommended:
+This analyzer validates session timeout, cookie security, and lifetime configuration across your Laravel application:
 
 - **Session lifetime** - Checks `config/session.php` for `lifetime` values exceeding 120 minutes (2 hours). Supports both direct values and `env()` defaults
-- **Expire on close** - Recognizes `expire_on_close => true` as a safe configuration and skips lifetime checks
-- **Remember me tokens** - Checks `config/auth.php` for remember token lifetimes exceeding 30 days
-- **Sanctum token expiration** - Validates `config/sanctum.php` expiration settings; flags `null` (no expiration) and values exceeding 1 year (525,600 minutes)
-- **Passport token expiration** - Validates `config/passport.php` token expiration values exceeding 365 days
+- **Expire on close** - Recognizes `expire_on_close => true` as a mitigating factor — downgrades excessive lifetime issues to Low severity rather than suppressing them, as browser behavior varies
+- **Remember me tokens** - Checks `config/auth.php` for custom remember token lifetime keys exceeding 30 days
+- **Cookie secure flag** - Flags `secure => false`; High severity. Cookie sent over unencrypted HTTP in production
+- **Cookie HttpOnly flag** - Flags `http_only => false`; Medium severity. JavaScript can read the session cookie (XSS risk)
+- **Cookie SameSite attribute** - Flags `same_site => 'none'` without `secure => true` (browser-rejected); High severity. Flags `same_site => 'none'` alone (cross-origin exposure); Medium severity
+- **Session driver** - Flags `driver => 'cookie'` (client-side session storage); Medium severity
 
 **Recommended limits:**
 
@@ -31,12 +33,6 @@ This analyzer validates session timeout and token lifetime configuration across 
 | Sensitive/financial apps | 15 minutes |
 | Admin panels | 30 minutes |
 | Remember me tokens | 30 days |
-| API tokens (Sanctum) | 1 year |
-| OAuth tokens (Passport) | 1 year |
-
-::: tip When This Analyzer Runs
-This analyzer only runs when a `config/session.php` file exists. It is automatically skipped for applications that do not use session-based authentication.
-:::
 
 ## Why It Matters
 
@@ -50,7 +46,7 @@ Excessively long session lifetimes increase the window for several attack vector
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (2 minutes)
 
 Update session lifetime in `config/session.php`:
 
@@ -76,9 +72,9 @@ return [
 ];
 ```
 
-### Proper Fix
+### Proper Fix (5 minutes)
 
-Configure appropriate timeouts across all authentication mechanisms:
+Configure appropriate session lifetime and cookie security:
 
 **Session configuration:**
 ```php
@@ -87,38 +83,13 @@ return [
     // General app: 120 minutes, Sensitive app: 15 minutes
     'lifetime' => env('SESSION_LIFETIME', 120),
 
-    // Optionally expire session when browser closes
     'expire_on_close' => false,
+
+    // Cookie security
+    'secure' => env('SESSION_SECURE_COOKIE', true),
+    'http_only' => true,
+    'same_site' => 'lax',
 ];
-```
-
-**Sanctum token expiration:**
-```php
-// config/sanctum.php
-return [
-    // Before (❌): no expiration
-    // 'expiration' => null,
-
-    // After (✅): tokens expire after 1 year (525600 minutes)
-    'expiration' => env('SANCTUM_TOKEN_EXPIRATION', 525600),
-];
-```
-
-**Passport token expiration:**
-```php
-// app/Providers/AuthServiceProvider.php
-use Laravel\Passport\Passport;
-
-public function boot()
-{
-    // Before (❌): tokens never expire
-    // Passport::tokensExpireIn(now()->addYears(10));
-
-    // After (✅): reasonable token lifetimes
-    Passport::tokensExpireIn(now()->addDays(15));
-    Passport::refreshTokensExpireIn(now()->addDays(30));
-    Passport::personalAccessTokensExpireIn(now()->addMonths(6));
-}
 ```
 
 **Environment-specific session lifetime:**
@@ -133,13 +104,16 @@ SESSION_LIFETIME=15
 SESSION_LIFETIME=480
 ```
 
+::: tip Sanctum and Passport token expiration
+Sanctum and Passport token lifetimes are validated by their dedicated analyzers: [Sanctum Security](/analyzers/security/sanctum-security) and [Passport Security](/analyzers/security/passport-security).
+:::
+
 
 ## References
 
 - [Laravel Session Configuration](https://laravel.com/docs/session#configuration)
-- [Laravel Sanctum Token Expiration](https://laravel.com/docs/sanctum#token-expiration)
-- [Laravel Passport Token Lifetimes](https://laravel.com/docs/passport#token-lifetimes)
 - [OWASP Session Management](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/06-Session_Management_Testing/)
+- [OWASP Secure Cookie Attributes](https://owasp.org/www-community/controls/SecureCookieAttribute)
 - [CWE-613: Insufficient Session Expiration](https://cwe.mitre.org/data/definitions/613.html)
 
 ## Related Analyzers
