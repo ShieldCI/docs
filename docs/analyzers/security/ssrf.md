@@ -15,40 +15,18 @@ pro: true
 
 ## What This Checks
 
-This analyzer detects Server-Side Request Forgery (SSRF) vulnerabilities by identifying patterns where user input can control the destination of outbound HTTP requests made by the server.
+Detects Server-Side Request Forgery (SSRF) vulnerabilities where user input controls the destination of outbound HTTP requests. Checks for:
 
-**Detected Vulnerable Patterns:**
+- **Laravel HTTP facade** — `Http::get()`, `Http::post()`, `Http::put()`, `Http::patch()`, `Http::delete()`, `Http::head()` called with a user-controlled URL
+- **Guzzle client methods (URL is first arg)** — `get()`, `post()`, `put()`, `patch()`, `delete()`, `head()`, `options()`, and async variants (`getAsync()`, `postAsync()`, `putAsync()`, `patchAsync()`, `deleteAsync()`, `headAsync()`, `optionsAsync()`) with a user-controlled URL
+- **Guzzle client methods (URL is second arg)** — `request()`, `requestAsync()` with a user-controlled URL in the second argument
+- **PHP remote fetch functions** — `file_get_contents()`, `fopen()`, `readfile()`, `get_headers()`, `fsockopen()`, `pfsockopen()`, and `simplexml_load_file()` with user-controlled URLs
+- **cURL** — `curl_init($url)`, `curl_setopt($ch, CURLOPT_URL, ...)`, and `curl_setopt_array($ch, [CURLOPT_URL => ...])` with user-controlled URLs
+- **XML and SOAP sinks** — `new SoapClient($wsdlUrl)`, `DOMDocument::load()`, and `XMLReader::open()` with user-controlled URLs
+- **Hardcoded cloud metadata endpoints** — references to `169.254.169.254`, `169.254.170.2`, `metadata.google.internal`, or `/latest/meta-data/` outside of safe contexts (blocklist arrays, validation comparisons)
+- **Variable taint propagation** — user input assigned to a variable (e.g. `$url = request('url')`) and later passed as a request destination
 
-#### HTTP Client Method Calls (18)
-Guzzle and Laravel HTTP facade methods with user-controlled URLs:
-- **Guzzle methods**: `get()`, `post()`, `put()`, `patch()`, `delete()`, `head()`, `options()`, `request()`, `send()`, `sendAsync()`, `requestAsync()`
-- **Laravel HTTP facade**: `Http::get()`, `Http::post()`, `Http::put()`, `Http::patch()`, `Http::delete()`, `Http::head()`, `Http::request()`, `Http::send()`
-
-#### Remote Content Fetch Functions (5)
-PHP functions that can fetch remote content with user-controlled URLs:
-- `file_get_contents()` - Can fetch remote URLs
-- `fopen()` - Supports URL wrappers for remote resources
-- `curl_init()` - Initializes a cURL session with a URL
-- `curl_exec()` - Performs the cURL request
-- `curl_setopt()` - Specifically checks `CURLOPT_URL` option with user input
-
-#### Cloud Metadata Endpoints (4)
-Hardcoded references to cloud provider metadata services that are common SSRF targets:
-- `169.254.169.254` - AWS/Azure/GCP instance metadata
-- `169.254.170.2` - AWS ECS task metadata
-- `metadata.google.internal` - GCP metadata service
-- `metadata` - Short-form metadata reference
-
-**User Input Detection:**
-
-The analyzer traces user input from these sources through expressions, concatenation, and string interpolation:
-- Superglobals: `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`
-- Laravel helpers: `request()`, `Request::` facade
-- Request object: `$request->input()`, `$request->get()`, and other method calls
-
-::: tip AST-Based Analysis
-This analyzer uses PHP-Parser AST analysis for accurate detection. It recursively traces user input through concatenation operations, string interpolation (encapsed strings), and nested expressions to identify tainted URLs.
-:::
+User input is traced from `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `Request::` facade, and `$request->input()` through concatenation and string interpolation.
 
 ## Why It Matters
 
