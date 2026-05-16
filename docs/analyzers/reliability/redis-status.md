@@ -24,16 +24,6 @@ This analyzer verifies Redis connectivity, health, and configuration across all 
 - **Persistence configuration** - For connections used by queues or sessions, verifies that AOF or RDB persistence is enabled
 - **All connections** - Tests every configured Redis connection (from `database.redis`), not just the default
 
-::: tip When This Analyzer Runs
-This analyzer only runs when the application actively uses Redis for at least one of:
-- Cache (`cache.default` driver is `redis`)
-- Queue (`queue.default` driver is `redis`)
-- Session (`session.driver` is `redis`)
-- Broadcasting (`broadcasting.default` is `redis`)
-
-It is automatically skipped in CI environments (`$runInCI = false`).
-:::
-
 ## Why It Matters
 
 Redis is a critical infrastructure component for many Laravel applications. When Redis fails or degrades:
@@ -48,7 +38,7 @@ Redis is a critical infrastructure component for many Laravel applications. When
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 1. Verify Redis is running and accessible:
 
@@ -79,7 +69,7 @@ php artisan tinker
 >>> Illuminate\Support\Facades\Redis::connection()->ping()
 ```
 
-### Proper Fix
+### Proper Fix (15 minutes)
 
 1. **Configure Redis connections properly** in `config/database.php`:
 
@@ -151,22 +141,34 @@ Cache::tags(['reports'])->flush();
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments.
-
-**Specify which Redis connections to check:**
-
-```php
-// config/shieldci.php
-'redis_connections' => ['default', 'cache', 'queue'],
-```
-
-If `redis_connections` is not configured, the analyzer automatically tests all connections defined in `database.redis` (excluding the `client` and `options` keys).
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures Redis is accessible during development
 - ✅ **Staging/Production servers**: Confirms Redis health and configuration
 - ✅ **After infrastructure changes**: Run after Redis upgrades, migrations, or configuration changes
 - ❌ **CI/CD pipelines**: Skipped automatically (Redis may not be available)
+
+**Specify which Redis connections to check:**
+
+By default, the analyzer automatically tests all connections defined in `database.redis` (excluding the `client` and `options` keys). If you want to configure the `connections` to check, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+```php
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+        
+        'redis-status' => [
+            'connections' => ['default', 'cache', 'queue'],
+        ],
+    ],
+],
+```
 
 ## References
 
