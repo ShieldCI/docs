@@ -11,33 +11,15 @@ pro: true
 
 | Analyzer ID           | Category     | Severity   | Time To Fix  |
 |-----------------------| :----------: |:----------:| ------------:|
-| `xxe-vulnerabilities` | 🛡️ Security  | Critical   | 20 minutes   |
+| `xxe`                 | 🛡️ Security  | Critical   | 20 minutes   |
 
 ## What This Checks
 
-This analyzer detects XML External Entity (XXE) injection vulnerabilities by scanning for unsafe XML parsing patterns in your Laravel application.
+This analyzer detects XML External Entity (XXE) injection vulnerabilities by scanning for unsafe XML parsing patterns in your Laravel application. XXE occurs when an XML parser resolves external entity references inside attacker-controlled input, enabling file reads, SSRF, and denial-of-service:
 
-**Detected Vulnerable Patterns:**
-
-#### XML Parsing Functions (4)
-- `simplexml_load_string()` - Parses XML string without XXE protection
-- `simplexml_load_file()` - Parses XML file without XXE protection
-- `xml_parse()` - Parses XML data without external entity restrictions
-- `xml_parser_create()` - Creates XML parser without safe configuration
-
-#### DOMDocument Usage (2)
-- `new DOMDocument()` - Instantiation without disabling external entities
-- `DOMDocument::loadXML()` - Loading XML without `LIBXML_NOENT` protection
-
-#### XMLReader Usage (1)
-- `new XMLReader()` - Instantiation without `setParserProperty(XMLReader::SUBST_ENTITIES, false)`
-
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- XML functions called with `LIBXML_NOENT` option
-- XML functions called with `LIBXML_NONET` option
-- Bitwise OR combinations of safe LIBXML constants: `LIBXML_NOENT | LIBXML_NONET`
-:::
+- **`simplexml_load_string()` and `simplexml_load_file()`** called without `LIBXML_NONET` — flagged at **High** severity; escalates to **Critical** when `LIBXML_NOENT`, `LIBXML_DTDLOAD`, or `LIBXML_DTDATTR` is also present
+- **`DOMDocument::loadXML()` and `DOMDocument::load()`** called without `LIBXML_NONET` — same severity rules; bare `new DOMDocument()` instantiation without a load call is not flagged
+- **`XMLReader::open()` and `XMLReader::XML()`** in files that instantiate `XMLReader` without a preceding `setParserProperty(XMLReader::SUBST_ENTITIES, false)` call
 
 ## Why It Matters
 
@@ -77,8 +59,8 @@ public function parseXml(Request $request)
 {
     $xml = $request->getContent();
 
-    // SAFE: External entities disabled
-    $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOENT | LIBXML_NONET);
+    // SAFE: Network access disabled during XML parsing
+    $doc = simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NONET);
 
     return response()->json(['data' => $doc]);
 }
@@ -109,11 +91,9 @@ public function importXml(Request $request)
 {
     $xmlContent = $request->input('xml_data');
 
-    // SAFE: External entities disabled
+    // SAFE: Network access disabled during XML parsing
     $doc = new DOMDocument();
-    $doc->resolveExternals = false;
-    $doc->substituteEntities = false;
-    $doc->loadXML($xmlContent, LIBXML_NOENT | LIBXML_NONET);
+    $doc->loadXML($xmlContent, LIBXML_NONET);
 
     $items = $doc->getElementsByTagName('item');
     // Process items...
@@ -140,10 +120,10 @@ public function readXml(string $filePath)
 ```php
 public function readXml(string $filePath)
 {
-    // SAFE: Entity substitution explicitly disabled
+    // SAFE: Entity substitution disabled before opening
     $reader = new XMLReader();
-    $reader->open($filePath);
     $reader->setParserProperty(XMLReader::SUBST_ENTITIES, false);
+    $reader->open($filePath);
 
     while ($reader->read()) {
         // Process nodes...
