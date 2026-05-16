@@ -3,7 +3,7 @@ title: Web Server Fingerprinting Analyzer
 description: Detects information disclosure via Server HTTP header that aids attackers in fingerprinting
 icon: fingerprint
 outline: [2, 3]
-tags: fingerprinting,headers,server,information-disclosure,security
+tags: fingerprinting,headers,server,information-disclosure,security,reconnaissance
 pro: true
 ---
 
@@ -25,14 +25,6 @@ This analyzer detects web server information disclosure through the `Server` HTT
 
 The analyzer makes a real HTTP request to a guest route (login page or homepage) and examines the `Server` header in the response.
 
-::: tip When This Analyzer Runs
-This analyzer only runs in production/staging environments and is automatically skipped in:
-- Local development environments
-- CI/CD pipelines (`$runInCI = false`)
-- When no accessible route is found
-- When the application URL points to localhost
-:::
-
 ## Why It Matters
 
 The `Server` header reveals information that helps attackers plan targeted attacks:
@@ -47,7 +39,7 @@ While security through obscurity is not a standalone defense, removing version i
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (2 minutes)
 
 Configure your web server to suppress version information:
 
@@ -70,7 +62,7 @@ ServerTokens Prod
 ServerSignature Off
 ```
 
-### Proper Fix
+### Proper Fix (5 minutes)
 
 Remove or obfuscate the `Server` header entirely and suppress related headers:
 
@@ -123,14 +115,6 @@ class SecurityHeaders
 
         return $response;
     }
-}
-```
-
-**Caddy:**
-```txt
-yourdomain.com {
-    header -Server
-    header -X-Powered-By
 }
 ```
 
