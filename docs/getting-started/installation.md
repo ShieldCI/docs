@@ -13,7 +13,7 @@ outline: [2, 3]
 ### Minimum Requirements
 
 - **PHP:** 8.1 or higher
-- **Laravel:** 9.x, 10.x, 11.x, or 12.x
+- **Laravel:** 9+
 - **Composer:** 2.0 or higher
 - **Memory:** 512MB minimum (1GB recommended for large projects)
 - **Disk Space:** 50MB for package + cache
@@ -28,11 +28,12 @@ outline: [2, 3]
 ### Compatibility Matrix
 
 | Laravel Version | PHP Version | ShieldCI Support |
-|----------------|-------------|------------------|
-| Laravel 12.x   | PHP 8.2+    | ✅ Full Support   |
-| Laravel 11.x   | PHP 8.2+    | ✅ Full Support   |
-| Laravel 10.x   | PHP 8.1+    | ✅ Full Support   |
-| Laravel 9.x    | PHP 8.1+    | ✅ Full Support   |
+|-----------------|-------------|------------------|
+| Laravel 13.x    | PHP 8.3+    | ✅ Full Support   |
+| Laravel 12.x    | PHP 8.2+    | ✅ Full Support   |
+| Laravel 11.x    | PHP 8.2+    | ✅ Full Support   |
+| Laravel 10.x    | PHP 8.1+    | ✅ Full Support   |
+| Laravel 9.x     | PHP 8.1+    | ✅ Full Support   |
 
 ## Installation Methods
 
