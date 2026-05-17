@@ -10,7 +10,7 @@ tags: laravel,security,eloquent,query-builder,multi-tenant,data-leak,global-scop
 
 | Analyzer ID                         | Category           | Severity | Time To Fix |
 | ------------------------------------| :----------------: |:--------:| -----------:|
-| `mixed-query-builder-eloquent`      | 🏅 Best Practices  | High     | 20 minutes  |
+| `mixed-query-builder-eloquent`      | 🏅 Best Practices  | Medium   | 30 minutes  |
 
 ## What This Checks
 
@@ -241,7 +241,7 @@ For external packages or edge cases where model scanning doesn't work (e.g., mod
 2. **Model scanning** extracts `$table` properties from model files
 3. **Inference** uses Laravel's snake_case pluralization as fallback (e.g., `UserProfile` → `user_profiles`)
 
-### Proper Fix (20 minutes)
+### Proper Fix (30 minutes)
 
 **1. Audit and Standardize Data Access Patterns**
 

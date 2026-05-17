@@ -71,7 +71,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Mixed Query Builder and Eloquent"
   description="Detects inconsistent query building patterns"
-  severity="low"
+  severity="medium"
   link="/analyzers/best-practices/mixed-query-builder-eloquent"
 />
 
@@ -104,7 +104,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Silent Failure"
   description="Detects empty catch blocks and error suppression that hide failures"
-  severity="high"
+  severity="medium"
   link="/analyzers/best-practices/silent-failure"
 />
 
