@@ -268,7 +268,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Cookie Security"
   description="Validates cookie encryption and security configuration"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/cookie"
 />
 
@@ -283,7 +283,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Fillable Foreign Key"
   description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/fillable-foreign-key"
 />
 
@@ -371,7 +371,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Up-to-Date Dependencies"
   description="Checks if dependencies are up-to-date with available bug fixes and security patches"
-  severity="low"
+  severity="medium"
   link="/analyzers/security/up-to-date-dependencies"
 />
 
@@ -385,7 +385,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="License Compliance"
   description="Validates that all dependencies use legally acceptable licenses for your application type"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/license-compliance"
 />
 
@@ -398,7 +398,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="File Permissions"
   description="Validates that project files and directories use secure permissions"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/file-permissions"
 />
 

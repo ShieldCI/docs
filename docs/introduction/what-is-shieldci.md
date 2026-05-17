@@ -177,11 +177,12 @@ ShieldCI performs all analysis locally:
 ShieldCI supports all modern Laravel versions:
 
 | Laravel Version | Support Status | PHP Version |
-|----------------|----------------|-------------|
-| Laravel 12.x   | ✅ Fully Supported | PHP 8.2+    |
-| Laravel 11.x   | ✅ Fully Supported | PHP 8.2+    |
-| Laravel 10.x   | ✅ Fully Supported | PHP 8.1+    |
-| Laravel 9.x    | ✅ Fully Supported | PHP 8.1+    |
+|-----------------|----------------|-------------|
+| Laravel 13.x    | ✅ Fully Supported | PHP 8.3+    |
+| Laravel 12.x    | ✅ Fully Supported | PHP 8.2+    |
+| Laravel 11.x    | ✅ Fully Supported | PHP 8.2+    |
+| Laravel 10.x    | ✅ Fully Supported | PHP 8.1+    |
+| Laravel 9.x     | ✅ Fully Supported | PHP 8.1+    |
 
 ## Use Cases
 

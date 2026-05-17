@@ -23,14 +23,14 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 <AnalyzerCard
   title="Nesting Depth"
   description="Detects excessive code nesting levels that reduce readability"
-  severity="high"
+  severity="medium"
   link="/analyzers/code-quality/nesting-depth"
 />
 
 <AnalyzerCard
   title="Method Length"
   description="Flags methods exceeding recommended line count for better maintainability"
-  severity="medium"
+  severity="low"
   link="/analyzers/code-quality/method-length"
 />
 
@@ -56,7 +56,7 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 <AnalyzerCard
   title="Missing DocBlock"
   description="Flags public methods without proper PHPDoc documentation"
-  severity="medium"
+  severity="low"
   link="/analyzers/code-quality/missing-docblock"
 />
 

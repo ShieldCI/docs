@@ -57,7 +57,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Missing Chunk"
   description="Detects missing chunk() calls for large datasets"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/chunk-missing"
 />
 
@@ -71,7 +71,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Mixed Query Builder and Eloquent"
   description="Detects inconsistent query building patterns"
-  severity="low"
+  severity="medium"
   link="/analyzers/best-practices/mixed-query-builder-eloquent"
 />
 
@@ -91,7 +91,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Service Container Resolution"
   description="Detects manual service container resolution and recommends constructor dependency injection"
-  severity="low"
+  severity="medium"
   link="/analyzers/best-practices/service-container-resolution"
 />
 
@@ -104,14 +104,14 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Silent Failure"
   description="Detects empty catch blocks and error suppression that hide failures"
-  severity="high"
+  severity="medium"
   link="/analyzers/best-practices/silent-failure"
 />
 
 <AnalyzerCard
   title="Missing Error Tracking"
   description="Ensures error tracking is configured"
-  severity="medium"
+  severity="info"
   link="/analyzers/best-practices/missing-error-tracking"
 />
 
@@ -138,7 +138,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="PHP-Side Data Filtering"
   description="Detects filtering that should be done in database"
-  severity="medium"
+  severity="critical"
   link="/analyzers/best-practices/php-side-filtering"
 />
 
