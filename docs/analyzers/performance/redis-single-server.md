@@ -1,5 +1,5 @@
 ---
-title: Redis Single Server Optimization
+title: Redis Single Server Optimization Analyzer
 description: Suggests using Unix sockets for local Redis connections to improve performance
 icon: zap
 outline: [2, 3]
@@ -7,7 +7,7 @@ tags: redis,sockets,performance,optimization,infrastructure
 pro: true
 ---
 
-# Redis Single Server Optimization
+# Redis Single Server Optimization Analyzer
 
 | Analyzer ID                       | Category       | Severity   | Time To Fix  |
 | ----------------------------------| :------------: |:----------:| ------------:|

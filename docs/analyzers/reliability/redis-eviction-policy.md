@@ -3,7 +3,7 @@ title: Redis Eviction Policy Analyzer
 description: Checks Redis eviction policy is properly configured for the workload type
 icon: trash-2
 outline: [2, 3]
-tags: redis,eviction,memory,reliability,configuration
+tags: redis,eviction,memory,reliability,configuration,infrastructure,cache,queue
 pro: true
 ---
 

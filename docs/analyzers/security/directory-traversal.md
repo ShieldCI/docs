@@ -3,7 +3,7 @@ title: Directory Traversal Analyzer
 description: Detects path traversal vulnerabilities where user input can access files outside intended directories via file operations, includes, and Laravel Storage
 icon: folder-open
 outline: [2, 3]
-tags: directory-traversal,path-traversal,file-access,security,lfi
+tags: directory-traversal,path-traversal,file-access,security,lfi,file-inclusion
 pro: true
 ---
 

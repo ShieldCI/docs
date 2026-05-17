@@ -3,7 +3,7 @@ title: Nova Security Analyzer
 description: Validates that Laravel Nova admin panel is properly secured with authentication gates, middleware, resource policies, and tool authorization
 icon: shield
 outline: [2, 3]
-tags: nova,admin,authentication,security,authorization
+tags: nova,admin,authentication,security,authorization,dashboard
 pro: true
 ---
 

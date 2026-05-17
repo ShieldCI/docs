@@ -3,7 +3,7 @@ title: Server-Side Request Forgery (SSRF) Analyzer
 description: Detects SSRF vulnerabilities where user input controls outbound HTTP request destinations, enabling access to internal services and cloud metadata
 icon: globe
 outline: [2, 3]
-tags: ssrf,server-side-request-forgery,security,http
+tags: ssrf,server-side-request-forgery,security,http,network,metadata
 pro: true
 ---
 

@@ -3,7 +3,7 @@ title: Arbitrary File Upload Analyzer
 description: Detects arbitrary file upload vulnerabilities that could lead to remote code execution in Laravel applications
 icon: file-warning
 outline: [2, 3]
-tags: file-upload,rce,remote-code-execution,security,validation
+tags: file-upload,rce,remote-code-execution,security,validation,code-execution
 pro: true
 ---
 

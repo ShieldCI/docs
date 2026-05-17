@@ -3,7 +3,7 @@ title: Host Header Injection Analyzer
 description: Detects Host header injection vulnerabilities in URL generation and routing
 icon: server
 outline: [2, 3]
-tags: host-injection,header,security,cache-poisoning
+tags: host-injection,header,security,cache-poisoning,host-header,injection,ssrf,http-headers
 pro: true
 ---
 

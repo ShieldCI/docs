@@ -3,7 +3,7 @@ title: Regular Expression DoS Analyzer
 description: Detects regular expressions vulnerable to catastrophic backtracking (ReDoS)
 icon: clock
 outline: [2, 3]
-tags: regex,redos,denial-of-service,security,performance
+tags: regex,redos,denial-of-service,security,performance,dos,backtracking
 pro: true
 ---
 

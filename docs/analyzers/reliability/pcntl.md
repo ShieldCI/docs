@@ -3,7 +3,7 @@ title: PCNTL Extension Analyzer
 description: Verifies that required PHP extensions (PCNTL, Redis) are loaded for queue and cache operations
 icon: cpu
 outline: [2, 3]
-tags: pcntl,extension,signals,queue,reliability
+tags: pcntl,extension,signals,queue,reliability,infrastructure
 pro: true
 ---
 

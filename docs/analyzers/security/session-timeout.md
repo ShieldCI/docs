@@ -3,7 +3,7 @@ title: Session Timeout Analyzer
 description: Validates session timeout and lifetime configuration to prevent unauthorized access
 icon: timer
 outline: [2, 3]
-tags: session,timeout,lifetime,security,configuration
+tags: session,timeout,lifetime,security,configuration,authentication,cookies
 pro: true
 ---
 

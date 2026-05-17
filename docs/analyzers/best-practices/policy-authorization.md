@@ -3,7 +3,7 @@ title: Policy Authorization Analyzer
 description: Validates that resource controllers have corresponding Policy classes for proper authorization enforcement
 icon: check-circle
 outline: [2, 3]
-tags: best-practices,authorization,policies,controllers
+tags: best-practices,authorization,policies,controllers,laravel
 pro: true
 ---
 

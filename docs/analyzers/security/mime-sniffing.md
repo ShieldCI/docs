@@ -3,7 +3,7 @@ title: MIME Sniffing Protection Analyzer
 description: Validates X-Content-Type-Options header to prevent browser MIME sniffing attacks
 icon: file
 outline: [2, 3]
-tags: mime-sniffing,headers,content-type,security
+tags: mime-sniffing,headers,content-type,security,xss
 pro: true
 ---
 

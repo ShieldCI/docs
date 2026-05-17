@@ -3,7 +3,7 @@ title: Cache Busting Analyzer
 description: Verifies frontend assets use cache busting to prevent stale asset delivery after deployments
 icon: refresh-cw
 outline: [2, 3]
-tags: cache-busting,assets,versioning,reliability,deployment
+tags: cache-busting,assets,versioning,reliability,deployment,frontend,caching
 pro: true
 ---
 

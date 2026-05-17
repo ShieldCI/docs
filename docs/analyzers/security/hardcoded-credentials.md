@@ -3,7 +3,7 @@ title: Hardcoded Credentials Analyzer
 description: Detects hardcoded passwords, API keys, and other secrets embedded in source code that should be stored in environment variables
 icon: key
 outline: [2, 3]
-tags: credentials,secrets,hardcoded,api-key,password,security
+tags: credentials,secrets,hardcoded,api-key,password,security,passwords,api-keys
 pro: true
 ---
 

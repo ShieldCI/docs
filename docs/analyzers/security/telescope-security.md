@@ -3,7 +3,7 @@ title: Telescope Security Analyzer
 description: Validates Laravel Telescope debug tool is properly secured and disabled in production, preventing exposure of sensitive application data
 icon: eye
 outline: [2, 3]
-tags: telescope,debug,authentication,security,production
+tags: telescope,debug,authentication,security,production,debugging,data-exposure
 pro: true
 ---
 

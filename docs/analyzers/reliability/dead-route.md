@@ -3,7 +3,7 @@ title: Dead Route Analyzer
 description: Detects routes pointing to non-existent or invalid controllers and actions
 icon: link-2
 outline: [2, 3]
-tags: routes,dead-code,controllers,reliability
+tags: routes,dead-code,controllers,reliability,routing,code-quality
 pro: true
 ---
 

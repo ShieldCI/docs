@@ -3,7 +3,7 @@ title: Remote Code Execution (RCE) Analyzer
 description: Detects remote code execution vulnerabilities including eval, preg_replace /e modifier, variable functions, unsafe callbacks, and Reflection-based execution
 icon: terminal
 outline: [2, 3]
-tags: rce,remote-code-execution,security,code-execution
+tags: rce,remote-code-execution,security,code-execution,eval
 pro: true
 ---
 

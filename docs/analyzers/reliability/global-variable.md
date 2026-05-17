@@ -3,7 +3,7 @@ title: Global Variable Analyzer
 description: Detects use of PHP superglobals and global functions that should use Laravel alternatives
 icon: globe
 outline: [2, 3]
-tags: global-variable,state,reliability,code-quality
+tags: global-variable,state,reliability,code-quality,globals,superglobals,best-practices
 pro: true
 ---
 

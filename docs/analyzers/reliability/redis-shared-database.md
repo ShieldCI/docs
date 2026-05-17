@@ -3,7 +3,7 @@ title: Redis Shared Database Analyzer
 description: Detects when multiple Laravel services share the same Redis database number causing data loss risks
 icon: layers
 outline: [2, 3]
-tags: redis,database,shared,isolation,reliability
+tags: redis,database,shared,isolation,reliability,infrastructure,cache,queue,session,configuration
 pro: true
 ---
 

@@ -3,7 +3,7 @@ title: Object Injection Analyzer
 description: Detects PHP object injection vulnerabilities through unsafe deserialization with unserialize() and exploitable magic methods
 icon: box
 outline: [2, 3]
-tags: object-injection,unserialize,deserialization,security
+tags: object-injection,unserialize,deserialization,security,magic-methods
 pro: true
 ---
 

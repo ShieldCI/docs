@@ -3,7 +3,7 @@ title: Cookie Domain Analyzer
 description: Detects unnecessary cookie domain configuration that makes cookies less restrictive and exposes them to subdomain takeover attacks
 icon: lock
 outline: [2, 3]
-tags: cookies,domain,subdomain,security,configuration,session
+tags: cookies,domain,subdomain,security,configuration,session,cookie
 pro: true
 ---
 

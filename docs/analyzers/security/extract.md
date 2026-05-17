@@ -3,7 +3,7 @@ title: Extract Function Analyzer
 description: Detects use of PHP extract() function which can overwrite variables, leading to authentication bypass, variable pollution, and code injection
 icon: alert-triangle
 outline: [2, 3]
-tags: extract,variable-overwrite,security,php
+tags: extract,variable-overwrite,security,php,variable-pollution,code-injection
 pro: true
 ---
 
