@@ -40,7 +40,7 @@ Object injection attacks are particularly dangerous because the vulnerability ex
 
 Replace `unserialize()` with JSON:
 
-**Before:**
+**Before (❌):**
 ```php
 public function loadPreferences(Request $request)
 {
@@ -53,7 +53,7 @@ public function loadPreferences(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function loadPreferences(Request $request)
 {
@@ -74,7 +74,7 @@ public function loadPreferences(Request $request)
 
 **If you must use `unserialize()`, restrict allowed classes:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function restoreSession(string $sessionData)
 {
@@ -85,7 +85,7 @@ public function restoreSession(string $sessionData)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function restoreSession(string $sessionData)
 {
@@ -107,7 +107,7 @@ public function restoreSession(string $sessionData)
 
 **Prevent phar:// deserialization attacks:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function downloadFile(Request $request)
 {
@@ -120,7 +120,7 @@ public function downloadFile(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function downloadFile(Request $request)
 {
@@ -141,7 +141,7 @@ public function downloadFile(Request $request)
 
 **Audit magic methods for dangerous operations:**
 
-**Before:**
+**Before (❌):**
 ```php
 class CacheItem
 {
@@ -158,7 +158,7 @@ class CacheItem
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 class CacheItem
 {

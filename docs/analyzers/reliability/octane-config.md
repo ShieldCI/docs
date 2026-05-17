@@ -44,41 +44,44 @@ The analyzer is automatically skipped on Laravel Vapor (serverless architecture 
 
 ## How to Fix
 
-### Publish the config
+### Quick Fix (15 minutes)
+
+If `config/octane.php` is missing, publish it and configure the required limits:
 
 ```bash
 php artisan vendor:publish --tag=octane-config
 ```
 
-### Set sane limits
+Then set sane values in `config/octane.php`:
 
 ```php
-// config/octane.php
 'server'             => env('OCTANE_SERVER', 'roadrunner'),
 'max_execution_time' => 30,  // seconds; 0 disables (not recommended)
 'garbage'            => 50,  // MB; recycle worker once heap exceeds this
 ```
 
-### Avoid stale-capture singletons
+### Proper Fix (15 minutes)
 
-**Before (❌)** — captures `Application`, which carries per-request container state:
+For stale-capture singletons, replace singleton bindings that inject per-request services (`Application`, `Request`, `Auth\Guard`, `Session`, `Authenticatable`) with `scoped()` bindings or inject the dependency at call time instead.
 
+**Before (❌):**
 ```php
 $this->app->singleton('cart', function (Application $app) {
     return new CartService($app->make(Request::class));
 });
 ```
 
-**After (✅)** — use `scoped()` (Octane-aware per-request binding) or resolve fresh services at call time:
-
+**After (✅):**
 ```php
-// Resets automatically between Octane requests
+// scoped() resets automatically between Octane requests
 $this->app->scoped('cart', function ($app) {
     return new CartService();
 });
 ```
 
-## Configuration
+Use `$this->app->bind()` when you need a fresh instance on every resolution, or pass the per-request service as a method argument rather than capturing it in the singleton factory.
+
+## ShieldCI Configuration
 
 Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to override:
 

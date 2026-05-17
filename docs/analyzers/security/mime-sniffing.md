@@ -35,16 +35,10 @@ This is especially critical for applications that allow user file uploads or ser
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (2 minutes)
 
 Add the header via Laravel middleware:
 
-**Before (❌):**
-```php
-// No X-Content-Type-Options header in responses
-```
-
-**After (✅):**
 ```php
 // app/Http/Middleware/SecurityHeaders.php
 namespace App\Http\Middleware;
@@ -74,7 +68,7 @@ Register in your `bootstrap/app.php` or `app/Http/Kernel.php`:
 })
 ```
 
-### Proper Fix
+### Proper Fix (5 minutes)
 
 Configure the header at the web server level for all responses:
 

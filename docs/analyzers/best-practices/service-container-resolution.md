@@ -180,7 +180,7 @@ class OrderService
 5. Consider using interfaces instead of concrete classes for flexibility
 6. Update tests to inject mocks/stubs
 
-## Configuration
+## ShieldCI Configuration
 
 Publish the config to customize behaviour:
 

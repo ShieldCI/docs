@@ -1,5 +1,5 @@
 ---
-title: Xdebug Production Check
+title: Xdebug Enabled Analyzer
 description: Ensures Xdebug and other debugging extensions are not loaded in production environments
 icon: bug
 outline: [2, 3]
@@ -7,7 +7,7 @@ tags: php,xdebug,debugging,performance,production
 pro: true
 ---
 
-# Xdebug Production Check
+# Xdebug Enabled Analyzer
 
 | Analyzer ID       | Category       | Severity   | Time To Fix  |
 | ------------------| :------------: |:----------:| ------------:|
@@ -28,7 +28,7 @@ Even with Xdebug mode set to "off", there is still some overhead from the extens
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### Quick Fix (2 minutes)
 
 **Option 1: Disable Xdebug in php.ini**
 
@@ -59,7 +59,7 @@ sudo systemctl restart php8.1-fpm
 sudo systemctl restart php-fpm
 ```
 
-### Proper Fix: Separate PHP Configurations
+### Proper Fix (5 minutes)
 
 **Production php.ini:**
 ```ini
@@ -89,7 +89,7 @@ RUN pecl install xdebug && docker-php-ext-enable xdebug
 COPY docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 ```
 
-### Verification
+**Verify Xdebug is removed:**
 
 ```bash
 # Check if Xdebug is loaded
@@ -102,26 +102,31 @@ php -r "echo ini_get('xdebug.mode');"
 php -m | grep -iE 'xdebug|blackfire|tideways|pcov'
 ```
 
-## Extensions Checked
-
-| Extension  | Severity | Notes |
-|------------|----------|-------|
-| Xdebug     | Critical | Significant performance impact (up to 50% slower) |
-| Blackfire  | Low      | Probe designed for production; minimal overhead when idle |
-| Tideways   | Medium   | Profiler, overhead when enabled |
-| PCOV       | High     | Code coverage driver, testing only |
-
 ## ShieldCI Configuration
 
-This analyzer only runs in **production** and **staging** environments. It is skipped in:
-- Local development
-- Testing environments
-- CI/CD pipelines
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
-**Why skip in development/CI?**
+**Why skip in CI and development?**
 - Xdebug is essential for development debugging
 - CI environments are controlled and don't reflect production
 - Testing environments may need PCOV for coverage
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
 
 ## References
 

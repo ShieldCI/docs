@@ -15,7 +15,12 @@ pro: true
 
 ## What This Checks
 
-Validates that Laravel's event-to-listener mappings are cached in production environments using `php artisan event:cache`.
+Validates that Laravel's event-to-listener mappings are cached in production environments using `php artisan event:cache`. Specifically:
+
+- Checks for the existence of `bootstrap/cache/events.php`
+- Warns if the cache file is older than 30 days, which may indicate new events were added without re-caching
+
+This mapping is generated from the `$listen` array in `EventServiceProvider`, auto-discovered events, and event subscribers.
 
 ## Why It Matters
 
@@ -43,122 +48,35 @@ php artisan event:clear
 php artisan event:cache
 ```
 
-### Deployment Script
+### Proper Fix (5 minutes)
 
-Add to your deployment script (after `composer install`):
+Add `php artisan event:cache` to your deployment pipeline so it runs automatically after every deploy.
 
+**Standard deploy script:**
 ```bash
 #!/bin/bash
-# deploy.sh
-
-# Install dependencies
 composer install --no-dev --optimize-autoloader
-
-# Cache configurations
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
-php artisan event:cache  # Don't forget this!
-
-# Clear old caches first (optional but recommended)
-# php artisan optimize:clear
-# php artisan optimize
-```
-
-### Laravel Forge / Envoyer
-
-Add to your deploy script:
-
-```bash
-cd /home/forge/your-site.com
-
-php artisan down
-git pull origin main
-composer install --no-dev --optimize-autoloader
-php artisan migrate --force
-php artisan event:cache  # Add this line
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
-php artisan up
-```
-
-### Docker Deployment
-
-```dockerfile
-# Dockerfile
-FROM php:8.1-fpm
-
-# ... your setup ...
-
-# Cache events during build
-RUN php artisan event:cache
-```
-
-Or in your entrypoint:
-
-```bash
-#!/bin/bash
-# docker-entrypoint.sh
-
 php artisan event:cache
-php artisan config:cache
-php artisan route:cache
-
-exec php-fpm
 ```
-
-## What Gets Cached
-
-The event cache file (`bootstrap/cache/events.php`) contains:
-
-```php
-<?php return array (
-    'App\\Events\\UserRegistered' => array (
-        0 => 'App\\Listeners\\SendWelcomeEmail',
-        1 => 'App\\Listeners\\CreateUserProfile',
-    ),
-    'App\\Events\\OrderPlaced' => array (
-        0 => 'App\\Listeners\\SendOrderConfirmation',
-    ),
-);
-```
-
-This mapping is generated from:
-- `$listen` array in `EventServiceProvider`
-- Auto-discovered events (if enabled)
-- Event subscribers
-
-## Stale Cache Detection
-
-This analyzer also warns if your event cache is older than 30 days, which may indicate:
-- New events/listeners added but cache not refreshed
-- Deployment script missing event caching step
-- Manual changes to events without re-caching
 
 ## ShieldCI Configuration
 
-This analyzer:
-- Runs only in **production** and **staging** environments
-- Skips if no events are registered (empty `$listen` array)
-- Checks for `bootstrap/cache/events.php` existence
-- Warns about potentially stale caches
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments.
 
-## Verification
+**Why skip in CI and development?**
+- Event caching is a deployment-time operation — it has no meaning until the app is deployed to a live environment
+- CI pipelines run with uncached events intentionally to keep listener registration testable
+- Development environments skip caching so listener changes take effect immediately without clearing the cache
 
-```bash
-# Check if events are cached
-ls -la bootstrap/cache/events.php
+**When to run this analyzer:**
+- ✅ **Production/Staging servers**: Validates events are cached for optimal boot performance
+- ❌ **CI/CD pipelines**: Skipped automatically (deployment-specific check)
+- ❌ **Local development**: Skipped automatically (only relevant in production and staging)
 
-# View cached events
-cat bootstrap/cache/events.php
-
-# Clear and regenerate
-php artisan event:clear && php artisan event:cache
-
-# Verify events list
-php artisan event:list
-```
+**Staleness detection:** When the cache file exists, the analyzer compares its modification time against the newest mtime among `app/Providers/EventServiceProvider.php`, `bootstrap/app.php`, and any file under `app/Listeners/`. If a source file is newer than the cache, a stale-cache warning is raised.
 
 ## References
 

@@ -42,10 +42,6 @@ This analyzer validates the security configuration of Laravel Nova to ensure the
 - **Missing canSee()** - Flags tools registered without a `->canSee()` authorization callback
 - **Permissive canSee()** - Flags tools where `canSee()` unconditionally returns `true`
 
-::: tip When This Analyzer Runs
-This analyzer only runs when Laravel Nova is installed (detected via `"laravel/nova"` in `composer.json`). If Nova is not installed, the analyzer is automatically skipped.
-:::
-
 ## Why It Matters
 
 An unsecured Nova admin panel provides complete administrative access to your application, exposing:

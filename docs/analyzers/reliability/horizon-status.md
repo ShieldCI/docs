@@ -35,7 +35,7 @@ pro: true
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Start Horizon and verify it is running:
 
@@ -54,7 +54,7 @@ php artisan horizon:terminate
 php artisan horizon
 ```
 
-### Proper Fix
+### Proper Fix (10 minutes)
 
 #### 1: Configure Supervisor to keep Horizon running
 

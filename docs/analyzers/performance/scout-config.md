@@ -1,5 +1,5 @@
 ---
-title: Scout Config Analyzer
+title: Scout Configuration Analyzer
 description: Validates Laravel Scout search configuration, indexing, and sensitive data exposure in search indexes
 icon: zap
 outline: [2, 3]
@@ -7,7 +7,7 @@ tags: performance,scout,search,indexing,configuration
 pro: true
 ---
 
-# Scout Config Analyzer
+# Scout Configuration Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|

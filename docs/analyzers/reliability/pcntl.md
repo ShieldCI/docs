@@ -77,7 +77,7 @@ pecl install redis
 composer require predis/predis
 ```
 
-### Proper Fix
+### Proper Fix (10 minutes)
 
 #### 1: Include extensions in your Docker image
 

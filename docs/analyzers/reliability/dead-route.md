@@ -35,7 +35,7 @@ pro: true
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Identify and remove or fix dead routes:
 
@@ -63,7 +63,7 @@ Route::get('/reports', [ReportController::class, 'generate']);
 Route::get('/reports', [ReportController::class, 'index']);
 ```
 
-### Proper Fix
+### Proper Fix (10 minutes)
 
 #### 1: Fix non-public method references
 

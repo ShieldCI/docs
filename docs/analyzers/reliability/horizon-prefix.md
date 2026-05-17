@@ -32,7 +32,7 @@ pro: true
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (2 minutes)
 
 Set a unique Horizon prefix in `config/horizon.php`:
 
@@ -57,7 +57,7 @@ Or set it via your `.env` file:
 HORIZON_PREFIX=myapp_production_horizon:
 ```
 
-### Proper Fix
+### Proper Fix (5 minutes)
 
 #### 1: Use environment-aware prefixes
 

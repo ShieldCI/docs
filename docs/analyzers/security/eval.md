@@ -62,7 +62,7 @@ A single dynamic code execution call with user input gives attackers the same ac
 
 Replace dynamic code execution with proper control structures or callbacks:
 
-**Before:**
+**Before (❌):**
 ```php
 public function calculate(Request $request)
 {
@@ -71,7 +71,7 @@ public function calculate(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function calculate(Request $request)
 {
@@ -98,14 +98,14 @@ public function calculate(Request $request)
 
 **Replace `create_function()` with closures:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: create_function() uses dynamic evaluation internally
 $sorter = create_function('$a, $b', 'return $a["name"] <=> $b["name"];');
 usort($items, $sorter);
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: Arrow function (PHP 7.4+)
 usort($items, fn($a, $b) => $a['name'] <=> $b['name']);
@@ -113,13 +113,13 @@ usort($items, fn($a, $b) => $a['name'] <=> $b['name']);
 
 **Replace `preg_replace()` with `/e` modifier:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: /e modifier executes replacement as PHP code
 $result = preg_replace('/\{(\w+)\}/e', '$data["$1"]', $template);
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: preg_replace_callback() with closure
 $result = preg_replace_callback('/\{(\w+)\}/', function ($matches) use ($data) {
@@ -129,13 +129,13 @@ $result = preg_replace_callback('/\{(\w+)\}/', function ($matches) use ($data) {
 
 **Replace `assert()` with string argument:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: assert() with string executes code
 assert('$user->isValid()');
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: assert() with boolean expression
 assert($user->isValid());
@@ -146,7 +146,7 @@ assert($user->isValid());
 
 **Secure `call_user_func()` usage:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function execute(Request $request)
 {
@@ -155,7 +155,7 @@ public function execute(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function execute(Request $request)
 {
@@ -176,7 +176,7 @@ public function execute(Request $request)
 
 **Fix `unserialize()` usage:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: user-controlled data
 $object = unserialize($request->input('payload'));
@@ -185,7 +185,7 @@ $object = unserialize($request->input('payload'));
 $cached = unserialize($data);
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: reject user input entirely — use JSON instead
 $data = json_decode($request->input('payload'), true);
@@ -199,13 +199,13 @@ $cached = unserialize($data, ['allowed_classes' => [MyValueObject::class]]);
 
 **Fix dynamic class instantiation:**
 
-**Before:**
+**Before (❌):**
 ```php
 $class = $request->input('driver');
 $instance = new $class(); // VULNERABLE
 ```
 
-**After:**
+**After (✅):**
 ```php
 $validated = $request->validate(['driver' => 'required|in:mysql,sqlite,pgsql']);
 
@@ -220,14 +220,14 @@ $instance = new $drivers[$validated['driver']]();
 
 **Fix callback registration with user input:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: user controls the callback
 ob_start($request->input('handler'));
 register_shutdown_function($request->input('fn'));
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: use a fixed, static callback
 ob_start(function () {
@@ -240,13 +240,13 @@ register_shutdown_function([$this, 'cleanup']);
 
 **Fix Blade::compileString() with user input:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: user-controlled Blade template compiles arbitrary @php blocks
 $html = Blade::compileString(request('template'));
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: pass user data as variables, never as the template itself
 return view('templates.user-content', [

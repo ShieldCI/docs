@@ -43,11 +43,11 @@ The 2019 Capital One breach, which exposed 100 million customer records, was cau
 
 ## How to Fix
 
-### Quick Fix (10 minutes)
+### Quick Fix (5 minutes)
 
 Validate URLs against a whitelist of allowed domains:
 
-**Before:**
+**Before (❌):**
 ```php
 use Illuminate\Support\Facades\Http;
 
@@ -62,7 +62,7 @@ public function fetchUrl(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 use Illuminate\Support\Facades\Http;
 
@@ -92,7 +92,7 @@ public function fetchUrl(Request $request)
 
 Implement comprehensive URL validation with DNS resolution checks and internal IP blocking:
 
-**Before:**
+**Before (❌):**
 ```php
 public function proxy(Request $request)
 {
@@ -109,7 +109,7 @@ public function proxy(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 use Illuminate\Support\Facades\Http;
 

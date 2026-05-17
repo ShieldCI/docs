@@ -51,7 +51,7 @@ A publicly accessible Horizon dashboard is equivalent to giving an attacker a mo
 
 Add a `Horizon::auth()` gate in your `HorizonServiceProvider`:
 
-**Before:**
+**Before (❌):**
 ```php
 // app/Providers/HorizonServiceProvider.php
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
@@ -63,7 +63,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 // app/Providers/HorizonServiceProvider.php
 use Laravel\Horizon\Horizon;
@@ -83,7 +83,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 
 Implement environment-aware authorization with role checks:
 
-**Before:**
+**Before (❌):**
 ```php
 // app/Providers/HorizonServiceProvider.php
 protected function gate(): void
@@ -95,7 +95,7 @@ protected function gate(): void
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 // app/Providers/HorizonServiceProvider.php
 use Laravel\Horizon\Horizon;
@@ -159,7 +159,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 
 Ensure the Redis password is read from environment variables, not hardcoded:
 
-**Before:**
+**Before (❌):**
 ```php
 // config/database.php
 'redis' => [
@@ -171,7 +171,7 @@ Ensure the Redis password is read from environment variables, not hardcoded:
 ],
 ```
 
-**After:**
+**After (✅):**
 ```php
 // config/database.php
 'redis' => [

@@ -47,7 +47,7 @@ Hardcoded credentials in source code pose severe security risks that are difficu
 
 Move hardcoded values to environment variables:
 
-**Before:**
+**Before (❌):**
 ```php
 class PaymentService
 {
@@ -71,7 +71,7 @@ class PaymentService
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 class PaymentService
 {

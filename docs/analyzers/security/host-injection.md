@@ -44,7 +44,7 @@ Host header injection allows attackers to manipulate the HTTP `Host` header to e
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Replace direct Host header usage with `config('app.url')`:
 
@@ -65,7 +65,7 @@ $resetUrl = config('app.url') . "/password/reset/{$token}";
 Mail::to($user)->send(new ResetPasswordMail($resetUrl));
 ```
 
-### Proper Fix
+### Proper Fix (10 minutes)
 
 1. **Use Laravel's URL generation helpers** instead of manual Host header access:
 

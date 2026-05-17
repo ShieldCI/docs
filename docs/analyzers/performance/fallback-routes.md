@@ -1,5 +1,5 @@
 ---
-title: Fallback Route SEO Check
+title: Fallback Routes SEO Analyzer
 description: Detects fallback routes that can cause soft 404 issues and hurt SEO
 icon: route
 outline: [2, 3]
@@ -7,7 +7,7 @@ tags: seo,routes,fallback,404,performance
 pro: true
 ---
 
-# Fallback Route SEO Check
+# Fallback Routes SEO Analyzer
 
 | Analyzer ID        | Category       | Severity   | Time To Fix  |
 | -------------------| :------------: |:----------:| ------------:|
@@ -15,7 +15,18 @@ pro: true
 
 ## What This Checks
 
-Detects the use of `Route::fallback()` and catch-all routes that can cause "soft 404" issues, negatively impacting SEO by returning 200 OK status codes for non-existent pages.
+Detects the use of `Route::fallback()` and root-level catch-all routes that can cause "soft 404" issues, negatively impacting SEO by returning 200 OK for non-existent pages.
+
+| Pattern | Example | Detected |
+|---------|---------|---------|
+| `Route::fallback()` | `Route::fallback(fn() => view('404'))` | ✅ Always |
+| `/{any}` catch-all | `Route::get('/{any}', ...)` | ✅ Root-level only |
+| `/{any?}` optional | `Route::get('/{any?}', ...)` | ✅ Root-level only |
+| `/{path?}` optional | `Route::get('/{path?}', ...)` | ✅ Root-level only |
+| `/{catchall}`, `/{all}` | `Route::get('/{all}', ...)` | ✅ Root-level only |
+| `->where($param, '.*')` | `Route::get('/{slug}')->where('slug', '.*')` | ✅ Regex catch-all |
+
+Catch-all detection applies only when the parameter is the **entire URI** (e.g., `{any}`, not `/posts/{any}`). API routes (URIs starting with `api/` or carrying `api` middleware) are always exempt.
 
 ## Why It Matters
 
@@ -28,105 +39,60 @@ When a fallback route returns 200 OK for any URL, search engines assume the cont
 
 ## How to Fix
 
-### Remove Fallback Routes
+### Quick Fix (5 minutes)
 
-**Before (problematic):**
+Ensure the fallback or catch-all route handler returns a 4xx status code instead of 200 OK:
+
+**Before (❌):**
 ```php
-// routes/web.php
 Route::fallback(function () {
-    return view('not-found');  // Returns 200 OK!
+    return view('not-found');  // Returns 200 OK — soft 404
 });
 ```
 
-**After (proper 404 handling):**
+**After (✅):**
 ```php
-// Remove the fallback route and let Laravel handle 404s naturally
-// Laravel will return proper 404 status codes
-
-// If you need a custom 404 page, use app/Exceptions/Handler.php
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
+});
 ```
 
-### Custom 404 Page with Proper Status
+The same applies to catch-all routes used for SPAs:
 
-**In app/Exceptions/Handler.php:**
+**Before (❌):**
+```php
+Route::get('/{any}', [SpaController::class, 'index'])->where('any', '.*');
+// Controller returns view() with implicit 200
+```
+
+**After (✅):**
+```php
+Route::get('/{any}', function () {
+    // Frontend router decides; server always returns 404 for unrecognised paths
+    return response()->view('spa', [], 404);
+})->where('any', '.*');
+```
+
+### Proper Fix (15 minutes)
+
+Remove the fallback route entirely and rely on Laravel's native 404 handling, which always returns the correct status code. Customise the 404 page via `app/Exceptions/Handler.php`:
+
 ```php
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 public function render($request, Throwable $exception)
 {
     if ($exception instanceof NotFoundHttpException) {
-        return response()->view('errors.404', [], 404);  // Proper 404 status!
+        return response()->view('errors.404', [], 404);
     }
 
     return parent::render($request, $exception);
 }
 ```
 
-**Or create a custom 404 view:**
-```blade
-{{-- resources/views/errors/404.blade.php --}}
-@extends('layouts.app')
+Or simply create `resources/views/errors/404.blade.php` — Laravel auto-renders it for all 404 responses without any handler changes.
 
-@section('content')
-    <h1>Page Not Found</h1>
-    <p>The page you're looking for doesn't exist.</p>
-    <a href="{{ url('/') }}">Go Home</a>
-@endsection
-```
-
-### SPA (Single Page Application) Routes
-
-For SPAs, you often need a catch-all route. Ensure your frontend handles 404s properly:
-
-**routes/web.php:**
-```php
-// Catch-all for SPA - but handle 404s in your frontend
-Route::get('/{any}', function () {
-    return view('spa');
-})->where('any', '^(?!api).*$');  // Exclude API routes
-```
-
-**In your Vue/React app:**
-```javascript
-// Vue Router example
-const routes = [
-  // ... your routes
-  { path: '/:pathMatch(.*)*', component: NotFound }  // Handle 404 in frontend
-]
-```
-
-For proper SEO with SPAs, consider:
-1. Server-side rendering (SSR)
-2. Pre-rendering static pages
-3. Returning 404 status from the server for known non-existent routes
-
-### API Routes (Acceptable)
-
-Catch-all routes in API prefixes are generally acceptable since APIs aren't indexed:
-
-```php
-// routes/api.php - This is OK
-Route::fallback(function () {
-    return response()->json(['error' => 'Not Found'], 404);  // Returns 404!
-});
-```
-
-## What Gets Detected
-
-| Pattern | Example | Issue |
-|---------|---------|-------|
-| `Route::fallback()` | `Route::fallback(fn() => view('404'))` | Soft 404 |
-| `/{any}` catch-all | `Route::get('/{any}', ...)` | Potential soft 404 |
-| `/{path?}` optional | `Route::get('/{path?}', ...)` | Potential soft 404 |
-| `/{slug}` at root | `Route::get('/{slug}', ...)` | Potential soft 404 |
-
-**Ignored:**
-- API routes (`/api/*`) - Not indexed by search engines
-- Routes with `api` middleware
-
-## ShieldCI Configuration
-
-This analyzer runs in **all environments including CI** since it checks route definitions in code, not runtime behavior.
+For SPAs that must handle all paths client-side, configure your frontend router to return a distinct 404 state for unknown routes (e.g., a Vue `{ path: '/:pathMatch(.*)*', component: NotFound }` entry), so both server and client agree on which URLs are valid.
 
 ## References
 

@@ -1,5 +1,5 @@
 ---
-title: Pennant Config Analyzer
+title: Pennant Configuration Analyzer
 description: Validates Laravel Pennant feature flag configuration, driver settings, and usage patterns
 icon: check-circle
 outline: [2, 3]
@@ -7,7 +7,7 @@ tags: best-practices,pennant,feature-flags,configuration,testing
 pro: true
 ---
 
-# Pennant Config Analyzer
+# Pennant Configuration Analyzer
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|

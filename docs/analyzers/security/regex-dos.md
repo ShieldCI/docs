@@ -47,7 +47,7 @@ A pattern like `(a+)+` matching against the string `aaaaaaaaaaaaaaaaaaaX` can ta
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Simplify nested quantifiers and overlapping alternatives:
 
@@ -77,7 +77,7 @@ $pattern = '/^https?:\/\//';
 preg_match($pattern, $userInput);
 ```
 
-### Proper Fix
+### Proper Fix (15 minutes)
 
 Use possessive quantifiers, atomic grouping, or avoid regex altogether:
 

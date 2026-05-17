@@ -28,37 +28,52 @@ When multiple queue workers process jobs simultaneously, non-Redis rate limiting
 
 ## How to Fix
 
-### Update Job Middleware
+### Quick Fix (5 minutes)
 
-**Before (cache-based, potential race conditions):**
+Replace `RateLimited` with `RateLimitedWithRedis` in each job's `middleware()` method:
+
+**Before (❌):**
 ```php
-<?php
-
-namespace App\Jobs;
-
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 
-class ProcessPodcast implements ShouldQueue
+public function middleware(): array
 {
-    use Queueable;
-
-    public function middleware(): array
-    {
-        return [
-            new RateLimited('podcasts'),
-        ];
-    }
-
-    public function handle(): void
-    {
-        // Process podcast
-    }
+    return [new RateLimited('podcasts')];
 }
 ```
 
-**After (Redis-based, atomic operations):**
+**After (✅):**
+```php
+use Illuminate\Queue\Middleware\RateLimitedWithRedis;
+
+public function middleware(): array
+{
+    return [new RateLimitedWithRedis('podcasts')];
+}
+```
+
+### Proper Fix (10 minutes)
+
+Define named rate limiters centrally in `AppServiceProvider`, then apply `RateLimitedWithRedis` to all affected jobs:
+
+**`app/Providers/AppServiceProvider.php`:**
+```php
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
+public function boot(): void
+{
+    RateLimiter::for('podcasts', function (object $job) {
+        return Limit::perMinute(10);
+    });
+
+    RateLimiter::for('email', function (object $job) {
+        return Limit::perMinute(3)->by($job->user->id);
+    });
+}
+```
+
+**Each affected job:**
 ```php
 <?php
 
@@ -74,148 +89,20 @@ class ProcessPodcast implements ShouldQueue
 
     public function middleware(): array
     {
-        return [
-            new RateLimitedWithRedis('podcasts'),
-        ];
+        return [new RateLimitedWithRedis('podcasts')];
     }
 
-    public function handle(): void
-    {
-        // Process podcast
-    }
+    public function handle(): void { /* ... */ }
 }
 ```
 
-### Define Rate Limiters
-
-**In `app/Providers/AppServiceProvider.php`:**
-
-```php
-use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Support\Facades\RateLimiter;
-
-public function boot(): void
-{
-    // Rate limiter for podcasts (10 per minute)
-    RateLimiter::for('podcasts', function (object $job) {
-        return Limit::perMinute(10);
-    });
-
-    // Rate limiter with dynamic key
-    RateLimiter::for('email', function (object $job) {
-        return Limit::perMinute(3)->by($job->user->id);
-    });
-
-    // Rate limiter with backoff
-    RateLimiter::for('api-calls', function (object $job) {
-        return Limit::perMinute(60)
-            ->by($job->apiKey)
-            ->response(function () {
-                // Job will be released back to queue
-            });
-    });
-}
-```
-
-### WithoutOverlapping Middleware
-
-If using `WithoutOverlapping` for job locks, use a cache driver that supports atomic locks (Redis recommended, but Memcached and DynamoDB also work):
-
-```php
-use Illuminate\Queue\Middleware\WithoutOverlapping;
-
-public function middleware(): array
-{
-    return [
-        new WithoutOverlapping($this->user->id),
-    ];
-}
-```
+If you also use `WithoutOverlapping`, ensure Redis is your cache driver for reliable distributed locks:
 
 ```env
-# .env - WithoutOverlapping uses the cache driver for distributed locks
-# Laravel 10 and below:
-CACHE_DRIVER=redis
-# Laravel 11+:
+# Laravel 11+
 CACHE_STORE=redis
-```
-
-## Common Rate Limiting Patterns
-
-**Rate limit by user:**
-```php
-RateLimiter::for('user-actions', function (object $job) {
-    return Limit::perMinute(10)->by($job->user->id);
-});
-```
-
-**Rate limit by external API:**
-```php
-RateLimiter::for('stripe-api', function (object $job) {
-    return Limit::perSecond(25);  // Stripe rate limit
-});
-```
-
-**Rate limit with release delay:**
-```php
-public function middleware(): array
-{
-    return [
-        (new RateLimitedWithRedis('api-calls'))->releaseAfterMinutes(5),
-    ];
-}
-```
-
-## Configuration Requirements
-
-`RateLimitedWithRedis` connects to Redis directly (not via the cache layer), so you need Redis configured in `config/database.php`:
-
-```env
-# .env - Redis connection (used by RateLimitedWithRedis directly)
-REDIS_HOST=127.0.0.1
-REDIS_PORT=6379
-REDIS_PASSWORD=null
-```
-
-The queue driver can be any driver (Redis, SQS, database, etc.) — the rate limiting middleware is independent of the queue connection.
-
-## How It Works
-
-**RateLimited (cache-based, two separate cache calls):**
-```
-Worker 1: CHECK count (cache read) → DECIDE → INCREMENT (cache write)
-Worker 2: CHECK count (cache read) → DECIDE → INCREMENT (cache write)
-         ↑ Both workers may read the same count before either increments
-```
-
-**RateLimitedWithRedis (atomic Lua script):**
-```
-Worker 1: INCREMENT + CHECK in single atomic Lua script → accurate count
-Worker 2: INCREMENT + CHECK in single atomic Lua script → accurate count
-         ↑ Each operation is indivisible — count is always accurate
-```
-
-Under low concurrency the race window with `RateLimited` is extremely small. The difference becomes significant at high worker counts processing many jobs simultaneously.
-
-## ShieldCI Configuration
-
-This analyzer:
-- Runs in **all environments including CI**
-- Skips if Redis is not used for queue or cache
-- Scans `app/Jobs` directory for `RateLimited` usage
-- Recommends `RateLimitedWithRedis` when Redis is available
-
-## Verification
-
-```bash
-# Check job middleware
-grep -r "RateLimited" app/Jobs/
-
-# Test rate limiting with Horizon
-php artisan horizon
-
-# Monitor in Horizon dashboard
-# Jobs should be rate limited consistently
+# Laravel 10 and below
+CACHE_DRIVER=redis
 ```
 
 ## References

@@ -48,7 +48,7 @@ A single RCE vulnerability can result in complete infrastructure compromise, mak
 
 Remove or replace dangerous function calls:
 
-**Before:**
+**Before (❌):**
 ```php
 public function executeTemplate(Request $request)
 {
@@ -59,7 +59,7 @@ public function executeTemplate(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function executeTemplate(Request $request)
 {
@@ -76,7 +76,7 @@ public function executeTemplate(Request $request)
 
 **Replace variable functions with explicit dispatch:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function handle(Request $request)
 {
@@ -88,7 +88,7 @@ public function handle(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function handle(Request $request)
 {
@@ -110,13 +110,13 @@ public function handle(Request $request)
 
 **Replace `preg_replace()` /e with `preg_replace_callback()`:**
 
-**Before:**
+**Before (❌):**
 ```php
 // VULNERABLE: /e modifier evaluates replacement as PHP code
 $output = preg_replace('/\{(\w+)\}/e', '$this->resolve("$1")', $template);
 ```
 
-**After:**
+**After (✅):**
 ```php
 // SAFE: callback receives the match array, no code evaluation
 $output = preg_replace_callback('/\{(\w+)\}/', function (array $m) {
@@ -126,7 +126,7 @@ $output = preg_replace_callback('/\{(\w+)\}/', function (array $m) {
 
 **Replace user-controlled `call_user_func()` with an allowlist:**
 
-**Before:**
+**Before (❌):**
 ```php
 public function format(Request $request)
 {
@@ -135,7 +135,7 @@ public function format(Request $request)
 }
 ```
 
-**After:**
+**After (✅):**
 ```php
 public function format(Request $request)
 {

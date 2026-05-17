@@ -36,7 +36,7 @@ For public-facing applications with global users, a CDN can reduce asset loading
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (10 minutes)
 
 Set `ASSET_URL` in your `.env` to point to your CDN distribution:
 
@@ -54,7 +54,7 @@ Ensure `config/app.php` reads from the environment:
 
 Laravel's `asset()` helper and Vite/Mix will automatically prefix all asset URLs with this value — no template changes needed.
 
-### Proper Fix
+### Proper Fix (60 minutes)
 
 **1. Choose a CDN Provider**
 

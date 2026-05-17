@@ -85,7 +85,7 @@ Verify the manifest exists at `public/build/manifest.json`:
 }
 ```
 
-### Proper Fix
+### Proper Fix (10 minutes)
 
 1. **Automate asset builds in your deployment pipeline**:
 

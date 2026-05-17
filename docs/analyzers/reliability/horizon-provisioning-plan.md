@@ -24,12 +24,6 @@ This analyzer validates that Laravel Horizon has a properly configured provision
 - **Worker processes** - Ensures `minProcesses` is at least 1 and not greater than `maxProcesses`
 - **Timeout values** - Flags timeouts below 10 seconds (too short) or above 3,600 seconds (too long)
 
-::: tip When This Analyzer Runs
-This analyzer only runs when:
-- Laravel Horizon is installed and configured
-- The application is NOT running on Laravel Vapor (Horizon is incompatible with serverless)
-:::
-
 ## Why It Matters
 
 A missing or misconfigured Horizon provisioning plan can cause serious reliability issues:
@@ -43,7 +37,7 @@ A missing or misconfigured Horizon provisioning plan can cause serious reliabili
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Add a provisioning plan for your current environment:
 
@@ -92,7 +86,7 @@ Add a provisioning plan for your current environment:
 ],
 ```
 
-### Proper Fix
+### Proper Fix (15 minutes)
 
 Configure a comprehensive provisioning plan with multiple supervisors for different workloads:
 

@@ -37,7 +37,7 @@ pro: true
 
 ## How to Fix
 
-### Quick Fix
+### Quick Fix (5 minutes)
 
 Free up disk space immediately:
 
@@ -65,7 +65,7 @@ du -sh storage/*
 du -sh storage/logs/*
 ```
 
-### Proper Fix
+### Proper Fix (15 minutes)
 
 #### 1: Set up log rotation
 

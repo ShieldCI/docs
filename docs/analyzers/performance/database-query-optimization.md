@@ -30,7 +30,7 @@ Even moderate traffic can bring a server to its knees when these patterns are pr
 
 ### 1. Replace SELECT * with Specific Columns
 
-**Before:**
+**Before (❌):**
 
 ```php
 // Fetches ALL columns
@@ -38,7 +38,7 @@ $users = DB::select('SELECT * FROM users WHERE active = 1');
 $posts = Post::all();
 ```
 
-**After:**
+**After (✅):**
 
 ```php
 // Fetch only needed columns
@@ -88,7 +88,7 @@ $posts = Post::with(['comments' => function ($query) {
 
 ### 3. Use exists() Instead of count()
 
-**Before:**
+**Before (❌):**
 
 ```php
 if (User::where('email', $email)->count() > 0) {
@@ -96,7 +96,7 @@ if (User::where('email', $email)->count() > 0) {
 }
 ```
 
-**After:**
+**After (✅):**
 
 ```php
 if (User::where('email', $email)->exists()) {
