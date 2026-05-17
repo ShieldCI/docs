@@ -23,21 +23,21 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Cache Prefix Configuration"
   description="Ensures cache prefix is set to avoid collisions"
-  severity="low"
+  severity="high"
   link="/analyzers/reliability/cache-prefix-configuration"
 />
 
 <AnalyzerCard
   title="Cache Status"
   description="Validates cache connectivity and functionality"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/cache-status"
 />
 
 <AnalyzerCard
   title="Composer Validation"
   description="Ensures composer.json is valid and follows best practices"
-  severity="medium"
+  severity="critical"
   link="/analyzers/reliability/composer-validation"
 />
 
@@ -92,7 +92,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Directory Write Permissions"
   description="Ensures critical Laravel directories (storage/, bootstrap/cache/) have proper write permissions"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/directory-write-permissions"
 />
 
@@ -125,7 +125,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="PHPStan Static Analysis"
   description="Comprehensive static analysis detecting 13 categories of code reliability issues including dead code, undefined variables, invalid method calls, and more"
-  severity="critical"
+  severity="high"
   link="/analyzers/reliability/phpstan"
 />
 

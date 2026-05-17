@@ -51,7 +51,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="OPcache Enabled"
   description="Ensures OPcache is enabled for PHP bytecode caching and performance"
-  severity="critical"
+  severity="high"
   link="/analyzers/performance/opcache-enabled"
 />
 
@@ -71,14 +71,14 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Shared Cache Lock Store"
   description="Detects cache lock usage on the default cache store, which can cause locks to be cleared when cache is flushed"
-  severity="medium"
+  severity="low"
   link="/analyzers/performance/shared-cache-lock"
 />
 
 <AnalyzerCard
   title="Session Driver Configuration"
   description="Ensures a proper session driver is configured for scalability and performance"
-  severity="high"
+  severity="critical"
   link="/analyzers/performance/session-driver"
 />
 
@@ -91,7 +91,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Queue Driver Configuration"
   description="Ensures a proper queue driver is configured for optimal performance and reliability"
-  severity="high"
+  severity="medium"
   link="/analyzers/performance/queue-driver"
 />
 
@@ -111,14 +111,14 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="MySQL Single Server Optimization"
   description="Ensures MySQL is configured optimally for single-server setups using Unix sockets"
-  severity="low"
+  severity="medium"
   link="/analyzers/performance/mysql-single-server-optimization"
 />
 
 <AnalyzerCard
   title="Collection Call Optimization"
   description="Detects inefficient collection operations that should be performed at the database query level"
-  severity="medium"
+  severity="high"
   link="/analyzers/performance/collection-call-optimization"
 />
 
@@ -138,7 +138,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Asset Cache Headers"
   description="Ensures compiled assets have appropriate cache headers for optimal browser caching"
-  severity="low"
+  severity="high"
   link="/analyzers/performance/asset-cache-headers"
 />
 
@@ -151,7 +151,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Debug Log Level"
   description="Ensures log level is not set to debug in production for optimal performance"
-  severity="medium"
+  severity="high"
   link="/analyzers/performance/debug-log-level"
 />
 
@@ -165,7 +165,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Dev Dependencies in Production"
   description="Detects if development dependencies are installed in production environment"
-  severity="medium"
+  severity="high"
   link="/analyzers/performance/dev-dependencies-production"
 />
 

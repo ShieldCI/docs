@@ -12,8 +12,6 @@ tags: dependency-injection,architecture,testability,laravel,ioc,service-locator
 |--------------------------------|:------------------:|:--------:|------------:|
 | `service-container-resolution` | 🏅 Best Practices   |  Medium  |  25 minutes |
 
-Detects manual service container resolution (Service Locator anti-pattern) and recommends constructor dependency injection for improved testability and maintainability.
-
 ## What This Checks
 
 The Service Container Resolution Analyzer identifies usage of `app()`, `resolve()`, `App::make()`, and `Container::getInstance()` in application code where constructor dependency injection should be used instead. It detects manual container resolution patterns that hide dependencies and make code harder to test.
@@ -34,56 +32,6 @@ Manual container resolution is a recognized anti-pattern that creates several pr
 2. **Difficult Testing** - Cannot easily inject mocks or stubs for testing since dependencies are resolved internally
 3. **Tight Coupling** - Creates direct dependency on Laravel's container, making code less portable
 4. **Violation of SOLID** - Breaks the Dependency Inversion Principle by depending on concrete implementations
-
-**Example Problem:**
-
-**Before (❌):**
-```php
-class OrderProcessor
-{
-    public function process($orderId)
-    {
-        // Hidden dependencies - you must read implementation to know what's needed
-        $repository = app(OrderRepository::class);
-        $payment = resolve(PaymentGateway::class);
-        $mailer = App::make('mailer');
-
-        $order = $repository->find($orderId);
-        $result = $payment->charge($order);
-        $mailer->send(new OrderConfirmation($order));
-
-        return $result;
-    }
-}
-
-// Testing is difficult - how do you inject mocks?
-$processor = new OrderProcessor(); // No way to inject dependencies!
-```
-
-**After (✅):**
-```php
-class OrderProcessor
-{
-    public function __construct(
-        private OrderRepository $repository,
-        private PaymentGateway $payment,
-        private Mailer $mailer
-    ) {}
-
-    public function process($orderId)
-    {
-        $order = $this->repository->find($orderId);
-        $result = $this->payment->charge($order);
-        $this->mailer->send(new OrderConfirmation($order));
-
-        return $result;
-    }
-}
-
-// Testing is easy with explicit dependencies
-$mockPayment = Mockery::mock(PaymentGateway::class);
-$processor = new OrderProcessor($repository, $mockPayment, $mailer);
-```
 
 ## How to Fix
 
@@ -117,12 +65,6 @@ class UserController extends Controller
     }
 }
 ```
-
-**Steps:**
-1. Add constructor with type-hinted dependencies
-2. Store dependencies as private properties (PHP 8.0+) or assign in constructor
-3. Replace `app()` calls with `$this->dependency`
-4. Laravel automatically resolves constructor dependencies
 
 ### Proper Fix (~25 minutes per class)
 
@@ -172,15 +114,7 @@ class OrderService
 }
 ```
 
-**Steps:**
-1. Identify all `app()`, `resolve()`, and `App::make()` calls
-2. Create constructor with all dependencies as type-hinted parameters
-3. Store dependencies as private properties
-4. Replace all manual resolution with property access
-5. Consider using interfaces instead of concrete classes for flexibility
-6. Update tests to inject mocks/stubs
-
-## Configuration
+## ShieldCI Configuration
 
 Publish the config to customize behaviour:
 
@@ -264,14 +198,6 @@ Then in `config/shieldci.php`:
     ],
 ],
 ```
-
-### `detect_manual_instantiation`
-
-When enabled, the analyzer also flags `new SomeService()` patterns for classes matching `manual_instantiation_patterns`. This catches cases where constructor injection is bypassed entirely rather than via `app()`. Disabled by default to avoid noise.
-
-### `detect_psr_get`
-
-When enabled, also detects PSR-11 `->get()` calls on the container. Disabled by default since `get()` is a common method name and false positives are likely without full type information.
 
 ## References
 
