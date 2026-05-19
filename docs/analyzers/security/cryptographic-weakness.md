@@ -20,11 +20,11 @@ Detects weak cryptographic algorithms, insecure cipher usage, and unsafe impleme
 - Direct use of `md5()`, `sha1()`, or `crc32()` in a security context (cache keys and ETags are excluded)
 - `hash()` or `hash_hmac()` called with a weak first-argument algorithm: `md5`, `md4`, `md2`, `sha1`, `crc32`, `crc32b`
 - Weak ciphers in `openssl_encrypt()` / `openssl_decrypt()`: `DES`, `3DES`, `RC2`, `RC4`, `BF-*` (Blowfish)
-- `ECB` mode in any cipher string — identical plaintext blocks produce identical ciphertext
-- Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` — IVs must be random per encryption
+- `ECB` mode in any cipher string - identical plaintext blocks produce identical ciphertext
+- Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` - IVs must be random per encryption
 - Deprecated `mcrypt_*` functions (`mcrypt_encrypt`, `mcrypt_decrypt`, `mcrypt_cbc`, `mcrypt_cfb`, `mcrypt_ecb`, `mcrypt_ofb`) removed in PHP 7.2
-- Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` — none provide cryptographic randomness
-- `===` / `==` comparison of hash or HMAC output — vulnerable to timing side-channel attacks
+- Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` - none provide cryptographic randomness
+- `===` / `==` comparison of hash or HMAC output - vulnerable to timing side-channel attacks
 - Non-cryptographic random functions: `rand()`, `mt_rand()`, `srand()`, `mt_srand()`
 
 ## Why It Matters

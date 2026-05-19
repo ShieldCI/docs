@@ -69,7 +69,7 @@ class FinancialStats extends StatsOverviewWidget
 }
 ```
 
-**2. Optionally combine with lazy loading (performance only — not a substitute for authorization):**
+**2. Optionally combine with lazy loading (performance only, not a substitute for authorization):**
 
 ```php
 class UserStatsWidget extends Widget
@@ -110,7 +110,7 @@ class OrderChart extends ChartWidget
 
 **4. Validate filter values when using `InteractsWithPageFilters`:**
 
-Filament's page filters are **not validated automatically** — values from the dashboard filter form land directly in `$this->pageFilters`. Always validate before using in queries:
+Filament's page filters are **not validated automatically**: values from the dashboard filter form land directly in `$this->pageFilters`. Always validate before using in queries:
 
 ```php
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
@@ -144,7 +144,7 @@ class OrderStats extends StatsOverviewWidget
 
 ## References
 
-- [Filament Widgets — Conditionally Hiding](https://filamentphp.com/docs/4.x/panels/dashboard#conditionally-hiding-widgets)
+- [Filament Widgets - Conditionally Hiding](https://filamentphp.com/docs/4.x/panels/dashboard#conditionally-hiding-widgets)
 - [Filament Stats Overview](https://filamentphp.com/docs/4.x/widgets/stats-overview)
 - [Filament Page Filters (unvalidated data warning)](https://filamentphp.com/docs/4.x/panels/dashboard#filtering-dashboard-widgets)
 - [Laravel Authorization](https://laravel.com/docs/authorization)

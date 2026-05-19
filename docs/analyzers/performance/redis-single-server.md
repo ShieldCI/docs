@@ -30,7 +30,7 @@ When Redis is on the same host, using TCP adds unnecessary overhead. Unix socket
 
 ### Quick Fix (5 minutes)
 
-If you're aware Redis is local and want to keep TCP for now, this is informational. No immediate action required — TCP works correctly, just with slightly more overhead.
+If you're aware Redis is local and want to keep TCP for now, this is informational. No immediate action required. TCP works correctly, just with slightly more overhead.
 
 ### Proper Fix (15 minutes)
 

@@ -27,9 +27,9 @@ The analyzer reads `config/octane.php` via AST, so it is comment-safe and correc
 
 ### Checks intentionally not performed
 
-- **`max_requests`** — this is a `php artisan octane:start --max-requests=N` CLI flag, not a config key. Set it in Supervisor or your Procfile, not `config/octane.php`.
-- **`warm`, `flush`, `listeners` presence** — Octane's published stub ships sane defaults for all three. Their presence is not flagged.
-- **Blanket singleton detection** — stateless singletons (Repository, Service, Gateway) are the recommended Laravel pattern and are Octane-safe. Only singletons that capture per-request services are flagged.
+- **`max_requests`** - this is a `php artisan octane:start --max-requests=N` CLI flag, not a config key. Set it in Supervisor or your Procfile, not `config/octane.php`.
+- **`warm`, `flush`, `listeners` presence** - Octane's published stub ships sane defaults for all three. Their presence is not flagged.
+- **Blanket singleton detection** - stateless singletons (Repository, Service, Gateway) are the recommended Laravel pattern and are Octane-safe. Only singletons that capture per-request services are flagged.
 
 ### Platforms skipped
 
@@ -102,7 +102,7 @@ Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to o
 ## References
 
 - [Laravel Octane Documentation](https://laravel.com/docs/octane)
-- [Laravel Octane — Dependency Injection](https://laravel.com/docs/octane#dependency-injection-and-octane)
+- [Laravel Octane - Dependency Injection](https://laravel.com/docs/octane#dependency-injection-and-octane)
 - [Laravel Octane config source (2.x)](https://github.com/laravel/octane/blob/2.x/config/octane.php)
 
 ## Related Analyzers

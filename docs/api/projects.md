@@ -89,7 +89,7 @@ curl "https://shieldci.com/api/v1/projects?page=1" \
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | string (UUID) | Project UUID — use this in all project URLs |
+| `id` | string (UUID) | Project UUID - use this in all project URLs |
 | `name` | string | Project display name |
 | `description` | string\|null | Optional description |
 | `repository_url` | string\|null | Repository URL |
@@ -104,7 +104,7 @@ curl "https://shieldci.com/api/v1/projects?page=1" \
 | Field | Type | Description |
 |-------|------|-------------|
 | `id` | integer | Report database ID |
-| `uuid` | string (UUID) | Report UUID — use this in [Report](/api/reports) URLs |
+| `uuid` | string (UUID) | Report UUID - use this in [Report](/api/reports) URLs |
 | `score` | integer | Overall score (0–100) |
 | `total` | integer | Total number of analyzers run |
 | `passed` | integer | Analyzers that passed |
@@ -150,7 +150,7 @@ Creates a new project under the authenticated user's current team. Returns a one
 | `name` | string | Yes | Project name (max 255 characters) |
 | `description` | string | No | Description (max 1,000 characters) |
 | `repository_url` | string | No | Repository URL (max 500 characters) |
-| `laravel_version` | string | Yes | Laravel major version — one of `9`, `10`, `11`, `12`, `13` |
+| `laravel_version` | string | Yes | Laravel major version - one of `9`, `10`, `11`, `12`, `13` |
 
 ```bash
 curl -X POST https://shieldci.com/api/v1/projects \
@@ -169,7 +169,7 @@ curl -X POST https://shieldci.com/api/v1/projects \
 HTTP `201 Created`
 
 ::: warning Save the API token immediately
-`api_token` is the token your ShieldCI Laravel package uses to submit analysis results. It is shown **only once** — if lost, regenerate it via [Regenerate Token](#regenerate-token).
+`api_token` is the token your ShieldCI Laravel package uses to submit analysis results. It is shown **only once**; if lost, regenerate it via [Regenerate Token](#regenerate-token).
 :::
 
 ```json
@@ -190,7 +190,7 @@ HTTP `201 Created`
 |--------|-----------|
 | `401` | Missing or invalid token |
 | `403` | No team associated with this user |
-| `422` | Validation failed — `name` missing, `laravel_version` invalid, `repository_url` not a valid URL |
+| `422` | Validation failed - `name` missing, `laravel_version` invalid, `repository_url` not a valid URL |
 
 ---
 
@@ -252,7 +252,7 @@ Updates a project's name, description, repository URL, Laravel version, or quali
 | `name` | string | Yes | Project name (max 255 characters) |
 | `description` | string | No | Description (max 1,000 characters) |
 | `repository_url` | string | No | Repository URL (max 500 characters) |
-| `laravel_version` | string | Yes | Laravel major version — one of `9`, `10`, `11`, `12`, `13` |
+| `laravel_version` | string | Yes | Laravel major version - one of `9`, `10`, `11`, `12`, `13` |
 | `settings` | object | No | Quality gate and tracker settings (see below) |
 
 #### `settings` Object
@@ -378,6 +378,6 @@ The new `api_token` is shown **only once** and replaces the previous token immed
 
 ## Related
 
-- [Reports](/api/reports) — View and delete analysis reports for a project
-- [Authentication](/api/authentication) — How to create and use API tokens
-- [Errors](/api/errors) — Full error reference
+- [Reports](/api/reports) - View and delete analysis reports for a project
+- [Authentication](/api/authentication) - How to create and use API tokens
+- [Errors](/api/errors) - Full error reference

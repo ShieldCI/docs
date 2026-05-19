@@ -25,7 +25,7 @@ Validates that critical application modules have corresponding test files. Recur
 
 **Automatically skipped:** Abstract/Base-prefixed classes, traits, enums, and interfaces are excluded from the count since they typically don't need dedicated tests.
 
-**Flexible test matching:** Test files don't need to match exactly — `UserModelTest.php` and `ManagePostControllerTest.php` will match `User.php` and `PostController.php` respectively (PascalCase boundary matching).
+**Flexible test matching:** Test files don't need to match exactly. `UserModelTest.php` and `ManagePostControllerTest.php` will match `User.php` and `PostController.php` respectively (PascalCase boundary matching).
 
 **Per-directory breakdown:** Results include a per-layer summary so you can see exactly which areas need attention:
 
@@ -35,7 +35,7 @@ Validates that critical application modules have corresponding test files. Recur
 
 | Coverage | Result | Issue Severity |
 |----------|--------|---------------|
-| >= 75% | Pass | — |
+| >= 75% | Pass | - |
 | 25–74% | Warning | Low |
 | < 25% | Warning | Medium |
 

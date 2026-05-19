@@ -17,11 +17,11 @@ pro: true
 
 Detects business logic in middleware that violates separation of concerns. Checks for:
 
-- **Database write operations** — instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
-- **Email/notification sending** — `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
-- **Event/job dispatching via facades** — `Event::dispatch()`, `Event::fire()`, `Bus::dispatch()`, `Bus::dispatchSync()`, `Bus::dispatchNow()`
-- **Direct model instantiation** — `new Model()` in middleware (responses (`Response`, `JsonResponse`, `RedirectResponse`), exceptions (`RuntimeException`, `ValidationException`, HTTP exceptions, etc.), dates (`Carbon`, `DateTime`), and utilities (`Closure`, `stdClass`, `Collection`) are allowed)
-- **Complex conditional logic** — if-statement nesting 4+ levels deep, suggesting embedded business rules
+- **Database write operations** - instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
+- **Email/notification sending** - `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
+- **Event/job dispatching via facades** - `Event::dispatch()`, `Event::fire()`, `Bus::dispatch()`, `Bus::dispatchSync()`, `Bus::dispatchNow()`
+- **Direct model instantiation** - `new Model()` in middleware (responses (`Response`, `JsonResponse`, `RedirectResponse`), exceptions (`RuntimeException`, `ValidationException`, HTTP exceptions, etc.), dates (`Carbon`, `DateTime`), and utilities (`Closure`, `stdClass`, `Collection`) are allowed)
+- **Complex conditional logic** - if-statement nesting 4+ levels deep, suggesting embedded business rules
 
 | Check | Issue Severity |
 | ----- | :------------: |
@@ -33,15 +33,15 @@ Detects business logic in middleware that violates separation of concerns. Check
 
 ::: tip What is NOT flagged
 - **Safe infrastructure facades** (for write method names): `Schema`, `Gate`, `Auth`, `Log`, `Cache`, `Config`, `Session`, `Cookie`, `Hash`, `Crypt`, `Storage`, `Route`, `View`, `Redirect`, `Validator`, `Queue`, `Event`, `Http`, `Request`, `Str`, `Arr`, `Collection`, `Response`, `JsonResponse`, `RedirectResponse`, `Carbon`, `CarbonImmutable`, `DateTime`, `DateTimeImmutable`
-- **`Mail::to()`** alone — it's a builder, not a send action
-- **`dispatch()` / `dispatch_sync()` global helpers** — dispatching async jobs from middleware is the accepted Laravel pattern for offloading work (e.g., background tracking)
+- **`Mail::to()`** alone - it's a builder, not a send action
+- **`dispatch()` / `dispatch_sync()` global helpers** - dispatching async jobs from middleware is the accepted Laravel pattern for offloading work (e.g., background tracking)
 :::
 
 ## Why It Matters
 
 - **Separation of Concerns:** Middleware should handle cross-cutting concerns (auth, CORS, logging), not business logic
 - **Testability:** Business logic in middleware is harder to unit test than in dedicated service classes
-- **Reusability:** Middleware runs on every matching request — business logic should be in controllers for precise control
+- **Reusability:** Middleware runs on every matching request; business logic should be in controllers for precise control
 - **Debugging:** When business logic is scattered across middleware, bugs are harder to trace
 
 ## How to Fix

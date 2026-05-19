@@ -17,12 +17,12 @@ pro: true
 
 This analyzer detects open redirection vulnerabilities where user-controlled input determines redirect destinations, allowing attackers to redirect users to malicious websites. Checks for:
 
-- **`redirect()` helpers with user input** — `redirect($input)`, `redirect()->to()`, `->away()`, `->guest()`, `->secure()`, and the `Redirect` facade equivalents (`Redirect::to()`, `::away()`, `::guest()`, `::secure()`) when the URL argument is user-supplied or a tainted variable
-- **Raw `header('Location:')` calls** with user input — flagged as Critical; bypasses Laravel's response pipeline entirely
+- **`redirect()` helpers with user input** - `redirect($input)`, `redirect()->to()`, `->away()`, `->guest()`, `->secure()`, and the `Redirect` facade equivalents (`Redirect::to()`, `::away()`, `::guest()`, `::secure()`) when the URL argument is user-supplied or a tainted variable
+- **Raw `header('Location:')` calls** with user input - flagged as Critical; bypasses Laravel's response pipeline entirely
 - **`new RedirectResponse()`** constructed directly with user input (both short and fully-qualified Symfony/Illuminate forms)
 - **`redirect()->intended()`** with a user-controlled fallback argument instead of a hardcoded route
-- **Referer-based redirects** — `$_SERVER['HTTP_REFERER']`, `$request->header('Referer')`, or `$request->headers->get('referer')` used as redirect targets
-- **`url()->previous()` / `URL::previous()`** in redirect context — both helpers derive their value from the Referer header, not session history, making them attacker-influenced
+- **Referer-based redirects** - `$_SERVER['HTTP_REFERER']`, `$request->header('Referer')`, or `$request->headers->get('referer')` used as redirect targets
+- **`url()->previous()` / `URL::previous()`** in redirect context - both helpers derive their value from the Referer header, not session history, making them attacker-influenced
 
 All checks also perform simple variable taint tracking (e.g. `$url = $request->input('next'); redirect($url)`) and recognise validation guards such as `Str::startsWith($url, '/')` or a `parse_url` host comparison as safe.
 

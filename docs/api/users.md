@@ -273,6 +273,6 @@ curl -X PUT "https://shieldci.com/api/v1/user/notifications/550e8400-e29b-41d4-a
 
 ## Related
 
-- [Authentication](/api/authentication) — How to create and use API tokens
-- [Tokens](/api/tokens) — Manage personal access tokens
-- [Errors](/api/errors) — Full error reference
+- [Authentication](/api/authentication) - How to create and use API tokens
+- [Tokens](/api/tokens) - Manage personal access tokens
+- [Errors](/api/errors) - Full error reference

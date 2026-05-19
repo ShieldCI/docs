@@ -19,15 +19,15 @@ Scans `app/Models/User.php`, `app/Models/Profile.php`, `app/Models/Customer.php`
 `database/migrations/`, `routes/web.php`, `routes/api.php`, and `config/logging.php`
 for technical GDPR compliance signals. Checks for:
 
-- **Data deletion capability (Article 17)** — `SoftDeletes` trait, or `anonymize` / `purge` / `erasePersonalData` method on the User model
-- **Encryption at rest** — `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields
-- **Consent tracking (Article 7)** — a `Consent` / `UserConsent` model, a consent-related migration, or consent columns on the users table
-- **Privacy policy route** — a `/privacy` or `/privacy-policy` route in web or API route files
-- **Data export capability (Article 20)** — an export controller, export route, `app/Exports/` directory, or `export` / `downloadData` method on the User model
-- **PII protection in logs** — log sanitization (`SanitizeLog`, `mask`, `redact`, `scrub`, `replace_placeholders`) in `config/logging.php` or a custom processor in `app/Logging/`
+- **Data deletion capability (Article 17)** - `SoftDeletes` trait, or `anonymize` / `purge` / `erasePersonalData` method on the User model
+- **Encryption at rest** - `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields
+- **Consent tracking (Article 7)** - a `Consent` / `UserConsent` model, a consent-related migration, or consent columns on the users table
+- **Privacy policy route** - a `/privacy` or `/privacy-policy` route in web or API route files
+- **Data export capability (Article 20)** - an export controller, export route, `app/Exports/` directory, or `export` / `downloadData` method on the User model
+- **PII protection in logs** - log sanitization (`SanitizeLog`, `mask`, `redact`, `scrub`, `replace_placeholders`) in `config/logging.php` or a custom processor in `app/Logging/`
 
 ::: tip SoftDeletes is not sufficient for true erasure
-`SoftDeletes` preserves all personal data in the database — soft-deleted records are still
+`SoftDeletes` preserves all personal data in the database: soft-deleted records are still
 readable by database admins and analytical tools. GDPR Article 17 requires that data be
 **truly erased or anonymized**. Add an `anonymize()` method alongside `SoftDeletes`, or
 use the `Prunable` / `MassPrunable` traits to schedule automatic hard-deletion of
@@ -195,8 +195,8 @@ class SanitizePiiProcessor implements ProcessorInterface
 ## References
 
 - [GDPR Official Text](https://gdpr-info.eu/)
-- [GDPR Article 17 — Right to Erasure](https://gdpr-info.eu/art-17-gdpr/)
-- [GDPR Article 20 — Right to Data Portability](https://gdpr-info.eu/art-20-gdpr/)
+- [GDPR Article 17 - Right to Erasure](https://gdpr-info.eu/art-17-gdpr/)
+- [GDPR Article 20 - Right to Data Portability](https://gdpr-info.eu/art-20-gdpr/)
 - [Laravel Encryption Casts](https://laravel.com/docs/eloquent-mutators#encrypted-casting)
 - [Laravel Model Pruning (SoftDeletes)](https://laravel.com/docs/eloquent#pruning-models)
 - [OWASP Privacy Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Privacy_Cheat_Sheet.html)

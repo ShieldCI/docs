@@ -15,33 +15,33 @@ pro: true
 
 ## What This Checks
 
-Detects `eval()` and related dynamic code execution patterns. Severity escalates to Critical when tainted user-input variables (tracked from `$_GET`, `request()`, `$request->`, etc.) flow into any dangerous call — including pre-assigned variables like `$fn = request('x'); ob_start($fn)`.
+Detects `eval()` and related dynamic code execution patterns. Severity escalates to Critical when tainted user-input variables (tracked from `$_GET`, `request()`, `$request->`, etc.) flow into any dangerous call, including pre-assigned variables like `$fn = request('x'); ob_start($fn)`.
 
 **Detected Patterns:**
 
 #### Code Execution Functions (4)
-- `eval()` — executes arbitrary PHP code
-- `assert()` with a string literal — treated as code in PHP < 8.3
-- `create_function()` — deprecated (PHP 7.2), removed (PHP 8.0); uses `eval` internally
-- `preg_replace()` with `/e` modifier — executes replacement as PHP code (removed PHP 7.0)
+- `eval()` - executes arbitrary PHP code
+- `assert()` with a string literal - treated as code in PHP < 8.3
+- `create_function()` - deprecated (PHP 7.2), removed (PHP 8.0); uses `eval` internally
+- `preg_replace()` with `/e` modifier - executes replacement as PHP code (removed PHP 7.0)
 
 #### Dynamic Invocation with User Input (5)
 Flagged when the callable or class name is tainted by user input:
 - `call_user_func()` / `call_user_func_array()` with a user-controlled function name
-- `$func()` — variable function calls
-- `$obj->$method()` — dynamic method dispatch
-- `Class::$method()` — dynamic static dispatch
-- `new $class()` — dynamic class instantiation
+- `$func()` - variable function calls
+- `$obj->$method()` - dynamic method dispatch
+- `Class::$method()` - dynamic static dispatch
+- `new $class()` - dynamic class instantiation
 
 #### Unsafe Deserialization (1)
-- `unserialize()` with user input — Critical; PHP object injection / RCE
-- `unserialize()` without `['allowed_classes' => false]` — Medium; flagged even without user input
+- `unserialize()` with user input - Critical; PHP object injection / RCE
+- `unserialize()` without `['allowed_classes' => false]` - Medium; flagged even without user input
 
 #### User-Controlled Callbacks and Templates (4)
 - `ob_start()` with a user-supplied callable
 - `register_shutdown_function()` with a user-supplied callable
 - `register_tick_function()` with a user-supplied callable
-- `Blade::compileString()` with user input — `@php` directives allow arbitrary PHP execution
+- `Blade::compileString()` with user input - `@php` directives allow arbitrary PHP execution
 
 ## Why It Matters
 

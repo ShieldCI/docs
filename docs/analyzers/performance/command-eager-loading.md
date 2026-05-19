@@ -21,11 +21,11 @@ Detects Artisan commands that have a constructor but do not use the `#[AsCommand
 - Constructor injection of class-typed dependencies (reported in the issue message)
 - Absence of the `#[AsCommand]` attribute, which would make the command lazy
 
-Commands without a constructor are skipped — their instantiation cost is negligible. Commands decorated with `#[AsCommand]` are skipped — they are already lazy.
+Commands without a constructor are skipped because their instantiation cost is negligible. Commands decorated with `#[AsCommand]` are skipped as they are already lazy.
 
 ## Why It Matters
 
-- **Boot Time Overhead:** When you run any `php artisan` command, Laravel calls `resolve()` on every command loaded via `load()`, instantiating each class and its constructor dependencies — even for commands not being run
+- **Boot Time Overhead:** When you run any `php artisan` command, Laravel calls `resolve()` on every command loaded via `load()`, instantiating each class and its constructor dependencies, even for commands not being run
 - **Memory Usage:** All injected dependencies are resolved into memory on every artisan invocation, not just when the command executes
 - **Slow CLI Response:** Deployment scripts, schedulers, and `php artisan list` all pay the full resolution cost
 - **Unnecessary Connections:** Commands with database or HTTP client dependencies may open connections even for unrelated artisan calls
@@ -34,9 +34,9 @@ In most small applications, the impact is negligible. It becomes meaningful with
 
 ## How to Fix
 
-### Primary Fix — Add `#[AsCommand]`
+### Primary Fix - Add `#[AsCommand]`
 
-Adding `#[AsCommand]` registers the command via Symfony's `ContainerCommandLoader`, which defers instantiation until the command is actually invoked. Constructor DI continues to work exactly as before — no restructuring needed.
+Adding `#[AsCommand]` registers the command via Symfony's `ContainerCommandLoader`, which defers instantiation until the command is actually invoked. Constructor DI continues to work exactly as before. No restructuring needed.
 
 ```php
 <?php
@@ -68,9 +68,9 @@ class ProcessUsers extends Command
 }
 ```
 
-The `$signature` property becomes optional when using `#[AsCommand]` — the command name is declared on the attribute itself.
+The `$signature` property becomes optional when using `#[AsCommand]`: the command name is declared on the attribute itself.
 
-### Alternative — Inject in `handle()`
+### Alternative - Inject in `handle()`
 
 If your dependencies are only used within `handle()` and nowhere else in the command, you can move them to method parameters. Laravel's service container injects them automatically when the command runs.
 

@@ -64,7 +64,7 @@ curl https://shieldci.com/api/v1/teams \
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | integer | Team ID — use in all team URLs |
+| `id` | integer | Team ID - use in all team URLs |
 | `name` | string | Team display name |
 | `personal_team` | boolean | `true` if this is the user's automatically-created personal team |
 | `owner_id` | integer\|null | User ID of the team owner |
@@ -132,7 +132,7 @@ HTTP `201 Created`
 |--------|-----------|
 | `401` | Missing or invalid token |
 | `403` | Plan does not allow creating shared teams |
-| `422` | Validation failed — `name` missing or exceeds 255 characters |
+| `422` | Validation failed - `name` missing or exceeds 255 characters |
 
 ---
 
@@ -197,7 +197,7 @@ curl "https://shieldci.com/api/v1/teams/3" \
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `id` | integer | User ID — use in member management URLs |
+| `id` | integer | User ID - use in member management URLs |
 | `name` | string | Display name |
 | `email` | string | Email address |
 | `avatar_url` | string\|null | Avatar URL |
@@ -310,7 +310,7 @@ Sends a team invitation email to the specified address. The invitation must be a
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
 | `email` | string | Yes | Email address to invite (max 255 characters) |
-| `role` | string | Yes | Role to assign: `admin`, `member`, or `readonly` — cannot be `owner` |
+| `role` | string | Yes | Role to assign: `admin`, `member`, or `readonly` - cannot be `owner` |
 
 ```bash
 curl -X POST "https://shieldci.com/api/v1/teams/3/members" \
@@ -362,7 +362,7 @@ Changes the role of an existing team member.
 
 | Field | Type | Required | Description |
 |-------|------|----------|-------------|
-| `role` | string | Yes | New role: `admin`, `member`, or `readonly` — cannot be `owner` |
+| `role` | string | Yes | New role: `admin`, `member`, or `readonly` - cannot be `owner` |
 
 ```bash
 curl -X PUT "https://shieldci.com/api/v1/teams/3/members/8" \
@@ -445,6 +445,6 @@ curl -X DELETE "https://shieldci.com/api/v1/teams/3/members/8" \
 
 ## Related
 
-- [Projects](/api/projects) — Manage projects within a team
-- [Authentication](/api/authentication) — How to create and use API tokens
-- [Errors](/api/errors) — Full error reference
+- [Projects](/api/projects) - Manage projects within a team
+- [Authentication](/api/authentication) - How to create and use API tokens
+- [Errors](/api/errors) - Full error reference

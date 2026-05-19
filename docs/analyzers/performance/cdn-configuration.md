@@ -52,7 +52,7 @@ Ensure `config/app.php` reads from the environment:
 'asset_url' => env('ASSET_URL'),
 ```
 
-Laravel's `asset()` helper and Vite/Mix will automatically prefix all asset URLs with this value — no template changes needed.
+Laravel's `asset()` helper and Vite/Mix will automatically prefix all asset URLs with this value. No template changes needed.
 
 ### Proper Fix (60 minutes)
 
@@ -92,7 +92,7 @@ ASSET_URL=https://d123456789.cloudfront.net
 **Cloudflare (proxy mode):**
 
 1. Add your domain to Cloudflare and enable proxy status
-2. Assets are automatically cached at the edge — no `ASSET_URL` change needed
+2. Assets are automatically cached at the edge. No `ASSET_URL` change needed
 
 **Bunny CDN:**
 
@@ -102,11 +102,11 @@ ASSET_URL=https://your-zone.b-cdn.net
 
 **Laravel Vapor:**
 
-Vapor automatically configures CloudFront and uploads assets to S3 on every deploy — no manual CDN setup required.
+Vapor automatically configures CloudFront and uploads assets to S3 on every deploy. No manual CDN setup required.
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments — CDN setup is a production concern and should not generate noise during local development or testing.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments. CDN setup is a production concern and should not generate noise during local development or testing.
 
 It also skips when no compiled assets are detected (no `public/mix-manifest.json` or `public/build/manifest.json`).
 

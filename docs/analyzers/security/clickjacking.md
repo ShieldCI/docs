@@ -189,7 +189,7 @@ class SecurityHeaders
 }
 ```
 
-> **Browser compatibility note:** `Content-Security-Policy: frame-ancestors` is the modern standard and takes precedence in all current browsers. For maximum compatibility with legacy browsers (Internet Explorer), keep both `X-Frame-Options` and the CSP header — as shown above.
+> **Browser compatibility note:** `Content-Security-Policy: frame-ancestors` is the modern standard and takes precedence in all current browsers. For maximum compatibility with legacy browsers (Internet Explorer), keep both `X-Frame-Options` and the CSP header, as shown above.
 
 **Option 4: Configuration-Based Approach**
 
@@ -282,7 +282,7 @@ public function index()
 
 **Option 6: Environment-Based CSP Configuration**
 
-Store CSP values in a config file (never call `env()` directly in middleware — it returns `null` after `php artisan config:cache`):
+Store CSP values in a config file (never call `env()` directly in middleware, as it returns `null` after `php artisan config:cache`):
 
 ```php
 // config/security.php

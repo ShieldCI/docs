@@ -17,13 +17,13 @@ pro: true
 
 Validates that security-sensitive operations have proper audit logging. Checks for:
 
-- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) — supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
-- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) — detects audit traits and Observer-based logging
+- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) - supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
+- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) - detects audit traits and Observer-based logging
 - Admin action logging in admin controllers, backend controllers, and Filament resources
 - Dedicated audit/security log channel configuration
-- API token lifecycle logging — Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
-- Data export/download operations — `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
-- Bulk model operations that bypass observers — `saveQuietly()`, `updateQuietly()`, and `withoutEvents()` skip audit traits; explicit logging is required at the call site
+- API token lifecycle logging - Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
+- Data export/download operations - `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
+- Bulk model operations that bypass observers - `saveQuietly()`, `updateQuietly()`, and `withoutEvents()` skip audit traits; explicit logging is required at the call site
 
 ## Why It Matters
 

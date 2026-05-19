@@ -46,11 +46,11 @@ This analyzer validates the security configuration of Laravel Nova to ensure the
 
 An unsecured Nova admin panel provides complete administrative access to your application, exposing:
 
-- **Full database access** — CRUD operations on all application resources and sensitive data
-- **User management** — Ability to create, modify, and delete user accounts including administrators
-- **Application configuration** — Settings, feature flags, and system configuration changes
-- **File management** — Upload, download, and delete files through Nova file fields
-- **Custom actions** — Execution of bulk operations, data exports, and administrative actions
+- **Full database access** - CRUD operations on all application resources and sensitive data
+- **User management** - Ability to create, modify, and delete user accounts including administrators
+- **Application configuration** - Settings, feature flags, and system configuration changes
+- **File management** - Upload, download, and delete files through Nova file fields
+- **Custom actions** - Execution of bulk operations, data exports, and administrative actions
 
 A publicly accessible Nova panel is equivalent to giving an attacker full database admin access with a user-friendly interface.
 
@@ -167,7 +167,7 @@ public function tools(): array
 ## References
 
 - [Laravel Nova Authorization](https://nova.laravel.com/docs/resources/authorization)
-- [Laravel Nova — Gates](https://laravel.com/docs/authorization#gates)
+- [Laravel Nova - Gates](https://laravel.com/docs/authorization#gates)
 - [OWASP Access Control Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html)
 - [CWE-284: Improper Access Control](https://cwe.mitre.org/data/definitions/284.html)
 - [CWE-306: Missing Authentication for Critical Function](https://cwe.mitre.org/data/definitions/306.html)
@@ -175,9 +175,9 @@ public function tools(): array
 
 ## Related Analyzers
 
-- [Horizon Security Analyzer](/analyzers/security/horizon-security) — Validates Laravel Horizon dashboard security
-- [Authentication Authorization Analyzer](/analyzers/security/authentication-authorization) — Checks authentication and authorization configuration
-- [Debug Mode Analyzer](/analyzers/security/debug-mode) — Ensures debug mode is disabled in production
-- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) — Protects against mass assignment in models
+- [Horizon Security Analyzer](/analyzers/security/horizon-security) - Validates Laravel Horizon dashboard security
+- [Authentication Authorization Analyzer](/analyzers/security/authentication-authorization) - Checks authentication and authorization configuration
+- [Debug Mode Analyzer](/analyzers/security/debug-mode) - Ensures debug mode is disabled in production
+- [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) - Protects against mass assignment in models
 
 ---

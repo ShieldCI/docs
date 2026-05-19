@@ -90,7 +90,7 @@ public function render($request, Throwable $exception)
 }
 ```
 
-Or simply create `resources/views/errors/404.blade.php` — Laravel auto-renders it for all 404 responses without any handler changes.
+Or simply create `resources/views/errors/404.blade.php`: Laravel auto-renders it for all 404 responses without any handler changes.
 
 For SPAs that must handle all paths client-side, configure your frontend router to return a distinct 404 state for unknown routes (e.g., a Vue `{ path: '/:pathMatch(.*)*', component: NotFound }` entry), so both server and client agree on which URLs are valid.
 

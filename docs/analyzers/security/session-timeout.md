@@ -18,7 +18,7 @@ pro: true
 This analyzer validates session timeout, cookie security, and lifetime configuration across your Laravel application:
 
 - **Session lifetime** - Checks `config/session.php` for `lifetime` values exceeding 120 minutes (2 hours). Supports both direct values and `env()` defaults
-- **Expire on close** - Recognizes `expire_on_close => true` as a mitigating factor — downgrades excessive lifetime issues to Low severity rather than suppressing them, as browser behavior varies
+- **Expire on close** - Recognizes `expire_on_close => true` as a mitigating factor; downgrades excessive lifetime issues to Low severity rather than suppressing them, as browser behavior varies
 - **Remember me tokens** - Checks `config/auth.php` for custom remember token lifetime keys exceeding 30 days
 - **Cookie secure flag** - Flags `secure => false`; High severity. Cookie sent over unencrypted HTTP in production
 - **Cookie HttpOnly flag** - Flags `http_only => false`; Medium severity. JavaScript can read the session cookie (XSS risk)

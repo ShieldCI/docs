@@ -15,7 +15,7 @@ pro: true
 
 ## What This Checks
 
-Detects Eloquent relationship property access inside `foreach` loops — the classic N+1 query problem where each loop iteration triggers a separate database query.
+Detects Eloquent relationship property access inside `foreach` loops: the classic N+1 query problem where each loop iteration triggers a separate database query.
 
 ## Why It Matters
 

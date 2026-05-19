@@ -34,7 +34,7 @@ This analyzer detects command injection vulnerabilities in your Laravel applicat
 #### Laravel APIs
 - **Process facade**: `Process::run()`, `::command()`, `::pipe()`, `::pool()`, `::start()` with string commands
 - **process() helper** (Laravel 10+): `process($cmd)` with a string command
-- **Artisan facade**: `Artisan::call()` / `::queue()` — Critical if command name is user-controlled, Medium if only parameters are
+- **Artisan facade**: `Artisan::call()` / `::queue()` - Critical if command name is user-controlled, Medium if only parameters are
 
 #### Symfony Process Component
 - `new Process($cmd)` instantiated with a string command

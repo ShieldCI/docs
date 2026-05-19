@@ -17,9 +17,9 @@ pro: true
 
 Detects hardcoded credentials in source code across two detection strategies:
 
-**By variable/property/array key name** — flags literal string values assigned to credential-named identifiers (`password`, `passwd`, `pwd`, `api_key`, `apiKey`, `access_token`, `secret`, `private_key`, `encryption_key`, `jwt_secret`, `webhook_secret`, `client_secret`, `oauth_token`, `aws_key`, `aws_secret`, and camelCase/snake_case variants).
+**By variable/property/array key name** - flags literal string values assigned to credential-named identifiers (`password`, `passwd`, `pwd`, `api_key`, `apiKey`, `access_token`, `secret`, `private_key`, `encryption_key`, `jwt_secret`, `webhook_secret`, `client_secret`, `oauth_token`, `aws_key`, `aws_secret`, and camelCase/snake_case variants).
 
-**By value format** — flags strings whose content matches known credential patterns regardless of variable name:
+**By value format** - flags strings whose content matches known credential patterns regardless of variable name:
 - AWS Access Key IDs (`AKIA` + 16 uppercase alphanumerics)
 - PEM private keys (`-----BEGIN PRIVATE KEY-----`)
 - Bearer and Basic auth header values

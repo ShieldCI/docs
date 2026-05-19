@@ -67,7 +67,7 @@ php artisan event:cache
 This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments.
 
 **Why skip in CI and development?**
-- Event caching is a deployment-time operation — it has no meaning until the app is deployed to a live environment
+- Event caching is a deployment-time operation: it has no meaning until the app is deployed to a live environment
 - CI pipelines run with uncached events intentionally to keep listener registration testable
 - Development environments skip caching so listener changes take effect immediately without clearing the cache
 

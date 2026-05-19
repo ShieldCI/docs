@@ -1,6 +1,6 @@
 ---
 title: API Reference
-description: REST API v1 reference for ShieldCI — manage projects, reports, teams, and tokens programmatically
+description: REST API v1 reference for ShieldCI - manage projects, reports, teams, and tokens programmatically
 icon: plug
 outline: [2, 2]
 tags: api,v1,overview,rest
@@ -53,7 +53,7 @@ All endpoints require a valid Sanctum personal access token and an active subscr
 
 ### 1. Create a token
 
-Open the ShieldCI dashboard → **Settings → API Tokens** → **New Token**. Assign the abilities your integration needs (`read`, `write`, and/or `admin`) and save the token value — it is shown only once.
+Open the ShieldCI dashboard → **Settings → API Tokens** → **New Token**. Assign the abilities your integration needs (`read`, `write`, and/or `admin`) and save the token value; it is shown only once.
 
 Alternatively, create one via the API if you already have a token with the `admin` ability:
 
@@ -113,6 +113,6 @@ See [Errors](/api/errors) for the full status code reference. See [Rate Limits](
 
 ## Reference
 
-- [Authentication](/api/authentication) — How to create tokens and use the `Authorization` header
-- [Rate Limits](/api/rate-limits) — Request limits by plan and retry strategies
-- [Errors](/api/errors) — Full HTTP status code and error format reference
+- [Authentication](/api/authentication) - How to create tokens and use the `Authorization` header
+- [Rate Limits](/api/rate-limits) - Request limits by plan and retry strategies
+- [Errors](/api/errors) - Full HTTP status code and error format reference

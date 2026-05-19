@@ -30,7 +30,7 @@ The standard `ThrottleRequests` middleware reads the current count, checks if li
 
 ### Option 1: Update Middleware Alias (Recommended)
 
-**Laravel 10 and below — In `app/Http/Kernel.php`:**
+**Laravel 10 and below - In `app/Http/Kernel.php`:**
 
 ```php
 protected $middlewareAliases = [
@@ -44,7 +44,7 @@ protected $middlewareAliases = [
 ];
 ```
 
-**Laravel 11+ — In `bootstrap/app.php`:**
+**Laravel 11+ - In `bootstrap/app.php`:**
 
 ```php
 use Illuminate\Foundation\Configuration\Middleware;

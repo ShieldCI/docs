@@ -17,10 +17,10 @@ pro: true
 
 Validates that Filament resources have proper authorization. Checks for:
 
-- Resources that set `$shouldSkipAuthorization = true` (bypasses all policy checks — High severity)
+- Resources that set `$shouldSkipAuthorization = true` (bypasses all policy checks - High severity)
 - Each resource has a corresponding model policy
 - Resources implement `canAccess()` or model has `viewAny` policy method
-- Weak `canAccess()` implementations that only check authentication (`return true`, `return auth()->check()`, `return Auth::check()`) — High severity
+- Weak `canAccess()` implementations that only check authentication (`return true`, `return auth()->check()`, `return Auth::check()`) - High severity
 - All CRUD operations are protected by policy methods (`viewAny`, `view`, `create`, `update`, `delete`, `deleteAny`)
 - SoftDeletes models have both single-record and bulk soft-delete policy methods (`restore`, `forceDelete`, `restoreAny`, `forceDeleteAny`)
 - Model-less resources must override `canAccess()` to control who can access them
@@ -30,7 +30,7 @@ Validates that Filament resources have proper authorization. Checks for:
 
 - **Unauthorized Access:** Without policies, all authenticated panel users can perform any CRUD operation
 - **Data Modification:** Users may edit or delete records they shouldn't have access to
-- **Bulk Destruction:** Missing `deleteAny`, `forceDeleteAny` leaves bulk-action buttons completely unguarded — a single click can wipe large datasets
+- **Bulk Destruction:** Missing `deleteAny`, `forceDeleteAny` leaves bulk-action buttons completely unguarded: a single click can wipe large datasets
 - **Privilege Escalation:** Admin panel users may access resources meant for higher privilege levels
 - **Compliance:** Access control is a fundamental requirement for security compliance
 

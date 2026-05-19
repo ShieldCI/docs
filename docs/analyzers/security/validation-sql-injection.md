@@ -19,7 +19,7 @@ This analyzer detects SQL injection vulnerabilities that arise specifically thro
 
 - **Dynamic table/column names** in `exists` and `unique` rules (e.g., `"exists:$table,col"` or `"unique:{$var},col"`)
 - **Request input in validation rules** (e.g., `"exists:users,$request->column"`)
-- **Rule builder with string concatenation** (e.g., `Rule::exists('table' . $var)` or `Rule::unique("table" . $var)`) — reported at **Critical** severity
+- **Rule builder with string concatenation** (e.g., `Rule::exists('table' . $var)` or `Rule::unique("table" . $var)`) - reported at **Critical** severity
 - **Custom validation functions** that contain database queries (`DB::`, `->get()`, `->first()`)
 - **Validator::extend()** calls that include database queries without parameter binding
 

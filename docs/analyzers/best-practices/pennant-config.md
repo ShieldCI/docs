@@ -17,11 +17,11 @@ pro: true
 
 Validates Laravel Pennant feature flag configuration, driver settings, and usage patterns. Checks for:
 
-- Unpublished `config/pennant.php` — driver configuration cannot be verified
-- Explicit use of the `array` driver — feature flag state is not persisted between requests
-- Stale feature flag references — flags checked via `Feature::active()`, `inactive()`, `when()`, `unless()`, `value()`, and bulk methods (`allAreActive()`, `someAreActive()`, `allAreInactive()`, `someAreInactive()`) that have no corresponding definition
+- Unpublished `config/pennant.php` - driver configuration cannot be verified
+- Explicit use of the `array` driver - feature flag state is not persisted between requests
+- Stale feature flag references - flags checked via `Feature::active()`, `inactive()`, `when()`, `unless()`, `value()`, and bulk methods (`allAreActive()`, `someAreActive()`, `allAreInactive()`, `someAreInactive()`) that have no corresponding definition
 - Feature definitions without a type hint on the scope parameter (including PHP 8 union types such as `User|null`)
-- Feature definitions with empty closures or bare `return;` statements — no default value when the store is unavailable
+- Feature definitions with empty closures or bare `return;` statements - no default value when the store is unavailable
 - Class-based features in `app/Features/` (with a `resolve()` method) are recognised as definitions, including those using the `#[Name('...')]` attribute
 
 > **Severity note:** Missing scope type hints raise a **Low** severity issue; all other findings are **Medium**.
@@ -70,7 +70,7 @@ php artisan migrate
 if (Feature::active('new-dashboard')) { ... }
 ```
 
-**After (✅) — closure-based:**
+**After (✅) - closure-based:**
 ```php
 // app/Providers/AppServiceProvider.php
 Feature::define('new-dashboard', function (User $scope): bool {
@@ -78,7 +78,7 @@ Feature::define('new-dashboard', function (User $scope): bool {
 });
 ```
 
-**After (✅) — class-based:**
+**After (✅) - class-based:**
 ```php
 // app/Features/NewDashboard.php
 class NewDashboard

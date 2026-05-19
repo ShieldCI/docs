@@ -24,7 +24,7 @@ Validates Filament admin panel security configuration. Checks for:
 - Public registration on admin/staff panels (`->registration()` on privileged surfaces)
 - Registration without email verification (`->emailVerification()` absent)
 - Revealable passwords enabled (`->revealablePasswords()`)
-- No model implements `FilamentUser` — any authenticated user can access all panels
+- No model implements `FilamentUser`: any authenticated user can access all panels
 
 ## Why It Matters
 

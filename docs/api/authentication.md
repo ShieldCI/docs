@@ -21,7 +21,7 @@ The easiest way to create a token is through the ShieldCI dashboard:
 3. Click **Create Token**.
 
 ::: warning Save your token immediately
-The plain-text token is displayed **only once**. Copy it before closing the dialog — it cannot be retrieved afterwards.
+The plain-text token is displayed **only once**. Copy it before closing the dialog; it cannot be retrieved afterwards.
 :::
 
 ### Via the API
@@ -61,11 +61,11 @@ The limit is **10 tokens per user**.
 
 ## Abilities
 
-Each token is granted one or more abilities that determine what it can do. Abilities form a strict hierarchy — a higher ability implicitly includes all lower ones.
+Each token is granted one or more abilities that determine what it can do. Abilities form a strict hierarchy: a higher ability implicitly includes all lower ones.
 
 | Ability | Includes | What it grants |
 |---------|----------|----------------|
-| `read` | — | View projects, reports, teams, and notifications |
+| `read` | none | View projects, reports, teams, and notifications |
 | `write` | `read` | Create and update projects, reports, and teams (includes read) |
 | `admin` | `write`, `read` | Manage tokens, delete resources, and team members (includes write) |
 | `*` | everything | Satisfies all ability checks (wildcard) |
@@ -88,7 +88,7 @@ curl https://shieldci.com/api/v1/user \
   -H "Accept: application/json"
 ```
 
-The `shieldci_` prefix is part of the token value returned when the token is created. It is not added separately — include it exactly as returned. The prefix allows GitHub Secret Scanning and similar tools to detect accidentally committed tokens.
+The `shieldci_` prefix is part of the token value returned when the token is created. It is not added separately; include it exactly as returned. The prefix allows GitHub Secret Scanning and similar tools to detect accidentally committed tokens.
 
 ## Subscription Requirement
 
@@ -122,5 +122,5 @@ All error responses use a consistent JSON envelope:
 
 ## Related
 
-- [Managing Tokens via API](/api/tokens) — List, create, and revoke tokens programmatically
-- [Error Reference](/api/errors) — Full catalog of API error codes and recovery steps
+- [Managing Tokens via API](/api/tokens) - List, create, and revoke tokens programmatically
+- [Error Reference](/api/errors) - Full catalog of API error codes and recovery steps

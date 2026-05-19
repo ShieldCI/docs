@@ -432,7 +432,7 @@ public function verifyAndStore(Request $request)
 | `image` | 9+ | Restricts to jpeg, png, bmp, gif, svg, webp via MIME type detection |
 | `extensions:pdf,docx` | 11+ | Validates the extension guessed from MIME type detection (server-side) |
 
-> **Tip:** Both `mimes:` and `mimetypes:` use finfo to read actual file content — neither trusts the client-supplied filename. The difference: `mimes:` accepts extension aliases (e.g., `jpg`), while `mimetypes:` requires the full MIME type string (e.g., `image/jpeg`). For maximum security, combine both or use `extensions:` (Laravel 11+) which validates the guessed extension from MIME type detection.
+> **Tip:** Both `mimes:` and `mimetypes:` use finfo to read actual file content, so neither trusts the client-supplied filename. The difference: `mimes:` accepts extension aliases (e.g., `jpg`), while `mimetypes:` requires the full MIME type string (e.g., `image/jpeg`). For maximum security, combine both or use `extensions:` (Laravel 11+) which validates the guessed extension from MIME type detection.
 
 ## References
 

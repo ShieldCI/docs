@@ -23,12 +23,12 @@ Checks for:
 - A recognised compression encoding (`gzip`, `br`, `zstd`, `deflate`)
 - Correct `Accept-Encoding` negotiation (brotli is only advertised on HTTPS sites)
 
-> **Note:** Brotli (`br`) is only negotiated over HTTPS. The analyzer reflects this — brotli is only checked on HTTPS sites.
+> **Note:** Brotli (`br`) is only negotiated over HTTPS. The analyzer reflects this: brotli is only checked on HTTPS sites.
 
 ## Why It Matters
 
 - **Bandwidth Reduction:** Compression reduces transfer size by 60-90% for text-based assets, directly cutting hosting costs
-- **Faster Load Times:** Smaller files download faster, especially on slow or mobile connections — gzip cuts JS by ~70%, brotli by ~75%
+- **Faster Load Times:** Smaller files download faster, especially on slow or mobile connections. Gzip cuts JS by ~70%, brotli by ~75%
 - **Core Web Vitals:** Faster asset delivery improves LCP and FID scores, which affect SEO rankings
 - **Production Critical:** Uncompressed assets are one of the easiest performance wins to miss in server configuration
 
@@ -62,13 +62,13 @@ sudo systemctl restart apache2
 ```
 
 **CDN (no server config needed):**
-Most CDNs compress automatically — enable "Compress Objects Automatically" in AWS CloudFront, or verify it is on in Cloudflare's Speed settings.
+Most CDNs compress automatically. Enable "Compress Objects Automatically" in AWS CloudFront, or verify it is on in Cloudflare's Speed settings.
 
 ### Proper Fix (30 minutes)
 
 For full compression coverage including brotli (HTTPS only) and pre-compressed asset serving:
 
-**Nginx — gzip + brotli:**
+**Nginx - gzip + brotli:**
 ```nginx
 http {
     # Gzip (all connections)
@@ -104,7 +104,7 @@ sudo apt-get install libnginx-mod-brotli
 apk add --no-cache nginx-mod-http-brotli
 ```
 
-**Apache — mod_deflate + mod_brotli:**
+**Apache - mod_deflate + mod_brotli:**
 ```apache
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html text/css
@@ -157,7 +157,7 @@ curl -H "Accept-Encoding: gzip, br" -I https://yoursite.com/js/app.js
 This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
-- Compression is a web server configuration — it cannot be verified without a running server
+- Compression is a web server configuration and cannot be verified without a running server
 - Local and CI environments typically serve assets without a web server in front of them
 - Production and staging should have a properly configured web server (Nginx, Apache, or CDN)
 

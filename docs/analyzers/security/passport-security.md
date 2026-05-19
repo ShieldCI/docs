@@ -29,7 +29,7 @@ Validates Laravel Passport OAuth2 configuration. Checks for:
 ## Why It Matters
 
 - **Long-Lived Tokens:** Default 1-year access tokens provide an extended window for token theft
-- **Insecure Grant Types:** The implicit grant exposes tokens in URL fragments; the password grant sends user credentials directly to clients — both are deprecated in current OAuth 2.0 security recommendations
+- **Insecure Grant Types:** The implicit grant exposes tokens in URL fragments; the password grant sends user credentials directly to clients - both are deprecated in current OAuth 2.0 security recommendations
 - **Key Exposure:** OAuth private keys with world-readable permissions allow token forgery
 - **Unlimited Scopes:** Without defined scopes, any token can access all API endpoints
 - **Database Bloat:** Without pruning, expired tokens accumulate and slow queries

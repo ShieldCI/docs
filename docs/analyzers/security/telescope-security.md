@@ -17,20 +17,20 @@ pro: true
 
 Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production. Checks for:
 
-- **`composer.json`**: Telescope in `require` instead of `require-dev` — will be installed in production
-- **`composer.json`**: Auto-discovery not disabled (missing `dont-discover` entry) — registered in all environments
-- **`config/app.php`**: `TelescopeServiceProvider` listed in providers array — loads in all environments
-- **`bootstrap/providers.php`**: `TelescopeServiceProvider` registered unconditionally — loads in all environments
+- **`composer.json`**: Telescope in `require` instead of `require-dev` - will be installed in production
+- **`composer.json`**: Auto-discovery not disabled (missing `dont-discover` entry) - registered in all environments
+- **`config/app.php`**: `TelescopeServiceProvider` listed in providers array - loads in all environments
+- **`bootstrap/providers.php`**: `TelescopeServiceProvider` registered unconditionally - loads in all environments
 - **`AppServiceProvider`**: Telescope registration without an `environment('local')` guard
-- **`TelescopeServiceProvider`**: File missing entirely — no gate or access control in place
-- **`TelescopeServiceProvider`**: No `viewTelescope` gate defined — dashboard open to everyone
+- **`TelescopeServiceProvider`**: File missing entirely - no gate or access control in place
+- **`TelescopeServiceProvider`**: No `viewTelescope` gate defined - dashboard open to everyone
 - **`TelescopeServiceProvider`**: `gate()` method exists but `Gate::define('viewTelescope', ...)` is absent
-- **`TelescopeServiceProvider`**: Authorization callback returns hardcoded `true` — anyone can access the dashboard
-- **`config/telescope.php`**: `enabled` defaults to `true` — Telescope active when `TELESCOPE_ENABLED` env var is unset
-- **`config/telescope.php`**: Middleware only includes `web` — no authentication layer protecting the dashboard
-- **`config/telescope.php`**: Default `/telescope` path — predictable and increases exposure risk (Info)
-- **Scheduler**: `telescope:prune` not scheduled — `telescope_entries` table grows indefinitely
-- **`TelescopeServiceProvider`**: `hideSensitiveRequestDetails()` not called — passwords and tokens may be recorded
+- **`TelescopeServiceProvider`**: Authorization callback returns hardcoded `true` - anyone can access the dashboard
+- **`config/telescope.php`**: `enabled` defaults to `true` - Telescope active when `TELESCOPE_ENABLED` env var is unset
+- **`config/telescope.php`**: Middleware only includes `web` - no authentication layer protecting the dashboard
+- **`config/telescope.php`**: Default `/telescope` path - predictable and increases exposure risk (Info)
+- **Scheduler**: `telescope:prune` not scheduled - `telescope_entries` table grows indefinitely
+- **`TelescopeServiceProvider`**: `hideSensitiveRequestDetails()` not called - passwords and tokens may be recorded
 
 ## Why It Matters
 

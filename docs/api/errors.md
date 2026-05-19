@@ -44,14 +44,14 @@ Validation errors (HTTP `422`) add an `errors` object with per-field messages. T
 | `403` | Forbidden | Valid token but insufficient ability, or no active subscription |
 | `404` | Not Found | Resource does not exist or belongs to another user |
 | `409` | Conflict | Operation conflicts with current state (e.g., duplicate export) |
-| `422` | Unprocessable Entity | Validation failed — `errors` object contains field-level details |
+| `422` | Unprocessable Entity | Validation failed - `errors` object contains field-level details |
 | `405` | Method Not Allowed | HTTP verb not supported for this endpoint |
 | `429` | Too Many Requests | Rate limit exceeded; see `Retry-After` header |
 | `500` | Server Error | Unexpected server-side failure |
 
 ## Common Errors
 
-### 401 — Unauthenticated
+### 401 - Unauthenticated
 
 ```json
 {
@@ -62,7 +62,7 @@ Validation errors (HTTP `422`) add an `errors` object with per-field messages. T
 
 Returned when no token is present, the token is malformed, or the token has been revoked. Check that you are including `Authorization: Bearer shieldci_{your_token}` in the request.
 
-### 403 — Insufficient Ability
+### 403 - Insufficient Ability
 
 ```json
 {
@@ -73,7 +73,7 @@ Returned when no token is present, the token is malformed, or the token has been
 
 The token is valid but lacks the ability required by the endpoint. [Create a new token](/api/tokens) with the appropriate ability, or use an existing `admin` token which satisfies all ability checks.
 
-### 403 — Subscription Required
+### 403 - Subscription Required
 
 ```json
 {
@@ -84,7 +84,7 @@ The token is valid but lacks the ability required by the endpoint. [Create a new
 
 The authenticated user has no active ShieldCI subscription. REST API access is available on all paid plans.
 
-### 404 — Not Found
+### 404 - Not Found
 
 ```json
 {
@@ -95,7 +95,7 @@ The authenticated user has no active ShieldCI subscription. REST API access is a
 
 The resource does not exist, has been deleted, or belongs to a different user's account. Route model binding also returns 404 when access is denied (to avoid exposing resource existence).
 
-### 422 — Validation Failed
+### 422 - Validation Failed
 
 ```json
 {
@@ -107,9 +107,9 @@ The resource does not exist, has been deleted, or belongs to a different user's 
 }
 ```
 
-One or more request fields failed validation. Inspect the `errors` object — each key is a field name, and the value is an array of error messages for that field.
+One or more request fields failed validation. Inspect the `errors` object: each key is a field name, and the value is an array of error messages for that field.
 
-### 429 — Too Many Requests
+### 429 - Too Many Requests
 
 ```json
 {
@@ -123,5 +123,5 @@ You have exceeded your plan's rate limit. The `Retry-After` response header cont
 
 ## Related
 
-- [Authentication](/api/authentication) — How to obtain and use API tokens
-- [Rate Limits](/api/rate-limits) — Per-plan request limits and retry guidance
+- [Authentication](/api/authentication) - How to obtain and use API tokens
+- [Rate Limits](/api/rate-limits) - Per-plan request limits and retry guidance

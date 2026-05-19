@@ -20,31 +20,31 @@ This analyzer detects path traversal vulnerabilities where user input constructs
 **Detected Vulnerable Patterns:**
 
 #### PHP File & Directory Operations (High / Critical)
-- `file_get_contents($request->input('path'))` — reads an arbitrary file from the filesystem
-- `fopen($_GET['file'], 'r')` — opens a user-controlled file path
-- `unlink($request->input('name'))` — deletes a user-specified file
+- `file_get_contents($request->input('path'))` - reads an arbitrary file from the filesystem
+- `fopen($_GET['file'], 'r')` - opens a user-controlled file path
+- `unlink($request->input('name'))` - deletes a user-specified file
 - Also covers: `file_put_contents()`, `readfile()`, `rename()`, `copy()`, `move_uploaded_file()`, `scandir()`, `opendir()`, `glob()`
 
 #### Include / Require with User Input (Critical)
-- `include $request->input('module')` — remote or local file inclusion
-- `require "{$base}/{$userModule}"` — dynamic include without path validation
+- `include $request->input('module')` - remote or local file inclusion
+- `require "{$base}/{$userModule}"` - dynamic include without path validation
 
 #### Laravel Storage & File Facades (High)
-- `Storage::get($request->input('path'))` — reads an arbitrary storage path
-- `Storage::disk($request->input('disk'))` — switches storage disk, bypassing root directory restrictions
-- `File::delete($_GET['path'])` — deletes a user-specified file via File facade
+- `Storage::get($request->input('path'))` - reads an arbitrary storage path
+- `Storage::disk($request->input('disk'))` - switches storage disk, bypassing root directory restrictions
+- `File::delete($_GET['path'])` - deletes a user-specified file via File facade
 - Also covers all `Storage::` methods (`put`, `delete`, `exists`, `download`, `path`, `url`, `temporaryUrl`) and `File::` methods (`get`, `copy`, `move`, `put`, `append`, `link`) with user input
 
 #### File Uploads (High)
-- `$file->store($request->input('dir'))` — stores upload in user-controlled directory
-- `$file->storeAs('uploads', $request->input('name'))` — user-controlled filename without `basename()` protection
+- `$file->store($request->input('dir'))` - stores upload in user-controlled directory
+- `$file->storeAs('uploads', $request->input('name'))` - user-controlled filename without `basename()` protection
 
 #### Response, Archives & Symlinks (Critical / High)
-- `response()->download($request->input('path'))` — serves an arbitrary file for download
-- `response()->file($request->input('path'))` — serves an arbitrary file inline
-- `symlink($_GET['target'], ...)` — creates a symlink to an attacker-controlled path
-- `->open($_GET['archive'])` / `->extractTo($_GET['dest'])` — zip-slip archive extraction
-- `str_replace('../', '', $input)` — naive traversal strip, bypassed with `....//`, `%2e%2e%2f`, or mixed separators
+- `response()->download($request->input('path'))` - serves an arbitrary file for download
+- `response()->file($request->input('path'))` - serves an arbitrary file inline
+- `symlink($_GET['target'], ...)` - creates a symlink to an attacker-controlled path
+- `->open($_GET['archive'])` / `->extractTo($_GET['dest'])` - zip-slip archive extraction
+- `str_replace('../', '', $input)` - naive traversal strip, bypassed with `....//`, `%2e%2e%2f`, or mixed separators
 
 ## Why It Matters
 

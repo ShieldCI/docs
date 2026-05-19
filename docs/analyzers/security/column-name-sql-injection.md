@@ -20,23 +20,23 @@ Detects SQL injection vulnerabilities where user input controls column names in 
 **Covered methods (14 + joins):**
 
 Column name methods (first argument checked):
-- `orderBy`, `orderByDesc` — column name in first argument
-- `select`, `addSelect` — any request usage flagged
-- `groupBy` — any request usage flagged
-- `pluck` — first argument and second argument (`$key` column) checked
-- `where`, `whereColumn` — first argument (column name) checked
-- `latest`, `oldest`, `reorder` — column name argument checked
-- `value` — column name argument checked
-- `having`, `orHaving` — first argument (column name) checked
+- `orderBy`, `orderByDesc` - column name in first argument
+- `select`, `addSelect` - any request usage flagged
+- `groupBy` - any request usage flagged
+- `pluck` - first argument and second argument (`$key` column) checked
+- `where`, `whereColumn` - first argument (column name) checked
+- `latest`, `oldest`, `reorder` - column name argument checked
+- `value` - column name argument checked
+- `having`, `orHaving` - first argument (column name) checked
 
 Join methods (second and fourth arguments checked):
-- `join`, `leftJoin`, `rightJoin` — `$first` and `$second` column args in ON clause
+- `join`, `leftJoin`, `rightJoin` - `$first` and `$second` column args in ON clause
 
 Additional detection:
-- `when()` closures — detects user input inside closures including concatenated input (`$prefix . $request->sort`)
+- `when()` closures - detects user input inside closures including concatenated input (`$prefix . $request->sort`)
 
 **Excluded from detection:**
-- `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`, `havingRaw`) — Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
+- `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`, `havingRaw`) - Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
 
 **Allowlist suppression:**
 - A file containing `in_array($var, $allowed, true)` (strict comparison) is treated as allowlist-validated and skipped. For per-line suppression, add `// @shieldci-ignore` on the affected line.

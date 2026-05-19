@@ -20,7 +20,7 @@ Validates that test files follow proper data management practices. Works with **
 - Hardcoded model creation instead of using factories (requires 2 or more hardcoded string field values)
 - Missing database cleanup traits (`RefreshDatabase`, `DatabaseMigrations`, `DatabaseTransactions`)
 - Raw SQL used in test files for data setup (`DB::insert()`, `DB::statement()`, `DB::unprepared()`, `DB::table()->insert()`)
-- Large factory sequences (count > 50) that may slow tests — both `->count(N)` and `Model::factory(N)` syntax
+- Large factory sequences (count > 50) that may slow tests - both `->count(N)` and `Model::factory(N)` syntax
 - Seeder usage in tests via `$this->seed()` or `Artisan::call('db:seed')`
 
 **Framework Support**
@@ -66,7 +66,7 @@ $user = User::factory()->create();
 
 ::: code-group
 
-```php [PHPUnit — RefreshDatabase]
+```php [PHPUnit - RefreshDatabase]
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class OrderTest extends TestCase
@@ -83,7 +83,7 @@ class OrderTest extends TestCase
 }
 ```
 
-```php [PHPUnit — DatabaseTransactions]
+```php [PHPUnit - DatabaseTransactions]
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class OrderTest extends TestCase
@@ -100,7 +100,7 @@ class OrderTest extends TestCase
 }
 ```
 
-```php [PHPUnit — DatabaseMigrations]
+```php [PHPUnit - DatabaseMigrations]
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class OrderTest extends TestCase
@@ -197,7 +197,7 @@ Then in `config/shieldci.php`:
 ```
 
 ::: tip When to Change the Threshold
-The default of 50 works well for most projects. You may want to increase it if your integration test suite legitimately creates larger datasets (e.g. pagination tests that need > 50 rows). Keep in mind that large factory sequences slow your CI — consider whether the test truly needs that many records.
+The default of 50 works well for most projects. You may want to increase it if your integration test suite legitimately creates larger datasets (e.g. pagination tests that need > 50 rows). Keep in mind that large factory sequences slow your CI, so consider whether the test truly needs that many records.
 :::
 
 ## References

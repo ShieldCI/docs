@@ -15,7 +15,7 @@ pro: true
 
 ## What This Checks
 
-Validates the **structure and contents of `vapor.yml`** — the file that drives AWS Lambda provisioning and environment variable injection on Laravel Vapor. This analyzer deliberately does **not** grep `vapor.yml` for runtime variables such as `FILESYSTEM_DISK`, `SESSION_DRIVER`, `CACHE_DRIVER`, or `QUEUE_CONNECTION`: per Vapor's documentation those are managed via the Vapor UI or `.env.{env}` files synced with `vapor env:pull/push`, not inlined in `vapor.yml`. Validation of those driver values is the responsibility of the per-concern analyzers (filesystem, session, cache, queue).
+Validates the **structure and contents of `vapor.yml`** - the file that drives AWS Lambda provisioning and environment variable injection on Laravel Vapor. This analyzer deliberately does **not** grep `vapor.yml` for runtime variables such as `FILESYSTEM_DISK`, `SESSION_DRIVER`, `CACHE_DRIVER`, or `QUEUE_CONNECTION`: per Vapor's documentation those are managed via the Vapor UI or `.env.{env}` files synced with `vapor env:pull/push`, not inlined in `vapor.yml`. Validation of those driver values is the responsibility of the per-concern analyzers (filesystem, session, cache, queue).
 
 Specific checks:
 
@@ -39,7 +39,7 @@ Specific checks:
 - **Cold starts:** Production environments without `warm:` pay the full 1–3 s initialization cost on every cold request.
 - **Missed migrations:** Attaching a `database:` resource without adding `php artisan migrate --force` to `deploy:` hooks ships schema drift to production.
 - **Silent scheduler:** Laravel's scheduler only runs on Vapor when `scheduler: true` is set on the environment. Missing this silently disables every scheduled command.
-- **Typos:** Vapor ignores unrecognized keys without warning — `warm_up: 5` passes `vapor deploy` but has no effect.
+- **Typos:** Vapor ignores unrecognized keys without warning - `warm_up: 5` passes `vapor deploy` but has no effect.
 
 ## How to Fix
 

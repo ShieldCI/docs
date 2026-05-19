@@ -17,10 +17,10 @@ pro: true
 
 Detects PHP object injection vulnerabilities through unsafe deserialization patterns and exploitable magic methods used in Property-Oriented Programming (POP) gadget chains:
 
-- `unserialize()` with user input — Critical without `allowed_classes` restriction; Medium when `allowed_classes => false` is present; High when input source is unknown
-- `call_user_func('unserialize', ...)` / `call_user_func_array('unserialize', ...)` — High; indirect deserialization via dynamic dispatch
-- Magic methods (`__wakeup`, `__unserialize`, `__destruct`, `__toString`, `__call`, `__callStatic`, `__get`, `__set`, `__isset`, `__unset`, `__invoke`) containing dangerous file, exec, eval, or database operations — High when sinks consume `$this->` properties, Medium otherwise
-- Filesystem functions (`file_get_contents`, `fopen`, `getimagesize`, `md5_file`, etc.) with user-controlled paths — High; vulnerable to `phar://` stream wrapper deserialization
+- `unserialize()` with user input - Critical without `allowed_classes` restriction; Medium when `allowed_classes => false` is present; High when input source is unknown
+- `call_user_func('unserialize', ...)` / `call_user_func_array('unserialize', ...)` - High; indirect deserialization via dynamic dispatch
+- Magic methods (`__wakeup`, `__unserialize`, `__destruct`, `__toString`, `__call`, `__callStatic`, `__get`, `__set`, `__isset`, `__unset`, `__invoke`) containing dangerous file, exec, eval, or database operations - High when sinks consume `$this->` properties, Medium otherwise
+- Filesystem functions (`file_get_contents`, `fopen`, `getimagesize`, `md5_file`, etc.) with user-controlled paths - High; vulnerable to `phar://` stream wrapper deserialization
 
 ## Why It Matters
 

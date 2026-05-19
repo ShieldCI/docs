@@ -62,7 +62,7 @@ curl https://shieldci.com/api/v1/tokens \
 | `created_at` | string\|null | ISO 8601 creation timestamp |
 
 ::: info Plain-text value not returned
-The `plain_text_token` is only returned when the token is **created**. This endpoint returns token metadata only — the actual token string cannot be retrieved after creation.
+The `plain_text_token` is only returned when the token is **created**. This endpoint returns token metadata only; the actual token string cannot be retrieved after creation.
 :::
 
 ### Errors
@@ -80,7 +80,7 @@ The `plain_text_token` is only returned when the token is **created**. This endp
 
 Requires ability: **admin**
 
-Creates a new personal access token. The plain-text token value is returned **only once** in the response — copy it immediately.
+Creates a new personal access token. The plain-text token value is returned **only once** in the response; copy it immediately.
 
 Maximum of **10 tokens per user**.
 
@@ -135,7 +135,7 @@ HTTP `201 Created`
 
 | Status | Condition |
 |--------|-----------|
-| `403` | Token limit reached — maximum 10 tokens per user |
+| `403` | Token limit reached - maximum 10 tokens per user |
 | `422` | Validation failed (`name` missing, `abilities` empty or invalid, `expires_at` in the past) |
 
 **403 response when limit is reached:**
@@ -190,5 +190,5 @@ curl -X DELETE https://shieldci.com/api/v1/tokens/2 \
 
 ## Related
 
-- [Authentication](/api/authentication) — Ability system and how tokens are used
-- [Errors](/api/errors) — Full error reference
+- [Authentication](/api/authentication) - Ability system and how tokens are used
+- [Errors](/api/errors) - Full error reference

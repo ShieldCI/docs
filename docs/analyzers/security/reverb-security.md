@@ -29,7 +29,7 @@ Validates Laravel Reverb WebSocket configuration. Checks for:
 - **Data Exposure:** Presence channels returning full user data expose passwords and tokens to all subscribers
 - **Credential Exposure:** Hardcoded Reverb secrets allow any client to forge events and impersonate the server
 - **Man-in-the-Middle:** Unencrypted ws:// connections can be intercepted on public networks
-- **Cross-Origin Abuse:** Wildcard origins allow malicious sites to connect to your WebSocket server — the official published config ships with `allowed_origins: ['*']` by default
+- **Cross-Origin Abuse:** Wildcard origins allow malicious sites to connect to your WebSocket server - the official published config ships with `allowed_origins: ['*']` by default
 
 ## How to Fix
 

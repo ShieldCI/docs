@@ -21,15 +21,15 @@ Validates Cross-Origin Resource Sharing configuration for security. Checks for:
 - Wildcard `allowed_origins` permitting any domain
 - Wildcard `allowed_methods` exposing all HTTP methods
 - Wildcard `allowed_headers` permitting any custom header
-- `supports_credentials` enabled with wildcard origins (**Critical** — fundamental misconfiguration)
+- `supports_credentials` enabled with wildcard origins (**Critical** - fundamental misconfiguration)
 - CORS `max_age` set to 0 (no preflight caching) or excessively high values (> 24 hours)
 - Sensitive headers exposed cross-origin: `Authorization`, `Set-Cookie`, `Cookie`, `X-CSRF-TOKEN`, `X-XSRF-TOKEN`
-- Overly permissive `allowed_origins_patterns` — regex patterns that match all origins (e.g., `.*`)
-- Unanchored `allowed_origins_patterns` — patterns missing `^`/`$` anchors that may match unintended origins
-- `null` origin in `allowed_origins` — enables cross-origin requests from sandboxed iframes and `data:` URLs
-- `env()` with wildcard `'*'` default — falls back to open access when the env variable is not set
-- Empty `paths` array — CORS headers not applied to any route (effectively disabled)
-- `HandleCors` middleware not registered — `config/cors.php` exists but is never applied
+- Overly permissive `allowed_origins_patterns` - regex patterns that match all origins (e.g., `.*`)
+- Unanchored `allowed_origins_patterns` - patterns missing `^`/`$` anchors that may match unintended origins
+- `null` origin in `allowed_origins` - enables cross-origin requests from sandboxed iframes and `data:` URLs
+- `env()` with wildcard `'*'` default - falls back to open access when the env variable is not set
+- Empty `paths` array - CORS headers not applied to any route (effectively disabled)
+- `HandleCors` middleware not registered - `config/cors.php` exists but is never applied
 - HTTP (non-HTTPS) origins in `allowed_origins`, especially dangerous when `supports_credentials` is enabled
 - Wildcard subdomain patterns in `allowed_origins_patterns` combined with `supports_credentials`
 

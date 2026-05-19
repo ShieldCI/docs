@@ -24,11 +24,11 @@ Validates Laravel Pulse dashboard security. Checks for:
 
 ## Why It Matters
 
-- **Public Dashboard** — Without the `viewPulse` gate, the `/pulse` route is accessible to any authenticated user in non-local environments, exposing slow queries, job timings, request data, and exception counts
-- **Weak Authorization** — A gate that returns `true` or only checks `auth()->check()` grants the full dashboard to every logged-in user, not just administrators
-- **Sensitive Query Data** — Pulse records slow query text and timing; this information can reveal table names, column names, and data patterns useful to attackers
-- **Database Growth** — Without data trimming, Pulse's storage tables grow unbounded and can exhaust disk space in high-traffic applications
-- **Data Minimisation** — Retaining monitoring data longer than necessary increases the blast radius of a database breach
+- **Public Dashboard** - Without the `viewPulse` gate, the `/pulse` route is accessible to any authenticated user in non-local environments, exposing slow queries, job timings, request data, and exception counts
+- **Weak Authorization** - A gate that returns `true` or only checks `auth()->check()` grants the full dashboard to every logged-in user, not just administrators
+- **Sensitive Query Data** - Pulse records slow query text and timing; this information can reveal table names, column names, and data patterns useful to attackers
+- **Database Growth** - Without data trimming, Pulse's storage tables grow unbounded and can exhaust disk space in high-traffic applications
+- **Data Minimisation** - Retaining monitoring data longer than necessary increases the blast radius of a database breach
 
 ## How to Fix
 

@@ -17,7 +17,7 @@ pro: true
 
 Validates Laravel Sanctum token configuration. Checks for:
 
-- Token expiration is configured (not `null` — tokens never expire)
+- Token expiration is configured (not `null`; tokens never expire)
 - Token creation uses explicit abilities/scopes
 - Token abilities are enforced via middleware or `tokenCan()` (not just created)
 - Stateful domains are explicitly listed (no wildcards)
@@ -30,7 +30,7 @@ Validates Laravel Sanctum token configuration. Checks for:
 
 - **Perpetual Tokens:** Tokens that never expire provide an unlimited window for stolen token abuse
 - **Unrestricted Access:** Tokens without abilities can access every API endpoint
-- **Decorative Scopes:** Token abilities do nothing without enforcement via `abilities:`/`ability:` middleware or `tokenCan()` checks — scopes without enforcement are purely cosmetic
+- **Decorative Scopes:** Token abilities do nothing without enforcement via `abilities:`/`ability:` middleware or `tokenCan()` checks: scopes without enforcement are purely cosmetic
 - **Session Hijacking:** Wildcard stateful domains allow any subdomain to make stateful requests
 - **SPA Auth Failure:** Missing `EnsureFrontendRequestsAreStateful` middleware breaks SPA authentication
 - **Missing Trait:** Without `HasApiTokens`, `createToken()` and `tokenCan()` are unavailable on the User model

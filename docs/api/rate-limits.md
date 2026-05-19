@@ -83,5 +83,5 @@ async function apiRequest(url, options, retries = 3, attempt = 0) {
 
 ## Related
 
-- [Authentication](/api/authentication) — How to obtain and use API tokens
-- [Errors](/api/errors) — Full error reference including 429 details
+- [Authentication](/api/authentication) - How to obtain and use API tokens
+- [Errors](/api/errors) - Full error reference including 429 details

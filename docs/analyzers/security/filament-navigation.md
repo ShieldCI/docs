@@ -17,7 +17,7 @@ pro: true
 
 Validates that Filament navigation items have proper permission gates. Checks for:
 
-- Resources hidden via `shouldRegisterNavigation()` but missing `canAccess()` — the URL remains directly reachable
+- Resources hidden via `shouldRegisterNavigation()` but missing `canAccess()` - the URL remains directly reachable
 - `canAccess()` or `shouldRegisterNavigation()` that only checks authentication, not authorization (weak gate)
 - Resources with sensitive navigation groups (e.g., "Admin", "System", "Users") that have no visibility gate
 - Navigation badges that may leak count information without authorization
@@ -25,7 +25,7 @@ Validates that Filament navigation items have proper permission gates. Checks fo
 
 ## Why It Matters
 
-- **Security by Obscurity Fails:** Hiding a navigation item does **not** protect the route — users can still reach it via direct URL. `shouldRegisterNavigation()` only controls sidebar visibility; `canAccess()` is required for actual route protection.
+- **Security by Obscurity Fails:** Hiding a navigation item does **not** protect the route: users can still reach it via direct URL. `shouldRegisterNavigation()` only controls sidebar visibility; `canAccess()` is required for actual route protection.
 - **Weak Gates:** `canAccess()` returning `true` or `auth()->check()` allows any authenticated panel user to access sensitive resources regardless of their role or permissions.
 - **Information Disclosure:** Navigation badges showing counts (e.g., "42 Users") leak data to unauthorized users.
 - **Attack Surface:** Visible admin navigation reveals application structure to potential attackers.

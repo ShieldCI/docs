@@ -22,7 +22,7 @@ Scans application code for common inefficient database query patterns including 
 - **SELECT \*:** Fetches all columns when only a few are needed, wasting memory and bandwidth
 - **Queries in Loops:** Each iteration executes a separate query (N+1 problem), turning 1 query into hundreds
 - **count() for Existence:** `->count() > 0` scans entire table when `->exists()` stops at first match
-- **Cumulative Impact:** These patterns compound — a page with multiple N+1 issues can execute thousands of queries
+- **Cumulative Impact:** These patterns compound: a page with multiple N+1 issues can execute thousands of queries
 
 Even moderate traffic can bring a server to its knees when these patterns are present.
 

@@ -17,17 +17,17 @@ pro: true
 
 This analyzer detects Remote Code Execution (RCE) vulnerabilities by identifying dangerous function calls and code patterns that allow attackers to run arbitrary code on the server:
 
-- **`eval()`** — executes string argument as PHP code
-- **`assert()`** — string argument evaluates as PHP code in PHP < 8.0; only flagged when argument is a string or user-controlled
-- **`create_function()`** — creates a function from a string body; inherently dangerous
-- **Variable function calls** (`$func()`) — flagged when the function name is user-controlled
-- **`preg_replace()` with `/e` modifier** — replacement string is evaluated as PHP code (deprecated PHP 5.5, removed PHP 7.0)
-- **`call_user_func()`** / **`call_user_func_array()`** — flagged when callback is user-controlled or a plain variable
-- **`new ReflectionFunction()`** / **`new ReflectionMethod()`** — invokes arbitrary function or method when arguments are user-controlled
+- **`eval()`** - executes string argument as PHP code
+- **`assert()`** - string argument evaluates as PHP code in PHP < 8.0; only flagged when argument is a string or user-controlled
+- **`create_function()`** - creates a function from a string body; inherently dangerous
+- **Variable function calls** (`$func()`) - flagged when the function name is user-controlled
+- **`preg_replace()` with `/e` modifier** - replacement string is evaluated as PHP code (deprecated PHP 5.5, removed PHP 7.0)
+- **`call_user_func()`** / **`call_user_func_array()`** - flagged when callback is user-controlled or a plain variable
+- **`new ReflectionFunction()`** / **`new ReflectionMethod()`** - invokes arbitrary function or method when arguments are user-controlled
 
 **Severity Classification:**
-- **Critical** — dangerous pattern called with user input (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `$request->`)
-- **High** — dangerous pattern without detected user input (still a risk if data flows from untrusted sources)
+- **Critical** - dangerous pattern called with user input (`$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `$request->`)
+- **High** - dangerous pattern without detected user input (still a risk if data flows from untrusted sources)
 
 ## Why It Matters
 

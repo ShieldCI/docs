@@ -19,8 +19,8 @@ Detects dangerous usage of PHP's `extract()` function and related scope-pollutin
 
 - `extract()` called with direct user input (`$_GET`, `$_POST`, `$request->all()`, `Request::all()`)
 - `extract()` called with a variable tainted by user input (`$data = $request->all(); extract($data)`)
-- `extract()` called without safe flags — missing `EXTR_SKIP`, `EXTR_IF_EXISTS`, `EXTR_PREFIX_ALL`, `EXTR_PREFIX_SAME`, or `EXTR_PREFIX_INVALID`
-- `extract()` called with dangerous flags — `EXTR_OVERWRITE`, `EXTR_REFS`, or BitOr combinations
+- `extract()` called without safe flags - missing `EXTR_SKIP`, `EXTR_IF_EXISTS`, `EXTR_PREFIX_ALL`, `EXTR_PREFIX_SAME`, or `EXTR_PREFIX_INVALID`
+- `extract()` called with dangerous flags - `EXTR_OVERWRITE`, `EXTR_REFS`, or BitOr combinations
 - `compact()` called with user-controlled variable names or a spread operator
 - `parse_str()` called without a result argument (imports variables directly into scope)
 - `parse_str()` called with user input as the first argument

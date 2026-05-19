@@ -29,7 +29,7 @@ Validates Laravel Fortify authentication configuration. Checks for:
 ## Why It Matters
 
 - **Account Takeover:** Without 2FA, compromised passwords mean compromised accounts
-- **Unverified 2FA Setup:** Without `confirm`, 2FA activates immediately — users may lock themselves out if their authenticator is misconfigured
+- **Unverified 2FA Setup:** Without `confirm`, 2FA activates immediately, meaning users may lock themselves out if their authenticator is misconfigured
 - **Weak Passwords:** Without password validation, users can set trivially guessable passwords
 - **Fake Accounts:** Without email verification, bots can register with invalid emails
 - **Brute Force:** Unprotected password reset routes allow email flooding attacks
