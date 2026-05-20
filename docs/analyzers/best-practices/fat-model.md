@@ -428,7 +428,6 @@ The analyzer automatically excludes Laravel magic methods (scopes, relationships
 - [Laravel Service Container](https://laravel.com/docs/container) - Dependency injection in Laravel
 - [SOLID Principles](https://www.digitalocean.com/community/conceptual_articles/s-o-l-i-d-the-first-five-principles-of-object-oriented-design) - Single Responsibility Principle
 - [Action Classes in Laravel](https://freek.dev/1371-refactoring-to-actions) - Freek Van der Herten's action pattern
-- [Repository Pattern](https://medium.com/@panjeh/reposit ory-design-pattern-in-laravel-2d7c1f98e9a5) - Implementing repositories in Laravel
 - [Laravel Best Practices](https://github.com/alexeymezenin/laravel-best-practices) - Community best practices guide
 
 ## Related Analyzers

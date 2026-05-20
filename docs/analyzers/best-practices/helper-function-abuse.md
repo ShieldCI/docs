@@ -32,33 +32,6 @@ Detects excessive use of Laravel helper functions that hide dependencies and vio
 - **Debug helpers**: `dd`, `dump` - handled by [Debug Mode Analyzer](/analyzers/security/debug-mode)
 - **Low priority**: `bcrypt` - simple utility, rarely abused
 
-## Whitelisted Contexts
-
-The analyzer automatically skips certain contexts where helper usage is acceptable:
-
-**Whitelisted Directories** (default):
-- `tests/` - Test files need flexibility
-- `database/migrations/` - Migrations don't support constructor DI
-- `database/seeders/` - Seeders often need dynamic resolution
-- `database/factories/` - Factories may need service resolution
-- `app/Jobs/` - Job constructors are used for serialization, can't DI config/services
-- `app/Listeners/` - Event-driven infrastructure, similar to Jobs
-- `app/Http/Middleware/` - HTTP pipeline infrastructure, needs request/response/config
-
-**Whitelisted Class Patterns** (default):
-- `*ServiceProvider` - Service providers legitimately bootstrap the app
-- `*Command` - Console commands often need conditional resolution
-- `*Controller` - HTTP boundary layer, naturally uses view/response/redirect
-- `*Job` - Queue infrastructure where helpers are the natural pattern
-- `*Listener` - Event listeners often need dynamic resolution
-- `*Middleware` - HTTP pipeline needs request/response/config access
-- `*Seeder` - Database seeders need service resolution
-- `*Test` / `*TestCase` - Test classes need flexibility
-
-::: tip Why both directories and class patterns?
-Directory whitelisting catches classes regardless of naming convention (e.g. `DispatchDealEmail` in `app/Jobs/`). Class pattern whitelisting catches classes in non-standard directories (e.g. a `ProcessOrderJob` in `app/Services/`). Together they provide comprehensive coverage.
-:::
-
 ## Why It Matters
 
 - **Hidden Dependencies**: Helper functions hide what a class actually depends on, making dependencies invisible

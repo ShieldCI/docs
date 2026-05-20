@@ -26,10 +26,6 @@ Single-server MySQL configuration works but limits scaling options as traffic gr
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
-
-Current single-server config is acceptable for most applications. This is informational.
-
 ### Proper Fix (30 minutes)
 
 **Read Replicas:**

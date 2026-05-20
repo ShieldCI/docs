@@ -50,8 +50,8 @@ composer config prefer-stable true
 
 The analyzer detects **all** Composer-valid unstable version formats:
 
+**Before (❌):**
 ```json
-**Before (❌ All detected as unstable)**
 {
     "require": {
         "vendor/package": "dev-master",      // dev branch
@@ -63,8 +63,10 @@ The analyzer detects **all** Composer-valid unstable version formats:
         "vendor/flag": "^2.0@dev"            // stability flag
     }
 }
+```
 
-**After (✅ All stable)**
+**After (✅):**
+```json
 {
     "require": {
         "vendor/package": "^2.3",
@@ -74,6 +76,7 @@ The analyzer detects **all** Composer-valid unstable version formats:
         "vendor/beta": "^1.0",
         "vendor/rc": "^1.0",
         "vendor/flag": "^2.0"
+    }
 }
 ```
 

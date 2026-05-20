@@ -68,7 +68,7 @@ php artisan tinker
 1. **Verify all connection details** in `config/database.php`:
 
 ```php
-// Before - Missing database or wrong credentials
+// ❌ Before: Missing database or wrong credentials
 'mysql' => [
     'driver' => 'mysql',
     'host' => env('DB_HOST', '127.0.0.1'),
@@ -77,7 +77,7 @@ php artisan tinker
     'password' => env('DB_PASSWORD', 'wrong_password'),  // ❌ Incorrect password
 ],
 
-// After - Correct configuration
+// ✅ After: Correct configuration
 'mysql' => [
     'driver' => 'mysql',
     'host' => env('DB_HOST', '127.0.0.1'),

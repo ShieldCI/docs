@@ -127,60 +127,6 @@ chmod 644 .env
 sudo chown www-data:www-data .env  # Adjust user as needed
 ```
 
-### Creating .env from Scratch (if .env.example is missing)
-
-If `.env.example` doesn't exist, create `.env` manually:
-
-```bash
-# Create new .env file
-touch .env
-
-# Add minimum required configuration
-cat > .env << 'EOF'
-APP_NAME=Laravel
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://localhost
-
-LOG_CHANNEL=stack
-LOG_DEPRECATIONS_CHANNEL=null
-LOG_LEVEL=debug
-
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=laravel
-DB_USERNAME=root
-DB_PASSWORD=
-
-BROADCAST_DRIVER=log
-CACHE_DRIVER=file
-FILESYSTEM_DISK=local
-QUEUE_CONNECTION=sync
-SESSION_DRIVER=file
-SESSION_LIFETIME=120
-
-MEMCACHED_HOST=127.0.0.1
-
-REDIS_HOST=127.0.0.1
-REDIS_PASSWORD=null
-REDIS_PORT=6379
-
-MAIL_MAILER=smtp
-MAIL_HOST=mailpit
-MAIL_PORT=1025
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
-EOF
-
-# Generate secure APP_KEY
-php artisan key:generate
-```
-
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
