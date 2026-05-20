@@ -39,15 +39,6 @@ Debug mode enabled in production is one of the most dangerous misconfigurations 
 - Framework versions helping attackers find known vulnerabilities
 - File system paths assisting in directory traversal attacks
 
-::: info Environment-Aware Analysis
-This analyzer is **smart about development vs. production environments**:
-
-- ✅ **Development/Local**: `APP_DEBUG=true` with `APP_ENV=local` or `development` will **pass** - this is the correct configuration for local development
-- ⚠️ **Production/Staging**: `APP_DEBUG=true` with `APP_ENV=production` or `staging` triggers **Critical** severity - this is extremely dangerous
-
-The analyzer reads `APP_ENV` from your `.env` file to intelligently determine if debug mode is appropriate for your environment.
-:::
-
 ## How to Fix
 
 ### Quick Fix (1 minute)
@@ -80,8 +71,8 @@ grep -r "dump(" app/
 grep -r "ray(" app/
 
 # Replace with proper logging
-# Before: dd($user);
-# After: Log::debug('User data', ['user' => $user->toArray()]);
+# ❌ Before: dd($user);
+# ✅ After: Log::debug('User data', ['user' => $user->toArray()]);
 ```
 
 **Scenario 3: Debug Packages in Production**
@@ -104,12 +95,12 @@ grep -r "exit(" app/
 grep -r "die(" app/
 
 # Replace with proper alternatives
-# Before: exit('Error');
-# After: abort(500, 'Error');
+# ❌ Before: exit('Error');
+# ✅ After: abort(500, 'Error');
 
 # For CLI commands, use exit codes properly:
-# Before: exit(1);
-# After: return Command::FAILURE;
+# ❌ Before: exit(1);
+# ✅ After: return Command::FAILURE;
 ```
 
 ### Proper Fix (5 minutes)

@@ -31,16 +31,14 @@ Horizon provides essential visibility into queue operations that basic queue:wor
 ```bash
 composer require laravel/horizon
 php artisan horizon:install
-php artisan migrate
 ```
 
-### Proper Fix (30 minutes)
+### Proper Fix (15 minutes)
 
 **Install and Configure:**
 ```bash
 composer require laravel/horizon
 php artisan horizon:install
-php artisan migrate
 
 # Configure
 php artisan vendor:publish --tag=horizon-config
@@ -63,13 +61,6 @@ redirect_stderr=true
 stdout_logfile=/path/to/horizon.log
 stopwaitsecs=3600
 ```
-
-## ShieldCI Configuration
-
-**When to run this analyzer:**
-- ✅ **Local/Staging/Production**: Runs when you are on a Redis queue driver and not on Vapor
-- ❌ **Laravel Vapor / Serverless**: Skipped automatically (incompatible architecture)
-- ❌ **Non-Redis queue drivers**: Skipped automatically (Horizon requires Redis)
 
 ## References
 
