@@ -31,16 +31,6 @@ The analyzer uses context-aware detection to minimize false positives:
 
 :::
 
-::: tip What's NOT Flagged
-The analyzer correctly recognizes these as **safe**:
-- PDO/mysqli instantiation (`new PDO()`, `new mysqli()`) - just connection setup
-- Prepared statement functions (`mysqli_prepare()`, `pg_prepare()`) - secure by design
-- Parameter binding (`DB::select('WHERE id = ?', [$id])`) - the recommended safe pattern
-- Static queries without variables (`DB::select('SELECT * FROM users')`)
-- Table/column name concatenation in query fragment methods (`->orderByRaw('col/' . $table . '.goal ASC')`) - only direct user input is flagged in `*Raw()` methods
-- Structural concatenation with bindings (`DB::select('... IN (' . $placeholders . ')', $bindings)`) - when bindings are present, only direct user input in the SQL string is flagged
-:::
-
 ## Why It Matters
 
 SQL injection is one of the most critical security vulnerabilities (OWASP Top 10 #1) that can lead to:
