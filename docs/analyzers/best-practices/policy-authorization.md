@@ -160,5 +160,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 ## Related Analyzers
 
 - [Auth & Authorization](/analyzers/security/authentication-authorization) - Validates authentication patterns
-- [Form Request Validation](/analyzers/best-practices/form-request-validation) - Validates FormRequest usage
 - [Filament Resource Authorization](/analyzers/security/filament-resource-authorization) - Validates Filament authorization

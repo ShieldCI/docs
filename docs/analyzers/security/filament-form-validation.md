@@ -106,5 +106,4 @@ public static function form(Form $form): Form
 ## Related Analyzers
 
 - [Filament Panel Security](/analyzers/security/filament-panel-security) - Validates panel authentication
-- [Form Request Validation](/analyzers/best-practices/form-request-validation) - Validates FormRequest usage
 - [XSS Vulnerabilities](/analyzers/security/xss-vulnerabilities) - Detects cross-site scripting
