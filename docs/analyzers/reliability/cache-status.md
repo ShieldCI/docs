@@ -71,7 +71,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 ## References
 
 - [Laravel Cache Docs](https://laravel.com/docs/cache)
-- [Laravel Health Checks](https://laravel.com/docs/10.x/validation#available-validation-rules)
+- [Laravel Health Checks](https://laravel.com/docs/validation#available-validation-rules)
 
 ## Related Analyzers
 

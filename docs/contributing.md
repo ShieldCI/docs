@@ -30,7 +30,7 @@ Found a bug? Please help us fix it:
 Title: False positive in SQL Injection analyzer with Query Builder
 
 ShieldCI: 1.0.0
-Laravel: 11.x
+Laravel: 13.x
 PHP: 8.3
 
 Steps to reproduce:

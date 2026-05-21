@@ -22,7 +22,7 @@ Specifically checks for:
 |---|---|:---:|
 | `TrustProxies` | No proxies configured (property empty, no `trustedproxy.proxies` config) | 9–10 |
 | `TrustHosts` | Registered without `TrustProxies` (useless without it) | 9–10 |
-| `HandleCors` | No paths configured in `config/cors.php` | 9–12 |
+| `HandleCors` | No paths configured in `config/cors.php` | 9+ |
 
 ::: info Laravel 11+
 `TrustProxies` and `TrustHosts` are framework-level defaults in Laravel 11+ and are not flagged. Only `HandleCors` is checked.

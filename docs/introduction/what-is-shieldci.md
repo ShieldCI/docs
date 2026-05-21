@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # What is ShieldCI?
 
-ShieldCI is a comprehensive AI-powered Laravel code analysis and security auditing platform designed to help developers maintain secure, high-performance, and high-quality Laravel applications. It provides automated static analysis, security scanning, and best practice enforcement for Laravel versions 9-12.
+ShieldCI is a comprehensive AI-powered Laravel code analysis and security auditing platform designed to help developers maintain secure, high-performance, and high-quality Laravel applications. It provides automated static analysis, security scanning, and best practice enforcement for Laravel versions 9 and above.
 
 ## Overview
 
