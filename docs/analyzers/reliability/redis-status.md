@@ -117,9 +117,19 @@ save 60 10000
 3. **Configure memory limits**:
 
 ```bash
-# redis.conf
-maxmemory 256mb
-maxmemory-policy allkeys-lru
+# Immediate fix — takes effect without a restart:
+redis-cli CONFIG SET maxmemory 256mb
+redis-cli CONFIG SET maxmemory-policy allkeys-lru
+```
+
+To persist across restarts, add the same settings to `redis.conf`. ShieldCI will show the exact config file path in the issue location when it can be detected from Redis. In Docker/containers, pass these as flags to the Redis entrypoint:
+
+```yaml
+# docker-compose.yml
+services:
+  redis:
+    image: redis:alpine
+    command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
 ```
 
 4. **Monitor connection limits**:
