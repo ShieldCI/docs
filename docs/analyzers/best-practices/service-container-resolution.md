@@ -201,12 +201,12 @@ Then in `config/shieldci.php`:
 
 ## References
 
-- [Laravel Dependency Injection](https://laravel.com/docs/10.x/container#dependency-injection) - Official Laravel documentation on DI
-- [Service Container](https://laravel.com/docs/10.x/container) - Understanding Laravel's IoC container
+- [Laravel Dependency Injection](https://laravel.com/docs/container#dependency-injection) - Official Laravel documentation on DI
+- [Service Container](https://laravel.com/docs/container) - Understanding Laravel's IoC container
 - [Service Locator is an Anti-Pattern](https://blog.ploeh.dk/2010/02/03/ServiceLocatorisanAnti-Pattern/) - Martin Fowler's explanation
 - [SOLID Principles](https://en.wikipedia.org/wiki/SOLID) - Object-oriented design principles
 - [Dependency Inversion Principle](https://en.wikipedia.org/wiki/Dependency_inversion_principle) - The "D" in SOLID
-- [Testing with Mocks](https://laravel.com/docs/10.x/mocking) - Laravel testing documentation
+- [Testing with Mocks](https://laravel.com/docs/mocking) - Laravel testing documentation
 
 ---
 

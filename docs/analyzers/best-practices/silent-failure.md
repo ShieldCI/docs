@@ -271,7 +271,7 @@ The error suppression whitelist supports three types of calls:
 
 ## References
 
-- [Laravel Error Handling](https://laravel.com/docs/10.x/errors) - Official Laravel documentation
+- [Laravel Error Handling](https://laravel.com/docs/errors) - Official Laravel documentation
 - [PSR-3 Logger Interface](https://www.php-fig.org/psr/psr-3/) - Standard logging interface
 - [Sentry for Laravel](https://docs.sentry.io/platforms/php/guides/laravel/) - Error tracking integration
 - [Bugsnag Laravel Integration](https://docs.bugsnag.com/platforms/php/laravel/) - Alternative error tracking
