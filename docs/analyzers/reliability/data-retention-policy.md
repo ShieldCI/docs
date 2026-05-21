@@ -19,7 +19,8 @@ Validates that data retention policies prevent unbounded growth. Checks for:
 
 - Log channels using `single` driver (single file grows forever)
 - Accumulating models without `Prunable` or `MassPrunable` trait
-- Missing job/batch cleanup (`failed_jobs` table growing unbounded)
+- Missing `queue:prune-failed` scheduling (`failed_jobs` table growing unbounded)
+- Missing `queue:prune-batches` scheduling when `Bus::batch()` / `Batchable` is actively used
 - Telescope installed without pruning scheduled
 - Horizon installed without purging configured
 
@@ -78,10 +79,21 @@ $schedule->command('model:prune')->daily();
 
 **3. Schedule job cleanup:**
 
+Always schedule failed job pruning when you use queues:
+
 ```php
 Schedule::command('queue:prune-failed --hours=168')->daily();
+```
+
+If your application uses [Laravel job batches](https://laravel.com/docs/queues#job-batching) (`Bus::batch()` / `Batchable` trait), also schedule batch pruning:
+
+```php
 Schedule::command('queue:prune-batches --hours=168')->daily();
 ```
+
+::: tip
+The `job_batches` table is created by Laravel's default scaffold migration even in apps that don't use batching. The analyzer only flags missing `queue:prune-batches` when it detects actual batch usage (`Batchable` trait on a job or a `Bus::batch()` call).
+:::
 
 **4. Schedule Telescope/Horizon cleanup:**
 
