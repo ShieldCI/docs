@@ -22,7 +22,6 @@ Validates that controllers follow Laravel's FormRequest pattern. Checks for:
   - `request()->validate()` (Laravel helper form)
   - `$this->validate()`
   - `Validator::make()`, `Validator::validate()`
-- Controller `store()`/`update()` methods missing a FormRequest type-hint
 
 ## Why It Matters
 
@@ -83,17 +82,6 @@ class UserController extends Controller
     {
         User::create($request->validated());
     }
-}
-```
-
-Multi-line signatures are fully supported:
-
-```php
-public function store(
-    StoreUserRequest $request,
-    UserService $service,
-): JsonResponse {
-    return response()->json($service->create($request->validated()));
 }
 ```
 
