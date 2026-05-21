@@ -405,7 +405,6 @@ export default defineConfig({
                                 { text: 'Accessibility', link: '/analyzers/best-practices/accessibility' },
                                 { text: 'N+1 Query', link: '/analyzers/best-practices/eloquent-n-plus-one' },
                                 { text: 'Fat Model', link: '/analyzers/best-practices/fat-model' },
-                                { text: 'Form Request Validation', link: '/analyzers/best-practices/form-request-validation' },
                                 { text: 'Framework Override', link: '/analyzers/best-practices/framework-override' },
                                 { text: 'Hardcoded Config', link: '/analyzers/best-practices/config-outside-config' },
                                 { text: 'Hardcoded Paths', link: '/analyzers/best-practices/hardcoded-storage-paths' },

@@ -93,7 +93,6 @@ export const proAnalyzerPaths = new Set<string>([
 
   // ── Best Practices (5) ─────────────────────────────────────
   '/analyzers/best-practices/accessibility',
-  '/analyzers/best-practices/form-request-validation',
   '/analyzers/best-practices/middleware-misuse',
   '/analyzers/best-practices/pennant-config',
   '/analyzers/best-practices/policy-authorization',
