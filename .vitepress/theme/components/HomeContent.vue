@@ -8,7 +8,7 @@ useScrollReveal(sectionRef)
 const categories = [
   {
     name: 'Security',
-    count: 22,
+    count: 67,
     href: '/analyzers/security/',
     color: 'red',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
@@ -16,7 +16,7 @@ const categories = [
   },
   {
     name: 'Performance',
-    count: 18,
+    count: 33,
     href: '/analyzers/performance/',
     color: 'amber',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>`,
@@ -24,7 +24,7 @@ const categories = [
   },
   {
     name: 'Reliability',
-    count: 13,
+    count: 28,
     href: '/analyzers/reliability/',
     color: 'blue',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`,
@@ -32,7 +32,7 @@ const categories = [
   },
   {
     name: 'Code Quality',
-    count: 5,
+    count: 8,
     href: '/analyzers/code-quality/',
     color: 'violet',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
@@ -40,7 +40,7 @@ const categories = [
   },
   {
     name: 'Best Practices',
-    count: 15,
+    count: 19,
     href: '/analyzers/best-practices/',
     color: 'emerald',
     icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>`,
@@ -53,7 +53,7 @@ const steps = [
     number: '1',
     title: 'Install',
     code: 'composer require shieldci/laravel',
-    description: 'Add ShieldCI to your Laravel application via Composer.',
+    description: 'Install the free package (73 analyzers). For all 155 analyzers, see <a href="/getting-started/installation#pro-package" class="underline">Pro installation</a>.',
   },
   {
     number: '2',
@@ -76,7 +76,7 @@ const steps = [
   <section class="mx-auto px-6 sm:px-12 md:px-16 pt-16 pb-8">
     <div data-reveal class="text-center mb-10">
       <h2 class="text-2xl! sm:text-3xl! font-bold! text-gray-900! dark:text-gray-100! m-0! border-none!">
-          73 Purpose-Built Analyzers Across 5 Categories
+          155 Purpose-Built Analyzers Across 5 Categories
       </h2>
       <p class="mt-3! text-base! text-gray-600! dark:text-gray-400! m-0! leading-relaxed!">
         Comprehensive Laravel static analysis and vulnerability scanning covering everything from SQL injection to N+1 queries.
@@ -173,9 +173,7 @@ const steps = [
           </div>
 
           <!-- Description -->
-          <p class="text-sm text-gray-600 dark:text-gray-400 m-0! leading-relaxed">
-            {{ step.description }}
-          </p>
+          <p class="text-sm text-gray-600 dark:text-gray-400 m-0! leading-relaxed" v-html="step.description" />
         </div>
 
         <!-- Connector arrow (between steps, hidden on mobile) -->

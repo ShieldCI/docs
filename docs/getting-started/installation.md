@@ -100,6 +100,54 @@ Run analysis:
 docker-compose run --rm shieldci
 ```
 
+## Pro Package
+
+ShieldCI Pro includes 82 advanced analyzers across all five categories and requires a [ShieldCI Pro subscription](https://shieldci.com/pricing).
+
+::: tip Already have the free package?
+Pro analyzers load alongside the free package — no need to remove or replace `shieldci/laravel`. Install `shieldci/laravel-pro` and both run together automatically.
+:::
+
+### Step 1: Configure the private repository
+
+```bash
+composer config repositories.shieldci-pro composer https://packages.shieldci.com
+```
+
+### Step 2: Add your API token
+
+Your API token is displayed when you create a project in the [ShieldCI dashboard](https://shieldci.com/dashboard). Copy it and run:
+
+```bash
+composer config http-basic.packages.shieldci.com token YOUR_API_TOKEN
+```
+
+::: warning Keep your token out of version control
+Composer writes credentials to `auth.json`. Add it to `.gitignore` — never commit API tokens.
+
+```bash
+echo "auth.json" >> .gitignore
+```
+:::
+
+### Step 3: Install the pro package
+
+```bash
+composer require shieldci/laravel-pro
+```
+
+Pro analyzers are automatically discovered alongside free analyzers. No additional configuration is needed.
+
+### Step 4: Verify pro analyzers are active
+
+```bash
+php artisan shield:analyze
+```
+
+Pro analyzers run automatically. Look for entries like Filament Security, GDPR Compliance, or Octane Config in the report output.
+
+---
+
 ## Post-Installation Setup
 
 ### Step 1: Publish Configuration (Optional)

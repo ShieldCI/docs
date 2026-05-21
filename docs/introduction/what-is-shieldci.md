@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # What is ShieldCI?
 
-ShieldCI is a comprehensive AI-powered Laravel code analysis and security auditing platform designed to help developers maintain secure, high-performance, and high-quality Laravel applications. It provides automated static analysis, security scanning, and best practice enforcement for Laravel versions 9 and above.
+ShieldCI is a comprehensive automated static analysis platform for Laravel applications, designed to help developers maintain secure, high-performance, and high-quality code. It provides deterministic rule-based analysis, security scanning, and best practice enforcement for Laravel versions 9 and above.
 
 ## Overview
 
@@ -30,37 +30,37 @@ ShieldCI is purpose-built for Laravel applications, understanding Laravel's conv
 
 ### Comprehensive Analysis
 
-**121 Analyzers Across 5 Categories:**
+**155 Analyzers Across 5 Categories:**
 
-1. **Security** (46 analyzers)
+1. **Security** (67 analyzers)
    - OWASP Top 10 2021 coverage
    - SQL injection, XSS, CSRF protection
    - Authentication & authorization checks
    - HTTP security headers
    - License compliance
 
-2. **Performance** (30 analyzers)
+2. **Performance** (33 analyzers)
    - Database query optimization
    - Caching configuration
    - Autoloader optimization
    - OPcache settings
    - Route and config caching
 
-3. **Reliability** (25 analyzers)
+3. **Reliability** (28 analyzers)
    - Error handling & logging
    - Queue configuration
    - Session management
    - Environment configuration
    - Deployment readiness
 
-4. **Code Quality** (5 analyzers)
+4. **Code Quality** (8 analyzers)
    - Laravel best practices
    - Code duplication
    - Deprecated API usage
    - Maintainability metrics
    - Code complexity
 
-5. **Best Practices** (15 analyzers)
+5. **Best Practices** (19 analyzers)
    - Laravel conventions
    - Framework patterns
    - Testing practices
@@ -110,16 +110,18 @@ ShieldCI is purpose-built for Laravel applications, understanding Laravel's conv
 ### Beautiful Reporting
 
 - **Console output** - Color-coded, formatted results in terminal
-- **JSON export** - Machine-readable results for automation
-- **HTML reports** - Shareable reports with charts and trends
-- **Detailed recommendations** - Step-by-step fix instructions
+- **JSON export** - Machine-readable results for CI/CD automation
+- **Detailed recommendations** - Step-by-step fix instructions with code examples
+- **Platform dashboard** - Shareable reports, historical trends, and charts via [shieldci.com](https://shieldci.com)
 
 ## How It Works
 
-### 1. Install Package
+### 1. Install the free Package
 ```bash
 composer require shieldci/laravel
 ```
+
+For all 155 analyzers, see the [Pro installation guide](/getting-started/installation#pro-package).
 
 ### 2. Configure
 ```bash
@@ -140,10 +142,14 @@ ShieldCI provides:
 - Links to documentation
 
 ### 5. Track Progress
-- **Baseline support** - Track improvements over time
-- **Historical trends** - See quality metrics evolving
-- **CI/CD gates** - Enforce quality standards
-- **Team dashboards** - Shared visibility (Pro feature)
+
+**Package features:**
+- **Baseline support** - Compare runs over time to track improvement
+- **CI/CD gates** - Fail builds automatically on critical or high issues
+
+**Platform features** ([shieldci.com](https://shieldci.com)):
+- **Historical trends** - Visualise quality metrics evolving across deployments
+- **Team dashboards** - Shared visibility across your team (Pro)
 
 ## Privacy & Security
 
@@ -166,11 +172,11 @@ ShieldCI performs all analysis locally:
 - **Community support** - GitHub issues and discussions
 
 ### Pro Package (Commercial)
-- **+48 analyzers** - Advanced security (+24), performance (+12), reliability (+12)
-- **Team collaboration** - Multi-user dashboards
-- **Historical trends** - Track quality over time
-- **Priority support** - 48-hour response
-- **SOC 2 compliance** - Audit reports
+- **+82 analyzers** — Advanced security (+45), performance (+15), reliability (+15), code quality (+3), best practices (+4)
+- **Team collaboration** — Multi-user dashboards
+- **Historical trends** — Track quality over time
+- **Priority support** — 48-hour response
+- **SOC 2 compliance** — Audit reports
 
 ## Laravel Version Support
 

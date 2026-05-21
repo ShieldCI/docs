@@ -81,7 +81,7 @@ public function index()
 **Get started in under 5 minutes:**
 
 ```bash
-# 1. Install
+# 1. Install the free package
 composer require shieldci/laravel
 
 # 2. Analyze
@@ -90,6 +90,8 @@ php artisan shield:analyze
 # 3. Fix issues
 # Detailed recommendations guide you through each fix
 ```
+
+For all 155 analyzers, see the [Pro installation guide](/getting-started/installation#pro-package).
 
 **Why This Matters:**
 - No complex configuration files to maintain
@@ -137,7 +139,7 @@ ShieldCI complements static analysis tools like PHPStan:
 | Capability | ShieldCI | PHPStan/Larastan |
 |------------|----------|------------------|
 | **Type Safety** | ✅ Comprehensive | ✅ Comprehensive |
-| **Security Scanning** | ✅ 22 analyzers | ❌ None |
+| **Security Scanning** | ✅ 67 analyzers (22 free + 45 Pro) | ❌ None |
 | **Performance Analysis** | ✅ N+1, caching, config | ❌ None |
 | **Laravel Context** | ✅ Framework-aware | ⚠️ Limited (Larastan) |
 | **Production Readiness** | ✅ Deployment checks | ❌ None |
@@ -166,7 +168,7 @@ ShieldCI provides Laravel-specific depth that generic tools lack:
 | **Framework Misconfig** | ✅ 60+ Laravel checks             | ❌ None |
 | **Performance Analysis** | ✅ N+1, caching, OPcache          | ❌ None |
 | **False Positive Rate** | ✅ <5%                            | ⚠️ 30-50% |
-| **Laravel Best Practices** | ✅ 15 analyzers                   | ❌ None |
+| **Laravel Best Practices** | ✅ 19 analyzers                   | ❌ None |
 | **Actionable Fixes** | ✅ Laravel-specific code examples | ⚠️ Generic advice |
 | **Privacy** | ✅ 100% local                     | ❌ Cloud-based (SaaS) |
 | **Cost** | ✅ $0 (free tier)                 | ⚠️ $$$$ (per-seat) |
@@ -192,7 +194,7 @@ Ready to improve your Laravel application's security, performance, and quality?
 **Perfect for:** Solo developers, small projects, startups
 
 ### Pro (Commercial)
-- ✅ **48+ analyzers** (all categories)
+- ✅ **82+ analyzers** (all categories — security, performance, reliability, code quality, best practices)
 - ✅ **Team dashboards** (multi-user)
 - ✅ **Historical trends** (track progress)
 - ✅ **Priority support** (48-hour response)

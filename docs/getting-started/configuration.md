@@ -42,6 +42,37 @@ return [
     'enabled' => env('SHIELDCI_ENABLED', true),
     'timeout' => env('SHIELDCI_TIMEOUT', 300), // seconds
     'memory_limit' => env('SHIELDCI_MEMORY_LIMIT', '512M'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | ShieldCI Platform Integration
+    |--------------------------------------------------------------------------
+    |
+    | Connect to the ShieldCI platform for centralized dashboards, historical
+    | trends, and team-wide visibility. Sign up at https://shieldci.com
+    |
+    | These settings are optional. The package works fully offline without
+    | any platform credentials configured.
+    |
+    */
+
+    'token' => env('SHIELDCI_TOKEN'),
+    'project_id' => env('SHIELDCI_PROJECT_ID'),
+    'api_url' => env('SHIELDCI_API_URL', 'https://shieldci.com'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Documentation Base URL
+    |--------------------------------------------------------------------------
+    |
+    | Base URL for analyzer documentation
+    |
+    | URLs are auto-generated as: {base_url}/analyzers/{category}/{analyzer-id}
+    | Example: https://docs.shieldci.com/analyzers/security/sql-injection
+    |
+    */
+
+    'docs_base_url' => env('SHIELDCI_DOCS_URL', 'https://docs.shieldci.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -118,7 +149,11 @@ return [
         'output_file' => null,
         'show_recommendations' => env('SHIELDCI_SHOW_RECOMMENDATIONS', true),
         'show_code_snippets' => env('SHIELDCI_SHOW_CODE_SNIPPETS', true),
-        'max_issues_per_check' => env('SHIELDCI_MAX_ISSUES', 5),
+        'snippet_context_lines' => env('SHIELDCI_SNIPPET_CONTEXT_LINES', 8), // Lines before/after the issue
+        'snippet_plain_mode' => env('SHIELDCI_SNIPPET_PLAIN_MODE', false), // Disable ANSI colors for copy-paste
+        'snippet_syntax_highlighting' => env('SHIELDCI_SNIPPET_SYNTAX_HIGHLIGHTING', true), // Enable PHP syntax highlighting
+        'max_issues_per_check' => env('SHIELDCI_MAX_ISSUES', 5), // Limit displayed issues per check
+        'send_to_api' => env('SHIELDCI_SEND_TO_API', false),
     ],
 
     /*
