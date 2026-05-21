@@ -100,18 +100,6 @@ environments:
             - 'php artisan migrate --force'
 ```
 
-### Where driver env vars actually go
-
-Runtime environment variables (`FILESYSTEM_DISK`, `SESSION_DRIVER`, `CACHE_DRIVER`, `QUEUE_CONNECTION`) are managed via the Vapor UI or `.env.{env}` files synced with:
-
-```bash
-vapor env:pull production
-# edit .env.production
-vapor env:push production
-```
-
-Those values are validated by the separate `filesystem-driver`, `session-driver`, `cache-driver`, and queue-related analyzers.
-
 ## References
 
 - [Laravel Vapor Documentation](https://docs.vapor.build/)

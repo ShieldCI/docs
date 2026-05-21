@@ -23,20 +23,6 @@ Detects business logic in middleware that violates separation of concerns. Check
 - **Direct model instantiation** - `new Model()` in middleware (responses (`Response`, `JsonResponse`, `RedirectResponse`), exceptions (`RuntimeException`, `ValidationException`, HTTP exceptions, etc.), dates (`Carbon`, `DateTime`), and utilities (`Closure`, `stdClass`, `Collection`) are allowed)
 - **Complex conditional logic** - if-statement nesting 4+ levels deep, suggesting embedded business rules
 
-| Check | Issue Severity |
-| ----- | :------------: |
-| Database write operations | Medium |
-| Email / notification sending | Medium |
-| Event / job dispatching via facades | Low |
-| Direct model instantiation | Low |
-| Complex conditional logic (4+ levels) | Low |
-
-::: tip What is NOT flagged
-- **Safe infrastructure facades** (for write method names): `Schema`, `Gate`, `Auth`, `Log`, `Cache`, `Config`, `Session`, `Cookie`, `Hash`, `Crypt`, `Storage`, `Route`, `View`, `Redirect`, `Validator`, `Queue`, `Event`, `Http`, `Request`, `Str`, `Arr`, `Collection`, `Response`, `JsonResponse`, `RedirectResponse`, `Carbon`, `CarbonImmutable`, `DateTime`, `DateTimeImmutable`
-- **`Mail::to()`** alone - it's a builder, not a send action
-- **`dispatch()` / `dispatch_sync()` global helpers** - dispatching async jobs from middleware is the accepted Laravel pattern for offloading work (e.g., background tracking)
-:::
-
 ## Why It Matters
 
 - **Separation of Concerns:** Middleware should handle cross-cutting concerns (auth, CORS, logging), not business logic
