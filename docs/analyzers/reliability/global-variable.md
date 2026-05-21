@@ -15,13 +15,14 @@ pro: true
 
 ## What This Checks
 
-- Detects usage of PHP superglobals: `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `$_SESSION`, `$_SERVER`, `$_FILES`, `$GLOBALS`, `$_ENV`
+- Detects **reads** from PHP superglobals: `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `$_SESSION`, `$_SERVER`, `$_FILES`, `$GLOBALS`, `$_ENV` — writes to superglobals (e.g. `$_SERVER['HTTPS'] = 'on'`) are intentionally not flagged as they have no Laravel equivalent
 - Detects `filter_input()` and `filter_input_array()` calls that bypass Laravel's request validation
-- Detects discouraged session functions: `session_start()`, `session_destroy()`, `session_id()`, `session_regenerate_id()`, `session_name()`, `session_status()`, `session_unset()`, `session_write_close()`, `session_abort()`, `session_reset()`
-- Detects discouraged header functions: `header()`, `header_remove()`, `headers_list()`, `headers_sent()`, `http_response_code()`, `setcookie()`, `setrawcookie()`
-- Detects discouraged environment functions: `getenv()`, `putenv()`
+- Detects the `global` keyword (`global $var;`) which imports hidden global state
+- Detects discouraged session functions: `session_start()`, `session_destroy()`, `session_id()`, `session_regenerate_id()`, `session_name()`, `session_unset()`, `session_write_close()`, `session_abort()`, `session_reset()` — note: `session_status()` is intentionally excluded as it is a read-only diagnostic
+- Detects discouraged header/response functions: `header()`, `header_remove()`, `http_response_code()`, `setcookie()`, `setrawcookie()` — note: `headers_sent()` and `headers_list()` are intentionally excluded as they are read-only diagnostics
+- Detects discouraged environment functions: `getenv()` (Medium severity), `putenv()` (High severity — mutates the process environment globally)
 - Suggests the correct Laravel alternative for each detected pattern
-- Context-aware exclusions: automatically skips middleware, kernel files, console commands, and bootstrap files
+- Context-aware exclusions: automatically skips middleware, kernel files, console commands, bootstrap files, and `routes/console.php`
 
 ## Why It Matters
 
@@ -30,6 +31,7 @@ pro: true
 - **Portability**: Code tightly coupled to superglobals cannot be reused in Artisan commands, queued jobs, or other non-HTTP contexts
 - **Consistency**: Mixing native PHP functions with Laravel abstractions leads to unpredictable behavior (e.g., `session_start()` conflicts with Laravel's session middleware)
 - **Caching**: Using `getenv()` or `putenv()` outside of config files breaks `php artisan config:cache`, causing hard-to-diagnose production issues
+- **Process safety**: `putenv()` mutates the environment globally, corrupting state across Octane/Horizon workers and affecting third-party packages
 
 ## How to Fix
 
@@ -157,32 +159,28 @@ $apiKey = config('services.api_key');
 
 #### 4: Configure Custom Exclusion Paths
 
-If certain files legitimately need superglobal access, exclude them:
+To exclude certain iles that legitimately need superglobal access, publish the config:
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
 return [
-    'global_variables' => [
-        'exclude_paths' => [
-            'app/Legacy/*',
-            'app/ThirdParty/*.php',
+    'analyzers' => [
+        'reliability' => [
+            'enabled' => true,
+            
+            'global-variables' => [
+                'exclude_paths' => [
+                    'app/Legacy/*',
+                    'app/ThirdParty/*.php',
+                ],
+            ],
         ],
     ],
 ];
-```
-
-## ShieldCI Configuration
-
-Exclude specific paths from global variable scanning:
-
-```php
-// config/shieldci.php
-'global_variables' => [
-    'exclude_paths' => [
-        'bootstrap/helpers.php',
-        'app/Legacy/*.php',
-    ],
-],
 ```
 
 ## References
