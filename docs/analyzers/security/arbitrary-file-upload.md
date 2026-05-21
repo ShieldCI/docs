@@ -17,7 +17,7 @@ pro: true
 
 Detects arbitrary file upload vulnerabilities that could lead to remote code execution (RCE). Validates that file uploads have proper MIME type validation, file extension whitelisting, size limits, and are not stored in publicly executable locations. Also checks for dangerous file types (`.php`, `.phar`, `.exe`, `.sh`, `.shtml`, etc.), missing filename sanitization, ZIP/XML bomb susceptibility, and direct `$_FILES` access without validation.
 
-Recognizes all Laravel validation approaches across versions 9–12, including `mimes:`, `mimetypes:`, `image`, and the `extensions:` rule (Laravel 11+).
+Recognizes all Laravel validation approaches across versions 9 and above, including `mimes:`, `mimetypes:`, `image`, and the `extensions:` rule (Laravel 11+).
 
 ## Why It Matters
 
