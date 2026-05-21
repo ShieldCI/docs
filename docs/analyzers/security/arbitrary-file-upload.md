@@ -36,14 +36,14 @@ Without proper file upload validation, an attacker can upload a PHP backdoor, ex
 **Scenario 1: Missing MIME Type Validation**
 
 ```php
-// BEFORE - Vulnerable
+// ❌ Before:
 public function upload(Request $request)
 {
     $file = $request->file('avatar');
     $file->store('public/avatars');  // ❌ No validation
 }
 
-// AFTER - Protected
+// ✅ After:
 public function upload(Request $request)
 {
     $request->validate([
@@ -58,14 +58,14 @@ public function upload(Request $request)
 **Scenario 2: Direct $_FILES Access**
 
 ```php
-// BEFORE - Critical Vulnerability
+// ❌ Before:
 public function upload()
 {
     $uploadedFile = $_FILES['avatar'];  // ❌ Direct access, no validation
     move_uploaded_file($uploadedFile['tmp_name'], 'public/uploads/' . $uploadedFile['name']);
 }
 
-// AFTER - Protected
+// ✅ After:
 public function upload(Request $request)
 {
     $request->validate([
@@ -80,23 +80,23 @@ public function upload(Request $request)
 **Scenario 3: Missing Extension and MIME Validation**
 
 ```php
-// BEFORE - Vulnerable
+// ❌ Before:
 $request->validate([
     'document' => 'required|max:5120'  // ❌ Only size limit, any file type allowed
 ]);
 
-// AFTER - Option A: mimes: (validates MIME type, all Laravel versions)
+// ✅ After — Option A (mimes:, all Laravel versions):
 // Lists extensions as aliases — Laravel resolves them to MIME types via finfo
 $request->validate([
     'document' => 'required|mimes:pdf,doc,docx|max:5120'  // ✅ MIME type + size
 ]);
 
-// AFTER - Option B: mimetypes: (validates full MIME type string directly)
+// ✅ After — Option B (mimetypes:):
 $request->validate([
     'document' => 'required|mimetypes:application/pdf,application/msword|max:5120'  // ✅ Explicit MIME
 ]);
 
-// AFTER - Option C: extensions: (validates guessed extension from MIME type, Laravel 11+)
+// ✅ After — Option C (extensions:, Laravel 11+):
 $request->validate([
     'document' => 'required|extensions:pdf,doc,docx|max:5120'  // ✅ Server-side extension detection
 ]);
