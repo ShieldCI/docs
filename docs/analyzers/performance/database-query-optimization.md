@@ -51,7 +51,7 @@ $posts = Post::where('published', true)->get(['id', 'title']);
 
 ### 2. Fix N+1 Query Problems
 
-**Before (N+1):**
+**Before (❌):**
 
 ```php
 $posts = Post::all();
@@ -63,7 +63,7 @@ foreach ($posts as $post) {
 // 1 query for posts + N queries for authors = N+1
 ```
 
-**After (Eager Loading):**
+**After (✅):**
 
 ```php
 // 2 queries total, regardless of how many posts

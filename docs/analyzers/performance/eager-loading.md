@@ -30,7 +30,7 @@ N+1 queries are the single most common performance issue in Laravel applications
 
 ### Use `with()` for Eager Loading
 
-**Before (N+1):**
+**Before (❌):**
 
 ```php
 $orders = Order::where('status', 'pending')->get();
@@ -43,7 +43,7 @@ foreach ($orders as $order) {
 // Queries: 1 + N (customers) + N (items) = 2N+1
 ```
 
-**After (Eager Loaded):**
+**After (✅):**
 
 ```php
 $orders = Order::where('status', 'pending')
