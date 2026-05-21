@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID       | Category       | Severity   | Time To Fix  |
 | ------------------| :------------: |:----------:| ------------:|
-| `eager-loading`   | ⚡ Performance  | High       | 5 minutes    |
+| `eager-loading`   | ⚡ Performance  | Medium     | 5 minutes    |
 
 ## What This Checks
 

@@ -69,7 +69,7 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/performance/scout-config',
   '/analyzers/performance/xdebug-enabled',
 
-  // ── Reliability (16) ───────────────────────────────────────
+  // ── Reliability (15) ───────────────────────────────────────
   '/analyzers/reliability/alerting-config',
   '/analyzers/reliability/cache-busting',
   '/analyzers/reliability/data-retention-policy',
@@ -77,6 +77,8 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/reliability/disk-space',
   '/analyzers/reliability/global-variable',
   '/analyzers/reliability/health-check',
+  '/analyzers/reliability/horizon-reliability',
+  '/analyzers/reliability/job-queue-config',
   '/analyzers/reliability/octane-config',
   '/analyzers/reliability/pcntl',
   '/analyzers/reliability/redis-eviction-policy',

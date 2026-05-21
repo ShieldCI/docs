@@ -368,6 +368,8 @@ export default defineConfig({
                                 { text: 'Env Variables Complete', link: '/analyzers/reliability/env-variables-complete' },
                                 { text: 'Global Variables', link: '/analyzers/reliability/global-variable' },
                                 { text: 'Health Check', link: '/analyzers/reliability/health-check' },
+                                { text: 'Horizon Reliability', link: '/analyzers/reliability/horizon-reliability' },
+                                { text: 'Job Queue Config', link: '/analyzers/reliability/job-queue-config' },
                                 { text: 'Maintenance Mode', link: '/analyzers/reliability/maintenance-mode-status' },
                                 { text: 'Octane Configuration', link: '/analyzers/reliability/octane-config' },
                                 { text: 'PCNTL Extension', link: '/analyzers/reliability/pcntl' },
