@@ -131,10 +131,20 @@ it('can place an order', function () {
 ```
 
 ```php [Pest (global via tests/Pest.php)]
-// tests/Pest.php
+// tests/Pest.php — traditional uses() style
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class)->in('Feature');
+```
+
+```php [Pest v2+ (fluent extend API)]
+// tests/Pest.php — pest()->extend() fluent style
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
+
+pest()->extend(TestCase::class)
+    ->use(RefreshDatabase::class)
+    ->in('Feature', 'Unit');
 ```
 
 :::
