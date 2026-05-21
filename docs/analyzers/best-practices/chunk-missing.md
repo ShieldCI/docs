@@ -191,7 +191,7 @@ $admin = User::where('role', 'admin')->first();
 
 - [Laravel Eloquent Chunking](https://laravel.com/docs/eloquent#chunking-results) - Official Laravel documentation
 - [Laravel Query Builder Chunking](https://laravel.com/docs/queries#chunking-results) - Query builder chunking methods
-- [Laravel 9 Lazy Collections](https://laravel.com/docs/9.x/collections#lazy-collections) - Lazy collection documentation
+- [Laravel Lazy Collections](https://laravel.com/docs/collections#lazy-collections) - Lazy collection documentation
 - [PHP Memory Management](https://www.php.net/manual/en/features.gc.php) - Understanding PHP memory limits
 
 ## Related Analyzers
