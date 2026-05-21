@@ -75,7 +75,7 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/reliability/data-retention-policy',
   '/analyzers/reliability/dead-route',
   '/analyzers/reliability/disk-space',
-  '/analyzers/reliability/global-variable',
+  '/analyzers/reliability/global-variables',
   '/analyzers/reliability/health-check',
   '/analyzers/reliability/horizon-reliability',
   '/analyzers/reliability/job-queue-config',
