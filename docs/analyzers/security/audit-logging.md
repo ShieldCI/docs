@@ -40,9 +40,8 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 
 Register authentication event listeners:
 
-**Laravel 9/10 (EventServiceProvider):**
-
-```php
+::: code-group
+```php [Laravel 9–10]
 // app/Providers/EventServiceProvider.php
 protected $listen = [
     \Illuminate\Auth\Events\Login::class => [
@@ -57,9 +56,7 @@ protected $listen = [
 ];
 ```
 
-**Laravel 11+ (AppServiceProvider or bootstrap/app.php):**
-
-```php
+```php [Laravel 11+]
 // Option A: bootstrap/app.php with event discovery
 return Application::configure(basePath: dirname(__DIR__))
     ->withEvents(discover: [
@@ -78,6 +75,7 @@ public function boot(): void
     });
 }
 ```
+:::
 
 ### Proper Fix (20 minutes)
 

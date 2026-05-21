@@ -30,9 +30,18 @@ The standard `ThrottleRequests` middleware reads the current count, checks if li
 
 ### Option 1: Update Middleware Alias (Recommended)
 
-**Laravel 10 and below - In `app/Http/Kernel.php`:**
+::: code-group
+```php [Laravel 11+]
+use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 
-```php
+return Application::configure(basePath: dirname(__DIR__))
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->throttleApi(ThrottleRequestsWithRedis::class);
+    })
+    // ...
+```
+```php [Laravel 9–10]
 protected $middlewareAliases = [
     // Change this:
     // 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -43,19 +52,7 @@ protected $middlewareAliases = [
     // ... other middleware
 ];
 ```
-
-**Laravel 11+ - In `bootstrap/app.php`:**
-
-```php
-use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
-
-return Application::configure(basePath: dirname(__DIR__))
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->throttleApi(ThrottleRequestsWithRedis::class);
-    })
-    // ...
-```
+:::
 
 All routes using `throttle:60,1` will now use the Redis version automatically.
 
@@ -70,7 +67,7 @@ Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function ()
 });
 ```
 
-### Configuration Requirements
+**Configuration Requirements**
 
 Ensure Redis is your cache driver:
 
@@ -82,64 +79,6 @@ CACHE_DRIVER=redis
 ```php
 // config/cache.php
 'default' => env('CACHE_DRIVER', 'redis'),
-```
-
-## How It Works
-
-**Standard ThrottleRequests (potential race condition):**
-```
-Request 1: READ count=59 → CHECK < 60 → PASS → WRITE count=60
-Request 2: READ count=59 → CHECK < 60 → PASS → WRITE count=60
-Request 3: READ count=60 → CHECK >= 60 → BLOCKED
-```
-
-Both Request 1 and 2 might pass because they read before either wrote.
-
-**ThrottleRequestsWithRedis (atomic):**
-```
-Request 1: INCR + CHECK in atomic Lua script → PASS (count=60)
-Request 2: INCR + CHECK in atomic Lua script → BLOCKED (count=61, over limit)
-```
-
-## Rate Limiting Best Practices
-
-```php
-// Multiple rate limits
-Route::middleware([
-    'throttle:api',        // 60 per minute general limit
-    'throttle:sensitive',  // 10 per minute for sensitive endpoints
-])->group(function () {
-    Route::post('/login', [AuthController::class, 'login']);
-});
-
-// Custom response headers
-RateLimiter::for('api', function (Request $request) {
-    return Limit::perMinute(60)
-        ->by($request->user()?->id ?: $request->ip())
-        ->response(function (Request $request, array $headers) {
-            return response('Rate limit exceeded', 429, $headers);
-        });
-});
-```
-
-## ShieldCI Configuration
-
-This analyzer:
-- Runs in **all environments including CI**
-- Skips if Redis is not used by the application
-- Checks the middleware alias for 'throttle'
-- Scans routes for explicit ThrottleRequests usage
-
-## Verification
-
-```bash
-# Check which throttle middleware is used
-php artisan tinker
->>> app(\Illuminate\Contracts\Http\Kernel::class)->getMiddlewareAliases()['throttle']
-=> "Illuminate\Routing\Middleware\ThrottleRequestsWithRedis"
-
-# Test rate limiting
-for i in {1..65}; do curl -s -o /dev/null -w "%{http_code}\n" http://yourapp.test/api/endpoint; done
 ```
 
 ## References

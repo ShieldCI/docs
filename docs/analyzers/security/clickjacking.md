@@ -41,9 +41,8 @@ Clickjacking (also known as "UI redressing") occurs when an attacker embeds your
 
 ### Quick Fix (2 minutes)
 
-**Laravel 10+ (Using bootstrap/app.php)**
-
-```php
+::: code-group
+```php [Laravel 11+]
 // bootstrap/app.php
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -58,9 +57,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->create();
 ```
 
-**Laravel 9 and Earlier (Using app/Http/Kernel.php)**
-
-```php
+```php [Laravel 9–10]
 // app/Http/Kernel.php
 protected $middlewareGroups = [
     'web' => [
@@ -70,6 +67,7 @@ protected $middlewareGroups = [
     ],
 ];
 ```
+:::
 
 ### Proper Fix (5 minutes)
 
@@ -77,9 +75,8 @@ protected $middlewareGroups = [
 
 The simplest approach is using Laravel's built-in FrameGuard middleware, which automatically sets the `X-Frame-Options: SAMEORIGIN` header.
 
-**Laravel 10+:**
-
-```php
+::: code-group
+```php [Laravel 11+]
 // bootstrap/app.php
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -97,9 +94,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->create();
 ```
 
-**Laravel 9:**
-
-```php
+```php [Laravel 9–10]
 // app/Http/Kernel.php
 protected $middlewareGroups = [
     'web' => [
@@ -113,6 +108,7 @@ protected $middlewareGroups = [
     ],
 ];
 ```
+:::
 
 **Option 2: Manual X-Frame-Options Header**
 
