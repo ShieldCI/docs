@@ -49,6 +49,36 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 
 </div>
 
+### Testing
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Test Coverage"
+  description="Checks that critical application modules have corresponding test files for adequate code coverage"
+  severity="medium"
+  link="/analyzers/code-quality/test-coverage"
+  pro
+/>
+
+<AnalyzerCard
+  title="Test Quality"
+  description="Checks test files for quality issues like missing assertions, empty test methods, and poor test practices"
+  severity="medium"
+  link="/analyzers/code-quality/test-quality"
+  pro
+/>
+
+<AnalyzerCard
+  title="Test Data Management"
+  description="Checks test files for proper test data management practices including factory usage and database cleanup"
+  severity="low"
+  link="/analyzers/code-quality/test-data-management"
+  pro
+/>
+
+</div>
+
 ### Documentation & Naming
 
 <div class="grid gap-4 md:grid-cols-2 mt-4">

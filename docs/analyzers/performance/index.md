@@ -157,6 +157,22 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 />
 
 <AnalyzerCard
+  title="Filament Table Optimization"
+  description="Checks Filament table definitions for N+1 queries and performance issues in resource tables"
+  severity="medium"
+  link="/analyzers/performance/filament-table-optimization"
+  pro
+/>
+
+<AnalyzerCard
+  title="Lazy Collection Opportunity"
+  description="Detects large collection operations that could benefit from lazy loading to reduce memory usage"
+  severity="low"
+  link="/analyzers/performance/lazy-collection-opportunity"
+  pro
+/>
+
+<AnalyzerCard
   title="MySQL Single Server Optimization"
   description="Ensures MySQL is configured optimally for single-server setups using Unix sockets"
   severity="medium"
@@ -269,6 +285,14 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   description="Detects fallback routes that may harm SEO by returning 200 for non-existent pages"
   severity="low"
   link="/analyzers/performance/fallback-routes"
+  pro
+/>
+
+<AnalyzerCard
+  title="Scout Configuration"
+  description="Validates Laravel Scout search configuration, indexing, and sensitive data exposure in search indexes"
+  severity="medium"
+  link="/analyzers/performance/scout-config"
   pro
 />
 

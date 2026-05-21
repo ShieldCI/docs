@@ -179,6 +179,122 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   pro
 />
 
+<AnalyzerCard
+  title="Fortify Security"
+  description="Validates Laravel Fortify authentication configuration, two-factor auth, password rules, and security settings"
+  severity="high"
+  link="/analyzers/security/fortify-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Passport Security"
+  description="Validates Laravel Passport OAuth2 configuration, token lifetimes, encryption keys, and security settings"
+  severity="high"
+  link="/analyzers/security/passport-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Sanctum Security"
+  description="Validates Laravel Sanctum token configuration, expiration settings, and SPA middleware setup"
+  severity="high"
+  link="/analyzers/security/sanctum-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Socialite Security"
+  description="Validates Laravel Socialite OAuth configuration, credential security, and callback handling"
+  severity="high"
+  link="/analyzers/security/socialite-security"
+  pro
+/>
+
+</div>
+
+### Filament Security
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Filament Panel Security"
+  description="Validates Filament admin panel security including authentication, middleware, and access restrictions"
+  severity="high"
+  link="/analyzers/security/filament-panel-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Resource Authorization"
+  description="Validates that Filament resources have proper policy bindings for authorization on CRUD operations"
+  severity="high"
+  link="/analyzers/security/filament-resource-authorization"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Tenancy"
+  description="Validates multi-tenancy scope enforcement in Filament panels to prevent cross-tenant data leakage"
+  severity="high"
+  link="/analyzers/security/filament-tenancy"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Custom Pages"
+  description="Validates that custom Filament pages have proper authorization to prevent unauthorized access"
+  severity="medium"
+  link="/analyzers/security/filament-custom-pages"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Form Validation"
+  description="Validates that Filament form fields have proper validation rules to prevent invalid or malicious input"
+  severity="medium"
+  link="/analyzers/security/filament-form-validation"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Navigation"
+  description="Validates that Filament navigation groups and items have proper permission gates for visibility control"
+  severity="medium"
+  link="/analyzers/security/filament-navigation"
+  pro
+/>
+
+<AnalyzerCard
+  title="Filament Widget Security"
+  description="Validates that Filament widgets have proper authorization and don't expose sensitive data to unauthorized users"
+  severity="medium"
+  link="/analyzers/security/filament-widget-security"
+  pro
+/>
+
+</div>
+
+### Payment Security
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Cashier Security (Stripe)"
+  description="Validates Laravel Cashier Stripe webhook verification, key exposure, and payment handling security"
+  severity="high"
+  link="/analyzers/security/cashier-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Cashier Paddle"
+  description="Validates Laravel Cashier Paddle webhook verification, sandbox detection, and configuration security"
+  severity="high"
+  link="/analyzers/security/cashier-paddle"
+  pro
+/>
+
 </div>
 
 ### Configuration & Secrets
@@ -252,6 +368,14 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   pro
 />
 
+<AnalyzerCard
+  title="Pulse Security"
+  description="Validates Laravel Pulse dashboard authorization, data retention, and security settings"
+  severity="high"
+  link="/analyzers/security/pulse-security"
+  pro
+/>
+
 </div>
 
 ### Data Protection
@@ -292,6 +416,28 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects weak cryptographic algorithms and insecure random number generation"
   severity="high"
   link="/analyzers/security/cryptographic-weakness"
+  pro
+/>
+
+</div>
+
+### Compliance & Audit
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Audit Logging"
+  description="Validates that security-sensitive operations have proper audit logging for compliance and incident response"
+  severity="medium"
+  link="/analyzers/security/audit-logging"
+  pro
+/>
+
+<AnalyzerCard
+  title="GDPR Compliance"
+  description="Validates basic GDPR compliance patterns including data deletion, consent tracking, and encryption at rest"
+  severity="medium"
+  link="/analyzers/security/gdpr-compliance"
   pro
 />
 
@@ -341,10 +487,56 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 />
 
 <AnalyzerCard
+  title="CORS Configuration"
+  description="Validates Cross-Origin Resource Sharing configuration for security, preventing overly permissive API access"
+  severity="high"
+  link="/analyzers/security/cors-config"
+  pro
+/>
+
+<AnalyzerCard
+  title="Route Rate Limiting"
+  description="Validates that public API endpoints have rate limiting configured to prevent abuse and brute force attacks"
+  severity="medium"
+  link="/analyzers/security/route-rate-limiting"
+  pro
+/>
+
+<AnalyzerCard
   title="Open Redirection"
   description="Detects open redirect vulnerabilities that can be used for phishing attacks"
   severity="medium"
   link="/analyzers/security/open-redirection"
+  pro
+/>
+
+</div>
+
+### Frontend & API Security
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Livewire Security"
+  description="Validates Livewire component security including property exposure, authorization checks, and file uploads"
+  severity="high"
+  link="/analyzers/security/livewire-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Reverb Security"
+  description="Validates Laravel Reverb WebSocket configuration, channel authorization, and SSL/TLS settings"
+  severity="high"
+  link="/analyzers/security/reverb-security"
+  pro
+/>
+
+<AnalyzerCard
+  title="Inertia Security"
+  description="Validates Inertia.js shared data exposure and middleware configuration to prevent sensitive data leakage"
+  severity="medium"
+  link="/analyzers/security/inertia-security"
   pro
 />
 

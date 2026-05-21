@@ -139,6 +139,22 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   pro
 />
 
+<AnalyzerCard
+  title="Job Queue Configuration"
+  description="Validates job queue configuration including blocking, retry policies, and failed job handling"
+  severity="high"
+  link="/analyzers/reliability/job-queue-config"
+  pro
+/>
+
+<AnalyzerCard
+  title="Data Retention Policy"
+  description="Validates that proper data retention policies are in place to prevent unbounded data growth"
+  severity="medium"
+  link="/analyzers/reliability/data-retention-policy"
+  pro
+/>
+
 </div>
 
 ### Cache & Redis
@@ -184,6 +200,14 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <div class="grid gap-4 md:grid-cols-2 mt-4">
 
 <AnalyzerCard
+  title="Horizon Reliability"
+  description="Validates Horizon prefix configuration, provisioning plan, and runtime health"
+  severity="critical"
+  link="/analyzers/reliability/horizon-reliability"
+  pro
+/>
+
+<AnalyzerCard
   title="Horizon Prefix"
   description="Ensures Horizon prefix is configured to avoid job collisions"
   severity="medium"
@@ -204,6 +228,50 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Checks if Horizon is running and processing jobs"
   severity="high"
   link="/analyzers/reliability/horizon-status"
+  pro
+/>
+
+</div>
+
+### Application Servers & Deployment
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Octane Configuration"
+  description="Validates Laravel Octane configuration for long-running server reliability including memory management and state isolation"
+  severity="high"
+  link="/analyzers/reliability/octane-config"
+  pro
+/>
+
+<AnalyzerCard
+  title="Vapor Configuration"
+  description="Validates Laravel Vapor configuration for proper serverless deployment on AWS Lambda"
+  severity="medium"
+  link="/analyzers/reliability/vapor-config"
+  pro
+/>
+
+</div>
+
+### Monitoring & Observability
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Health Check"
+  description="Validates that the application has proper health check endpoints for monitoring and load balancer integration"
+  severity="medium"
+  link="/analyzers/reliability/health-check"
+  pro
+/>
+
+<AnalyzerCard
+  title="Alerting Configuration"
+  description="Validates that proper alerting and notification mechanisms are configured for production issues"
+  severity="medium"
+  link="/analyzers/reliability/alerting-config"
   pro
 />
 

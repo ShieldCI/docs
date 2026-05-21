@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Best Practices Analyzers
 
-**20 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**19 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 ## Overview
 
@@ -39,6 +39,28 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
   description="Detects configuration values outside config files"
   severity="medium"
   link="/analyzers/best-practices/config-outside-config"
+/>
+
+<AnalyzerCard
+  title="Policy Authorization"
+  description="Validates that resource controllers have corresponding Policy classes for proper authorization enforcement"
+  severity="medium"
+  link="/analyzers/best-practices/policy-authorization"
+  pro
+/>
+
+</div>
+
+### Views & Frontend
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Accessibility"
+  description="Validates that Blade templates follow basic accessibility best practices for inclusive web applications"
+  severity="medium"
+  link="/analyzers/best-practices/accessibility"
+  pro
 />
 
 </div>
@@ -95,6 +117,14 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
   link="/analyzers/best-practices/service-container-resolution"
 />
 
+<AnalyzerCard
+  title="Middleware Misuse"
+  description="Detects business logic in middleware that should be in controllers or services for proper separation of concerns"
+  severity="medium"
+  link="/analyzers/best-practices/middleware-misuse"
+  pro
+/>
+
 </div>
 
 ### Error Handling & Logging
@@ -113,6 +143,20 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
   description="Ensures error tracking is configured"
   severity="info"
   link="/analyzers/best-practices/missing-error-tracking"
+/>
+
+</div>
+
+### Package Configuration
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Pennant Configuration"
+  description="Validates Laravel Pennant feature flag configuration, driver settings, and usage patterns"
+  severity="medium"
+  link="/analyzers/best-practices/pennant-config"
+  pro
 />
 
 </div>
