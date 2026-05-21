@@ -366,7 +366,7 @@ export default defineConfig({
                                 { text: 'Env Example Docs', link: '/analyzers/reliability/env-example-documented' },
                                 { text: 'Env File Exists', link: '/analyzers/reliability/env-file-exists' },
                                 { text: 'Env Variables Complete', link: '/analyzers/reliability/env-variables-complete' },
-                                { text: 'Global Variables', link: '/analyzers/reliability/global-variable' },
+                                { text: 'Global Variables', link: '/analyzers/reliability/global-variables' },
                                 { text: 'Health Check', link: '/analyzers/reliability/health-check' },
                                 { text: 'Horizon Reliability', link: '/analyzers/reliability/horizon-reliability' },
                                 { text: 'Job Queue Config', link: '/analyzers/reliability/job-queue-config' },
