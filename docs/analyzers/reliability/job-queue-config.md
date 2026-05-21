@@ -20,9 +20,9 @@ Validates that job queue configuration is correctly set up to prevent common rel
 - Redis connections with `block_for = 0` (busy polling that wastes CPU and blocks signal handling)
 - Redis connections with a very high `block_for` value (slow SIGTERM response on shutdown)
 - Job classes in `app/Jobs/` that do not implement `ShouldQueue` or `ShouldQueueAfterCommit`
-- Job classes missing `$tries` or a `retryUntil()` method (unlimited retries on failure)
+- Job classes missing `$tries` or a `retryUntil()` method — skipped when `handle()` is entirely wrapped in a `try/catch (\Throwable)` that does not rethrow (self-managing jobs that cannot propagate failures to the queue)
 - Job classes missing a `$timeout` property (workers can block indefinitely)
-- Job classes with `$tries` but no `$backoff` (immediate retry hammers external services)
+- Job classes with `$tries > 1` but no `$backoff` — skipped when `$tries = 1` because with a single attempt there are no retries and backoff has no effect
 - Missing or incomplete `queue.failed` configuration (failed jobs are not persisted)
 
 ## Why It Matters
@@ -136,6 +136,47 @@ class CallExternalApi implements ShouldQueue
     public function handle(): void
     {
         // Call external API...
+    }
+}
+```
+
+**4. Fire-and-forget jobs (analyzer exemptions):**
+
+Some jobs are intentionally best-effort — they attempt once and do not retry. The analyzer recognises two patterns and skips the relevant warnings automatically:
+
+```php
+// ✅ Single-attempt job: $tries = 1 means one attempt, no retries possible.
+// The $backoff warning is suppressed because there is nothing to back off from.
+class SendTelemetryJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $tries = 1;    // ✅ explicit single attempt
+    public int $timeout = 10;
+
+    public function handle(TelemetryService $service): void
+    {
+        $service->send($this->event);
+    }
+}
+
+// ✅ Self-managing job: handle() is entirely wrapped in try/catch (\Throwable)
+// that does not rethrow. The job cannot propagate failures to the queue, so
+// the $tries warning is suppressed.
+class NotifyWebhookJob implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    public int $timeout = 30;
+
+    public function handle(): void
+    {
+        try {
+            Http::post($this->url, $this->payload);
+        } catch (\Throwable $e) {
+            Log::warning('Webhook notification failed silently', ['error' => $e->getMessage()]);
+            // intentionally not rethrowing — caller does not need to know
+        }
     }
 }
 ```
