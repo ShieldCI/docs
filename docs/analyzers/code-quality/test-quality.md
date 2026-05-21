@@ -15,7 +15,7 @@ pro: true
 
 ## What This Checks
 
-Validates test files for quality issues that reduce their effectiveness. Supports both PHPUnit class-based tests and Pest PHP function-based tests.
+Validates test files for quality issues that reduce their effectiveness. Supports PHPUnit class-based tests, Pest PHP function-based tests, and the full range of Laravel assertion styles.
 
 **PHPUnit:**
 - Test classes with no test methods
@@ -24,17 +24,23 @@ Validates test files for quality issues that reduce their effectiveness. Support
 - Test methods that only assert `assertTrue(true)` (placeholder tests)
 - Test methods exceeding 80 lines (configurable)
 - `test_` prefix, `@test` annotation, and `#[Test]` attribute (PHPUnit 10+)
-- All calling styles: `$this->`, `self::`, and `static::`
 
 **Pest PHP:**
 - Empty test closures
 - `it()`/`test()` calls without assertions
-- `expect()` chains recognized as valid assertions
-- `->skip()` chained tests correctly ignored
+- `->skip()` and `->todo()` chained tests correctly ignored
 - `describe()` block nesting supported
 
+**Recognized assertion styles (PHPUnit and Pest):**
+- Direct PHPUnit: `$this->assert*()`, `self::assert*()`, `static::assert*()`
+- Pest expectations: `expect()->toBe()`, `expect()->toBeTrue()`, etc.
+- HTTP response assertions: `$response->assertOk()`, `$response->assertStatus()`, `$response->assertInertia()`, etc.
+- Chained HTTP assertions: `$this->get('/')->assertOk()`, `$this->postJson(...)->assertStatus(422)`
+- Static facade assertions: `Http::assertSent()`, `Mail::assertNothingSent()`, `Queue::assertPushed()`, `Event::assertDispatched()`, etc.
+- Mockery expectations: `$mock->shouldReceive()`, `Log::shouldReceive()`, `$spy->shouldHaveReceived()`
+
 ::: tip Assertion Detection Scope
-The analyzer checks assertions directly within each test method body. Assertions delegated to private helper methods called from the test are not detected. If you centralise assertions in helpers, ensure each test method also has at least one direct assertion call.
+The analyzer checks assertions within each test method body. Assertions delegated entirely to private helper methods (with no direct assertion in the test itself) are not detected. If you centralise assertions in helpers, ensure each test method also has at least one direct assertion call.
 :::
 
 ## Why It Matters
@@ -117,7 +123,32 @@ public function test_order_total_is_calculated_correctly(): void
 }
 ```
 
-**2. Split long test methods:**
+**2. Use facade assertions for side effects:**
+
+```php
+public function test_welcome_email_sent_after_registration(): void
+{
+    Mail::fake();
+
+    $this->postJson('/api/register', ['email' => 'john@example.com', ...]);
+
+    Mail::assertSent(WelcomeMail::class, fn ($mail) => $mail->hasTo('john@example.com'));
+}
+```
+
+**3. Use Mockery to assert on logged warnings or service calls:**
+
+```php
+it('logs a warning when the payment gateway fails', function () {
+    Log::shouldReceive('warning')
+        ->once()
+        ->with('Payment failed', Mockery::subset(['order_id' => 42]));
+
+    (new ProcessPayment(42))->handle();
+});
+```
+
+**4. Split long test methods:**
 
 ```php
 // Instead of one 50-line test, break into focused tests
@@ -127,7 +158,7 @@ public function test_creates_user_on_success(): void { /* ... */ }
 public function test_sends_welcome_email(): void { /* ... */ }
 ```
 
-**3. Customize ShieldCI Settings (Optional)**
+**5. Customize ShieldCI Settings (Optional)**
 
 Publish the config file if you haven't already:
 
@@ -157,8 +188,9 @@ The default of 80 lines suits most unit and feature tests. Integration tests or 
 
 - [PHPUnit Assertions](https://docs.phpunit.de/en/11.0/assertions.html)
 - [Pest PHP Expectations](https://pestphp.com/docs/expectations)
-- [Laravel Testing Documentation](https://laravel.com/docs/testing)
-- [Testing Best Practices](https://laravel.com/docs/testing#introduction)
+- [Laravel HTTP Tests](https://laravel.com/docs/testing#testing-json-apis)
+- [Laravel Fake Facades](https://laravel.com/docs/mocking)
+- [Mockery Documentation](https://docs.mockery.io/en/latest/)
 
 ## Related Analyzers
 
