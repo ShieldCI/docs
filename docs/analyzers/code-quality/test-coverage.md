@@ -23,9 +23,18 @@ Validates that critical application modules have corresponding test files. Recur
 - Services (`app/Services`) without matching test files
 - Policies (`app/Policies`) without matching test files
 
-**Automatically skipped:** Abstract/Base-prefixed classes, traits, enums, and interfaces are excluded from the count since they typically don't need dedicated tests.
+**Automatically skipped:** Abstract/Base-prefixed classes, traits, enums, and interfaces are excluded from the count. Within `app/Services`, DTOs (`*Payload`, files under a `DTOs/` subdirectory) and exception classes (`*Exception`, files under an `Exceptions/` subdirectory) are also excluded — these utility types have no independently testable business logic.
 
-**Flexible test matching:** Test files don't need to match exactly. `UserModelTest.php` and `ManagePostControllerTest.php` will match `User.php` and `PostController.php` respectively (PascalCase boundary matching).
+**Flexible test matching:** Test files don't need to exactly mirror the class name. PascalCase boundary matching handles all common Laravel naming conventions:
+
+| Pattern | Test file | Matches class |
+|---|---|---|
+| Exact | `UserTest.php` | `User.php` |
+| Suffix | `ManagePostControllerTest.php` | `PostController.php` |
+| Prefix | `UserModelTest.php` | `User.php` |
+| Reverse prefix | `EmailVerificationTest.php` | `EmailVerificationPromptController.php` |
+
+The reverse-prefix rule accommodates Laravel Breeze's convention of naming tests after features rather than individual controller classes (e.g., a single `EmailVerificationTest` can cover `EmailVerificationPromptController` and `EmailVerificationNotificationController`).
 
 **Per-directory breakdown:** Results include a per-layer summary so you can see exactly which areas need attention:
 
