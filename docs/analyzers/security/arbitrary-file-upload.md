@@ -17,7 +17,7 @@ pro: true
 
 Detects arbitrary file upload vulnerabilities that could lead to remote code execution (RCE). Validates that file uploads have proper MIME type validation, file extension whitelisting, size limits, and are not stored in publicly executable locations. Also checks for dangerous file types (`.php`, `.phar`, `.exe`, `.sh`, `.shtml`, etc.), missing filename sanitization, ZIP/XML bomb susceptibility, and direct `$_FILES` access without validation.
 
-Recognizes all Laravel validation approaches across versions 9 and above, including `mimes:`, `mimetypes:`, `image`, and the `extensions:` rule (Laravel 11+).
+Recognizes all Laravel validation approaches across versions 9 and above, including `mimes:`, `mimetypes:`, `image`, `extensions:` (Laravel 11+), and the `File` fluent rule class (`File::image()`, `File::types()`) introduced in Laravel 10. Controllers that delegate validation to a custom FormRequest (e.g. `UploadImageRequest $request`) are also recognized — Laravel enforces the FormRequest's rules before the controller method runs, so no inline validation is required.
 
 ## Why It Matters
 
@@ -111,6 +111,52 @@ $request->validate([
 $request->validate([
     'avatar' => 'required|image|max:2048'  // ✅ MIME + extension + size validation
 ]);
+```
+
+**Scenario 5: Image Upload (using the `File` fluent rule, Laravel 10+)**
+
+```php
+use Illuminate\Validation\Rules\File;
+
+// File::image() restricts to image MIME types (jpeg, png, gif, bmp, svg, webp).
+// Chain ->max(N) for size validation (N in kilobytes).
+
+$request->validate([
+    'avatar' => ['required', File::image()->max(2048)],  // ✅ MIME + extension + size
+]);
+
+// File::types() accepts an explicit list of MIME type strings.
+$request->validate([
+    'document' => ['required', File::types(['application/pdf', 'image/jpeg'])->max(5120)],
+]);
+```
+
+**Scenario 6: Validation via FormRequest**
+
+```php
+// If you use a custom FormRequest, the analyzer recognises that validation
+// is enforced by Laravel before the controller method runs — no inline
+// validate() call is needed in the controller.
+
+// app/Http/Requests/AvatarUploadRequest.php
+class AvatarUploadRequest extends FormRequest
+{
+    public function rules(): array
+    {
+        return [
+            'avatar' => ['required', File::image()->max(2048)],
+        ];
+    }
+}
+
+// Controller — no inline validation needed; FormRequest handles it.
+public function upload(AvatarUploadRequest $request): JsonResponse
+{
+    $file = $request->file('avatar');
+    $path = $file->store('private/avatars');
+
+    return response()->json(['path' => $path]);
+}
 ```
 
 ### Proper Fix (20 minutes)
@@ -431,8 +477,10 @@ public function verifyAndStore(Request $request)
 | `mimetypes:image/jpeg` | 9+ | Validates actual MIME type of file content using the full MIME type string |
 | `image` | 9+ | Restricts to jpeg, png, bmp, gif, svg, webp via MIME type detection |
 | `extensions:pdf,docx` | 11+ | Validates the extension guessed from MIME type detection (server-side) |
+| `File::image()` | 10+ | Fluent rule — restricts to image MIME types; chain `->max(N)` for size (N in KB) |
+| `File::types([...])` | 10+ | Fluent rule — validates against an explicit list of MIME type strings; chain `->max(N)` for size |
 
-> **Tip:** Both `mimes:` and `mimetypes:` use finfo to read actual file content, so neither trusts the client-supplied filename. The difference: `mimes:` accepts extension aliases (e.g., `jpg`), while `mimetypes:` requires the full MIME type string (e.g., `image/jpeg`). For maximum security, combine both or use `extensions:` (Laravel 11+) which validates the guessed extension from MIME type detection.
+> **Tip:** Both `mimes:` and `mimetypes:` use finfo to read actual file content, so neither trusts the client-supplied filename. The difference: `mimes:` accepts extension aliases (e.g., `jpg`), while `mimetypes:` requires the full MIME type string (e.g., `image/jpeg`). For maximum security, combine both or use `extensions:` (Laravel 11+) which validates the guessed extension from MIME type detection. The `File` fluent rule class (Laravel 10+) is the modern object-oriented alternative and is fully recognized by this analyzer.
 
 ## References
 
