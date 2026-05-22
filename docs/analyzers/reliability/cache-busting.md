@@ -15,14 +15,13 @@ pro: true
 
 ## What This Checks
 
-- Verifies that Laravel Mix or Vite manifests exist and are valid
+- Detects Laravel Mix via `webpack.mix.js` and Vite via `vite.config.{js,ts,mjs,mts,cjs,cts}`
+- Verifies that the corresponding manifest file exists and is valid JSON
 - Ensures Laravel Mix versioning is enabled (checks for `?id=` query strings in `mix-manifest.json`)
-- Validates Vite manifest presence when a `vite.config.js` or `vite.config.ts` file is detected
+- Validates Vite manifest presence when a Vite config file is detected
 - Checks manifest file readability and JSON validity
 - Detects stale manifests older than 7 days that may indicate forgotten asset rebuilds
 - Supports both `public/build/manifest.json` and `public/build/.vite/manifest.json` paths for Vite
-- Only runs in production and staging environments
-- Automatically skips in CI environments
 
 ## Why It Matters
 
