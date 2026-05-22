@@ -100,15 +100,34 @@ ASSET_URL=https://d123456789.cloudfront.net
 ASSET_URL=https://your-zone.b-cdn.net
 ```
 
-**Laravel Vapor:**
+**Laravel Vapor / Laravel Cloud:**
 
-Vapor automatically configures CloudFront and uploads assets to S3 on every deploy. No manual CDN setup required.
+Both platforms automatically configure CloudFront and upload assets on every deploy. No manual CDN setup is required — ShieldCI skips this analyzer for Vapor and Cloud projects entirely.
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`) and in non-production environments. CDN setup is a production concern and should not generate noise during local development or testing.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments. It also skips when no compiled assets are detected (no `public/mix-manifest.json` or `public/build/manifest.json`).
 
-It also skips when no compiled assets are detected (no `public/mix-manifest.json` or `public/build/manifest.json`).
+**Why skip in CI and development?**
+- CDN setup is a deployment concern, not a CI or local development concern
+- `ASSET_URL` is typically unset in development and CI, which is expected and acceptable
+- Production and staging should have a CDN configured for optimal asset delivery
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Laravel Vapor:** This analyzer is automatically skipped on Laravel Vapor. Vapor injects `ASSET_URL` at deploy-time via its environment management system — the value is never present in the project's source files, so static analysis would always produce a false positive.
+
+**Laravel Cloud:** This analyzer is automatically skipped on Laravel Cloud. Cloud provisions and manages the CDN automatically, so no `ASSET_URL` configuration is required in the project.
 
 ## References
 
