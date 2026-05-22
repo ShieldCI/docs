@@ -288,7 +288,7 @@ return [
 ];
 ```
 
-```env
+```ini
 # .env
 CSP_FRAME_ANCESTORS="'self' https://trusted-partner.com"
 CSP_DEFAULT_SRC="'self'"

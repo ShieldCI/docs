@@ -70,7 +70,7 @@ Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function ()
 
 Ensure Redis is configured as your cache driver:
 
-```env
+```ini
 CACHE_DRIVER=redis
 ```
 

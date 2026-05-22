@@ -48,7 +48,7 @@ Route::post('/stripe/webhook', WebhookController::class)
 
 Set the webhook secret:
 
-```env
+```ini
 STRIPE_WEBHOOK_SECRET=whsec_your_signing_secret_here
 ```
 
@@ -86,7 +86,7 @@ php artisan vendor:publish --tag=cashier-migrations
 
 **4. Use the correct webhook signing secret format:**
 
-```env
+```ini
 # CORRECT — webhook signing secret from Stripe Dashboard → Webhooks → Signing secret
 STRIPE_WEBHOOK_SECRET=whsec_your_signing_secret_here
 

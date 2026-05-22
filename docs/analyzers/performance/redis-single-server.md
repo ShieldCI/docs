@@ -86,7 +86,7 @@ ls -la /var/run/redis/redis.sock
 
 **In `.env`:**
 
-```env
+```ini
 REDIS_SOCKET=/var/run/redis/redis.sock
 REDIS_PASSWORD=null
 ```
@@ -123,7 +123,7 @@ volumes:
 
 **Laravel .env for Docker:**
 
-```env
+```ini
 REDIS_SOCKET=/var/run/redis/redis.sock
 ```
 

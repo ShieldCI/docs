@@ -102,7 +102,7 @@ class PaymentService
 Use Laravel's configuration system with environment variables and a secret management service:
 
 **Step 1: Add to `.env` (never commit this file):**
-```env
+```ini
 STRIPE_SECRET=sk_live_4eC39HqLyjWDarjtT1zdp7dc
 AWS_ACCESS_KEY_ID=AKIAIOSFODNN7EXAMPLE
 AWS_SECRET_ACCESS_KEY=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY

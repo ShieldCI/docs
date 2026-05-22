@@ -79,7 +79,7 @@ Move Telescope to dev dependencies and disable in production:
 ```
 
 Set your production `.env`:
-```env
+```ini
 TELESCOPE_ENABLED=false
 ```
 

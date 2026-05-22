@@ -67,7 +67,7 @@ php artisan route:list --name=cashier
 'api_key' => env('PADDLE_API_KEY'),
 ```
 
-```env
+```ini
 # .env
 PADDLE_VENDOR_ID=your-vendor-id
 PADDLE_API_KEY=your-api-key
@@ -97,7 +97,7 @@ $user->subscribe(config('pricing.monthly'));
 
 Copy the signing secret from your Paddle dashboard under **Developer Tools → Notifications → your endpoint → Secret key** and set it in `.env`:
 
-```env
+```ini
 PADDLE_WEBHOOK_SECRET=pdl_ntfset_your_secret_here
 ```
 

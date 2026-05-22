@@ -40,7 +40,7 @@ For public-facing applications with global users, a CDN can reduce asset loading
 
 Set `ASSET_URL` in your `.env` to point to your CDN distribution:
 
-```env
+```ini
 ASSET_URL=https://cdn.yourdomain.com
 # or using a provider-issued hostname:
 ASSET_URL=https://d123456789.cloudfront.net
@@ -85,7 +85,7 @@ aws cloudfront create-invalidation \
   --paths "/build/*"
 ```
 
-```env
+```ini
 ASSET_URL=https://d123456789.cloudfront.net
 ```
 
@@ -96,7 +96,7 @@ ASSET_URL=https://d123456789.cloudfront.net
 
 **Bunny CDN:**
 
-```env
+```ini
 ASSET_URL=https://your-zone.b-cdn.net
 ```
 

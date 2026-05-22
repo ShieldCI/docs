@@ -48,7 +48,7 @@ Use environment variables for credentials:
 
 **1. Use HTTPS redirect URLs:**
 
-```env
+```ini
 # .env
 GITHUB_REDIRECT_URL=https://app.example.com/auth/github/callback
 GOOGLE_REDIRECT_URL=https://app.example.com/auth/google/callback

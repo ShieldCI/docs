@@ -98,7 +98,7 @@ class ProcessPodcast implements ShouldQueue
 
 If you also use `WithoutOverlapping`, ensure Redis is your cache driver for reliable distributed locks:
 
-```env
+```ini
 # Laravel 11+
 CACHE_STORE=redis
 # Laravel 10 and below
