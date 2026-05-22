@@ -9,11 +9,13 @@ import Breadcrumbs from './components/Breadcrumbs.vue'
 import CodeComparison from './components/CodeComparison.vue'
 import HomeContent from './components/HomeContent.vue'
 import HomeFeatures from './components/HomeFeatures.vue'
+import SidebarAccordion from './components/SidebarAccordion.vue'
 
 export default {
   extends: Theme,
   Layout() {
     return h(Theme.Layout, null, {
+      'sidebar-nav-before': () => h(SidebarAccordion),
       'doc-before': () => h(Breadcrumbs),
       'home-hero-after': () => h(HomeFeatures),
       'home-features-after': () => h(HomeContent)
@@ -25,6 +27,7 @@ export default {
     app.component('CodeComparison', CodeComparison)
     app.component('HomeContent', HomeContent)
     app.component('HomeFeatures', HomeFeatures)
+    app.component('SidebarAccordion', SidebarAccordion)
   }
 }
 
