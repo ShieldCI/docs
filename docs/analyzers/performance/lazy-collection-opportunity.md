@@ -18,10 +18,10 @@ pro: true
 Identifies collection operations that load all records into memory when lazy alternatives exist. Checks for:
 
 - `Model::all()` loading entire tables into memory
-- `Model::all()` chained with collection processing (filter, map, sort, toArray, etc.)
+- `Model::all()` chained with collection processing (`filter`, `map`, `sort`, `toArray`, etc.)
 - `->get()->count()/sum()/avg()/max()/min()` fetching all records just to aggregate them
-- Large chunk sizes that could use `->lazy()` instead
-- `->get()` without pagination or limiting on potentially large datasets
+- Large chunk sizes (> 1000) that could use `->lazy()` instead
+- `->get()` without pagination or limiting on multi-row query builder chains
 
 ## Why It Matters
 
@@ -103,6 +103,18 @@ $sorted = User::all()->sort();
 
 // After: let the database handle sorting
 $sorted = User::orderBy('name')->cursor();
+```
+
+**6. Add pagination or limits to unbounded queries:**
+
+```php
+// Before: may load too many records
+$reports = Report::where('status', 'pending')->orderBy('created_at')->get();
+
+// After: paginate or limit
+$reports = Report::where('status', 'pending')->orderBy('created_at')->paginate(50);
+// or use cursor for iteration
+Report::where('status', 'pending')->orderBy('created_at')->cursor()->each(...);
 ```
 
 ## References
