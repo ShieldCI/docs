@@ -26,8 +26,8 @@ Specific checks:
 - `memory:` (if set) is an integer between 128 and 10240 MB and a multiple of 64 MB
 - `cli-timeout:` (if set) is an integer between 1 and 900 seconds
 - `queue:` (if present) is a non-empty string resource name, not a list or null
-- `warm:` is set on production-like environments (name matches `production`/`prod` variants, or `domain:` is present)
-- `scheduler: true` is set when the host application defines scheduled commands
+- `warm:` is set on production-like environments — name matches `production`/`prod` variants, or `domain:` is present on an environment not identified as dev/staging/test/qa/preview/sandbox by name
+- `scheduler: false` is not set when the host application defines scheduled commands (Vapor enables the scheduler by default; `scheduler: false` explicitly opts out)
 - `build:` hooks are present (artifact should run `composer install --no-dev` and any asset build)
 - `deploy:` hooks include `php artisan migrate --force` when a `database:` resource is attached
 - No unknown top-level or env-level keys (catches typos such as `warm_up`, `cliTimeout`, `domains`)
@@ -38,7 +38,7 @@ Specific checks:
 - **Silent HTTP timeouts:** API Gateway hard-caps HTTP responses at 30 seconds regardless of the Lambda `timeout` setting. A `timeout: 60` looks fine locally but fails in production.
 - **Cold starts:** Production environments without `warm:` pay the full 1–3 s initialization cost on every cold request.
 - **Missed migrations:** Attaching a `database:` resource without adding `php artisan migrate --force` to `deploy:` hooks ships schema drift to production.
-- **Silent scheduler:** Laravel's scheduler only runs on Vapor when `scheduler: true` is set on the environment. Missing this silently disables every scheduled command.
+- **Silent scheduler:** Vapor enables Laravel's scheduler by default — but setting `scheduler: false` silently disables every scheduled command. This is easy to add accidentally when copying environment blocks.
 - **Typos:** Vapor ignores unrecognized keys without warning - `warm_up: 5` passes `vapor deploy` but has no effect.
 
 ## How to Fix
@@ -63,11 +63,12 @@ environments:
 
 ### Proper Fix (15 minutes)
 
-A production-ready `vapor.yml` with resource attachments, scheduler, and migration hook:
+A production-ready `vapor.yml` with resource attachments and migration hook:
 
 ```yaml
 id: 12345
 name: my-app
+default-environment: staging
 environments:
     production:
         runtime: 'php-8.3:al2023'
@@ -78,9 +79,12 @@ environments:
         concurrency: 10
         database: my-app-db
         cache: my-app-cache
-        queue: my-app-queue
+        queues:
+            - my-app-default
+            - my-app-emails
+        queue-memory: 512
+        queue-timeout: 90
         storage: my-app-storage
-        scheduler: true
         domain: app.example.com
         build:
             - 'composer install --no-dev --optimize-autoloader'
@@ -93,6 +97,7 @@ environments:
         runtime: 'php-8.3:al2023'
         memory: 512
         timeout: 28
+        domain: staging.app.example.com
         database: my-app-staging-db
         build:
             - 'composer install --no-dev --optimize-autoloader'
@@ -100,10 +105,15 @@ environments:
             - 'php artisan migrate --force'
 ```
 
+::: tip Scheduler
+Vapor enables Laravel's task scheduler by default on every environment — no explicit `scheduler: true` is needed. Use `scheduler: false` only to intentionally opt out, or `scheduler: sub-minute` to enable Vapor's sub-minute scheduling engine.
+:::
+
 ## References
 
 - [Laravel Vapor Documentation](https://docs.vapor.build/)
 - [Vapor Environments](https://docs.vapor.build/projects/environments.html)
+- [Vapor Queues](https://docs.vapor.build/resources/queues.html)
 - [Vapor Deployments](https://docs.vapor.build/projects/deployments.html)
 - [API Gateway Quotas](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html)
 
