@@ -19,6 +19,7 @@ pro: true
 - Validates the eviction policy is appropriate based on how your application uses Redis (cache, queue, session, Horizon)
 - Detects when a cache-only Redis server uses `noeviction` (causes write errors when memory is full)
 - Detects when Redis stores persistent data (queues, sessions, Horizon) with an eviction policy that could delete jobs or sessions
+- Detects when multiple named connections (e.g. `cache` and `default`) resolve to the same host:port — since eviction policy is server-level, a cache-only connection is not flagged if its server also serves persistent data (changing the policy there would be dangerous)
 - Checks whether `maxmemory` is configured (warns if unlimited)
 - Monitors memory usage and warns when consumption exceeds 90% of the configured limit
 - Only runs in production and staging environments (skipped in CI and local)
@@ -58,7 +59,7 @@ redis-cli CONFIG REWRITE
 
 #### 1: Separate Redis Instances by Workload
 
-The best practice is to use different Redis instances (or at minimum, different databases) for cache vs persistent data:
+The best practice is to use **different Redis servers** (different host or port) for cache vs persistent data. Different logical databases on the same server (`database: 0` vs `database: 1`) are **not sufficient** — `maxmemory-policy` is a server-level setting and applies to all databases on the instance simultaneously.
 
 ```php
 // config/database.php
@@ -159,7 +160,31 @@ redis-cli INFO stats | grep evicted_keys
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging, since Redis configuration in those environments typically does not reflect production settings.
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+
+**Why skip in CI and development?**
+- Eviction policy checks require a live Redis connection with access to the `CONFIG GET` command
+- CI and local Redis instances are typically ephemeral and not configured to reflect production settings
+- Eviction policy mismatches only matter when Redis is under real memory pressure
+
+**Environment Detection:**
+The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
+
+```php
+// config/shieldci.php
+'environment_mapping' => [
+    'production-us' => 'production',
+    'production-blue' => 'production',
+    'staging-preview' => 'staging',
+],
+```
+
+**Examples:**
+- `APP_ENV=production` → Runs (no mapping needed)
+- `APP_ENV=production-us` → Maps to `production` → Runs
+- `APP_ENV=local` → Skipped (not production/staging)
+
+**Managed Redis (ElastiCache, Upstash, Memorystore, Redis Cloud):** Many managed Redis providers restrict the `CONFIG GET` command via ACL. The analyzer detects this and skips analysis for those connections rather than emitting false positives — no action required on your part.
 
 ## References
 
