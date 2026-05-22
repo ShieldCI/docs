@@ -134,12 +134,17 @@ public function store(StoreUserRequest $request): RedirectResponse
 header('Content-Type: application/json');
 header('X-Custom-Header: value');
 setcookie('preference', 'dark', time() + 86400);
-http_response_code(404);
+http_response_code(200);  // success code
+http_response_code(404);  // error code
 
 // ✅ GOOD - Laravel response
 return response()->json($data)
     ->header('X-Custom-Header', 'value')
     ->cookie('preference', 'dark', 1440);
+
+// ✅ GOOD - http_response_code() replacements
+return response('', 200);   // success codes: use response()
+abort(404);                  // error codes (4xx/5xx): use abort()
 ```
 
 #### 3: Replace Environment Functions with Config
@@ -159,7 +164,7 @@ $apiKey = config('services.api_key');
 
 #### 4: Configure Custom Exclusion Paths
 
-To exclude certain iles that legitimately need superglobal access, publish the config:
+To exclude certain files that legitimately need superglobal access, publish the config:
 ```bash
 php artisan vendor:publish --tag=shieldci-config
 ```
