@@ -125,7 +125,7 @@ location ~* \.(js|css)$ {
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging.
 
 **Why skip in CI and development?**
 - Asset manifests are typically absent in CI pipelines (assets are not built during test runs)

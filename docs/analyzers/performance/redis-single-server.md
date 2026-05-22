@@ -173,7 +173,7 @@ Illustrative figures from `redis-benchmark` on a typical Linux server:
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - Redis server configuration is not applicable in CI

@@ -136,7 +136,7 @@ docker run --rm -it php:8.2-cli php -m | grep pcntl
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging.
 
 **Why skip in CI and development?**
 - Extension availability differs between CI runners, local machines, and production servers

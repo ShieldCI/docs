@@ -169,7 +169,7 @@ server {
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging.
 
 **Why skip in CI and development?**
 - The check makes actual HTTP requests to your live application, which is not available in CI pipelines

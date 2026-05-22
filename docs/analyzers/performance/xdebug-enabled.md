@@ -104,7 +104,7 @@ php -m | grep -iE 'xdebug|blackfire|tideways|pcov'
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - Xdebug is essential for development debugging

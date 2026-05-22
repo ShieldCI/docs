@@ -273,7 +273,7 @@ ShieldCI auto-detects Vapor via `vapor.yml`, the `laravel/vapor-core` package, o
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - PHP ini settings are environment-specific and not applicable in CI
