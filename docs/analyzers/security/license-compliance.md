@@ -64,8 +64,15 @@ composer show vendor/package --all | grep source
 
 **Scenario 3: Dev Dependency with GPL**
 
+Publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
 ```php
-// config/shieldci.php
 'analyzers' => [
     'security' => [
         'enabled' => true,

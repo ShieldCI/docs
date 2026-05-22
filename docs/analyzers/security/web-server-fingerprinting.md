@@ -120,7 +120,12 @@ class SecurityHeaders
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging.
+
+**Why skip in CI and development?**
+- The check makes actual HTTP requests to verify the `Server` response header, which requires a live server
+- CI and local environments don't serve with production-equivalent web server configurations
+- Server version disclosure is a web server infrastructure concern, not a code-correctness concern
 
 **When to run this analyzer:**
 - ✅ **Production servers**: Confirms server version information is hidden

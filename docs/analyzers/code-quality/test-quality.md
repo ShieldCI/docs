@@ -158,15 +158,15 @@ public function test_creates_user_on_success(): void { /* ... */ }
 public function test_sends_welcome_email(): void { /* ... */ }
 ```
 
-**5. Customize ShieldCI Settings (Optional)**
+## ShieldCI Configuration
 
-Publish the config file if you haven't already:
+To customize the test method length threshold, publish the config:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
 ```
 
-Then adjust the threshold in `config/shieldci.php`:
+Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [

@@ -153,6 +153,11 @@ Cache::tags(['reports'])->flush();
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
+**Why skip in CI?**
+- Redis is typically unavailable in CI pipelines, which are stateless and ephemeral
+- CI environments often use an array or null driver for in-memory testing, not a real Redis instance
+- Redis connectivity is an infrastructure concern, not a code-correctness concern that CI should gate on
+
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures Redis is accessible during development
 - ✅ **Staging/Production servers**: Confirms Redis health and configuration
@@ -191,7 +196,7 @@ Then in `config/shieldci.php`:
 
 - [Database Status Analyzer](/analyzers/reliability/database-status) - Validates database connectivity and functionality
 - [Cache Status Analyzer](/analyzers/reliability/cache-status) - Validates cache connectivity and functionality
-- [Horizon Provisioning Plan Analyzer](/analyzers/reliability/horizon-provisioning-plan) - Validates Horizon supervisor configuration (requires Redis)
+- [Horizon Reliability Analyzer](/analyzers/reliability/horizon-reliability) - Validates Horizon supervisor configuration (requires Redis)
 - [Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration) - Validates queue worker timeout settings
 
 ---

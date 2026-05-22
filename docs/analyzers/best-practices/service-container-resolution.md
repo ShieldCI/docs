@@ -116,7 +116,7 @@ class OrderService
 
 ## ShieldCI Configuration
 
-Publish the config to customize behaviour:
+This analyzer runs in all environments. To customize which directories and classes to skip, publish the config:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config

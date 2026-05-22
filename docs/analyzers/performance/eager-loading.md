@@ -120,33 +120,6 @@ class Post extends Model
 }
 ```
 
-## ShieldCI Configuration
-
-This analyzer:
-- Scans PHP files for relationship property access (`$model->relationship`)
-- Checks if the access occurs inside a `foreach` loop
-- Excludes common non-relationship properties (`id`, `created_at`, `updated_at`, `deleted_at`)
-- Reports High severity since N+1 has significant performance impact
-
-## Verification
-
-```bash
-# Enable query logging to verify
-DB::enableQueryLog();
-
-// ... run your code ...
-
-dd(DB::getQueryLog());
-# Before: 101 queries
-# After:  2 queries
-```
-
-```bash
-# Or use Laravel Debugbar
-composer require barryvdh/laravel-debugbar --dev
-# Check the "Queries" tab for duplicate queries
-```
-
 ## References
 
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)

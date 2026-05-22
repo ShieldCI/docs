@@ -125,25 +125,6 @@ public function boot(): void
 
 This throws an exception when lazy loading occurs, helping catch N+1 issues during development.
 
-## ShieldCI Configuration
-
-This analyzer:
-- Scans PHP files in your application for query patterns
-- Detects `DB::select()` / `->selectRaw()` with `SELECT *`
-- Identifies database calls inside `foreach`, `for`, and `while` loops
-- Flags `->count() > 0` patterns that should use `->exists()`
-
-## Verification
-
-```bash
-# Use Laravel Debugbar or Telescope to count queries per request
-# Before optimization:
-# Total Queries: 152 (N+1 on posts.author)
-
-# After eager loading:
-# Total Queries: 3
-```
-
 ## References
 
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)

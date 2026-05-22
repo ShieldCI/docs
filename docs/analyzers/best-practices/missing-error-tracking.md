@@ -337,7 +337,7 @@ Then in `config/shieldci.php`:
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments  (`$runInCI = false`) and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - Developers don't need error tracking during local development

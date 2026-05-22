@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-description: Resolve common ShieldCI issues: installation errors, memory limits, parsing failures, false positives, and CI pipeline failures with step-by-step solutions
+description: "Resolve common ShieldCI issues: installation errors, memory limits, parsing failures, false positives, and CI pipeline failures with step-by-step solutions"
 tags: troubleshooting,errors,debugging,memory,php
 icon: wrench
 outline: [2, 3]

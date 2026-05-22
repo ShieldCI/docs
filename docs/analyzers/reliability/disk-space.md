@@ -172,28 +172,37 @@ if ($usedPercent > 85) {
 
 This analyzer is automatically skipped in CI environments and only runs in production and staging.
 
+**Why skip in CI and development?**
+- Disk space monitoring only makes sense on persistent servers, not ephemeral CI environments
+- CI runner disk capacity varies by provider and does not reflect production conditions
+- Local development machines have different storage profiles than production servers
+
 Configure thresholds and additional paths via `config/shieldci.php`:
 
 ```php
 // config/shieldci.php
 return [
-    'disk_space' => [
-        // Disk usage warning threshold (percentage)
-        'warning_threshold' => 70,
+    'analyzers' => [
+        'reliability' => [
+            'disk-space' => [
+                // Disk usage warning threshold (percentage)
+                'warning_threshold' => 70,
 
-        // Disk usage critical threshold (percentage)
-        'critical_threshold' => 90,
+                // Disk usage critical threshold (percentage)
+                'critical_threshold' => 90,
 
-        // Minimum free space in MB
-        'min_free_mb' => 500,
+                // Minimum free space in MB
+                'min_free_mb' => 500,
 
-        // Inode usage warning threshold (percentage)
-        'inode_warning_threshold' => 80,
+                // Inode usage warning threshold (percentage)
+                'inode_warning_threshold' => 80,
 
-        // Additional paths to monitor
-        'paths' => [
-            'Uploads' => '/var/www/uploads',
-            'Backups' => '/mnt/backups',
+                // Additional paths to monitor
+                'paths' => [
+                    'Uploads' => '/var/www/uploads',
+                    'Backups' => '/mnt/backups',
+                ],
+            ],
         ],
     ],
 ];

@@ -25,16 +25,6 @@ Validates Laravel Octane 2.x configuration for safe long-running server operatio
 
 The analyzer reads `config/octane.php` via AST, so it is comment-safe and correctly resolves `env()`-wrapped values.
 
-### Checks intentionally not performed
-
-- **`max_requests`** - this is a `php artisan octane:start --max-requests=N` CLI flag, not a config key. Set it in Supervisor or your Procfile, not `config/octane.php`.
-- **`warm`, `flush`, `listeners` presence** - Octane's published stub ships sane defaults for all three. Their presence is not flagged.
-- **Blanket singleton detection** - stateless singletons (Repository, Service, Gateway) are the recommended Laravel pattern and are Octane-safe. Only singletons that capture per-request services are flagged.
-
-### Platforms skipped
-
-The analyzer is automatically skipped on Laravel Vapor (serverless architecture is incompatible with Octane).
-
 ## Why It Matters
 
 - **State leakage:** Singletons that capture per-request services (Request, Auth Guard, Session) persist across requests, leaking user data between sessions.
@@ -83,11 +73,19 @@ Use `$this->app->bind()` when you need a fresh instance on every resolution, or 
 
 ## ShieldCI Configuration
 
-Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to override:
+To configure both thresholds, , publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
 'analyzers' => [
     'reliability' => [
+        'enabled' => true,
+        
         'octane-config' => [
             // Warn when max_execution_time exceeds this (Octane default is 30 s)
             'max_execution_time_threshold' => 60,
@@ -108,5 +106,5 @@ Both thresholds are config-tunable. Add these keys to `config/shieldci.php` to o
 ## Related Analyzers
 
 - [Vapor Configuration](/analyzers/reliability/vapor-config) - Validates serverless deployment config
-- [Horizon Status](/analyzers/reliability/horizon-status) - Validates Horizon runtime health
-- [Queue Blocking](/analyzers/reliability/queue-blocking) - Validates queue driver and blocking configuration
+- [Horizon Reliability Analyzer](/analyzers/reliability/horizon-reliability) - Validates Horizon runtime health and configuration
+- [Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration) - Validates queue driver and timeout configuration

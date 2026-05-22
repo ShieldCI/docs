@@ -215,12 +215,29 @@ MD5 and SHA1 are acceptable for non-cryptographic purposes like cache keys and c
 
 ## ShieldCI Configuration
 
-This analyzer is automatically **skipped in CI** environments (`$runInCI = false`) because hashing configuration is environment-specific.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
-Configuration is read from `analyzers.security.password-security` in `config/shieldci.php`.
+**Why skip in CI?**
+- Hashing configuration is environment-specific and not relevant to test pipelines
+- CI environments often use faster hashing settings for speed, which would trigger false warnings
+- Password security thresholds are a production concern validated on real servers
+
+**When to run this analyzer:**
+- ✅ **Local development**: Validates your bcrypt/Argon2 rounds meet minimum standards
+- ✅ **Staging/Production servers**: Confirms production-grade hashing is configured
+- ❌ **CI/CD pipelines**: Skipped automatically (hashing settings are environment-specific)
+
+**Configuration options:**
+
+To customize thresholds, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
 'analyzers' => [
     'security' => [
         'enabled' => true,

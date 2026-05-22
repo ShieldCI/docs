@@ -112,4 +112,4 @@ Schedule::command('horizon:purge')->daily();
 
 - [Alerting Configuration](/analyzers/reliability/alerting-config) - Validates alerting mechanisms
 - [Telescope Security](/analyzers/security/telescope-security) - Validates Telescope configuration
-- [Horizon Prefix](/analyzers/reliability/horizon-prefix) - Checks Horizon configuration
+- [Horizon Reliability Analyzer](/analyzers/reliability/horizon-reliability) - Checks Horizon configuration

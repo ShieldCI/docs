@@ -108,7 +108,12 @@ class SecurityHeaders
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging.
+
+**Why skip in CI and development?**
+- The check makes actual HTTP requests to verify response headers, which requires a live server
+- CI and local environments don't serve production-equivalent HTTP responses
+- MIME sniffing protection is a web server configuration concern, not a code-correctness concern
 
 **When to run this analyzer:**
 - ✅ **Production servers**: Confirms MIME sniffing protection is active

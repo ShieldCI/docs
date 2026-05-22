@@ -127,6 +127,11 @@ location ~* \.(js|css)$ {
 
 This analyzer is automatically skipped in CI environments and only runs in production and staging.
 
+**Why skip in CI and development?**
+- Asset manifests are typically absent in CI pipelines (assets are not built during test runs)
+- Local/Development environments may have unminified, un-versioned assets for easier debugging
+- Stale manifest detection is only meaningful in environments where assets are actively deployed
+
 **When to run this analyzer:**
 - ✅ **Production/Staging servers**: Confirms assets are properly versioned
 - ✅ **Local development**: Validates manifest existence and configuration

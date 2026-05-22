@@ -162,7 +162,7 @@ putenv('TEMP_VAR=value');
 $apiKey = config('services.api_key');
 ```
 
-#### 4: Configure Custom Exclusion Paths
+## ShieldCI Configuration
 
 To exclude certain files that legitimately need superglobal access, publish the config:
 ```bash

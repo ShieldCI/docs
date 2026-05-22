@@ -191,11 +191,17 @@ server {
 
 ## ShieldCI Configuration
 
-This analyzer:
-- Runs only in **production** and **staging** environments
-- Requires HTTPS (`APP_URL` starting with `https://`)
-- Makes actual HTTP requests to verify protocol support
-- Also checks for HTTP/3 support (informational)
+This analyzer is automatically skipped in CI environments and only runs in production and staging.
+
+**Why skip in CI and development?**
+- The check makes actual HTTP requests to your live application, which is not available in CI pipelines
+- HTTP/2 requires HTTPS (`APP_URL` starting with `https://`), typically absent in local and CI environments
+- Protocol support is a production infrastructure concern, not a code-correctness concern
+
+**When to run this analyzer:**
+- ✅ **Production/Staging servers**: Verifies HTTP/2 (and HTTP/3, informational) is active on your live application
+- ❌ **CI/CD pipelines**: Skipped automatically (no live server or HTTPS available)
+- ❌ **Local/Development environments**: Skipped (requires HTTPS and a public-facing server)
 
 ## References
 

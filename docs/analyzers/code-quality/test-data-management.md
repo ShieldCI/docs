@@ -184,7 +184,7 @@ public function test_admin_can_access_dashboard(): void
 }
 ```
 
-**4. Customize ShieldCI Settings (Optional)**
+## ShieldCI Configuration
 
 The factory sequence threshold is configurable. To customize it, publish the config:
 

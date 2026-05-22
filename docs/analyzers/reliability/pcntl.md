@@ -36,7 +36,7 @@ pro: true
 
 ## How to Fix
 
-### Quick Fix (PCNTL)
+### Quick Fix (5 minutes)
 
 Install the PCNTL extension for your operating system:
 
@@ -60,8 +60,6 @@ php -m | grep pcntl
 # Restart PHP-FPM after installation
 sudo systemctl restart php8.2-fpm
 ```
-
-### Quick Fix (Redis)
 
 Install a Redis client library:
 
@@ -136,46 +134,45 @@ docker run --rm -it php:8.2-cli php -m | grep pcntl
 # Configure a Linux-based worker server for production
 ```
 
-#### 5: Configure custom extension requirements
-
-```php
-// config/shieldci.php
-return [
-    'required_extensions' => [
-        'imagick' => [
-            'severity' => 'high',
-            'recommendation' => 'Install ImageMagick: sudo apt-get install php-imagick',
-        ],
-        'gd' => [
-            'severity' => 'critical',
-            'recommendation' => 'Install GD: sudo apt-get install php-gd',
-        ],
-        // Simple format (just the extension name)
-        'mbstring',
-        'openssl',
-    ],
-];
-```
-
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments and only runs in production and staging.
 
-Define additional required extensions via `config/shieldci.php`:
-
-```php
-// config/shieldci.php
-'required_extensions' => [
-    'pcntl',
-    'redis',    // Add additional required extensions
-    'posix',
-],
-```
+**Why skip in CI and development?**
+- Extension availability differs between CI runners, local machines, and production servers
+- Extensions like `pcntl` are Linux-only and absent on macOS development machines
+- Validating required extensions only makes sense on servers matching the production environment
 
 **When to run this analyzer:**
 - ✅ **Production/Staging servers**: Validates all required extensions are loaded
 - ✅ **Local development**: Catches missing extensions before deployment
 - ❌ **CI/CD pipelines**: Skipped automatically (CI may have different extension sets)
+
+**Define additional required extensions:**
+
+To specify which extensions must be present beyond the defaults, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+        
+        'pcntl-extension' => [
+            'required_extensions' => [
+                'pcntl',
+                'redis',    // Add additional required extensions
+                'posix',
+            ],
+        ],
+    ],
+],
+```
 
 ## References
 
@@ -188,7 +185,5 @@ Define additional required extensions via `config/shieldci.php`:
 
 ## Related Analyzers
 
-- [Horizon Status Analyzer](/analyzers/reliability/horizon-status) - Monitors Horizon runtime status and health
-- [Horizon Prefix Analyzer](/analyzers/reliability/horizon-prefix) - Validates Horizon prefix uniqueness
+- [Horizon Reliability Analyzer](/analyzers/reliability/horizon-reliability) - Monitors Horizon runtime status, health, and configuration
 - [Queue Timeout Configuration Analyzer](/analyzers/reliability/queue-timeout-configuration) - Ensures queue timeout and retry_after values are properly configured
-- [Queue Blocking Analyzer](/analyzers/reliability/queue-blocking) - Validates Redis queue blocking configuration

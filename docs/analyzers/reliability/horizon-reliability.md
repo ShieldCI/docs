@@ -108,7 +108,7 @@ stopwaitsecs=3600
 php artisan horizon:continue
 ```
 
-**4. Customize ShieldCI threshold (Optional):**
+## ShieldCI Configuration
 
 To configure a pending job threshold, publish the config:
 ```bash

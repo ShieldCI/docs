@@ -177,7 +177,7 @@ return $this->paymentProcessor->process($order);
 return $this->paymentProcessor->process($order);
 ```
 
-#### 7: Customize ShieldCI Settings (Optional)
+## ShieldCI Configuration
 
 To customize the commented code detection sensitivity, publish the config:
 
