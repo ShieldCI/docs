@@ -135,7 +135,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   title="Dead Route"
   description="Detects routes pointing to non-existent controllers or methods"
   severity="medium"
-  link="/analyzers/reliability/dead-route"
+  link="/analyzers/reliability/dead-routes"
   pro
 />
 
@@ -285,7 +285,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   title="PCNTL Extension"
   description="Ensures PCNTL extension is available for queue workers and signal handling"
   severity="medium"
-  link="/analyzers/reliability/pcntl"
+  link="/analyzers/reliability/pcntl-extension"
   pro
 />
 

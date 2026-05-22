@@ -102,5 +102,5 @@ For SPAs that must handle all paths client-side, configure your frontend router 
 
 ## Related Analyzers
 
-- [Dead Route Analyzer](/analyzers/reliability/dead-route) - Detects routes pointing to non-existent controllers
+- [Dead Route Analyzer](/analyzers/reliability/dead-routes) - Detects routes pointing to non-existent controllers
 - [Route Caching Analyzer](/analyzers/performance/route-caching) - Ensures routes are cached in production
