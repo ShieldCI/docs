@@ -9,6 +9,7 @@ import Breadcrumbs from './components/Breadcrumbs.vue'
 import CodeComparison from './components/CodeComparison.vue'
 import HomeContent from './components/HomeContent.vue'
 import HomeFeatures from './components/HomeFeatures.vue'
+import SidebarAccordion from './components/SidebarAccordion.vue'
 import ProBadge from './components/ProBadge.vue'
 
 import { proAnalyzerPaths } from './data/pro-analyzers'
@@ -35,6 +36,7 @@ export default {
   extends: Theme,
   Layout() {
     return h(Theme.Layout, null, {
+      'sidebar-nav-before': () => h(SidebarAccordion),
       'doc-before': () => [h(Breadcrumbs), h(ProBadge)],
       'home-hero-after': () => h(HomeFeatures),
       'home-features-after': () => h(HomeContent),
@@ -46,6 +48,7 @@ export default {
     app.component('CodeComparison', CodeComparison)
     app.component('HomeContent', HomeContent)
     app.component('HomeFeatures', HomeFeatures)
+    app.component('SidebarAccordion', SidebarAccordion)
     app.component('ProBadge', ProBadge)
   },
   setup() {
