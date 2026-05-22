@@ -1,6 +1,6 @@
 ---
 title: Database Query Optimization Analyzer
-description: Detects inefficient database query patterns — unindexed columns, SELECT *, repeated queries — that degrade performance as your Laravel app scales
+description: Detects inefficient database query patterns — SELECT *, N+1 loops, existence count-scans, and WHERE/ORDER BY on columns not indexed in your migrations
 icon: database
 outline: [2, 3]
 tags: database,queries,performance,optimization,n+1
@@ -15,13 +15,13 @@ pro: true
 
 ## What This Checks
 
-Scans application code for common inefficient database query patterns that degrade performance as your app scales. Checks for:
+Scans application code for common inefficient database query patterns and cross-references `database/migrations/` to determine which columns are actually indexed before flagging. Checks for:
 
 - `SELECT *` queries fetching all columns when only a subset is needed
-- Eloquent relationship access inside `foreach` loops (N+1 problem)
-- `DB::` calls inside loops creating one round-trip per iteration
+- Eloquent query calls inside `foreach`, `for`, and `while` loop bodies (N+1 problem)
+- `DB::` static calls inside loops creating one round-trip per iteration
 - `->count() > 0` existence checks that scan every matching row
-- `orderBy()` and `groupBy()` calls on potentially unindexed columns
+- `WHERE`, `ORDER BY`, and `GROUP BY` on columns with no index in your migrations
 
 ## Why It Matters
 
@@ -96,26 +96,39 @@ if (User::where('email', $email)->exists()) {
 **Before (❌):**
 
 ```php
-$users = User::orderBy('created_at', 'desc')->paginate(20);
-$posts = Post::where('status', 'published')->orderBy('published_at')->get();
+// Migration — status column has no index
+$table->string('status');
+
+// Query — full scan on every request
+$users = User::where('status', 'active')->orderBy('created_at', 'desc')->paginate(20);
 ```
 
 **After (✅):**
 
 ```php
-// Create a migration to add the missing indexes
-Schema::table('users', function (Blueprint $table) {
-    $table->index('created_at');
-});
+// Migration — composite covers WHERE + ORDER BY in one index
+$table->index(['status', 'created_at']);
+```
 
-Schema::table('posts', function (Blueprint $table) {
-    $table->index(['status', 'published_at']); // composite covers WHERE + ORDER BY
-});
+**Pattern 5: Chain ->constrained() on foreign keys**
+
+**Before (❌):**
+
+```php
+// No FK constraint → no automatic index
+$table->foreignId('project_id');
+```
+
+**After (✅):**
+
+```php
+// FK constraint forces MySQL to create an index on the child column
+$table->foreignId('project_id')->constrained()->cascadeOnDelete();
 ```
 
 ### Proper Fix (15 minutes)
 
-Apply all four patterns and add guardrails to prevent regressions.
+Apply all five patterns and add guardrails to prevent regressions.
 
 **Eager load multiple and nested relationships:**
 
@@ -147,6 +160,16 @@ if (User::where('email', $email)->doesntExist()) {
 }
 ```
 
+**Use composite indexes to cover polymorphic queries:**
+
+```php
+// morphs()/nullableMorphs() already create a composite index automatically
+$table->nullableMorphs('subject'); // indexes (subject_type, subject_id) together
+
+// For manual polymorphic columns, add a composite index explicitly
+$table->index(['commentable_type', 'commentable_id']);
+```
+
 **Enable strict mode to catch N+1 during development:**
 
 ```php
@@ -166,6 +189,7 @@ This throws an exception on lazy loading in non-production environments, catchin
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)
 - [Laravel Query Builder](https://laravel.com/docs/queries#select-statements)
 - [Preventing Lazy Loading](https://laravel.com/docs/eloquent-relationships#preventing-lazy-loading)
+- [Laravel Migrations — Available Index Types](https://laravel.com/docs/migrations#available-index-types)
 
 ## Related Analyzers
 
