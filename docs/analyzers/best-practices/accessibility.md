@@ -74,7 +74,21 @@ Add alt attributes to images:
 ```
 
 > [!NOTE]
-> The following input types are automatically exempt from the label requirement: `hidden`, `submit`, `button`, `reset`.
+> The following input types are automatically exempt from the label requirement: `hidden`, `submit`, `button`, `reset`, `image`.
+
+Dynamic label associations using Blade expressions are fully supported. The analyzer correctly resolves `for`/`id` pairs that include PHP arrow operators or `{{ }}` expressions:
+
+```html
+@foreach ($roles as $role)
+<div>
+    {{-- ✅ Recognized: for and id share the same dynamic expression --}}
+    <input type="radio" name="role"
+           @if(old('role') == $role->id) checked @endif
+           value="{{ $role->id }}" id="role-{{ $role->id }}">
+    <label for="role-{{ $role->id }}">{{ $role->name }}</label>
+</div>
+@endforeach
+```
 
 **2. Add lang attribute:**
 
