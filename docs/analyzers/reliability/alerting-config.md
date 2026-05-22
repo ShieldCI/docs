@@ -1,7 +1,7 @@
 ---
 title: Alerting Configuration Analyzer
 description: Validates that proper alerting and notification mechanisms are configured for production issues
-icon: shield
+icon: bell
 outline: [2, 3]
 tags: reliability,alerting,monitoring,notifications,production
 pro: true
@@ -17,23 +17,31 @@ pro: true
 
 Validates that proper alerting mechanisms are in place to detect production issues. Checks for:
 
-- Exception notification handler (report/reportable with notification/alerting)
-- Log alerting channel (Slack, syslog, papertrail, or custom channels)
+- Exception notification handler (`report` / `reportable` callbacks with actual alerting)
+- Log alerting channel (Slack, syslog, papertrail, Monolog custom, or alerting packages)
 - Failed job notification (`Queue::failing` callback or job `failed()` methods)
-- Deployment notification hooks or scripts
 
 ## Why It Matters
 
 - **Silent Failures:** Without alerting, production errors go unnoticed until users complain
 - **Queue Health:** Failed jobs without notifications silently drop critical tasks (emails, payments, etc.)
 - **Mean Time to Recovery:** Alerting reduces MTTR from hours/days to minutes
-- **Deployment Awareness:** Team members need to know when deployments occur to correlate with issues
 
 ## How to Fix
 
 ### Quick Fix (5 minutes)
 
-Add a Slack log channel for alerts:
+Install a monitoring package — these auto-register exception handlers and satisfy the check without any extra configuration:
+
+```bash
+composer require sentry/sentry-laravel
+# or
+composer require rollbar/rollbar-laravel
+# or
+composer require bugsnag/bugsnag-laravel
+```
+
+Alternatively, add a Slack log channel for immediate alerts:
 
 ```php
 // config/logging.php
@@ -41,7 +49,7 @@ Add a Slack log channel for alerts:
     'slack' => [
         'driver' => 'slack',
         'url' => env('LOG_SLACK_WEBHOOK_URL'),
-        'username' => 'ShieldCI Bot',
+        'username' => 'Laravel Bot',
         'emoji' => ':boom:',
         'level' => 'error',
     ],
@@ -56,8 +64,20 @@ Add a Slack log channel for alerts:
 
 **1. Add exception alerting:**
 
-```php
-// app/Exceptions/Handler.php (Laravel 10-)
+::: code-group
+
+```php [Laravel 11+ (bootstrap/app.php)]
+->withExceptions(function (Exceptions $exceptions) {
+    $exceptions->reportable(function (Throwable $e) {
+        if (app()->environment('production')) {
+            Notification::route('slack', config('services.slack.webhook'))
+                ->notify(new ExceptionOccurred($e));
+        }
+    });
+})
+```
+
+```php [Laravel 9-10 (Handler.php)]
 public function register(): void
 {
     $this->reportable(function (Throwable $e) {
@@ -68,6 +88,8 @@ public function register(): void
     });
 }
 ```
+
+:::
 
 **2. Add failed job notifications:**
 
@@ -85,15 +107,6 @@ public function boot(): void
         ]);
     });
 }
-```
-
-**3. Add deployment notifications:**
-
-```bash
-# deploy.sh
-php artisan deploy:notify || true
-curl -X POST "$SLACK_WEBHOOK" \
-  -d '{"text":"Deployed to production successfully"}'
 ```
 
 ## References
