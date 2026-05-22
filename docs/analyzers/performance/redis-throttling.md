@@ -15,7 +15,11 @@ pro: true
 
 ## What This Checks
 
-When your application uses Redis, this analyzer suggests using `ThrottleRequestsWithRedis` instead of the standard `ThrottleRequests` middleware for more accurate rate limiting under high concurrency.
+When your application uses Redis, this analyzer suggests using `ThrottleRequestsWithRedis` instead of the standard `ThrottleRequests` middleware for more accurate rate limiting under high concurrency. Checks for:
+
+- `ThrottleRequests` middleware registered in global middleware when Redis is available
+- The `throttle` alias mapped to `ThrottleRequests` instead of `ThrottleRequestsWithRedis`
+- Routes using the non-Redis throttle middleware
 
 ## Why It Matters
 
@@ -24,26 +28,22 @@ When your application uses Redis, this analyzer suggests using `ThrottleRequests
 - **High Concurrency:** More accurate under heavy load when multiple requests arrive simultaneously
 - **Distributed Systems:** Works correctly across multiple application servers
 
-The standard `ThrottleRequests` middleware reads the current count, checks if limit is exceeded, then increments. Under high concurrency, multiple requests can read the same count before any increment occurs.
+The standard `ThrottleRequests` middleware reads the current count, checks if the limit is exceeded, then increments — three separate cache operations. Under high concurrency, multiple requests can read the same count before any increment occurs, allowing brief bursts past the configured limit.
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
-
-Update the `throttle` middleware alias to point to the Redis-backed version. All routes using `throttle:60,1` will automatically use atomic rate limiting with no other changes needed.
+### Quick Fix
 
 ::: code-group
 ```php [Laravel 11+]
-use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
-
-return Application::configure(basePath: dirname(__DIR__))
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->throttleApi(ThrottleRequestsWithRedis::class);
-    })
+// bootstrap/app.php
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->throttleWithRedis();
     // ...
+})
 ```
 ```php [Laravel 9–10]
+// app/Http/Kernel.php
 protected $middlewareAliases = [
     // Change this:
     // 'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
@@ -51,14 +51,20 @@ protected $middlewareAliases = [
     // To this:
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequestsWithRedis::class,
 
-    // ... other middleware
+    // ... other aliases
 ];
 ```
 :::
 
-### Proper Fix (10 minutes)
+`throttleWithRedis()` remaps the `throttle` alias to `ThrottleRequestsWithRedis`. All routes using `throttle:60,1` will automatically use atomic rate limiting with no other changes needed.
 
-If you need different throttle behaviour per route group — or want to keep the global alias unchanged — apply `ThrottleRequestsWithRedis` explicitly on the routes that require it.
+::: warning Alias override pitfall
+On Laravel 11+, calling `$middleware->throttleWithRedis()` and then passing `'throttle' => ThrottleRequests::class` to `$middleware->alias()` in the same `withMiddleware()` block will override the Redis mapping. Remove the explicit `throttle` entry from `alias()` when using `throttleWithRedis()`.
+:::
+
+### Explicit per-route middleware
+
+If you need different throttle behaviour per route group without changing the global alias, apply `ThrottleRequestsWithRedis` directly:
 
 ```php
 use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
@@ -68,9 +74,12 @@ Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function ()
 });
 ```
 
+### Prerequisites
+
 Ensure Redis is configured as your cache driver:
 
 ```ini
+# .env
 CACHE_DRIVER=redis
 ```
 
