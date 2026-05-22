@@ -1,9 +1,9 @@
 ---
 title: Eager Loading Analyzer
-description: Detects lazy-loaded relationship access causing N+1 queries inside loops, and over-eager loading where rarely-used relations are bundled into a single query unnecessarily
+description: Detects wasteful eager loading in Eloquent queries — relations loaded with with(), load(), or loadMissing() that are never accessed in the same method, and single calls that load an unusually large number of relations at once
 icon: layers
 outline: [2, 3]
-tags: n+1,eager-loading,relationships,eloquent,performance
+tags: eager-loading,relationships,eloquent,performance
 pro: true
 ---
 
@@ -15,92 +15,59 @@ pro: true
 
 ## What This Checks
 
-Detects two categories of eager loading problems in Eloquent queries. Checks for:
+Detects two categories of wasteful eager loading in Eloquent queries. Checks for:
 
-- Eloquent relationship property access inside `foreach` loops (N+1 problem — Medium severity)
-- Single `with()` calls loading an unusually large number of relations at once (over-eager loading — Low severity)
+- **Unnecessary eager loading** (Medium): a relation passed to `with()`, `load()`, or `loadMissing()` is never accessed within the enclosing method and the holding variable does not escape to a view, response, or downstream call
+- **Over-eager loading** (Low): a single eager-load call requests more than five relations and at least one of them goes unused, suggesting that some should be deferred with lazy eager loading
+
+::: tip Complementary analyzer
+The free-package [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) covers the opposite failure mode — *missing* eager loading that causes N+1 queries inside loops. These two analyzers work together to keep your relationship loading strategy balanced.
+:::
 
 ## Why It Matters
 
-- **Exponential Queries:** A page listing 100 posts with authors executes 101 queries instead of 2
-- **Slow Page Loads:** Each extra query adds ~1-5ms, compounding to seconds of delay
-- **Database Load:** N+1 queries create excessive connections and lock contention under load
-- **Hidden Problem:** The code looks correct and works fine with small datasets, but degrades as data grows
-- **Over-Eager Overhead:** Loading every relation upfront when only some are used on each code path wastes memory and executes joins or subqueries that are never consumed
-
-N+1 queries are the single most common performance issue in Laravel applications.
+- **Wasted Queries:** Every relation in a `with()` call fires an extra SQL query upfront, even when the data is never read
+- **Memory Overhead:** Eager-loaded collections are hydrated into PHP objects immediately — loading ten relations when only two are used inflates peak memory consumption
+- **Slower Responses:** Unnecessary joins and subqueries add latency even when their results are discarded
+- **Hidden Cost:** The waste is invisible in small datasets but compounds under load and as data grows
 
 ## How to Fix
 
 ### Quick Fix (2 minutes)
 
-Add `with()` to the query that feeds the loop — this replaces N+1 lazy loads with a fixed number of upfront queries.
+If a relation is flagged as never accessed, remove it from the `with()` call.
 
 **Before (❌):**
 
 ```php
-$orders = Order::where('status', 'pending')->get();
+public function index()
+{
+    // 'tags' is loaded but never accessed in this method
+    $posts = Post::with(['author', 'tags'])->paginate(20);
 
-foreach ($orders as $order) {
-    $name = $order->customer->name;  // query per iteration
-    $total = $order->items->sum('price');  // query per iteration
+    return Inertia::render('posts/index', ['posts' => $posts]);
 }
-// Queries: 1 + N (customers) + N (items) = 2N+1
 ```
 
 **After (✅):**
 
 ```php
-$orders = Order::where('status', 'pending')
-    ->with(['customer', 'items'])
-    ->get();
+public function index()
+{
+    $posts = Post::with('author')->paginate(20);
 
-foreach ($orders as $order) {
-    $name = $order->customer->name;  // already loaded
-    $total = $order->items->sum('price');  // already loaded
+    return Inertia::render('posts/index', ['posts' => $posts]);
 }
-// Queries: 3 (orders + customers + items)
 ```
 
 ### Proper Fix (5 minutes)
 
-Apply eager loading consistently and use the right loading strategy per access pattern.
+Apply the right loading strategy per access pattern and defer relations only needed on some code paths.
 
-**Nested relationships:**
-
-```php
-Post::with('comments.user')->get();
-```
-
-**Constrained eager loading:**
+**Defer rarely-used relations with lazy eager loading:**
 
 ```php
-Post::with(['comments' => function ($query) {
-    $query->where('approved', true)->latest()->limit(5);
-}])->get();
-```
-
-**Eager loading counts (avoids loading full relation just for a number):**
-
-```php
-Post::withCount('comments')->get();
-// Access: $post->comments_count
-```
-
-**Default eager loading on models (for relations always needed):**
-
-```php
-// app/Models/Post.php
-class Post extends Model
-{
-    protected $with = ['author'];
-}
-```
-
-**Reduce over-eager loading — defer rarely-used relations:**
-
-```php
-// ❌ Before: 8 subqueries on every request, most unused
+// ❌ Before: 8 subqueries on every request, most unused on any given path
 $orders = Order::with([
     'customer', 'items', 'discount', 'tax',
     'shipping', 'invoice', 'notes', 'history',
@@ -113,27 +80,34 @@ if ($showInvoice) {
     $orders->load('invoice');
 }
 
-$order->loadMissing(['discount', 'tax']); // safe to call — skips already-loaded relations
+$orders->loadMissing(['discount', 'tax']); // safe to call — skips already-loaded relations
 ```
 
-**Prevent N+1 during development:**
+**Constrain columns on eager-loaded relations to reduce data transfer:**
 
 ```php
-// app/Providers/AppServiceProvider.php
-use Illuminate\Database\Eloquent\Model;
+User::with('team:id,name,slug')->paginate();
+```
 
-public function boot(): void
-{
-    Model::preventLazyLoading(! app()->isProduction());
-}
+**Nested relationships:**
+
+```php
+Post::with('comments.user')->get();
+```
+
+**Eager loading counts (avoids loading the full relation just for a number):**
+
+```php
+Post::withCount('comments')->get();
+// Access: $post->comments_count
 ```
 
 ## References
 
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)
-- [Preventing Lazy Loading](https://laravel.com/docs/eloquent-relationships#preventing-lazy-loading)
-- [Laravel Debugbar](https://github.com/barryvdh/laravel-debugbar)
+- [Lazy Eager Loading](https://laravel.com/docs/eloquent-relationships#lazy-eager-loading)
 
 ## Related Analyzers
 
-- [Database Query Optimization Analyzer](/analyzers/performance/database-query-optimization) - Broader query pattern analysis including SELECT * and count() misuse
+- [Eloquent N+1 Analyzer](/analyzers/performance/eloquent-n-plus-one) — detects *missing* eager loading that causes N+1 queries inside loops (free package)
+- [Database Query Optimization Analyzer](/analyzers/performance/database-query-optimization) — broader query pattern analysis including SELECT * and count() misuse
