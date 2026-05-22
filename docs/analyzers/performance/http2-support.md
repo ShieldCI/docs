@@ -32,12 +32,12 @@ Verifies that your web server supports HTTP/2 protocol, which provides significa
 
 ## How to Fix
 
-### Nginx Configuration
+### Quick Fix (5 minutes)
+
+**Nginx — add `http2 on;` to your server block:**
 
 ```nginx
 # /etc/nginx/sites-available/yoursite
-# Nginx 1.25.1+ (modern syntax)
-
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
@@ -48,12 +48,9 @@ server {
     ssl_certificate /path/to/certificate.crt;
     ssl_certificate_key /path/to/private.key;
 
-    # Recommended SSL settings for HTTP/2
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256;
     ssl_prefer_server_ciphers off;
-
-    # ... rest of configuration
 }
 ```
 
@@ -62,10 +59,9 @@ server {
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    # ...
 }
 ```
-The `http2` parameter on the `listen` directive was deprecated in Nginx 1.25.1 (June 2023).
+The `http2` parameter on `listen` was deprecated in Nginx 1.25.1 (June 2023).
 :::
 
 **Verify Nginx HTTP/2 support:**
@@ -73,61 +69,58 @@ The `http2` parameter on the `listen` directive was deprecated in Nginx 1.25.1 (
 nginx -V 2>&1 | grep -o http_v2
 ```
 
-### Apache Configuration
+If you're on **Cloudflare, Laravel Vapor, or a modern CDN**, HTTP/2 is enabled by default — no configuration needed.
+
+### Proper Fix (30 minutes)
+
+**Requirements — confirm before enabling:**
+
+1. **HTTPS Required:** Browsers only support HTTP/2 over TLS
+2. **TLS 1.2+:** Minimum TLS version required
+3. **ALPN Support:** Application-Layer Protocol Negotiation for protocol discovery
+4. **Modern Web Server:** Nginx 1.9.5+, Apache 2.4.17+
+
+**Apache:**
 
 ```apache
-# httpd.conf or apache2.conf
-
-# Load HTTP/2 module (Apache 2.4.17+)
 LoadModule http2_module modules/mod_http2.so
 
-# Enable HTTP/2
 Protocols h2 http/1.1
 
 <VirtualHost *:443>
     ServerName example.com
-
-    # HTTP/2 specific settings
     Protocols h2 http/1.1
-
     SSLEngine on
     SSLCertificateFile /path/to/certificate.crt
     SSLCertificateKeyFile /path/to/private.key
 </VirtualHost>
 ```
 
-**Enable Apache HTTP/2:**
 ```bash
 sudo a2enmod http2
 sudo systemctl restart apache2
 ```
 
-### Caddy (HTTP/2 by Default)
+**Caddy (HTTP/2 by default):**
 
 ```txt
-# Caddyfile
+# Caddyfile — HTTP/2 is enabled automatically with HTTPS
 example.com {
-    # HTTP/2 is enabled by default with HTTPS
     root * /var/www/html
     file_server
     php_fastcgi unix//run/php/php8.1-fpm.sock
 }
 ```
 
-### Laravel Vapor
-
-HTTP/2 is enabled by default through AWS CloudFront.
-
-### Docker with Nginx
+**Docker with Nginx:**
 
 ```dockerfile
 FROM nginx:alpine
-
 # HTTP/2 is supported by default in nginx:alpine
 COPY nginx.conf /etc/nginx/nginx.conf
 ```
 
-### CDN Configuration
+**CDN configuration:**
 
 | CDN | HTTP/2 | HTTP/3 | Notes |
 |-----|--------|--------|-------|
@@ -136,16 +129,8 @@ COPY nginx.conf /etc/nginx/nginx.conf
 | Bunny CDN | Default | Default | No configuration needed |
 | Fastly | Default | Available | Enable in configuration |
 
-## HTTP/2 Requirements
+**Verify HTTP/2 is active:**
 
-1. **HTTPS Required:** Browsers only support HTTP/2 over TLS
-2. **TLS 1.2+:** Minimum TLS version required
-3. **ALPN Support:** Application-Layer Protocol Negotiation for protocol discovery
-4. **Modern Web Server:** Nginx 1.9.5+, Apache 2.4.17+
-
-## Verification
-
-**Using curl:**
 ```bash
 # Check HTTP version
 curl -sI https://example.com -o /dev/null -w '%{http_version}\n'
@@ -155,19 +140,13 @@ curl -sI https://example.com -o /dev/null -w '%{http_version}\n'
 curl -vso /dev/null https://example.com 2>&1 | grep -i 'http/2'
 ```
 
-**Using browser DevTools:**
-1. Open DevTools (F12)
-2. Go to Network tab
-3. Right-click column header → Enable "Protocol" column
-4. Reload page and check protocol column (should show "h2")
+In browser DevTools: Network tab → right-click column header → enable "Protocol" column → reload and confirm `h2`.
 
-**Using online tools:**
-- [KeyCDN HTTP/2 Test](https://tools.keycdn.com/http2-test)
-- [HTTP/2 Test by Cloudflare](https://http2.cloudflare.com/)
+For online verification: [KeyCDN HTTP/2 Test](https://tools.keycdn.com/http2-test) or [HTTP/2 Test by Cloudflare](https://http2.cloudflare.com/).
 
-## HTTP/3 (QUIC)
+**HTTP/3 (QUIC) — optional next step:**
 
-HTTP/3 uses QUIC protocol for even better performance:
+HTTP/3 eliminates TCP head-of-line blocking and improves mobile performance:
 
 | Feature | HTTP/2 | HTTP/3 |
 |---------|--------|--------|
@@ -176,7 +155,6 @@ HTTP/3 uses QUIC protocol for even better performance:
 | Head-of-line blocking | At TCP level | Eliminated |
 | Mobile performance | Good | Excellent |
 
-**Nginx HTTP/3 (experimental):**
 ```nginx
 server {
     listen 443 ssl;

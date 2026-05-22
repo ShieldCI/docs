@@ -1,6 +1,6 @@
 ---
 title: Eager Loading Analyzer
-description: Detects missing eager loading relationships that cause N+1 query problems, loading dozens of extra queries for every record in a collection
+description: Detects lazy-loaded relationship access causing N+1 queries inside loops, and over-eager loading where rarely-used relations are bundled into a single query unnecessarily
 icon: layers
 outline: [2, 3]
 tags: n+1,eager-loading,relationships,eloquent,performance
@@ -15,7 +15,10 @@ pro: true
 
 ## What This Checks
 
-Detects Eloquent relationship property access inside `foreach` loops: the classic N+1 query problem where each loop iteration triggers a separate database query.
+Detects two categories of eager loading problems in Eloquent queries. Checks for:
+
+- Eloquent relationship property access inside `foreach` loops (N+1 problem — Medium severity)
+- Single `with()` calls loading an unusually large number of relations at once (over-eager loading — Low severity)
 
 ## Why It Matters
 
@@ -23,12 +26,15 @@ Detects Eloquent relationship property access inside `foreach` loops: the classi
 - **Slow Page Loads:** Each extra query adds ~1-5ms, compounding to seconds of delay
 - **Database Load:** N+1 queries create excessive connections and lock contention under load
 - **Hidden Problem:** The code looks correct and works fine with small datasets, but degrades as data grows
+- **Over-Eager Overhead:** Loading every relation upfront when only some are used on each code path wastes memory and executes joins or subqueries that are never consumed
 
 N+1 queries are the single most common performance issue in Laravel applications.
 
 ## How to Fix
 
-### Use `with()` for Eager Loading
+### Quick Fix (2 minutes)
+
+Add `with()` to the query that feeds the loop — this replaces N+1 lazy loads with a fixed number of upfront queries.
 
 **Before (❌):**
 
@@ -36,9 +42,8 @@ N+1 queries are the single most common performance issue in Laravel applications
 $orders = Order::where('status', 'pending')->get();
 
 foreach ($orders as $order) {
-    // Lazy loads customer for EACH order
-    $name = $order->customer->name;
-    $total = $order->items->sum('price');
+    $name = $order->customer->name;  // query per iteration
+    $total = $order->items->sum('price');  // query per iteration
 }
 // Queries: 1 + N (customers) + N (items) = 2N+1
 ```
@@ -51,20 +56,15 @@ $orders = Order::where('status', 'pending')
     ->get();
 
 foreach ($orders as $order) {
-    // Already loaded — no additional queries
-    $name = $order->customer->name;
-    $total = $order->items->sum('price');
+    $name = $order->customer->name;  // already loaded
+    $total = $order->items->sum('price');  // already loaded
 }
 // Queries: 3 (orders + customers + items)
 ```
 
-### Common Eager Loading Patterns
+### Proper Fix (5 minutes)
 
-**Multiple relationships:**
-
-```php
-Post::with(['author', 'tags', 'comments'])->get();
-```
+Apply eager loading consistently and use the right loading strategy per access pattern.
 
 **Nested relationships:**
 
@@ -80,23 +80,43 @@ Post::with(['comments' => function ($query) {
 }])->get();
 ```
 
-**Eager loading counts:**
+**Eager loading counts (avoids loading full relation just for a number):**
 
 ```php
 Post::withCount('comments')->get();
 // Access: $post->comments_count
 ```
 
-**Lazy eager loading (when you already have the collection):**
+**Default eager loading on models (for relations always needed):**
 
 ```php
-$posts = Post::all();
-
-// Load relationships after the fact
-$posts->load('author');
+// app/Models/Post.php
+class Post extends Model
+{
+    protected $with = ['author'];
+}
 ```
 
-### Prevent N+1 in Development
+**Reduce over-eager loading — defer rarely-used relations:**
+
+```php
+// ❌ Before: 8 subqueries on every request, most unused
+$orders = Order::with([
+    'customer', 'items', 'discount', 'tax',
+    'shipping', 'invoice', 'notes', 'history',
+])->get();
+
+// ✅ After: load common relations upfront, defer the rest
+$orders = Order::with(['customer', 'items'])->get();
+
+if ($showInvoice) {
+    $orders->load('invoice');
+}
+
+$order->loadMissing(['discount', 'tax']); // safe to call — skips already-loaded relations
+```
+
+**Prevent N+1 during development:**
 
 ```php
 // app/Providers/AppServiceProvider.php
@@ -104,19 +124,7 @@ use Illuminate\Database\Eloquent\Model;
 
 public function boot(): void
 {
-    // Throws exception on lazy loading in non-production
     Model::preventLazyLoading(! app()->isProduction());
-}
-```
-
-### Default Eager Loading on Models
-
-```php
-// app/Models/Post.php
-class Post extends Model
-{
-    // Always eager load these relationships
-    protected $with = ['author'];
 }
 ```
 

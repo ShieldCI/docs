@@ -34,7 +34,7 @@ In most small applications, the impact is negligible. It becomes meaningful with
 
 ## How to Fix
 
-### Primary Fix - Add `#[AsCommand]`
+### Option 1 — Add `#[AsCommand]`
 
 Adding `#[AsCommand]` registers the command via Symfony's `ContainerCommandLoader`, which defers instantiation until the command is actually invoked. Constructor DI continues to work exactly as before. No restructuring needed.
 
@@ -70,7 +70,7 @@ class ProcessUsers extends Command
 
 The `$signature` property becomes optional when using `#[AsCommand]`: the command name is declared on the attribute itself.
 
-### Alternative - Inject in `handle()`
+### Option 2 — Inject in `handle()`
 
 If your dependencies are only used within `handle()` and nowhere else in the command, you can move them to method parameters. Laravel's service container injects them automatically when the command runs.
 

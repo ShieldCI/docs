@@ -28,7 +28,9 @@ The standard `ThrottleRequests` middleware reads the current count, checks if li
 
 ## How to Fix
 
-### Option 1: Update Middleware Alias (Recommended)
+### Quick Fix (5 minutes)
+
+Update the `throttle` middleware alias to point to the Redis-backed version. All routes using `throttle:60,1` will automatically use atomic rate limiting with no other changes needed.
 
 ::: code-group
 ```php [Laravel 11+]
@@ -54,25 +56,21 @@ protected $middlewareAliases = [
 ```
 :::
 
-All routes using `throttle:60,1` will now use the Redis version automatically.
+### Proper Fix (10 minutes)
 
-### Option 2: Use Explicit Middleware on Routes
+If you need different throttle behaviour per route group — or want to keep the global alias unchanged — apply `ThrottleRequestsWithRedis` explicitly on the routes that require it.
 
 ```php
 use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
 
-// In routes/api.php
 Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function () {
     Route::get('/users', [UserController::class, 'index']);
 });
 ```
 
-**Configuration Requirements**
-
-Ensure Redis is your cache driver:
+Ensure Redis is configured as your cache driver:
 
 ```env
-# .env
 CACHE_DRIVER=redis
 ```
 

@@ -15,25 +15,31 @@ pro: true
 
 ## What This Checks
 
-Scans application code for common inefficient database query patterns including SELECT *, queries inside loops, and unnecessary count operations.
+Scans application code for common inefficient database query patterns that degrade performance as your app scales. Checks for:
+
+- `SELECT *` queries fetching all columns when only a subset is needed
+- Eloquent relationship access inside `foreach` loops (N+1 problem)
+- `DB::` calls inside loops creating one round-trip per iteration
+- `->count() > 0` existence checks that scan every matching row
+- `orderBy()` and `groupBy()` calls on potentially unindexed columns
 
 ## Why It Matters
 
-- **SELECT \*:** Fetches all columns when only a few are needed, wasting memory and bandwidth
-- **Queries in Loops:** Each iteration executes a separate query (N+1 problem), turning 1 query into hundreds
-- **count() for Existence:** `->count() > 0` scans entire table when `->exists()` stops at first match
-- **Cumulative Impact:** These patterns compound: a page with multiple N+1 issues can execute thousands of queries
-
-Even moderate traffic can bring a server to its knees when these patterns are present.
+- **Memory & Bandwidth Waste:** `SELECT *` transfers every column for every row even when your code uses one or two — multiplying data between database and PHP on each request
+- **Exponential Query Count:** Queries inside loops execute once per record — 100 orders means 100 extra queries, 1,000 orders means 1,000 extra queries
+- **Full Table Scans for Existence Checks:** `count() > 0` counts every matching row before returning; `exists()` stops at the first match
+- **Slow Sort and Filter Operations:** `orderBy()` and `groupBy()` on unindexed columns force a full table scan on every request
+- **Cumulative Collapse:** These patterns compound — a page with `SELECT *` and two N+1 loops can execute thousands of queries and transfer megabytes per request
 
 ## How to Fix
 
-### 1. Replace SELECT * with Specific Columns
+### Quick Fix (5 minutes)
+
+**Pattern 1: Replace SELECT \* with specific columns**
 
 **Before (❌):**
 
 ```php
-// Fetches ALL columns
 $users = DB::select('SELECT * FROM users WHERE active = 1');
 $posts = Post::all();
 ```
@@ -41,15 +47,11 @@ $posts = Post::all();
 **After (✅):**
 
 ```php
-// Fetch only needed columns
 $users = DB::select('SELECT id, name, email FROM users WHERE active = 1');
 $posts = Post::select(['id', 'title', 'slug'])->get();
-
-// Or pass columns to get()
-$posts = Post::where('published', true)->get(['id', 'title']);
 ```
 
-### 2. Fix N+1 Query Problems
+**Pattern 2: Move queries out of loops**
 
 **Before (❌):**
 
@@ -57,42 +59,27 @@ $posts = Post::where('published', true)->get(['id', 'title']);
 $posts = Post::all();
 
 foreach ($posts as $post) {
-    // Each iteration executes a query!
-    echo $post->author->name;
+    echo $post->author->name; // query per iteration
 }
-// 1 query for posts + N queries for authors = N+1
 ```
 
 **After (✅):**
 
 ```php
-// 2 queries total, regardless of how many posts
 $posts = Post::with('author')->get();
 
 foreach ($posts as $post) {
-    echo $post->author->name; // No additional query
+    echo $post->author->name; // already loaded
 }
 ```
 
-**Nested Relationships:**
-
-```php
-// Eager load multiple levels
-$posts = Post::with(['author', 'comments.user'])->get();
-
-// Constrained eager loading
-$posts = Post::with(['comments' => function ($query) {
-    $query->where('approved', true)->latest();
-}])->get();
-```
-
-### 3. Use exists() Instead of count()
+**Pattern 3: Use exists() instead of count()**
 
 **Before (❌):**
 
 ```php
 if (User::where('email', $email)->count() > 0) {
-    // User exists
+    // ...
 }
 ```
 
@@ -100,18 +87,67 @@ if (User::where('email', $email)->count() > 0) {
 
 ```php
 if (User::where('email', $email)->exists()) {
-    // Stops at first match — much faster
-}
-
-// Or the inverse
-if (User::where('email', $email)->doesntExist()) {
-    // No user found
+    // stops at first match
 }
 ```
 
-### Preventing N+1 in Development
+**Pattern 4: Add indexes for sort and filter columns**
 
-**Enable strict mode in development:**
+**Before (❌):**
+
+```php
+$users = User::orderBy('created_at', 'desc')->paginate(20);
+$posts = Post::where('status', 'published')->orderBy('published_at')->get();
+```
+
+**After (✅):**
+
+```php
+// Create a migration to add the missing indexes
+Schema::table('users', function (Blueprint $table) {
+    $table->index('created_at');
+});
+
+Schema::table('posts', function (Blueprint $table) {
+    $table->index(['status', 'published_at']); // composite covers WHERE + ORDER BY
+});
+```
+
+### Proper Fix (15 minutes)
+
+Apply all four patterns and add guardrails to prevent regressions.
+
+**Eager load multiple and nested relationships:**
+
+```php
+// Multiple relationships — 3 queries total regardless of collection size
+$posts = Post::with(['author', 'tags', 'comments'])->get();
+
+// Nested relationships
+$posts = Post::with('comments.user')->get();
+
+// Constrained eager loading
+$posts = Post::with(['comments' => function ($query) {
+    $query->where('approved', true)->latest()->limit(5);
+}])->get();
+```
+
+**Prefer `get()` column selection over `all()`:**
+
+```php
+// Pass columns directly to get() when you don't need select()
+$posts = Post::where('published', true)->get(['id', 'title', 'slug']);
+```
+
+**Use `doesntExist()` for the inverse check:**
+
+```php
+if (User::where('email', $email)->doesntExist()) {
+    // no user found — no count scan
+}
+```
+
+**Enable strict mode to catch N+1 during development:**
 
 ```php
 // app/Providers/AppServiceProvider.php
@@ -123,7 +159,7 @@ public function boot(): void
 }
 ```
 
-This throws an exception when lazy loading occurs, helping catch N+1 issues during development.
+This throws an exception on lazy loading in non-production environments, catching N+1 issues before they reach production.
 
 ## References
 
