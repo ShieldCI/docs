@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: Configure ShieldCI analyzers and settings for your Laravel application
+description: Configure ShieldCI analyzers, set severity thresholds, exclude paths, and tailor the analysis rules for your specific Laravel application needs
 tags: laravel,configuration,analyzers,settings,customization
 icon: settings
 outline: [2, 3]

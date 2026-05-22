@@ -1,6 +1,6 @@
 ---
 title: Redis Eviction Policy Analyzer
-description: Checks Redis eviction policy is properly configured for the workload type
+description: Checks that the Redis eviction policy matches your workload type — preventing silent data loss when memory limits are reached in cache or session stores
 icon: trash-2
 outline: [2, 3]
 tags: redis,eviction,memory,reliability,configuration,infrastructure,cache,queue

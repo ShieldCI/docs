@@ -1,6 +1,6 @@
 ---
 title: Host Header Injection Analyzer
-description: Detects Host header injection vulnerabilities in URL generation and routing
+description: Detects Host header injection vulnerabilities in URL generation and routing that can be exploited for cache poisoning and password reset attacks
 icon: server
 outline: [2, 3]
 tags: host-injection,header,security,cache-poisoning,host-header,injection,ssrf,http-headers

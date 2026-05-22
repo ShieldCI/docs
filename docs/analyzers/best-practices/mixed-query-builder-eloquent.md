@@ -1,6 +1,6 @@
 ---
 title: Mixed Query Builder and Eloquent Analyzer
-description: Detects inconsistent mixing of Query Builder and Eloquent ORM that bypasses global scopes, relationships, and model events, potentially causing data leaks in multi-tenant applications
+description: Detects inconsistent mixing of Query Builder and Eloquent ORM that bypasses global scopes and model events, risking data leaks in multi-tenant applications
 icon: shield-alert
 outline: [2, 3]
 tags: laravel,security,eloquent,query-builder,multi-tenant,data-leak,global-scopes,best-practices,consistency

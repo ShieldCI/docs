@@ -1,6 +1,6 @@
 ---
 title: Tokens
-description: Manage personal access tokens for the ShieldCI REST API v1
+description: Create, list, and revoke personal access tokens for authenticating with the ShieldCI REST API v1 from CI/CD pipelines and integrations
 icon: fingerprint
 outline: [2, 2]
 tags: api,v1,tokens,authentication,personal-access-tokens

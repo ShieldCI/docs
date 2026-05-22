@@ -1,6 +1,6 @@
 ---
 title: Composer Validation Analyzer
-description: Ensure composer.json is syntactically correct and passes `composer validate`
+description: Ensures composer.json is syntactically correct and passes `composer validate`, preventing dependency resolution failures during deployment
 icon: code
 outline: [2, 3]
 tags: composer,dependencies,reliability,configuration

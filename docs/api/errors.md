@@ -1,6 +1,6 @@
 ---
 title: Errors
-description: Standard error format and HTTP status codes for the ShieldCI REST API v1
+description: Standard error response format, HTTP status codes, and machine-readable error codes returned by the ShieldCI REST API v1 for error handling
 icon: triangle-alert
 outline: [2, 2]
 tags: api,v1,errors,http-status

@@ -1,6 +1,6 @@
 ---
 title: Database Query Optimization Analyzer
-description: Detects inefficient database query patterns that impact performance
+description: Detects inefficient database query patterns — unindexed columns, SELECT *, repeated queries — that degrade performance as your Laravel app scales
 icon: database
 outline: [2, 3]
 tags: database,queries,performance,optimization,n+1

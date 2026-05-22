@@ -1,6 +1,6 @@
 ---
 title: Database Status Analyzer
-description: Ensure your database connections are accessible and functioning properly
+description: Ensures all configured database connections are accessible and functioning, catching connection failures before they surface as runtime errors in production
 icon: database
 outline: [2, 3]
 tags: database,infrastructure,reliability,availability

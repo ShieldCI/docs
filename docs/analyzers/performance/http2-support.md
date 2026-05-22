@@ -1,6 +1,6 @@
 ---
 title: HTTP/2 Support Analyzer
-description: Verifies that HTTP/2 protocol is enabled for improved performance
+description: Verifies that HTTP/2 protocol is enabled for your Laravel application, enabling request multiplexing and header compression for improved page load performance
 icon: zap
 outline: [2, 3]
 tags: http2,protocol,performance,infrastructure

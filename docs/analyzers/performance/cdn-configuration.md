@@ -1,6 +1,6 @@
 ---
 title: CDN Configuration Analyzer
-description: Checks if a CDN is configured for serving static assets
+description: Checks whether a CDN is configured for serving static assets in your Laravel app, reducing latency and offloading bandwidth from your origin server
 icon: globe
 outline: [2, 3]
 tags: cdn,assets,performance,optimization,infrastructure

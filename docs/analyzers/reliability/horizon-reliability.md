@@ -1,6 +1,6 @@
 ---
 title: Horizon Reliability Analyzer
-description: Validates Horizon prefix configuration, provisioning plan, and runtime health
+description: Validates Horizon prefix configuration, provisioning plan definitions, and runtime health to ensure queue workers process jobs reliably in production
 icon: shield
 outline: [2, 3]
 tags: reliability,horizon,redis,queue,configuration,workers,monitoring

@@ -1,6 +1,6 @@
 ---
 title: Dev Dependencies in Production Analyzer
-description: Ensures development dependencies are not installed in production environments
+description: Ensures development-only Composer dependencies are not installed in production, reducing attack surface and keeping the production footprint minimal
 icon: alert-circle
 outline: [2, 3]
 tags: composer,dependencies,performance,memory,production

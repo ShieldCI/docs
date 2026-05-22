@@ -1,6 +1,6 @@
 ---
 title: Regular Expression DoS Analyzer
-description: Detects regular expressions vulnerable to catastrophic backtracking (ReDoS)
+description: Detects regular expressions vulnerable to catastrophic backtracking (ReDoS), which can freeze your Laravel application under crafted malicious input
 icon: clock
 outline: [2, 3]
 tags: regex,redos,denial-of-service,security,performance,dos,backtracking

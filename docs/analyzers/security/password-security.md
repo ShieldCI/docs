@@ -1,6 +1,6 @@
 ---
 title: Password Security Analyzer
-description: Validates password hashing configuration, password policy enforcement, plain-text storage detection, validation rules, confirmation timeout, and rehash usage in Laravel applications
+description: Validates password hashing, policy enforcement, plain-text storage detection, validation rules, and confirmation timeout in Laravel applications
 icon: lock
 outline: [2, 3]
 tags: password,hashing,bcrypt,argon2,security,policy,validation,rehash,passwords

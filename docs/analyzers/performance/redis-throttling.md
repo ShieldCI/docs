@@ -1,6 +1,6 @@
 ---
 title: Redis Throttling Analyzer
-description: Suggests using ThrottleRequestsWithRedis for more accurate rate limiting
+description: Suggests using ThrottleRequestsWithRedis middleware for more accurate, atomic rate limiting in high-concurrency Laravel applications
 icon: zap
 outline: [2, 3]
 tags: redis,throttling,rate-limiting,middleware,performance

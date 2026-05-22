@@ -1,6 +1,6 @@
 ---
 title: Asset Minification Analyzer
-description: Validates that JavaScript and CSS assets are minified for production deployment
+description: Validates that JavaScript and CSS assets are minified for production, preventing oversized bundles that slow page loads and hurt Core Web Vitals scores
 icon: zap
 outline: [2, 3]
 tags: assets,minification,performance,javascript,css

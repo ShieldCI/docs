@@ -1,6 +1,6 @@
 ---
 title: Validation SQL Injection Analyzer
-description: Detects SQL injection vulnerabilities in validation rules and custom validators
+description: Detects SQL injection vulnerabilities in custom validation rules and validators where raw user input is interpolated into database queries
 icon: database
 outline: [2, 3]
 tags: sql-injection,validation,security,database

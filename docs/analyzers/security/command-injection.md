@@ -1,6 +1,6 @@
 ---
 title: Command Injection Analyzer
-description: Detects command injection vulnerabilities where user input is passed to shell execution functions without proper escaping, preventing remote code execution attacks
+description: Detects command injection vulnerabilities where user input reaches shell execution functions without proper escaping, preventing remote code execution attacks
 icon: terminal
 outline: [2, 3]
 tags: command-injection,rce,shell,exec,security,remote-code-execution,system-commands

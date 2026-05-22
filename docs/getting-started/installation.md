@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Step-by-step guide to installing ShieldCI in your Laravel application
+description: Step-by-step guide to installing ShieldCI via Composer in your Laravel application, including PHP version requirements and optional platform integration
 tags: laravel,installation,composer,setup,php
 icon: download
 outline: [2, 3]

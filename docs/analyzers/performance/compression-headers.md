@@ -1,6 +1,6 @@
 ---
 title: Compression Headers Analyzer
-description: Checks if gzip, brotli, or zstd compression is enabled for static assets
+description: Checks whether gzip, brotli, or zstd compression is enabled for static assets, reducing payload sizes and improving Core Web Vitals scores
 icon: archive
 outline: [2, 3]
 tags: compression,gzip,brotli,zstd,headers,performance

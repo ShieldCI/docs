@@ -1,6 +1,6 @@
 ---
 title: Teams
-description: Create and manage ShieldCI teams and their members via the REST API v1
+description: Create, update, and manage ShieldCI teams and their members programmatically via the REST API v1 for enterprise and multi-project setups
 icon: users
 outline: [2, 2]
 tags: api,v1,teams

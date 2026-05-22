@@ -1,6 +1,6 @@
 ---
 title: Reports
-description: List, view, and delete ShieldCI analysis reports via the REST API v1
+description: List, retrieve, filter, and delete ShieldCI analysis reports programmatically via the REST API v1 for CI/CD integrations and dashboards
 icon: chart-bar
 outline: [2, 2]
 tags: api,v1,reports

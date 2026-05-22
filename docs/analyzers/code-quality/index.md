@@ -1,6 +1,6 @@
 ---
 title: Code Quality Analyzers
-description: Analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: Analyzers maintaining clean, maintainable Laravel code — enforcing naming conventions, method length limits, docblock requirements, and PSR standards
 tags: code-quality,maintainability,psr,conventions,laravel,refactoring
 icon: code
 outline: [2, 3]

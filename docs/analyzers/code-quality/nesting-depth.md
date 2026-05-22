@@ -1,6 +1,6 @@
 ---
 title: Nesting Depth Analyzer
-description: Identifies deeply nested code blocks that reduce readability and maintainability
+description: Identifies deeply nested if/else and loop blocks that reduce readability and make code harder to test — signals methods that should be extracted or refactored
 icon: code
 outline: [2, 3]
 tags: complexity,maintainability,code-quality,readability

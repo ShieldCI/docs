@@ -1,6 +1,6 @@
 ---
 title: Event Caching Analyzer
-description: Validates that events are cached in production for optimal performance
+description: Validates that Laravel's event and listener discovery is cached in production, preventing expensive filesystem scans on every request
 icon: bell
 outline: [2, 3]
 tags: events,caching,performance,optimization

@@ -1,6 +1,6 @@
 ---
 title: Redis Status Analyzer
-description: Verifies Redis connectivity, health, and configuration across all connections
+description: Verifies Redis connectivity, health, and configuration across all named connections, catching misconfigured hosts and auth failures before production
 icon: database
 outline: [2, 3]
 tags: redis,status,connection,reliability,cache,infrastructure,queue

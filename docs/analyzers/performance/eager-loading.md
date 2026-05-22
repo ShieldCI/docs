@@ -1,6 +1,6 @@
 ---
 title: Eager Loading Analyzer
-description: Detects missing eager loading that causes N+1 query problems
+description: Detects missing eager loading relationships that cause N+1 query problems, loading dozens of extra queries for every record in a collection
 icon: layers
 outline: [2, 3]
 tags: n+1,eager-loading,relationships,eloquent,performance

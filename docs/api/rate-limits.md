@@ -1,6 +1,6 @@
 ---
 title: Rate Limits
-description: Per-plan rate limits and retry strategy for the ShieldCI REST API v1
+description: Per-plan rate limits, request quotas, and retry strategies for the ShieldCI REST API v1 — avoid 429 errors in automated pipelines
 icon: gauge
 outline: [2, 2]
 tags: api,v1,rate-limits,throttle

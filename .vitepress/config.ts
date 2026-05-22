@@ -15,7 +15,7 @@ const algoliaAskAiId = env.ALGOLIA_ASK_AI_ID || ''
 
 export default defineConfig({
     title: 'ShieldCI',
-    description: 'Automated code analysis for Laravel applications — 73 analyzers covering security, performance, reliability, best practices, and code quality.',
+    description: 'Automated code analysis for Laravel applications — comprehensive analyzers covering security, performance, reliability, best practices, and code quality.',
 
     // Source directory
     srcDir: 'docs',
@@ -80,9 +80,11 @@ export default defineConfig({
             head.push(['meta', { name: 'keywords', content: pageData.frontmatter.tags }])
         }
 
-        // Article date metadata
-        if (pageData.frontmatter.date) {
-            head.push(['meta', { property: 'article:published_time', content: pageData.frontmatter.date }])
+        // Article date metadata — frontmatter.date takes priority; fall back to git lastUpdated
+        const publishedDate = pageData.frontmatter.date
+            ?? (pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : null)
+        if (publishedDate) {
+            head.push(['meta', { property: 'article:published_time', content: publishedDate }])
         }
         if (pageData.lastUpdated) {
             head.push(['meta', { property: 'article:modified_time', content: new Date(pageData.lastUpdated).toISOString() }])
@@ -91,7 +93,8 @@ export default defineConfig({
         // OG meta tags
         head.push(['meta', { property: 'og:title', content: title }])
         head.push(['meta', { property: 'og:description', content: description }])
-        head.push(['meta', { property: 'og:type', content: 'article' }])
+        const isHomepage = relativePath === '' || relativePath === 'index'
+        head.push(['meta', { property: 'og:type', content: isHomepage ? 'website' : 'article' }])
         head.push(['meta', { property: 'og:site_name', content: 'ShieldCI' }])
         head.push(['meta', { property: 'og:url', content: pageUrl }])
         head.push(['meta', { property: 'og:image', content: `${siteUrl}/og-image.png` }])
@@ -119,7 +122,7 @@ export default defineConfig({
                 '@type': 'ListItem',
                 position: index + 2,
                 name: index === pathSegments.length - 1 ? title : name,
-                item: index === pathSegments.length - 1 ? undefined : `${siteUrl}${currentPath}`
+                item: index === pathSegments.length - 1 ? pageUrl : `${siteUrl}${currentPath}`
             })
         })
 
