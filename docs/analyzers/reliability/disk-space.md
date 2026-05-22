@@ -180,10 +180,11 @@ This analyzer is automatically skipped in CI environments and only runs in produ
 Configure thresholds and additional paths via `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
 return [
     'analyzers' => [
         'reliability' => [
+            'enabled' =>true,
+            
             'disk-space' => [
                 // Disk usage warning threshold (percentage)
                 'warning_threshold' => 70,
