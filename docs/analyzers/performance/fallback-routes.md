@@ -26,7 +26,7 @@ Detects the use of `Route::fallback()` and root-level catch-all routes that can 
 | `/{catchall}`, `/{all}` | `Route::get('/{all}', ...)` | ✅ Root-level only |
 | `->where($param, '.*')` | `Route::get('/{slug}')->where('slug', '.*')` | ✅ Regex catch-all |
 
-Catch-all detection applies only when the parameter is the **entire URI** (e.g., `{any}`, not `/posts/{any}`). API routes (URIs starting with `api/` or carrying `api` middleware) are always exempt.
+Catch-all detection applies only when the parameter is the **entire URI** (e.g., `{any}`, not `/posts/{any}`). API routes (URIs starting with `api/` or carrying `api` middleware) and routes registered by vendor packages (controllers outside `App\`) are always exempt.
 
 ## Why It Matters
 
