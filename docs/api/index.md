@@ -53,7 +53,7 @@ All endpoints require a valid Sanctum personal access token and an active subscr
 
 ### 1. Create a token
 
-Open the ShieldCI dashboard → **Settings → API Tokens** → **New Token**. Assign the abilities your integration needs (`read`, `write`, and/or `admin`) and save the token value; it is shown only once.
+Open the ShieldCI dashboard → **Profile → API Tokens** → **New Token**. Assign the abilities your integration needs (`read`, `write`, and/or `admin`) and save the token value; it is shown only once.
 
 Alternatively, create one via the API if you already have a token with the `admin` ability:
 
