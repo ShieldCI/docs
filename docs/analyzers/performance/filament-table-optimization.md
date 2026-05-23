@@ -96,7 +96,7 @@ Schema::table('orders', function (Blueprint $table) {
 ## References
 
 - [Filament Table Columns](https://filamentphp.com/docs/tables/columns)
-- [Filament Performance Tips](https://filamentphp.com/docs/panels/resources/getting-started#customizing-the-eloquent-query)
+- [Filament Performance Tips](https://filamentphp.com/docs/3.x/panels/resources/getting-started#customizing-the-eloquent-query)
 - [Laravel Eager Loading](https://laravel.com/docs/eloquent-relationships#eager-loading)
 
 ## Related Analyzers

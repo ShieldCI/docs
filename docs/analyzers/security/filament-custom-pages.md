@@ -91,8 +91,8 @@ class EditSettings extends Page implements HasForms
 
 ## References
 
-- [Filament Pages](https://filamentphp.com/docs/panels/pages)
-- [Filament Page Authorization](https://filamentphp.com/docs/panels/pages#authorization)
+- [Filament Pages](https://filamentphp.com/docs/3.x/panels/pages)
+- [Filament Page Authorization](https://filamentphp.com/docs/3.x/panels/pages#authorization)
 - [Laravel Authorization](https://laravel.com/docs/authorization)
 
 ## Related Analyzers

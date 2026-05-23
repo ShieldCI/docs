@@ -199,7 +199,7 @@ class SanitizePiiProcessor implements ProcessorInterface
 - [GDPR Article 20 - Right to Data Portability](https://gdpr-info.eu/art-20-gdpr/)
 - [Laravel Encryption Casts](https://laravel.com/docs/eloquent-mutators#encrypted-casting)
 - [Laravel Model Pruning (SoftDeletes)](https://laravel.com/docs/eloquent#pruning-models)
-- [OWASP Privacy Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Privacy_Cheat_Sheet.html)
+- [OWASP Privacy Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/User_Privacy_Protection_Cheat_Sheet.html)
 
 ## Related Analyzers
 

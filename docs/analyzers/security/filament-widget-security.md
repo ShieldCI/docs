@@ -144,9 +144,9 @@ class OrderStats extends StatsOverviewWidget
 
 ## References
 
-- [Filament Widgets - Conditionally Hiding](https://filamentphp.com/docs/4.x/panels/dashboard#conditionally-hiding-widgets)
+- [Filament Widgets - Conditionally Hiding](https://filamentphp.com/docs/3.x/panels/dashboard#conditionally-hiding-widgets)
 - [Filament Stats Overview](https://filamentphp.com/docs/4.x/widgets/stats-overview)
-- [Filament Page Filters (unvalidated data warning)](https://filamentphp.com/docs/4.x/panels/dashboard#filtering-dashboard-widgets)
+- [Filament Page Filters (unvalidated data warning)](https://filamentphp.com/docs/3.x/panels/dashboard#filtering-widget-data)
 - [Laravel Authorization](https://laravel.com/docs/authorization)
 
 ## Related Analyzers

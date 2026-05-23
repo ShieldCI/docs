@@ -461,13 +461,13 @@ Use configuration exceptions sparingly. Each framework class you extend becomes 
 
 ## References
 
-- [Laravel Macros](https://laravel.com/docs/macros) - Official macro documentation
+- [Laravel Macros](https://laravel.com/docs/collections#extending-collections) - Official macro documentation
 - [Laravel Service Providers](https://laravel.com/docs/providers) - Service provider patterns
 - [Eloquent Query Scopes](https://laravel.com/docs/eloquent#query-scopes) - Model query scopes
 - [Custom Validation Rules](https://laravel.com/docs/validation#custom-validation-rules) - Validator extensions
 - [Database Events](https://laravel.com/docs/database#database-events) - Query event listeners
 - [Laravel Upgrade Guide](https://laravel.com/docs/upgrade) - Official upgrade documentation
-- [Avoiding Framework Lock-in](https://martinfowler.com/articles/avoiding-vendor-lock-in.html) - Martin Fowler
+- [Avoiding Framework Lock-in](https://en.wikipedia.org/wiki/Vendor_lock-in) - Martin Fowler
 
 ## Related Analyzers
 

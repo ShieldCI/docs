@@ -283,7 +283,7 @@ public function cancel()
 - [OWASP Unvalidated Redirects and Forwards](https://cheatsheetseries.owasp.org/cheatsheets/Unvalidated_Redirects_and_Forwards_Cheat_Sheet.html)
 - [CWE-601: URL Redirection to Untrusted Site](https://cwe.mitre.org/data/definitions/601.html)
 - [OWASP Top 10 - A01:2021 Broken Access Control](https://owasp.org/Top10/A01_2021-Broken_Access_Control/)
-- [Laravel Redirects Documentation](https://laravel.com/docs/redirects)
+- [Laravel Redirects Documentation](https://laravel.com/docs/responses#redirects)
 - [Laravel Signed URLs Documentation](https://laravel.com/docs/urls#signed-urls)
 - [PHP parse_url Documentation](https://www.php.net/manual/en/function.parse-url.php)
 

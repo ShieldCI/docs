@@ -169,7 +169,7 @@ Then in `config/shieldci.php`:
 ## References
 
 - [Laravel Middleware](https://laravel.com/docs/middleware)
-- [Laravel Service Classes](https://laravel.com/docs/architecture)
+- [Laravel Service Classes](https://laravel.com/docs/container)
 - [SOLID Principles - Single Responsibility](https://en.wikipedia.org/wiki/Single-responsibility_principle)
 
 ## Related Analyzers

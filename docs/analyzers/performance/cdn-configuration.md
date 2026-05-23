@@ -134,7 +134,7 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - [Laravel Asset Helpers](https://laravel.com/docs/helpers#method-asset)
 - [AWS CloudFront Documentation](https://docs.aws.amazon.com/cloudfront/)
 - [Cloudflare CDN Setup](https://developers.cloudflare.com/cache/)
-- [Laravel Vapor CDN](https://docs.vapor.build/1.0/projects/deployments.html#assets)
+- [Laravel Vapor CDN](https://docs.vapor.build/projects/deployments)
 
 ## Related Analyzers
 

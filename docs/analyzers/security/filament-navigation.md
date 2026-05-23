@@ -93,9 +93,9 @@ class PaymentResource extends Resource
 
 ## References
 
-- [Filament Navigation](https://filamentphp.com/docs/panels/navigation)
-- [Filament Resource Navigation](https://filamentphp.com/docs/panels/resources/getting-started#customizing-the-resource-navigation-item)
-- [Filament Authorization](https://filamentphp.com/docs/panels/resources/getting-started#authorization)
+- [Filament Navigation](https://filamentphp.com/docs/3.x/panels/navigation)
+- [Filament Resource Navigation](https://filamentphp.com/docs/3.x/panels/resources/getting-started#resource-navigation-items)
+- [Filament Authorization](https://filamentphp.com/docs/3.x/panels/resources/getting-started#authorization)
 
 ## Related Analyzers
 

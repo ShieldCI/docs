@@ -98,8 +98,8 @@ public static function form(Form $form): Form
 
 ## References
 
-- [Filament Form Fields](https://filamentphp.com/docs/forms/fields/getting-started)
-- [Filament File Upload](https://filamentphp.com/docs/forms/fields/file-upload)
+- [Filament Form Fields](https://filamentphp.com/docs/3.x/forms/fields/getting-started)
+- [Filament File Upload](https://filamentphp.com/docs/3.x/forms/fields/file-upload)
 - [Filament Validation](https://filamentphp.com/docs/forms/validation)
 - [Laravel Validation Rules](https://laravel.com/docs/validation#available-validation-rules)
 

@@ -71,7 +71,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 ## References
 
 - [Laravel Cache Configuration](https://laravel.com/docs/cache#configuration)
-- [Laravel Vapor Cache Best Practices](https://docs.vapor.laravel.com/docs/1.0/applications/cache.html)
+- [Laravel Vapor Cache Best Practices](https://docs.vapor.build/resources/caches)
 
 ## Related Analyzers
 

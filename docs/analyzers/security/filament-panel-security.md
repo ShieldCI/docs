@@ -116,9 +116,9 @@ class User extends Authenticatable implements FilamentUser
 
 ## References
 
-- [Filament Panel Configuration](https://filamentphp.com/docs/panels/configuration)
-- [Filament Authentication](https://filamentphp.com/docs/panels/users)
-- [Filament Panel Users & Access](https://filamentphp.com/docs/panels/users#authorizing-access-to-the-panel)
+- [Filament Panel Configuration](https://filamentphp.com/docs/3.x/panels/configuration)
+- [Filament Authentication](https://filamentphp.com/docs/3.x/panels/users)
+- [Filament Panel Users & Access](https://filamentphp.com/docs/3.x/panels/users#authorizing-access-to-the-panel)
 - [Laravel Authentication Guards](https://laravel.com/docs/authentication#adding-custom-guards)
 
 ## Related Analyzers

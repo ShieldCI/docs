@@ -112,9 +112,9 @@ Vapor enables Laravel's task scheduler by default on every environment — no ex
 ## References
 
 - [Laravel Vapor Documentation](https://docs.vapor.build/)
-- [Vapor Environments](https://docs.vapor.build/projects/environments.html)
-- [Vapor Queues](https://docs.vapor.build/resources/queues.html)
-- [Vapor Deployments](https://docs.vapor.build/projects/deployments.html)
+- [Vapor Environments](https://docs.vapor.build/projects/environments)
+- [Vapor Queues](https://docs.vapor.build/resources/queues)
+- [Vapor Deployments](https://docs.vapor.build/projects/deployments)
 - [API Gateway Quotas](https://docs.aws.amazon.com/apigateway/latest/developerguide/limits.html)
 
 ## Related Analyzers

@@ -120,7 +120,7 @@ return [
 - [MDN: Set-Cookie Domain Attribute](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie#domaindomain-value)
 - [OWASP Session Management: Domain and Path Attributes](https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#domain-and-path-attributes)
 - [RFC 6265: HTTP State Management Mechanism](https://datatracker.ietf.org/doc/html/rfc6265#section-4.1.2.3)
-- [Subdomain Takeover Attacks](https://owasp.org/www-community/attacks/Subdomain_Takeover)
+- [Subdomain Takeover Attacks](https://owasp.org/www-project-web-security-testing-guide/latest/4-Web_Application_Security_Testing/02-Configuration_and_Deployment_Management_Testing/10-Test_for_Subdomain_Takeover)
 
 ## Related Analyzers
 

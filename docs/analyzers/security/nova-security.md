@@ -166,7 +166,7 @@ public function tools(): array
 
 ## References
 
-- [Laravel Nova Authorization](https://nova.laravel.com/docs/resources/authorization)
+- [Laravel Nova Authorization](https://nova.laravel.com/docs/v5/resources/authorization)
 - [Laravel Nova - Gates](https://laravel.com/docs/authorization#gates)
 - [OWASP Access Control Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Access_Control_Cheat_Sheet.html)
 - [CWE-284: Improper Access Control](https://cwe.mitre.org/data/definitions/284.html)

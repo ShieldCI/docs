@@ -54,7 +54,7 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 ## References
 
 - [Laravel Blade & XSS](https://laravel.com/docs/blade#displaying-data)
-- [OWASP XSS Prevention Cheat Sheet](https://owasp.org/www-community/xss-prevention)
+- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
 - [Content Security Policy (MDN)](https://developer.mozilla.org/docs/Web/HTTP/CSP)
 
 ## Related Analyzers

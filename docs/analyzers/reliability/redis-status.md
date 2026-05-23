@@ -190,7 +190,7 @@ Then in `config/shieldci.php`:
 - [Laravel Redis Configuration](https://laravel.com/docs/redis)
 - [Redis Persistence](https://redis.io/docs/management/persistence/)
 - [Redis Memory Optimization](https://redis.io/docs/management/optimization/memory-optimization/)
-- [Redis Administration](https://redis.io/docs/management/admin/)
+- [Redis Administration](https://redis.io/docs/latest/operate/rs/)
 
 ## Related Analyzers
 

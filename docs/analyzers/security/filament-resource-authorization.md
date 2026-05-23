@@ -175,10 +175,10 @@ class UserResource extends Resource
 
 ## References
 
-- [Filament Authorization](https://filamentphp.com/docs/panels/resources/getting-started#authorization-2)
-- [Filament Custom Authorization](https://filamentphp.com/docs/panels/resources/getting-started#custom-authorization)
+- [Filament Authorization](https://filamentphp.com/docs/3.x/panels/resources/getting-started#authorization)
+- [Filament Custom Authorization](https://filamentphp.com/docs/3.x/panels/resources/getting-started#authorization)
 - [Laravel Policies](https://laravel.com/docs/authorization#creating-policies)
-- [Filament Resource Configuration](https://filamentphp.com/docs/panels/resources/getting-started)
+- [Filament Resource Configuration](https://filamentphp.com/docs/3.x/panels/resources/getting-started)
 
 ## Related Analyzers
 

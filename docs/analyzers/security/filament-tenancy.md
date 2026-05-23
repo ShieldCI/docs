@@ -106,8 +106,8 @@ public function panel(Panel $panel): Panel
 
 ## References
 
-- [Filament Multi-Tenancy](https://filamentphp.com/docs/panels/tenancy)
-- [Filament Tenant Scoping](https://filamentphp.com/docs/panels/tenancy#setting-up-tenancy)
+- [Filament Multi-Tenancy](https://filamentphp.com/docs/3.x/panels/tenancy)
+- [Filament Tenant Scoping](https://filamentphp.com/docs/3.x/panels/tenancy#setting-up-tenancy)
 - [OWASP Multi-Tenancy Security](https://owasp.org/www-project-web-security-testing-guide/)
 
 ## Related Analyzers
