@@ -219,7 +219,7 @@ return [
 - [Laravel Filesystem Documentation](https://laravel.com/docs/filesystem)
 - [Laravel Logging Configuration](https://laravel.com/docs/logging)
 - [Linux Disk Usage Commands](https://man7.org/linux/man-pages/man1/df.1.html)
-- [Logrotate Configuration](https://linux.die.net/man/8/logrotate)
+
 
 ## Related Analyzers
 

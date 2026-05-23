@@ -488,7 +488,7 @@ public function verifyAndStore(Request $request)
 - [Laravel Validation Documentation](https://laravel.com/docs/validation#rule-file)
 - [OWASP File Upload Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/File_Upload_Cheat_Sheet.html)
 - [OWASP Unrestricted File Upload](https://owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload)
-- [CVE Details: File Upload Vulnerabilities](https://www.cvedetails.com/vulnerability-list/opuf-1/file-upload.html)
+
 
 ## Related Analyzers
 
