@@ -20,10 +20,10 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 - Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) - supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
 - Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) - detects audit traits and Observer-based logging
 - Admin action logging in admin controllers, backend controllers, and Filament resources
-- Dedicated audit/security log channel configuration
+- Dedicated audit/security log channel configuration (`audit`, `security`, `activity`, `audit-log`, or `security-log`)
 - API token lifecycle logging - Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
 - Data export/download operations - `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
-- Bulk model operations that bypass observers - `saveQuietly()`, `updateQuietly()`, and `withoutEvents()` skip audit traits; explicit logging is required at the call site
+- `saveQuietly()` and `withoutEvents()` calls that bypass model observers without explicit logging at the call site
 
 ## Why It Matters
 
@@ -81,7 +81,10 @@ public function boot(): void
 
 **1. Create a dedicated audit log channel:**
 
-```php
+Choose the driver that suits your deployment environment:
+
+::: code-group
+```php [Traditional server (daily)]
 // config/logging.php
 'channels' => [
     'audit' => [
@@ -92,6 +95,20 @@ public function boot(): void
     ],
 ],
 ```
+
+```php [Serverless / Laravel Cloud / Vapor]
+// config/logging.php
+// stderr is captured by CloudWatch on Lambda, Vapor, and Laravel Cloud
+'channels' => [
+    'audit' => [
+        'driver' => 'errorlog',
+        'level' => 'info',
+    ],
+],
+```
+:::
+
+Any of these channel names are recognised by the analyzer: `audit`, `security`, `activity`, `audit-log`, `security-log`.
 
 **2. Add activity logging to sensitive models:**
 
@@ -211,22 +228,21 @@ public function export(Request $request)
 
 ```php
 // When you must use saveQuietly(), add explicit logging
-$user->saveQuietly();
 Log::channel('audit')->info('User saved quietly (observers bypassed)', [
     'user_id' => $user->id,
     'changes' => $user->getChanges(),
     'actor_id' => auth()->id(),
 ]);
+$user->saveQuietly();
 
 // When you must use withoutEvents()
-User::withoutEvents(function () use ($users) {
-    // batch update
-    $users->each->update(['status' => 'inactive']);
-});
 Log::channel('audit')->info('Bulk user status change (events bypassed)', [
     'count' => $users->count(),
     'actor_id' => auth()->id(),
 ]);
+User::withoutEvents(function () use ($users) {
+    $users->each->update(['status' => 'inactive']);
+});
 ```
 
 ## References
