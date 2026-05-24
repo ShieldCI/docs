@@ -17,8 +17,9 @@ pro: true
 
 Detects missing clickjacking protection in Laravel applications. Validates that the application is protected from clickjacking attacks through one of these methods:
 - FrameGuard middleware (sets `X-Frame-Options: SAMEORIGIN` by default)
-- Manual `X-Frame-Options` header in middleware or service providers
+- Manual `X-Frame-Options` header in middleware or service providers (via `->header()`, `->withHeaders()`, or `->headers->set()`)
 - Content-Security-Policy `frame-ancestors` directive in middleware, config, or service providers
+- FrameGuard assigned via route-level middleware groups
 - `spatie/laravel-csp` package configuration with `frame-ancestors`
 - `bepsvpt/secure-headers` package configuration with X-Frame-Options or CSP
 - Server-level protection via `.htaccess` or `nginx.conf`
