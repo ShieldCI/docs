@@ -1,6 +1,6 @@
 ---
 title: GDPR Compliance Analyzer
-description: Validates basic GDPR compliance patterns including data deletion, consent tracking, and encryption at rest
+description: Validates basic GDPR compliance patterns including data deletion capability, encryption at rest, privacy policy route, data export, and PII protection in logs
 icon: lock
 outline: [2, 3]
 tags: compliance,gdpr,privacy,data-protection,security
@@ -19,9 +19,8 @@ Scans `app/Models/User.php`, `app/Models/Profile.php`, `app/Models/Customer.php`
 `database/migrations/`, `routes/web.php`, `routes/api.php`, and `config/logging.php`
 for technical GDPR compliance signals. Checks for:
 
-- **Data deletion capability (Article 17)** - `SoftDeletes` trait, or `anonymize` / `purge` / `erasePersonalData` method on the User model
+- **Data deletion capability (Article 17)** - `SoftDeletes` trait, anonymize/purge method on the User model, or a dedicated `UserDeletionService` / `UserErasureService`
 - **Encryption at rest** - `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields
-- **Consent tracking (Article 7)** - a `Consent` / `UserConsent` model, a consent-related migration, or consent columns on the users table
 - **Privacy policy route** - a `/privacy` or `/privacy-policy` route in web or API route files
 - **Data export capability (Article 20)** - an export controller, export route, `app/Exports/` directory, or `export` / `downloadData` method on the User model
 - **PII protection in logs** - log sanitization (`SanitizeLog`, `mask`, `redact`, `scrub`, `replace_placeholders`) in `config/logging.php` or a custom processor in `app/Logging/`
@@ -37,10 +36,10 @@ soft-deleted records after a retention period.
 ## Why It Matters
 
 - **Legal Obligation:** GDPR fines can reach 4% of annual global turnover or EUR 20 million
-- **Right to Erasure:** Users must be able to request deletion of their personal data
-- **Data Protection:** Sensitive personal data must be encrypted at rest
-- **Consent:** Processing personal data requires documented, explicit consent
-- **Transparency:** Users must be informed about how their data is processed
+- **Right to Erasure (Art. 17):** Users must be able to request deletion or anonymization of their personal data
+- **Data Protection (Art. 25):** Sensitive personal data must be encrypted at rest
+- **Lawful Basis (Art. 6):** All processing requires a documented lawful basis — typically contractual necessity for SaaS core features, or consent for marketing and non-essential processing
+- **Transparency (Art. 13/14):** Users must be informed about how their data is processed via a privacy policy
 
 ## How to Fix
 
@@ -107,27 +106,7 @@ class User extends Authenticatable
 }
 ```
 
-**3. Implement consent tracking:**
-
-```bash
-php artisan make:model Consent -m
-```
-
-```php
-// database/migrations/xxxx_create_consents_table.php
-Schema::create('consents', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-    $table->string('type'); // 'marketing', 'analytics', 'terms'
-    $table->boolean('granted');
-    $table->timestamp('granted_at')->nullable();
-    $table->timestamp('revoked_at')->nullable();
-    $table->string('ip_address')->nullable();
-    $table->timestamps();
-});
-```
-
-**4. Add data export endpoint (Article 20: Right to Data Portability):**
+**3. Add data export endpoint (Article 20: Right to Data Portability):**
 
 ```php
 // app/Http/Controllers/UserDataExportController.php
@@ -156,7 +135,7 @@ Route::get('/user/export', [UserDataExportController::class, 'export'])
     ->name('user.data.export');
 ```
 
-**5. Add PII protection to logging:**
+**4. Add PII protection to logging:**
 
 ```php
 // app/Logging/SanitizePiiProcessor.php
