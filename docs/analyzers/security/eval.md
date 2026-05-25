@@ -35,7 +35,7 @@ Flagged when the callable or class name is tainted by user input:
 
 #### Unsafe Deserialization (1)
 - `unserialize()` with user input - Critical; PHP object injection / RCE
-- `unserialize()` without `['allowed_classes' => false]` - Medium; flagged even without user input
+- `unserialize()` without a safe `allowed_classes` restriction - Medium; flagged even without user input. Resolved by `['allowed_classes' => false]` (no objects needed) or `['allowed_classes' => [MyClass::class, ...]]` (explicit known-class list). `true` or an empty `[]` still warns.
 
 #### User-Controlled Callbacks and Templates (4)
 - `ob_start()` with a user-supplied callable
