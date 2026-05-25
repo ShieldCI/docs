@@ -15,26 +15,40 @@ pro: true
 
 ## What This Checks
 
-Validates Inertia.js shared data exposure and middleware configuration. Checks for:
+Validates Inertia.js shared data exposure and middleware configuration. Inertia bridges server-side Laravel with client-side SPA frameworks — any data placed in shared props is serialized into every page response and visible in the browser's JavaScript context.
 
-- Sensitive data in shared props (passwords, tokens, secrets, API keys)
-- Missing or unregistered `HandleInertiaRequests` middleware
-- Unfiltered user model in shared data (exposes hashed password, `remember_token`)
-- Redundant CSRF token sharing (Inertia handles this automatically)
-- Application version exposure in `version()` method
-- Sensitive data in `Inertia::render()` props and the `inertia()` helper
-- Sensitive data shared via `Inertia::share()` in controllers and service providers
-- Inertia v2 APIs: `defer()`, `merge()`, `optional()`, `always()`
-- Dangerous values: `config('app.key')`, `env()`, `->bearerToken()`
+**Checks Performed:**
+
+#### Middleware Configuration
+- **Missing middleware** — flags when no class extending `Inertia\Middleware` exists in `app/Http/Middleware/`
+- **Unregistered middleware** — flags when `HandleInertiaRequests` exists but is not added to the `web` group in `Kernel.php` (Laravel 9/10)
+
+#### Sensitive Keys in `share()`
+Flags known credential-related key names in the `share()` method return array: `password`, `secret`, `api_key`, `access_token`, `refresh_token`, `client_secret`, `private_key`, `bearer`, `authorization`, and similar. Session flash reads (values sourced from `$request->session()->get(...)`) are excluded — they are intentional one-time display values.
+
+#### Dangerous Values in `share()`
+Flags high-risk expressions regardless of key name: `config('app.key')`, `env('APP_KEY')` and other sensitive env vars, `->bearerToken()`, `->password`, `->remember_token`, `->two_factor_secret`, `->recoveryCodes()`. Null-existence checks such as `$user->password !== null` are excluded — they evaluate to a boolean and expose no field value.
+
+#### Unfiltered User Model
+Flags `$request->user()`, `auth()->user()`, or `Auth::user()` shared without field filtering. The full Eloquent model serializes every column, including hashed password and `remember_token`. Filtered forms are safe: `->only([...])`, `->makeHidden([...])`, a wrapping API Resource, or an `instanceof` check (which produces a boolean).
+
+#### CSRF Token Sharing
+Flags explicit CSRF token sharing (`'csrf_token'`, `'_token'`, or `'token'` paired with `session()->token()` / `csrf_token()`). Inertia handles CSRF automatically via the `X-XSRF-TOKEN` header.
+
+#### Version Exposure
+Flags `version()` methods that return a hardcoded version string or `config('app.version')`. A content hash is a safer alternative.
+
+#### Controller and Provider Shares
+Scans `app/Http/Controllers/`, `app/Providers/`, and `app/Livewire/` for the same sensitive-key and dangerous-value patterns in `Inertia::share()`, `Inertia::render()`, the `inertia()` helper, and Inertia v2 APIs (`defer()`, `merge()`, `optional()`, `always()`).
 
 ## Why It Matters
 
-- **Data Exposure:** Shared props are serialized into every page response and visible in browser DevTools
-- **Password Leakage:** Sharing the full User model exposes the hashed password and `remember_token`
-- **Render Props:** Props passed to `Inertia::render()` and the `inertia()` helper are also serialized and sent to the browser
-- **Global Data Sharing:** `Inertia::share()` in service providers applies globally, making sensitive data visible on every page
-- **Attack Surface:** Application version exposure helps attackers target known vulnerabilities
-- **Unnecessary Code:** Manually sharing CSRF tokens duplicates what Inertia does automatically
+- **Data Exposure** — Shared props are serialized into every page response and visible in browser DevTools under the `__page` property
+- **Password Leakage** — Sharing the full User model exposes the bcrypt hash of the password and the `remember_token`
+- **Render Props** — Props passed to `Inertia::render()` and `inertia()` are also serialized and sent to the browser, not just shared middleware data
+- **Global Data Sharing** — `Inertia::share()` in service providers applies to every request, making sensitive data visible on every single page
+- **Attack Surface** — Application version strings help attackers find and exploit known CVEs
+- **Unnecessary Code** — Manually sharing CSRF tokens duplicates what Inertia does automatically
 
 ## How to Fix
 
@@ -49,19 +63,33 @@ public function share(Request $request): array
 {
     return array_merge(parent::share($request), [
         'auth' => [
-            'user' => $request->user(), // Shares ALL user fields!
+            'user' => $request->user(), // Shares ALL columns including hashed password
         ],
     ]);
 }
 ```
 
-**After (✅):**
+**After (✅) — inline filtering:**
 ```php
 public function share(Request $request): array
 {
     return array_merge(parent::share($request), [
         'auth' => [
             'user' => $request->user()?->only(['id', 'name', 'email', 'avatar']),
+        ],
+    ]);
+}
+```
+
+**After (✅) — variable assignment then filtered later in the same method:**
+```php
+public function share(Request $request): array
+{
+    $user = $request->user(); // assignment is fine as long as $user is filtered below
+
+    return array_merge(parent::share($request), [
+        'auth' => [
+            'user' => $user?->only(['id', 'name', 'email', 'avatar_url']),
         ],
     ]);
 }
@@ -86,14 +114,16 @@ public function share(Request $request): array
         ],
         'flash' => [
             'success' => fn () => $request->session()->get('success'),
-            'error' => fn () => $request->session()->get('error'),
+            'error'   => fn () => $request->session()->get('error'),
+            // Session flash reads are safe — they display a value once and are sourced from the session
+            'two_factor_secret' => fn () => $request->session()->get('two_factor_secret'),
         ],
-        // Don't share: tokens, secrets, API keys, or full models
+        // Don't share: access_token, api_key, client_secret, or unfiltered models
     ]);
 }
 ```
 
-**3. Use a content hash instead of version string:**
+**3. Use a content hash instead of a version string:**
 
 ```php
 public function version(Request $request): ?string
@@ -106,16 +136,17 @@ public function version(Request $request): ?string
 **4. Remove redundant CSRF sharing:**
 
 ```php
-// Remove this - Inertia handles CSRF automatically:
+// Remove these — Inertia handles CSRF automatically:
 // 'csrf_token' => csrf_token(),
+// '_token'     => csrf_token(),
 ```
 
 **5. Avoid sensitive data in controller render calls and global shares:**
 
 ```php
-// ❌ Sensitive data in Inertia::render() props
+// ❌ Auth token in render props
 return Inertia::render('Profile', [
-    'token' => $user->api_token,
+    'access_token' => $user->currentAccessToken(),
 ]);
 
 // ✅ Share only what the view needs
@@ -123,7 +154,14 @@ return Inertia::render('Profile', [
     'user' => $user->only(['id', 'name', 'email']),
 ]);
 
-// ❌ Global share in a service provider
+// ❌ Existence check using instanceof is safe — evaluates to boolean, not the user object
+// (this is NOT flagged — shown here for clarity)
+return Inertia::render('Profile/Edit', [
+    'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail, // ✅ boolean
+    'hasPassword'     => $user->password !== null,                     // ✅ boolean
+]);
+
+// ❌ Global share in a service provider with sensitive data
 Inertia::share('config', [
     'app_key' => config('app.key'),
 ]);
@@ -131,7 +169,7 @@ Inertia::share('config', [
 // ✅ Share only non-sensitive config
 Inertia::share('config', [
     'app_name' => config('app.name'),
-    'locale' => app()->getLocale(),
+    'locale'   => app()->getLocale(),
 ]);
 ```
 
@@ -146,3 +184,5 @@ Inertia::share('config', [
 - [XSS Vulnerabilities](/analyzers/security/xss-vulnerabilities) - Detects cross-site scripting
 - [CSRF Protection](/analyzers/security/csrf-protection) - Validates CSRF configuration
 - [Hardcoded Credentials](/analyzers/security/hardcoded-credentials) - Detects hardcoded secrets
+
+---
