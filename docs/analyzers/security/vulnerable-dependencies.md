@@ -52,6 +52,21 @@ composer update vendor/package
 4. **Remove or fork abandoned packages**: if no drop-in replacement exists, fork the package, apply patches, and reference your fork explicitly.
 5. **Automate**: add `composer audit` (or this analyzer) to CI so regressions get caught before merges.
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- Each run makes an HTTP POST to the OSV API (`api.osv.dev`) with up to 73 package versions — network latency is non-deterministic and adds to the Lambda/Vapor timeout budget
+- `composer audit` is already a standard CI step and covers the same advisory database with better caching and retry behaviour
+- Prevents timeout pressure on serverless runtimes where the function is hard-killed with no PHP signal when the Lambda timeout is reached
+
+**When to run this analyzer:**
+- ✅ **Local development**: Surfaces CVEs interactively as you work
+- ✅ **Staging/Production scans**: Validates the deployed `composer.lock` against current advisories
+- ❌ **CI/CD pipelines**: Skipped automatically — use `composer audit` or a dedicated scanning step instead
+- ❌ **Laravel Vapor / AWS Lambda**: Skipped automatically to avoid timeout pressure
+
 ## References
 
 - [Composer Audit](https://getcomposer.org/doc/03-cli.md#audit)

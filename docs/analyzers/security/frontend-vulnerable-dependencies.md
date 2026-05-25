@@ -213,6 +213,21 @@ Then in `config/shieldci.php`:
 Always document why you're ignoring vulnerabilities. This helps during security audits and prevents accidental exposure to known risks.
 :::
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- Running `npm audit` / `yarn audit` spawns a subprocess that takes up to 60 seconds and makes external network calls — a significant portion of the Lambda/Vapor timeout budget
+- Dedicated pipeline steps (`npm audit`, Dependabot, Snyk) already cover frontend dependency scanning in CI with better caching, retry logic, and structured output
+- Prevents timeout pressure on serverless runtimes where the process is hard-killed with no signal when the function timeout is reached
+
+**When to run this analyzer:**
+- ✅ **Local development**: Surfaces vulnerabilities interactively as you work
+- ✅ **Staging/Production scans**: Validates the deployed dependency set against current advisories
+- ❌ **CI/CD pipelines**: Skipped automatically — use `npm audit` or a dedicated scanning step instead
+- ❌ **Laravel Vapor / AWS Lambda**: Skipped automatically to avoid timeout pressure
+
 ## References
 
 - [npm audit Documentation](https://docs.npmjs.com/cli/audit)
