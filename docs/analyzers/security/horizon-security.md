@@ -23,11 +23,11 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 - **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
 - **Horizon::auth() gate** - Checks that an authorization gate is defined to restrict dashboard access
 - **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone)
-- **Environment-aware checks** - Verifies production-specific authorization logic is present (e.g., `isProduction()`, `environment()`)
+- **Auth-only checks** - Flags gates that only verify the user is logged in (`auth()->check()`) without restricting to specific users or roles
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
 
 #### Configuration File Validation
-- **Middleware configuration** - Flags when `config/horizon.php` only includes `web` middleware without `auth`
+- **Middleware configuration** - Flags when `config/horizon.php` only includes `web` middleware without `auth`, but only when no `viewHorizon` gate is configured. When a gate is present it already handles authorization, making `auth` middleware redundant.
 
 #### Redis Configuration Validation
 - **Redis password** - Flags when `config/database.php` has a hardcoded `null` or empty password for the Redis connection instead of using `env('REDIS_PASSWORD')`
@@ -49,7 +49,7 @@ A publicly accessible Horizon dashboard is equivalent to giving an attacker a mo
 
 ### Quick Fix (5 minutes)
 
-Add a `Horizon::auth()` gate in your `HorizonServiceProvider`:
+Add a `viewHorizon` gate in your `HorizonServiceProvider`. A role-check or email-allowlist is sufficient — no environment-specific branching is required.
 
 **Before (❌):**
 ```php
@@ -66,92 +66,88 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 **After (✅):**
 ```php
 // app/Providers/HorizonServiceProvider.php
-use Laravel\Horizon\Horizon;
+use Illuminate\Support\Facades\Gate;
 
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     protected function gate(): void
     {
-        Horizon::auth(function ($request) {
-            return $request->user()?->isAdmin() ?? false;
+        Gate::define('viewHorizon', function ($user): bool {
+            return $user->hasRole('admin');
         });
     }
 }
 ```
 
-### Proper Fix (10 minutes)
+Alternatively, drive the allowlist from an environment variable so no code change is needed per environment:
 
-Implement environment-aware authorization with role checks:
-
-**Before (❌):**
 ```php
-// app/Providers/HorizonServiceProvider.php
 protected function gate(): void
 {
-    Horizon::auth(function ($request) {
-        // VULNERABLE: Hardcoded boolean - no real authorization
-        return true;
+    Gate::define('viewHorizon', function ($user): bool {
+        $authorized = array_filter(
+            array_map('trim', explode(',', config('horizon.authorized_emails', '')))
+        );
+
+        return in_array($user->email, $authorized, strict: true);
     });
 }
 ```
 
-**After (✅):**
+```ini
+# .env
+HORIZON_AUTHORIZED_EMAILS=admin@yourcompany.com,devops@yourcompany.com
+```
+
+### Proper Fix (10 minutes)
+
+Also make sure weak gates are not in use:
+
+**Before (❌) — grants access to everyone:**
+```php
+protected function gate(): void
+{
+    Horizon::auth(function ($request) {
+        return true; // VULNERABLE: no real authorization
+    });
+}
+```
+
+**Before (❌) — authentication only, not authorization:**
+```php
+protected function gate(): void
+{
+    Horizon::auth(function ($request) {
+        return auth()->check(); // Any logged-in user can access Horizon
+    });
+}
+```
+
+**After (✅) — proper role/permission check:**
 ```php
 // app/Providers/HorizonServiceProvider.php
-use Laravel\Horizon\Horizon;
+use Illuminate\Support\Facades\Gate;
 
 class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     protected function gate(): void
     {
-        Horizon::auth(function ($request) {
-            // Strict authorization with environment check
-            if (app()->environment('local')) {
-                return true; // Allow all access in local development
-            }
-
-            // In production, restrict to admin users only
-            return $request->user()?->hasRole('admin')
-                || $request->user()?->email === config('horizon.admin_email');
+        Gate::define('viewHorizon', function ($user): bool {
+            return $user->hasRole('admin')
+                || $user->can('view-horizon');
         });
     }
 }
 ```
 
-**Best Practice: Combine auth gate with middleware:**
+**Optional: add `auth` middleware as an extra layer (not required when a gate is configured):**
 
 ```php
 // config/horizon.php
 return [
-    'path' => env('HORIZON_PATH', 'horizon'),
-
-    // Require both web session AND authentication
-    'middleware' => ['web', 'auth'],
-
-    // ...other config
+    'middleware' => ['web', 'auth'], // 'auth' ensures unauthenticated users get a login redirect
+    // ...
 ];
-```
-
-```php
-// app/Providers/HorizonServiceProvider.php
-use Laravel\Horizon\Horizon;
-
-class HorizonServiceProvider extends HorizonApplicationServiceProvider
-{
-    protected function gate(): void
-    {
-        Horizon::auth(function ($request) {
-            if (app()->isProduction()) {
-                return in_array($request->user()?->email, [
-                    'admin@yourcompany.com',
-                    'devops@yourcompany.com',
-                ], true);
-            }
-
-            return $request->user() !== null;
-        });
-    }
-}
 ```
 
 
