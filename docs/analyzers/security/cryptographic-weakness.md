@@ -24,7 +24,7 @@ Detects weak cryptographic algorithms, insecure cipher usage, and unsafe impleme
 - Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` - IVs must be random per encryption
 - Deprecated `mcrypt_*` functions (`mcrypt_encrypt`, `mcrypt_decrypt`, `mcrypt_cbc`, `mcrypt_cfb`, `mcrypt_ecb`, `mcrypt_ofb`) removed in PHP 7.2
 - Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` - none provide cryptographic randomness
-- `===` / `==` comparison of hash or HMAC output - vulnerable to timing side-channel attacks
+- `===`, `!==`, `==`, `!=` comparison of hash or HMAC output - vulnerable to timing side-channel attacks
 - Non-cryptographic random functions: `rand()`, `mt_rand()`, `srand()`, `mt_srand()`
 
 ## Why It Matters
@@ -144,6 +144,58 @@ class UserService
     {
         return hash_hmac('sha256', $payload, $key);
     }
+}
+```
+
+**Fix timing-unsafe hash comparisons:**
+
+**Before (❌):**
+```php
+// VULNERABLE: === short-circuits on first differing byte, leaking timing information
+if ($provided === hash_hmac('sha256', $payload, $secret)) {
+    // verified
+}
+
+// VULNERABLE: != has the same problem
+if (sha1($token) != $storedHash) {
+    abort(403);
+}
+```
+
+**After (✅):**
+```php
+// SAFE: hash_equals() always compares every byte regardless of where they differ
+if (hash_equals(hash_hmac('sha256', $payload, $secret), $provided)) {
+    // verified
+}
+
+if (! hash_equals($storedHash, hash('sha256', $token))) {
+    abort(403);
+}
+```
+
+**Fix general-purpose hashing (URL parameters, fingerprints, checksums):**
+
+Not every hash is a password or a MAC. When binding a known value into a URL parameter or generating a deterministic fingerprint, use `hash('sha256', ...)` — never `sha1()` or `md5()`.
+
+**Before (❌):**
+```php
+// VULNERABLE: SHA1 is deprecated and has known collision vulnerabilities
+$url = URL::temporarySignedRoute('verify', $expiry, [
+    'hash' => sha1($user->email),
+]);
+```
+
+**After (✅):**
+```php
+// SAFE: SHA-256 for deterministic URL parameter binding
+$url = URL::temporarySignedRoute('verify', $expiry, [
+    'hash' => hash('sha256', $user->email),
+]);
+
+// Verify it server-side with the same algorithm
+if (! hash_equals(hash('sha256', $user->email), $request->hash)) {
+    abort(403);
 }
 ```
 
