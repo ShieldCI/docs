@@ -47,6 +47,10 @@ Validates Cross-Origin Resource Sharing configuration for security. Checks for:
 Publish and configure CORS:
 
 ```bash
+# Laravel 11+
+php artisan config:publish cors
+
+# Laravel 9 / 10
 php artisan vendor:publish --tag=cors
 ```
 
