@@ -24,7 +24,10 @@ This analyzer detects open redirection vulnerabilities where user-controlled inp
 - **Referer-based redirects** - `$_SERVER['HTTP_REFERER']`, `$request->header('Referer')`, or `$request->headers->get('referer')` used as redirect targets
 - **`url()->previous()` / `URL::previous()`** in redirect context - both helpers derive their value from the Referer header, not session history, making them attacker-influenced
 
-All checks also perform simple variable taint tracking (e.g. `$url = $request->input('next'); redirect($url)`) and recognise validation guards such as `Str::startsWith($url, '/')` or a `parse_url` host comparison as safe.
+All checks also perform simple variable taint tracking (e.g. `$url = $request->input('next'); redirect($url)`) and recognise the following as safe:
+
+- **Validation guards** — `Str::startsWith($url, '/')`, `parse_url($url, PHP_URL_HOST)` comparisons, `in_array` domain allowlists, or a `validate()` call with a `starts_with:` rule within 8 lines of the redirect
+- **`$this->method()` as redirect target** — `redirect($this->buildUrl($input))` is not flagged because the redirect URL is the method's return value, not the tainted argument. The method on the same controller is treated as a trusted computation boundary (e.g. it always returns a `route()` call)
 
 ## Why It Matters
 
