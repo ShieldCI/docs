@@ -1,6 +1,6 @@
 ---
 title: Route Rate Limiting Analyzer
-description: Validates that public API endpoints have rate limiting configured to prevent abuse and brute force attacks
+description: Validates that public API endpoints have rate limiting configured to prevent abuse and denial of service
 icon: lock
 outline: [2, 3]
 tags: security,rate-limiting,throttle,api,routes
@@ -15,20 +15,21 @@ pro: true
 
 ## What This Checks
 
-Validates that public API endpoints have rate limiting. Checks for:
+Validates that public API endpoints have rate limiting configured. Checks for:
 
 - Custom rate limiter definitions in service providers (`RateLimiter::for()`)
 - `Limit::none()` usage in rate limiter definitions (effectively disables limiting)
 - API routes without throttle middleware
-- Login, register, password reset, email verification, and 2FA/OTP routes without strict throttle (reported as **High** severity - brute force risk)
 - Webhook routes without throttle middleware (severity reduced to Low when webhook signature verification middleware is present)
 - Global rate limiter in API middleware group
-- Skips auth route checks automatically when Laravel Fortify or Jetstream is installed (they provide built-in throttling)
+
+::: tip Auth route throttle checking
+Login, register, and password reset route throttling is handled by the [Login Throttling](/analyzers/security/login-throttling) analyzer, which provides deeper inspection including controller-level detection and Fortify/Breeze/Jetstream awareness.
+:::
 
 ## Why It Matters
 
 - **API Abuse:** Unthrottled APIs allow data scraping, enumeration, and denial of service
-- **Brute Force:** Login/register endpoints without rate limiting allow credential stuffing attacks
 - **Webhook Flooding:** Unthrottled webhook routes can be abused to overload your queue
 - **Cost:** Cloud infrastructure bills spike when APIs are abused at scale
 
@@ -60,41 +61,36 @@ public function boot(): void
         return Limit::perMinute(60)->by($request->user()?->id ?: $request->ip());
     });
 
-    RateLimiter::for('auth', function (Request $request) {
-        return Limit::perMinute(5)->by($request->ip());
-    });
-
     RateLimiter::for('webhooks', function (Request $request) {
         return Limit::perMinute(120)->by($request->ip());
     });
 }
 ```
 
-**2. Apply to authentication routes:**
-
-```php
-Route::post('/login', [AuthController::class, 'login'])
-    ->middleware('throttle:auth');
-
-Route::post('/register', [AuthController::class, 'register'])
-    ->middleware('throttle:auth');
-```
-
-**3. Apply to webhook routes:**
+**2. Apply to webhook routes:**
 
 ```php
 Route::post('/webhooks/stripe', WebhookController::class)
     ->middleware('throttle:webhooks');
 ```
 
-**4. Set global API throttle:**
+**3. Set global API throttle:**
 
-```php
-// bootstrap/app.php (Laravel 11+)
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
 ->withMiddleware(function (Middleware $middleware) {
     $middleware->api(prepend: ['throttle:api']);
 })
 ```
+
+```php [Laravel 10]
+// app/Http/Kernel.php
+protected $middlewareGroups = [
+    'api' => ['throttle:api', /* other middleware */],
+];
+```
+:::
 
 ## References
 
@@ -104,6 +100,6 @@ Route::post('/webhooks/stripe', WebhookController::class)
 
 ## Related Analyzers
 
-- [Login Throttling](/analyzers/security/login-throttling) - Detects missing auth rate limiting
+- [Login Throttling](/analyzers/security/login-throttling) - Detects missing rate limiting on auth routes (login, register, password reset)
 - [CORS Configuration](/analyzers/security/cors-config) - Validates cross-origin settings
-- [Redis Throttling](/analyzers/performance/redis-throttling) - Suggests Redis-based throttling
+- [Redis Throttling](/analyzers/performance/redis-throttling) - Suggests Redis-based throttling for high-traffic APIs
