@@ -26,7 +26,7 @@ Detects Server-Side Request Forgery (SSRF) vulnerabilities where user input cont
 - **Hardcoded cloud metadata endpoints** - references to `169.254.169.254`, `169.254.170.2`, `metadata.google.internal`, or `/latest/meta-data/` outside of safe contexts (blocklist arrays, validation comparisons)
 - **Variable taint propagation** - user input assigned to a variable (e.g. `$url = request('url')`) and later passed as a request destination
 
-User input is traced from `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `Request::` facade, and `$request->input()` through concatenation and string interpolation.
+User input is traced from `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `request()`, `Request::` facade, and any method call on a `$request` variable (e.g. `$request->input()`, `$request->query()`, `$request->all()`) through concatenation and string interpolation.
 
 ## Why It Matters
 
