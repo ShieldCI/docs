@@ -19,12 +19,17 @@ Validates that Laravel Horizon is correctly configured and healthy. Checks for:
 
 - Horizon prefix is set and not a generic value (`laravel_horizon:`, `horizon:`)
 - Horizon prefix differs sufficiently from the cache prefix
-- Prefix includes an environment identifier in production and staging
 - A provisioning plan exists for the current `APP_ENV`
 - Each supervisor has valid queue, memory, worker count, timeout, balance, connection, and retry settings
+- `autoScalingStrategy` is `"time"` or `"size"` when set (Horizon v5+)
+- `horizon.memory_limit` is adequate — at least 32 MB (Horizon v2+)
 - Horizon master process is running (production and staging only)
 - Pending job count is below the configured threshold (production and staging only)
 - No supervisors are paused (production and staging only)
+
+::: info Version-aware validation
+The analyzer reads your project's `composer.lock` to detect the installed Horizon major version and adjusts recommendations accordingly. On Horizon v4+, the default prefix is derived from `APP_NAME`; on v1–3, it was the hardcoded string `horizon:`. The v5+ `defaults` section is merged into each environment's supervisor configs before validation, so sparse environment overrides are not incorrectly flagged.
+:::
 
 ## Why It Matters
 
@@ -38,30 +43,41 @@ Validates that Laravel Horizon is correctly configured and healthy. Checks for:
 
 ### Quick Fix (5 minutes)
 
-Set a unique, environment-aware prefix in `config/horizon.php`:
+Set a unique prefix in `config/horizon.php`:
 
 ```php
-// ❌ Before: generic prefix, no environment context
+// ❌ Before: generic prefix causes Redis key collisions
 'prefix' => 'laravel_horizon:',
 
-// ✅ After: unique, environment-scoped prefix
-'prefix' => env('HORIZON_PREFIX', 'myapp_production_horizon:'),
+// ✅ After (Horizon v4+): set a unique APP_NAME — Horizon derives the prefix from it
+// In .env:
+// APP_NAME=myapp
+
+// ✅ After (Horizon v1–3): set the prefix key directly or via .env
+'prefix' => env('HORIZON_PREFIX', 'myapp_horizon:'),
 ```
 
 ### Proper Fix (15 minutes)
 
-**1. Configure a unique prefix:**
+**1. Configure a unique prefix and a complete provisioning plan:**
 
 ```php
 // config/horizon.php
 return [
-    'prefix' => env('HORIZON_PREFIX', 'myapp_production_horizon:'),
+    // Horizon v4+: prefix is derived from APP_NAME automatically.
+    // Set a unique APP_NAME in .env, or override explicitly:
+    'prefix' => env('HORIZON_PREFIX', 'myapp_horizon:'),
 
+    'memory_limit' => 64, // MB — master supervisor restart threshold (v2+)
+
+    // Horizon v5+: defaults are merged into each environment's supervisors
+    // before workers start. Define shared settings here.
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
             'queue' => ['default', 'high', 'low'],
             'balance' => 'auto',
+            'autoScalingStrategy' => 'time', // v5+: "time" or "size"
             'minProcesses' => 1,
             'maxProcesses' => 10,
             'memory' => 128,
@@ -73,6 +89,7 @@ return [
     'environments' => [
         'production' => [
             'supervisor-1' => [
+                // Sparse overrides — queue/connection/etc. inherited from defaults
                 'maxProcesses' => 20,
                 'balanceMaxShift' => 1,
                 'balanceCooldown' => 3,
