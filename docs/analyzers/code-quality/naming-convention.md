@@ -1,6 +1,6 @@
 ---
 title: Naming Convention Analyzer
-description: Validates PSR naming standards for better code consistency
+description: Validates PSR-1 and PSR-12 naming standards for classes, methods, and variables in your Laravel application for consistent, readable code
 icon: code
 outline: [2, 3]
 tags: conventions,psr,code-quality,readability

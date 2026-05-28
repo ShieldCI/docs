@@ -15,7 +15,7 @@ const algoliaAskAiId = env.ALGOLIA_ASK_AI_ID || ''
 
 export default defineConfig({
     title: 'ShieldCI',
-    description: 'Automated code analysis for Laravel applications — 73 analyzers covering security, performance, reliability, best practices, and code quality.',
+    description: 'Automated code analysis for Laravel applications — comprehensive analyzers covering security, performance, reliability, best practices, and code quality.',
 
     // Source directory
     srcDir: 'docs',
@@ -39,7 +39,7 @@ export default defineConfig({
                     ...item,
                     url,
                     changefreq: url.includes('analyzers/') ? 'weekly' : 'monthly',
-                    priority: url === '' ? 1.0 : url.includes('analyzers/') ? 0.8 : 0.6
+                    priority: url === '' ? 1.0 : url.includes('analyzers/') ? 0.8 : url.includes('api/') ? 0.7 : 0.6
                 }
             })
     },
@@ -80,9 +80,11 @@ export default defineConfig({
             head.push(['meta', { name: 'keywords', content: pageData.frontmatter.tags }])
         }
 
-        // Article date metadata
-        if (pageData.frontmatter.date) {
-            head.push(['meta', { property: 'article:published_time', content: pageData.frontmatter.date }])
+        // Article date metadata — frontmatter.date takes priority; fall back to git lastUpdated
+        const publishedDate = pageData.frontmatter.date
+            ?? (pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : null)
+        if (publishedDate) {
+            head.push(['meta', { property: 'article:published_time', content: publishedDate }])
         }
         if (pageData.lastUpdated) {
             head.push(['meta', { property: 'article:modified_time', content: new Date(pageData.lastUpdated).toISOString() }])
@@ -91,7 +93,8 @@ export default defineConfig({
         // OG meta tags
         head.push(['meta', { property: 'og:title', content: title }])
         head.push(['meta', { property: 'og:description', content: description }])
-        head.push(['meta', { property: 'og:type', content: 'article' }])
+        const isHomepage = relativePath === '' || relativePath === 'index'
+        head.push(['meta', { property: 'og:type', content: isHomepage ? 'website' : 'article' }])
         head.push(['meta', { property: 'og:site_name', content: 'ShieldCI' }])
         head.push(['meta', { property: 'og:url', content: pageUrl }])
         head.push(['meta', { property: 'og:image', content: `${siteUrl}/og-image.png` }])
@@ -119,7 +122,7 @@ export default defineConfig({
                 '@type': 'ListItem',
                 position: index + 2,
                 name: index === pathSegments.length - 1 ? title : name,
-                item: index === pathSegments.length - 1 ? undefined : `${siteUrl}${currentPath}`
+                item: index === pathSegments.length - 1 ? pageUrl : `${siteUrl}${currentPath}`
             })
         })
 
@@ -185,13 +188,23 @@ export default defineConfig({
 
         // Navigation
         nav: [
-            /*{
-                text: 'Home',
+            {
+                text: 'Documentation',
+                link: '/introduction/what-is-shieldci',
+                activeMatch: '^(?!/api/)'
+            },
+            {
+                text: 'API Reference',
+                link: '/api/',
+                activeMatch: '/api/'
+            },
+            {
+                text: 'shieldci.com',
                 link: 'https://shieldci.com'
-            },*/
+            },
             {
                 text: 'Changelog',
-                link: 'https://github.com/shieldci/laravel/blob/master/CHANGELOG.md'
+                link: 'https://shieldci.com/changelog'
             },
         ],
 
@@ -229,27 +242,72 @@ export default defineConfig({
                             collapsed: true,
                             items: [
                                 { text: 'Application Key', link: '/analyzers/security/app-key-security' },
+                                { text: 'Arbitrary File Upload', link: '/analyzers/security/arbitrary-file-upload' },
+                                { text: 'Audit Logging', link: '/analyzers/security/audit-logging' },
                                 { text: 'Auth & Authorization', link: '/analyzers/security/authentication-authorization' },
+                                { text: 'Cashier Paddle', link: '/analyzers/security/cashier-paddle' },
+                                { text: 'Cashier Security', link: '/analyzers/security/cashier-security' },
+                                { text: 'Clickjacking', link: '/analyzers/security/clickjacking' },
+                                { text: 'Column SQL Injection', link: '/analyzers/security/column-name-sql-injection' },
+                                { text: 'Command Injection', link: '/analyzers/security/command-injection' },
                                 { text: 'Cookie', link: '/analyzers/security/cookie' },
+                                { text: 'Cookie Domain', link: '/analyzers/security/cookie-domain' },
+                                { text: 'CORS Configuration', link: '/analyzers/security/cors-config' },
                                 { text: 'CSRF Protection', link: '/analyzers/security/csrf-protection' },
+                                { text: 'Crypto Weakness', link: '/analyzers/security/cryptographic-weakness' },
                                 { text: 'Debug Mode', link: '/analyzers/security/debug-mode' },
-                                { text: 'License Compliance', link: '/analyzers/security/license-compliance' },
+                                { text: 'Directory Traversal', link: '/analyzers/security/directory-traversal' },
                                 { text: 'Environment File', link: '/analyzers/security/env-file' },
                                 { text: 'Env HTTP Exposure', link: '/analyzers/security/env-http-accessibility' },
+                                { text: 'Eval Usage', link: '/analyzers/security/eval' },
+                                { text: 'Extract Usage', link: '/analyzers/security/extract' },
                                 { text: 'File Permissions', link: '/analyzers/security/file-permissions' },
+                                { text: 'Filament Pages', link: '/analyzers/security/filament-custom-pages' },
+                                { text: 'Filament Forms', link: '/analyzers/security/filament-form-validation' },
+                                { text: 'Filament Navigation', link: '/analyzers/security/filament-navigation' },
+                                { text: 'Filament Panel', link: '/analyzers/security/filament-panel-security' },
+                                { text: 'Filament Resource', link: '/analyzers/security/filament-resource-authorization' },
+                                { text: 'Filament Tenancy', link: '/analyzers/security/filament-tenancy' },
+                                { text: 'Filament Widgets', link: '/analyzers/security/filament-widget-security' },
                                 { text: 'Fillable Foreign Key', link: '/analyzers/security/fillable-foreign-key' },
+                                { text: 'Fortify Security', link: '/analyzers/security/fortify-security' },
                                 { text: 'Frontend Dependencies', link: '/analyzers/security/frontend-vulnerable-dependencies' },
+                                { text: 'GDPR Compliance', link: '/analyzers/security/gdpr-compliance' },
+                                { text: 'Hardcoded Credentials', link: '/analyzers/security/hardcoded-credentials' },
+                                { text: 'Horizon Security', link: '/analyzers/security/horizon-security' },
+                                { text: 'Host Injection', link: '/analyzers/security/host-injection' },
                                 { text: 'HSTS Header', link: '/analyzers/security/hsts-header' },
+                                { text: 'Inertia Security', link: '/analyzers/security/inertia-security' },
+                                { text: 'License Compliance', link: '/analyzers/security/license-compliance' },
+                                { text: 'Livewire Security', link: '/analyzers/security/livewire-security' },
                                 { text: 'Login Throttling', link: '/analyzers/security/login-throttling' },
                                 { text: 'Mass Assignment', link: '/analyzers/security/mass-assignment-vulnerabilities' },
+                                { text: 'MIME Sniffing', link: '/analyzers/security/mime-sniffing' },
+                                { text: 'Nova Security', link: '/analyzers/security/nova-security' },
+                                { text: 'Object Injection', link: '/analyzers/security/object-injection' },
+                                { text: 'Open Redirection', link: '/analyzers/security/open-redirection' },
+                                { text: 'Passport Security', link: '/analyzers/security/passport-security' },
                                 { text: 'Password Security', link: '/analyzers/security/password-security' },
                                 { text: 'PHP Configuration', link: '/analyzers/security/php-ini' },
+                                { text: 'Pulse Security', link: '/analyzers/security/pulse-security' },
+                                { text: 'RCE', link: '/analyzers/security/rce' },
+                                { text: 'Regex DoS', link: '/analyzers/security/regex-dos' },
+                                { text: 'Reverb Security', link: '/analyzers/security/reverb-security' },
+                                { text: 'Route Rate Limiting', link: '/analyzers/security/route-rate-limiting' },
+                                { text: 'Sanctum Security', link: '/analyzers/security/sanctum-security' },
+                                { text: 'Session Timeout', link: '/analyzers/security/session-timeout' },
+                                { text: 'Socialite Security', link: '/analyzers/security/socialite-security' },
                                 { text: 'SQL Injection', link: '/analyzers/security/sql-injection' },
+                                { text: 'SSRF', link: '/analyzers/security/ssrf' },
                                 { text: 'Stable Dependencies', link: '/analyzers/security/stable-dependencies' },
+                                { text: 'Telescope Security', link: '/analyzers/security/telescope-security' },
                                 { text: 'Unguarded Models', link: '/analyzers/security/unguarded-models' },
                                 { text: 'Up-to-Date Dependencies', link: '/analyzers/security/up-to-date-dependencies' },
+                                { text: 'Validation Injection', link: '/analyzers/security/validation-sql-injection' },
                                 { text: 'Vulnerable Dependencies', link: '/analyzers/security/vulnerable-dependencies' },
+                                { text: 'Server Fingerprinting', link: '/analyzers/security/web-server-fingerprinting' },
                                 { text: 'XSS Vulnerabilities', link: '/analyzers/security/xss-vulnerabilities' },
+                                { text: 'XXE Vulnerabilities', link: '/analyzers/security/xxe-vulnerabilities' },
                             ]
                         },
                         {
@@ -259,22 +317,37 @@ export default defineConfig({
                             items: [
                                 { text: 'Asset Cache Headers', link: '/analyzers/performance/asset-cache-headers' },
                                 { text: 'Asset Minification', link: '/analyzers/performance/asset-minification' },
-                                { text: 'Cache Driver', link: '/analyzers/performance/cache-driver' },
-                                { text: 'Collection Optimization', link: '/analyzers/performance/collection-call-optimization' },
                                 { text: 'Autoloader Optimization', link: '/analyzers/performance/autoloader-optimization' },
+                                { text: 'Cache Driver', link: '/analyzers/performance/cache-driver' },
+                                { text: 'CDN Configuration', link: '/analyzers/performance/cdn-configuration' },
+                                { text: 'Collection Optimization', link: '/analyzers/performance/collection-call-optimization' },
+                                { text: 'Cmd Eager Loading', link: '/analyzers/performance/command-eager-loading' },
+                                { text: 'Compression Headers', link: '/analyzers/performance/compression-headers' },
                                 { text: 'Config Caching', link: '/analyzers/performance/config-caching' },
+                                { text: 'Query Optimization', link: '/analyzers/performance/database-query-optimization' },
                                 { text: 'Debug Log Level', link: '/analyzers/performance/debug-log-level' },
                                 { text: 'Dev Deps in Production', link: '/analyzers/performance/dev-dependencies-production' },
+                                { text: 'Eager Loading', link: '/analyzers/performance/eager-loading' },
                                 { text: 'Env Outside Config', link: '/analyzers/performance/env-call-outside-config' },
+                                { text: 'Event Caching', link: '/analyzers/performance/event-caching' },
+                                { text: 'Fallback Routes', link: '/analyzers/performance/fallback-routes' },
+                                { text: 'Filament Tables', link: '/analyzers/performance/filament-table-optimization' },
                                 { text: 'Horizon Suggestion', link: '/analyzers/performance/horizon-suggestion' },
+                                { text: 'HTTP/2 Support', link: '/analyzers/performance/http2-support' },
+                                { text: 'Lazy Collections', link: '/analyzers/performance/lazy-collection-opportunity' },
                                 { text: 'MySQL Optimization', link: '/analyzers/performance/mysql-single-server-optimization' },
                                 { text: 'OPcache', link: '/analyzers/performance/opcache-enabled' },
                                 { text: 'Queue Driver', link: '/analyzers/performance/queue-driver' },
+                                { text: 'Redis Rate Limiting', link: '/analyzers/performance/redis-rate-limiting' },
+                                { text: 'Redis Single Server', link: '/analyzers/performance/redis-single-server' },
+                                { text: 'Redis Throttling', link: '/analyzers/performance/redis-throttling' },
                                 { text: 'Route Caching', link: '/analyzers/performance/route-caching' },
+                                { text: 'Scout Config', link: '/analyzers/performance/scout-config' },
                                 { text: 'Session Driver', link: '/analyzers/performance/session-driver' },
                                 { text: 'Shared Cache Lock', link: '/analyzers/performance/shared-cache-lock' },
                                 { text: 'Unused Middleware', link: '/analyzers/performance/unused-global-middleware' },
                                 { text: 'View Caching', link: '/analyzers/performance/view-caching' },
+                                { text: 'Xdebug Check', link: '/analyzers/performance/xdebug-enabled' },
                             ]
                         },
                         {
@@ -282,19 +355,34 @@ export default defineConfig({
                             link: '/analyzers/reliability/',
                             collapsed: true,
                             items: [
+                                { text: 'Alerting Configuration', link: '/analyzers/reliability/alerting-config' },
+                                { text: 'Cache Busting', link: '/analyzers/reliability/cache-busting' },
                                 { text: 'Cache Prefix', link: '/analyzers/reliability/cache-prefix-configuration' },
                                 { text: 'Cache Status', link: '/analyzers/reliability/cache-status' },
                                 { text: 'Composer Validation', link: '/analyzers/reliability/composer-validation' },
                                 { text: 'Custom Error Pages', link: '/analyzers/reliability/custom-error-pages' },
+                                { text: 'Data Retention Policy', link: '/analyzers/reliability/data-retention-policy' },
                                 { text: 'Database Status', link: '/analyzers/reliability/database-status' },
+                                { text: 'Dead Routes', link: '/analyzers/reliability/dead-routes' },
                                 { text: 'Directory Permissions', link: '/analyzers/reliability/directory-write-permissions' },
+                                { text: 'Disk Space', link: '/analyzers/reliability/disk-space' },
                                 { text: 'Env Example Docs', link: '/analyzers/reliability/env-example-documented' },
                                 { text: 'Env File Exists', link: '/analyzers/reliability/env-file-exists' },
                                 { text: 'Env Variables Complete', link: '/analyzers/reliability/env-variables-complete' },
+                                { text: 'Global Variables', link: '/analyzers/reliability/global-variables' },
+                                { text: 'Health Check', link: '/analyzers/reliability/health-check' },
+                                { text: 'Horizon Reliability', link: '/analyzers/reliability/horizon-reliability' },
+                                { text: 'Job Queue Config', link: '/analyzers/reliability/job-queue-config' },
                                 { text: 'Maintenance Mode', link: '/analyzers/reliability/maintenance-mode-status' },
+                                { text: 'Octane Configuration', link: '/analyzers/reliability/octane-config' },
+                                { text: 'PCNTL Extension', link: '/analyzers/reliability/pcntl-extension' },
                                 { text: 'PHPStan', link: '/analyzers/reliability/phpstan' },
                                 { text: 'Queue Timeout', link: '/analyzers/reliability/queue-timeout-configuration' },
+                                { text: 'Redis Eviction Policy', link: '/analyzers/reliability/redis-eviction-policy' },
+                                { text: 'Redis Shared DB', link: '/analyzers/reliability/redis-shared-database' },
+                                { text: 'Redis Status', link: '/analyzers/reliability/redis-status' },
                                 { text: 'Up-to-Date Migrations', link: '/analyzers/reliability/up-to-date-migrations' },
+                                { text: 'Vapor Configuration', link: '/analyzers/reliability/vapor-config' },
                             ]
                         },
                         {
@@ -307,6 +395,9 @@ export default defineConfig({
                                 { text: 'Missing DocBlock', link: '/analyzers/code-quality/missing-docblock' },
                                 { text: 'Naming Convention', link: '/analyzers/code-quality/naming-convention' },
                                 { text: 'Nesting Depth', link: '/analyzers/code-quality/nesting-depth' },
+                                { text: 'Test Coverage', link: '/analyzers/code-quality/test-coverage' },
+                                { text: 'Test Data Management', link: '/analyzers/code-quality/test-data-management' },
+                                { text: 'Test Quality', link: '/analyzers/code-quality/test-quality' },
                             ]
                         },
                         {
@@ -314,6 +405,7 @@ export default defineConfig({
                             link: '/analyzers/best-practices/',
                             collapsed: true,
                             items: [
+                                { text: 'Accessibility', link: '/analyzers/best-practices/accessibility' },
                                 { text: 'N+1 Query', link: '/analyzers/best-practices/eloquent-n-plus-one' },
                                 { text: 'Fat Model', link: '/analyzers/best-practices/fat-model' },
                                 { text: 'Framework Override', link: '/analyzers/best-practices/framework-override' },
@@ -322,11 +414,14 @@ export default defineConfig({
                                 { text: 'Helper Abuse', link: '/analyzers/best-practices/helper-function-abuse' },
                                 { text: 'Logic in Blade', link: '/analyzers/best-practices/logic-in-blade' },
                                 { text: 'Logic in Routes', link: '/analyzers/best-practices/logic-in-routes' },
+                                { text: 'Middleware Misuse', link: '/analyzers/best-practices/middleware-misuse' },
                                 { text: 'Missing Chunk', link: '/analyzers/best-practices/chunk-missing' },
                                 { text: 'Missing Transactions', link: '/analyzers/best-practices/missing-database-transactions' },
                                 { text: 'Missing Error Tracking', link: '/analyzers/best-practices/missing-error-tracking' },
                                 { text: 'Mixed Query/Eloquent', link: '/analyzers/best-practices/mixed-query-builder-eloquent' },
+                                { text: 'Pennant Config', link: '/analyzers/best-practices/pennant-config' },
                                 { text: 'PHP-Side Filtering', link: '/analyzers/best-practices/php-side-filtering' },
+                                { text: 'Policy Authorization', link: '/analyzers/best-practices/policy-authorization' },
                                 { text: 'Container Resolution', link: '/analyzers/best-practices/service-container-resolution' },
                                 { text: 'Silent Failure', link: '/analyzers/best-practices/silent-failure' },
                             ]
@@ -338,6 +433,29 @@ export default defineConfig({
                     collapsed: true,
                     items: [
                         { text: 'Contributing', link: '/contributing' },
+                    ]
+                },
+            ],
+            '/api/': [
+                {
+                    text: 'API Reference',
+                    link: '/api/',
+                    items: [
+                        { text: 'Overview', link: '/api/' },
+                        { text: 'Authentication', link: '/api/authentication' },
+                        { text: 'Rate Limits', link: '/api/rate-limits' },
+                        { text: 'Errors', link: '/api/errors' },
+                        {
+                            text: 'Resources',
+                            collapsed: false,
+                            items: [
+                                { text: 'Users', link: '/api/users' },
+                                { text: 'Tokens', link: '/api/tokens' },
+                                { text: 'Projects', link: '/api/projects' },
+                                { text: 'Reports', link: '/api/reports' },
+                                { text: 'Teams', link: '/api/teams' },
+                            ]
+                        },
                     ]
                 },
             ],

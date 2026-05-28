@@ -231,10 +231,10 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 ## References
 
 - [npm audit Documentation](https://docs.npmjs.com/cli/audit)
-- [yarn audit Documentation](https://yarnpkg.com/cli/audit)
+- [yarn audit Documentation](https://classic.yarnpkg.com/lang/en/docs/cli/audit/)
 - [GitHub Advisory Database](https://github.com/advisories)
 - [Snyk Vulnerability Database](https://snyk.io/vuln)
-- [npm Security Best Practices](https://docs.npmjs.com/security-best-practices)
+- [npm Security Best Practices](https://docs.npmjs.com/auditing-package-dependencies-for-security-vulnerabilities)
 - [OWASP Vulnerable and Outdated Components](https://owasp.org/Top10/A06_2021-Vulnerable_and_Outdated_Components/)
 
 ## Related Analyzers

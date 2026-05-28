@@ -1,9 +1,9 @@
 ---
 title: Password Security Analyzer
-description: Validates password hashing configuration, password policy enforcement, plain-text storage detection, validation rules, confirmation timeout, and rehash usage in Laravel applications
+description: Validates password hashing, policy enforcement, plain-text storage detection, validation rules, and confirmation timeout in Laravel applications
 icon: lock
 outline: [2, 3]
-tags: password,hashing,bcrypt,argon2,security,policy,validation,rehash
+tags: password,hashing,bcrypt,argon2,security,policy,validation,rehash,passwords
 ---
 
 # Password Security Analyzer
@@ -19,7 +19,7 @@ Validates password hashing configuration, code-level hashing practices, password
 - **Weak hashing drivers** - MD5, SHA1, or SHA256 configured in `config/hashing.php`
 - **Insufficient bcrypt/Argon2 parameters** - bcrypt rounds below 12, weak Argon2 memory/time/threads
 - **Weak hashing in code** - `md5()`, `sha1()`, `hash()`, or `password_hash()` with weak algorithms on password arguments
-- **Plain-text password storage** - password assignments and Eloquent/DB calls that store unhashed input
+- **Plain-text password storage** - password assignments and Eloquent/DB calls that store unhashed input (Filament `dehydrateStateUsing` closures are excluded — their return value is a transformed form state, not a stored credential)
 - **Missing password policy** - no `Password::defaults()` in service providers, or missing length/complexity/breach checks
 - **Weak validation rules** - password fields with minimum length below 8 in Form Requests or Controllers
 - **Long confirmation timeout** - `password_timeout` in `config/auth.php` exceeding 3 hours
@@ -215,12 +215,29 @@ MD5 and SHA1 are acceptable for non-cryptographic purposes like cache keys and c
 
 ## ShieldCI Configuration
 
-This analyzer is automatically **skipped in CI** environments (`$runInCI = false`) because hashing configuration is environment-specific.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
-Configuration is read from `analyzers.security.password-security` in `config/shieldci.php`.
+**Why skip in CI?**
+- Hashing configuration is environment-specific and not relevant to test pipelines
+- CI environments often use faster hashing settings for speed, which would trigger false warnings
+- Password security thresholds are a production concern validated on real servers
+
+**When to run this analyzer:**
+- ✅ **Local development**: Validates your bcrypt/Argon2 rounds meet minimum standards
+- ✅ **Staging/Production servers**: Confirms production-grade hashing is configured
+- ❌ **CI/CD pipelines**: Skipped automatically (hashing settings are environment-specific)
+
+**Configuration options:**
+
+To customize thresholds, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
 
 ```php
-// config/shieldci.php
 'analyzers' => [
     'security' => [
         'enabled' => true,

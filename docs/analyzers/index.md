@@ -1,6 +1,6 @@
 ---
 title: Analyzers Overview
-description: Comprehensive overview of ShieldCI's analyzers across 5 categories
+description: Comprehensive overview of ShieldCI's analyzers across security, performance, reliability, code quality, and best practice categories
 tags: analyzers,security,performance,reliability,code-quality,best-practices,laravel
 icon: shield-check
 outline: [2, 3]
@@ -8,12 +8,12 @@ outline: [2, 3]
 
 # Analyzers Overview
 
-ShieldCI includes comprehensive analyzers organized into five categories. The free package includes 73 analyzers across all categories.
+ShieldCI includes comprehensive analyzers organized into five categories. With 155 analyzers across all categories, ShieldCI provides the most comprehensive Laravel analysis available.
 
 ## Categories
 
 ### [Security](/analyzers/security/)
-**22 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
+**67 analyzers** (22 Free, 45 Pro) detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 **Critical Analyzers:**
 - SQL Injection Detection 
@@ -25,7 +25,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Environment File Security
 
 ### [Performance](/analyzers/performance/)
-**18 analyzers** identifying bottlenecks and optimization opportunities in Laravel applications.
+**33 analyzers** (18 Free, 15 Pro) identifying bottlenecks and optimization opportunities in Laravel applications.
 
 **Key Analyzers:**
 - Autoloader Optimization
@@ -36,7 +36,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - View Compilation
 
 ### [Reliability](/analyzers/reliability/)
-**13 analyzers** ensuring your application handles errors gracefully and maintains uptime.
+**28 analyzers** (13 Free, 15 Pro) ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
 - PHPStan Static Analysis (13 categories consolidated)
@@ -46,7 +46,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - File Permissions & Structure
 
 ### [Code Quality](/analyzers/code-quality/)
-**5 analyzers** maintaining clean, maintainable code following Laravel conventions.
+**8 analyzers** (5 Free, 3 Pro) maintaining clean, maintainable code following Laravel conventions.
 
 **Key Analyzers:**
 - Nesting Depth
@@ -56,25 +56,32 @@ ShieldCI includes comprehensive analyzers organized into five categories. The fr
 - Missing DocBlocks
 
 ### [Best Practices](/analyzers/best-practices/)
-**15 analyzers** ensuring you follow Laravel ecosystem best practices and framework conventions.
+**19 analyzers** (15 Free, 4 Pro) ensuring you follow Laravel ecosystem best practices and framework conventions.
 
 **Key Analyzers:**
 - Laravel Conventions
 - Framework Usage Patterns
 - Third-Party Integration Best Practices
 
-## Analyzer Package
+## Analyzer Packages
 
 ### Free Package (73 Analyzers)
-The open-source package includes comprehensive analyzers across all categories:
+The open-source package includes:
 
-- ✅ All 22 security analyzers
-- ✅ All 18 performance analyzers
-- ✅ All 13 reliability analyzers
-- ✅ All 5 code quality analyzers
-- ✅ All 15 best practices analyzers
+- ✅ 22 security analyzers
+- ✅ 18 performance analyzers
+- ✅ 13 reliability analyzers
+- ✅ 5 code quality analyzers
+- ✅ 15 best practices analyzers
 
-All analyzers are available in the free package.
+### Pro Package (+82 Analyzers)
+The commercial package adds advanced analyzers:
+
+- 🔒 +45 security analyzers (advanced vulnerability detection)
+- ⚡ +15 performance analyzers (deep optimization)
+- 🛡️ +15 reliability analyzers (enterprise monitoring)
+- 🧩 +4 best practices analyzers (framework expertise)
+- 📐 +3 code quality analyzers (test coverage analysis)
 
 ## How Analyzers Work
 

@@ -57,13 +57,13 @@ composer update
 This analyzer is automatically skipped in live serverless runtimes.
 
 **Why skip in live serverless runtimes?**
-- Composer is not installed in deployed Lambda containers — the dry-run exits immediately with an error
+- Composer is not installed in deployed Lambda containers - the dry-run exits immediately with an error
 - Packages are frozen at build time and cannot be updated at runtime
 - Running the check there would always fail and produce a false positive
 
 **When to run this analyzer:**
 - ✅ **Standard environments**: Runs normally and reports any pending updates within your declared constraints
-- ✅ **Laravel Vapor / Laravel Cloud (local dev or CI)**: Runs with `--ignore-platform-reqs` — your machine and the deployment target differ in OS and PHP extensions, so platform-specific packages are excluded from the diff to prevent false positives
+- ✅ **Laravel Vapor / Laravel Cloud (local dev or CI)**: Runs with `--ignore-platform-reqs` - your machine and the deployment target differ in OS and PHP extensions, so platform-specific packages are excluded from the diff to prevent false positives
 - ❌ **Live serverless runtimes** (Vapor Lambda, Cloud Functions, Azure Functions): Skipped automatically
 
 ## References

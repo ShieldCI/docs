@@ -1,6 +1,6 @@
 ---
 title: How It Works
-description: Technical overview of how ShieldCI analyzes Laravel applications
+description: Technical overview of how ShieldCI uses AST analysis on PHP and Blade files to detect security vulnerabilities, performance issues, and code quality problems
 tags: laravel,static-analysis,architecture,analyzers,code-analysis
 icon: code
 outline: [2, 3]

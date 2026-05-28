@@ -198,7 +198,7 @@ php -r "print_r(opcache_get_status());" | grep hit_rate
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - OPcache configuration is not applicable in CI

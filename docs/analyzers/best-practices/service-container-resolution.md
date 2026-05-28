@@ -1,6 +1,6 @@
 ---
 title: Service Container Resolution Analyzer
-description: Detects manual service container resolution (Service Locator anti-pattern) and recommends constructor dependency injection for improved testability and maintainability.
+description: Detects manual service container resolution (Service Locator anti-pattern) and recommends constructor dependency injection for testability and maintainability
 icon: shield-alert
 outline: [2, 3]
 tags: dependency-injection,architecture,testability,laravel,ioc,service-locator
@@ -116,7 +116,7 @@ class OrderService
 
 ## ShieldCI Configuration
 
-Publish the config to customize behaviour:
+This analyzer runs in all environments. To customize which directories and classes to skip, publish the config:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
