@@ -1,6 +1,6 @@
 ---
 title: Asset Minification Analyzer
-description: Validates that JavaScript and CSS assets are minified for production, preventing oversized bundles that slow page loads and hurt Core Web Vitals scores
+description: Validates that JavaScript and CSS assets are minified for production deployment
 icon: zap
 outline: [2, 3]
 tags: assets,minification,performance,javascript,css
@@ -68,7 +68,7 @@ export default defineConfig({
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - Asset minification checks require compiled assets, not applicable in CI

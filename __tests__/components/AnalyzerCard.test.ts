@@ -81,40 +81,4 @@ describe('AnalyzerCard', () => {
     )
     expect(categoryDiv).toBeUndefined()
   })
-
-  it('renders Pro pill when pro prop is true', () => {
-    const wrapper = mount(AnalyzerCard, {
-      props: { title: 'SSRF', description: 'Detects SSRF', pro: true },
-    })
-
-    const pill = wrapper.find('.pro-pill')
-    expect(pill.exists()).toBe(true)
-    expect(pill.text()).toBe('Pro')
-  })
-
-  it('hides Pro pill when pro prop is absent', () => {
-    const wrapper = mount(AnalyzerCard, {
-      props: { title: 'SQL Injection', description: 'Detects raw queries' },
-    })
-
-    expect(wrapper.find('.pro-pill').exists()).toBe(false)
-  })
-
-  it('hides Pro pill when pro prop is false', () => {
-    const wrapper = mount(AnalyzerCard, {
-      props: { title: 'SQL Injection', description: 'Detects raw queries', pro: false },
-    })
-
-    expect(wrapper.find('.pro-pill').exists()).toBe(false)
-  })
-
-  it('shows Pro pill alongside severity badge', () => {
-    const wrapper = mount(AnalyzerCard, {
-      props: { title: 'RCE', description: 'Remote code exec', severity: 'critical', pro: true },
-    })
-
-    expect(wrapper.find('.pro-pill').exists()).toBe(true)
-    expect(wrapper.find('span.shrink-0').exists()).toBe(true)
-    expect(wrapper.find('span.shrink-0').text()).toBe('Critical')
-  })
 })

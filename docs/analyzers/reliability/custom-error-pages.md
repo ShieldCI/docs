@@ -1,6 +1,6 @@
 ---
 title: Custom Error Pages Analyzer
-description: Checks for proper 404 and 500 error page templates in your Laravel application, ensuring users see branded error pages instead of raw framework output
+description: Checks for conventional file-based error page templates
 icon: alert-triangle
 outline: [2, 3]
 tags: errors,ux,reliability,security,fingerprinting

@@ -134,7 +134,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - [Laravel Environment Configuration](https://laravel.com/docs/configuration#environment-configuration)
 - [The Twelve-Factor App - Config](https://12factor.net/config)
 - [PHP Dotenv Library](https://github.com/vlucas/phpdotenv)
-- [Environment Variables Best Practices](https://12factor.net/config)
+- [Environment Variables Best Practices](https://blog.laravel.com/laravel-environment-configuration-best-practices)
 
 ## Related Analyzers
 

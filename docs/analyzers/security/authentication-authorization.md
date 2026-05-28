@@ -367,6 +367,8 @@ class AuthenticationTest extends TestCase
 }
 ```
 
+## ShieldCI Configuration
+
 #### Public Routes (Exact Path Matching)
 
 By default, the analyzer recognizes these exact public route paths and skips them:

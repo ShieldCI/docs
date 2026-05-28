@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Security Analyzers
 
-**67 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, command injection, and more.
+**22 analyzers** detecting vulnerabilities like SQL injection, XSS, CSRF, authentication issues, and more.
 
 ## Overview
 
@@ -28,94 +28,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 />
 
 <AnalyzerCard
-  title="Column Name SQL Injection"
-  description="Detects SQL injection vulnerabilities where user input controls column names"
-  severity="critical"
-  link="/analyzers/security/column-name-sql-injection"
-  pro
-/>
-
-<AnalyzerCard
-  title="Validation SQL Injection"
-  description="Detects SQL injection vulnerabilities in validation rules"
-  severity="critical"
-  link="/analyzers/security/validation-sql-injection"
-  pro
-/>
-
-<AnalyzerCard
-  title="Command Injection"
-  description="Detects command injection vulnerabilities where user input is passed to shell execution functions"
-  severity="critical"
-  link="/analyzers/security/command-injection"
-  pro
-/>
-
-<AnalyzerCard
-  title="Directory Traversal"
-  description="Detects path traversal vulnerabilities that allow accessing files outside intended directories"
-  severity="critical"
-  link="/analyzers/security/directory-traversal"
-  pro
-/>
-
-<AnalyzerCard
-  title="Remote Code Execution (RCE)"
-  description="Detects code execution vulnerabilities that allow arbitrary code execution"
-  severity="critical"
-  link="/analyzers/security/rce"
-  pro
-/>
-
-<AnalyzerCard
-  title="Object Injection"
-  description="Detects unsafe deserialization that can lead to object injection attacks"
-  severity="critical"
-  link="/analyzers/security/object-injection"
-  pro
-/>
-
-<AnalyzerCard
-  title="Server-Side Request Forgery (SSRF)"
-  description="Detects SSRF vulnerabilities where user input controls server-side requests"
-  severity="critical"
-  link="/analyzers/security/ssrf"
-  pro
-/>
-
-<AnalyzerCard
-  title="Eval Usage"
-  description="Detects dangerous eval usage that can execute arbitrary code"
-  severity="critical"
-  link="/analyzers/security/eval"
-  pro
-/>
-
-<AnalyzerCard
-  title="Extract Function"
-  description="Detects unsafe extract usage that can overwrite variables"
-  severity="high"
-  link="/analyzers/security/extract"
-  pro
-/>
-
-<AnalyzerCard
-  title="XXE Injection Vulnerabilities"
-  description="Detects XML External Entity injection vulnerabilities"
-  severity="critical"
-  link="/analyzers/security/xxe-vulnerabilities"
-  pro
-/>
-
-<AnalyzerCard
-  title="Regular Expression DoS"
-  description="Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns"
-  severity="high"
-  link="/analyzers/security/regex-dos"
-  pro
-/>
-
-<AnalyzerCard
   title="XSS Vulnerabilities"
   description="Detects XSS vulnerabilities via code analysis and HTTP header verification"
   severity="critical"
@@ -127,14 +39,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Detects missing CSRF (Cross-Site Request Forgery) protection"
   severity="critical"
   link="/analyzers/security/csrf-protection"
-/>
-
-<AnalyzerCard
-  title="Arbitrary File Upload"
-  description="Detects file upload vulnerabilities that could lead to remote code execution"
-  severity="critical"
-  link="/analyzers/security/arbitrary-file-upload"
-  pro
 />
 
 <AnalyzerCard
@@ -171,130 +75,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   link="/analyzers/security/login-throttling"
 />
 
-<AnalyzerCard
-  title="Session Timeout"
-  description="Ensures session lifetime is configured appropriately for security"
-  severity="medium"
-  link="/analyzers/security/session-timeout"
-  pro
-/>
-
-<AnalyzerCard
-  title="Fortify Security"
-  description="Validates Laravel Fortify authentication configuration, two-factor auth, password rules, and security settings"
-  severity="high"
-  link="/analyzers/security/fortify-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Passport Security"
-  description="Validates Laravel Passport OAuth2 configuration, token lifetimes, encryption keys, and security settings"
-  severity="high"
-  link="/analyzers/security/passport-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Sanctum Security"
-  description="Validates Laravel Sanctum token configuration, expiration settings, and SPA middleware setup"
-  severity="high"
-  link="/analyzers/security/sanctum-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Socialite Security"
-  description="Validates Laravel Socialite OAuth configuration, credential security, and callback handling"
-  severity="high"
-  link="/analyzers/security/socialite-security"
-  pro
-/>
-
-</div>
-
-### Filament Security
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Filament Panel Security"
-  description="Validates Filament admin panel security including authentication, middleware, and access restrictions"
-  severity="high"
-  link="/analyzers/security/filament-panel-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Resource Authorization"
-  description="Validates that Filament resources have proper policy bindings for authorization on CRUD operations"
-  severity="high"
-  link="/analyzers/security/filament-resource-authorization"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Tenancy"
-  description="Validates multi-tenancy scope enforcement in Filament panels to prevent cross-tenant data leakage"
-  severity="high"
-  link="/analyzers/security/filament-tenancy"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Custom Pages"
-  description="Validates that custom Filament pages have proper authorization to prevent unauthorized access"
-  severity="medium"
-  link="/analyzers/security/filament-custom-pages"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Form Validation"
-  description="Validates that Filament form fields have proper validation rules to prevent invalid or malicious input"
-  severity="medium"
-  link="/analyzers/security/filament-form-validation"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Navigation"
-  description="Validates that Filament navigation groups and items have proper permission gates for visibility control"
-  severity="medium"
-  link="/analyzers/security/filament-navigation"
-  pro
-/>
-
-<AnalyzerCard
-  title="Filament Widget Security"
-  description="Validates that Filament widgets have proper authorization and don't expose sensitive data to unauthorized users"
-  severity="medium"
-  link="/analyzers/security/filament-widget-security"
-  pro
-/>
-
-</div>
-
-### Payment Security
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Cashier Security (Stripe)"
-  description="Validates Laravel Cashier Stripe webhook verification, key exposure, and payment handling security"
-  severity="high"
-  link="/analyzers/security/cashier-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Cashier Paddle"
-  description="Validates Laravel Cashier Paddle webhook verification, sandbox detection, and configuration security"
-  severity="high"
-  link="/analyzers/security/cashier-paddle"
-  pro
-/>
-
 </div>
 
 ### Configuration & Secrets
@@ -306,14 +86,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   description="Validates that the application encryption key is properly configured and secure"
   severity="critical"
   link="/analyzers/security/app-key-security"
-/>
-
-<AnalyzerCard
-  title="Hardcoded Credentials"
-  description="Detects hardcoded passwords, API keys, and secrets in source code"
-  severity="critical"
-  link="/analyzers/security/hardcoded-credentials"
-  pro
 />
 
 <AnalyzerCard
@@ -344,38 +116,6 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   link="/analyzers/security/php-ini"
 />
 
-<AnalyzerCard
-  title="Telescope Security"
-  description="Ensures Laravel Telescope is properly secured in production"
-  severity="high"
-  link="/analyzers/security/telescope-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Nova Security"
-  description="Ensures Laravel Nova admin panel is properly secured"
-  severity="high"
-  link="/analyzers/security/nova-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Security"
-  description="Ensures Laravel Horizon dashboard is properly secured"
-  severity="high"
-  link="/analyzers/security/horizon-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Pulse Security"
-  description="Validates Laravel Pulse dashboard authorization, data retention, and security settings"
-  severity="high"
-  link="/analyzers/security/pulse-security"
-  pro
-/>
-
 </div>
 
 ### Data Protection
@@ -397,48 +137,10 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 />
 
 <AnalyzerCard
-  title="Cookie Domain"
-  description="Detects unnecessary cookie domain configuration that makes cookies less restrictive"
-  severity="medium"
-  link="/analyzers/security/cookie-domain"
-  pro
-/>
-
-<AnalyzerCard
   title="Fillable Foreign Key"
   description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
   severity="high"
   link="/analyzers/security/fillable-foreign-key"
-/>
-
-<AnalyzerCard
-  title="Cryptographic Weakness"
-  description="Detects weak cryptographic algorithms and insecure random number generation"
-  severity="high"
-  link="/analyzers/security/cryptographic-weakness"
-  pro
-/>
-
-</div>
-
-### Compliance & Audit
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Audit Logging"
-  description="Validates that security-sensitive operations have proper audit logging for compliance and incident response"
-  severity="medium"
-  link="/analyzers/security/audit-logging"
-  pro
-/>
-
-<AnalyzerCard
-  title="GDPR Compliance"
-  description="Validates basic GDPR compliance patterns including data deletion, consent tracking, and encryption at rest"
-  severity="medium"
-  link="/analyzers/security/gdpr-compliance"
-  pro
 />
 
 </div>
@@ -448,96 +150,10 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <div class="grid gap-4 md:grid-cols-2 mt-4">
 
 <AnalyzerCard
-  title="Clickjacking Protection"
-  description="Detects missing clickjacking protection via X-Frame-Options or CSP frame-ancestors"
-  severity="high"
-  link="/analyzers/security/clickjacking"
-  pro
-/>
-
-<AnalyzerCard
   title="HSTS Header"
   description="Validates HTTP Strict Transport Security (HSTS) header configuration for HTTPS-only applications"
   severity="high"
   link="/analyzers/security/hsts-header"
-/>
-
-<AnalyzerCard
-  title="MIME Sniffing Protection"
-  description="Ensures X-Content-Type-Options header prevents MIME type sniffing"
-  severity="medium"
-  link="/analyzers/security/mime-sniffing"
-  pro
-/>
-
-<AnalyzerCard
-  title="Web Server Fingerprinting"
-  description="Detects server information leakage through HTTP headers"
-  severity="low"
-  link="/analyzers/security/web-server-fingerprinting"
-  pro
-/>
-
-<AnalyzerCard
-  title="Host Header Injection"
-  description="Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks"
-  severity="high"
-  link="/analyzers/security/host-injection"
-  pro
-/>
-
-<AnalyzerCard
-  title="CORS Configuration"
-  description="Validates Cross-Origin Resource Sharing configuration for security, preventing overly permissive API access"
-  severity="high"
-  link="/analyzers/security/cors-config"
-  pro
-/>
-
-<AnalyzerCard
-  title="Route Rate Limiting"
-  description="Validates that public API endpoints have rate limiting configured to prevent abuse and brute force attacks"
-  severity="medium"
-  link="/analyzers/security/route-rate-limiting"
-  pro
-/>
-
-<AnalyzerCard
-  title="Open Redirection"
-  description="Detects open redirect vulnerabilities that can be used for phishing attacks"
-  severity="medium"
-  link="/analyzers/security/open-redirection"
-  pro
-/>
-
-</div>
-
-### Frontend & API Security
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Livewire Security"
-  description="Validates Livewire component security including property exposure, authorization checks, and file uploads"
-  severity="high"
-  link="/analyzers/security/livewire-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Reverb Security"
-  description="Validates Laravel Reverb WebSocket configuration, channel authorization, and SSL/TLS settings"
-  severity="high"
-  link="/analyzers/security/reverb-security"
-  pro
-/>
-
-<AnalyzerCard
-  title="Inertia Security"
-  description="Validates Inertia.js shared data exposure and middleware configuration to prevent sensitive data leakage"
-  severity="medium"
-  link="/analyzers/security/inertia-security"
-  pro
 />
 
 </div>
@@ -675,17 +291,13 @@ Before deploying to production, ensure:
 - ✅ File permissions are secure (644 for files, 755 for directories)
 - ✅ All routes have proper authentication/authorization
 - ✅ CSRF protection is enabled on all forms
-- ✅ Clickjacking protection enabled (X-Frame-Options or CSP frame-ancestors)
 - ✅ SQL injection protection (use Eloquent/parameter binding)
 - ✅ XSS protection (escape all user input)
-- ✅ File uploads have MIME type, extension, and size validation
-- ✅ Uploaded files stored in private directories (not publicly executable)
 - ✅ Mass assignment protection (use $fillable/$guarded)
 - ✅ Password hashing uses strong algorithms (bcrypt 12+ rounds or Argon2id)
 - ✅ Dependencies are up-to-date and vulnerability-free
 - ✅ HTTPS is enforced (HSTS header configured)
 - ✅ Cookies are secure (httpOnly, secure flags)
-- ✅ Cookie domain is only set when using subdomain routing
 - ✅ Login throttling is enabled
 
 ## Related Categories

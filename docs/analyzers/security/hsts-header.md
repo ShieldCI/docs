@@ -216,7 +216,7 @@ The default settings follow OWASP recommendations. Only customize if you have sp
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
 - HSTS header checks require a live web server, not applicable in CI

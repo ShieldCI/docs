@@ -250,7 +250,7 @@ The default dangerous patterns (`user_id`, `owner_id`, `tenant_id`, etc.) are ba
 
 - [Laravel Mass Assignment Documentation](https://laravel.com/docs/eloquent#mass-assignment)
 - [OWASP Mass Assignment Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html)
-- [Laravel Security Best Practices](https://laravel.com/docs/authentication)
+- [Laravel Security Best Practices](https://laravel.com/docs/security)
 - [Multi-Tenancy in Laravel](https://laravel.com/docs/eloquent#global-scopes)
 
 ## Related Analyzers

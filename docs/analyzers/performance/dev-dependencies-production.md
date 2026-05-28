@@ -1,6 +1,6 @@
 ---
 title: Dev Dependencies in Production Analyzer
-description: Ensures development-only Composer dependencies are not installed in production, reducing attack surface and keeping the production footprint minimal
+description: Ensures development dependencies are not installed in production environments
 icon: alert-circle
 outline: [2, 3]
 tags: composer,dependencies,performance,memory,production
@@ -49,7 +49,7 @@ RUN composer install --no-dev --optimize-autoloader
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
+This analyzer is automatically skipped in CI environments and only runs in production and staging environments.
 
 **Why skip in CI and development?**
 - Dev dependency checks are not applicable in CI

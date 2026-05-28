@@ -294,7 +294,7 @@ throw new \RuntimeException('Error occurred');
 
 - [Laravel Error Handling Documentation](https://laravel.com/docs/errors)
 - [Laravel Logging Documentation](https://laravel.com/docs/logging)
-- [OWASP Information Disclosure](https://owasp.org/Top10/A05_2021-Security_Misconfiguration/)
+- [OWASP Information Disclosure](https://owasp.org/www-community/vulnerabilities/Information_exposure_through_an_error_message)
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)
 
 ## Related Analyzers

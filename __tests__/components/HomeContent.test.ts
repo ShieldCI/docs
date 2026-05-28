@@ -45,7 +45,7 @@ describe('HomeContent', () => {
   it('shows analyzer counts on category cards', () => {
     const wrapper = mount(HomeContent)
 
-    const expectedCounts = ['67', '33', '28', '8', '19']
+    const expectedCounts = ['22', '18', '13', '5', '15']
     for (const count of expectedCounts) {
       expect(wrapper.text()).toContain(count)
     }

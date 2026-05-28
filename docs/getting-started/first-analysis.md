@@ -1,6 +1,6 @@
 ---
 title: First Analysis
-description: Run your first ShieldCI analysis, interpret the results report, understand severity levels, and learn how to act on the findings in your Laravel project
+description: Run your first ShieldCI analysis and understand the results
 tags: laravel,analysis,tutorial,getting-started,artisan
 icon: play
 outline: [2, 3]

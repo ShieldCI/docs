@@ -1,6 +1,6 @@
 ---
 title: XSS Vulnerabilities Analyzer
-description: Detects XSS vulnerabilities in Blade templates and PHP controllers — unescaped output, dangerous HTML attribute contexts, and missing CSP headers
+description: Detects Cross-Site Scripting (XSS) vulnerabilities in PHP controllers, Blade views, and HTTP responses by checking for unescaped output, dangerous HTML attribute contexts, and missing Content-Security-Policy headers
 icon: shield-alert
 outline: [2, 3]
 tags: xss,cross-site-scripting,security,blade,csp,headers
@@ -54,7 +54,7 @@ return response($html)->header('Content-Security-Policy', "default-src 'self'; s
 ## References
 
 - [Laravel Blade & XSS](https://laravel.com/docs/blade#displaying-data)
-- [OWASP XSS Prevention Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cross_Site_Scripting_Prevention_Cheat_Sheet.html)
+- [OWASP XSS Prevention Cheat Sheet](https://owasp.org/www-community/xss-prevention)
 - [Content Security Policy (MDN)](https://developer.mozilla.org/docs/Web/HTTP/CSP)
 
 ## Related Analyzers

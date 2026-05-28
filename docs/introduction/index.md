@@ -1,6 +1,6 @@
 ---
 title: Introduction
-description: Learn what ShieldCI is, why static analysis catches security flaws and performance bugs before they reach production, and how it integrates with Laravel
+description: Learn what ShieldCI is and why it exists
 head:
   - - meta
     - http-equiv: refresh

@@ -1,6 +1,6 @@
 ---
 title: Getting Started
-description: Install and configure ShieldCI for your Laravel application in minutes — Composer setup, config file, and your first security and performance scan
+description: Install and configure ShieldCI for your Laravel application
 head:
   - - meta
     - http-equiv: refresh
