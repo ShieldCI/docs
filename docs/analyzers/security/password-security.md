@@ -19,7 +19,7 @@ Validates password hashing configuration, code-level hashing practices, password
 - **Weak hashing drivers** - MD5, SHA1, or SHA256 configured in `config/hashing.php`
 - **Insufficient bcrypt/Argon2 parameters** - bcrypt rounds below 12, weak Argon2 memory/time/threads
 - **Weak hashing in code** - `md5()`, `sha1()`, `hash()`, or `password_hash()` with weak algorithms on password arguments
-- **Plain-text password storage** - password assignments and Eloquent/DB calls that store unhashed input
+- **Plain-text password storage** - password assignments and Eloquent/DB calls that store unhashed input (Filament `dehydrateStateUsing` closures are excluded — their return value is a transformed form state, not a stored credential)
 - **Missing password policy** - no `Password::defaults()` in service providers, or missing length/complexity/breach checks
 - **Weak validation rules** - password fields with minimum length below 8 in Form Requests or Controllers
 - **Long confirmation timeout** - `password_timeout` in `config/auth.php` exceeding 3 hours

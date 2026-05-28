@@ -22,7 +22,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - **Business logic in directives**: Complex conditionals (4+ conditions), data transformations in @foreach loops
 - **Complex calculations**: Multi-operation arithmetic, data manipulation in view layer
 - **Inline PHP tags**: Use of `<?php` instead of Blade directives
-- **Unclosed @php blocks**: Missing @endphp directives
+- **Unclosed @php blocks**: Missing `@endphp` directives (the single-statement `@php($expr)` form is self-closing and is never flagged)
 
 **Smart Detection Features:**
 - ✅ **Hybrid regex + AST analysis** - structural checks on raw Blade, logic detection via compiled PHP AST
@@ -32,6 +32,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - ✅ Detects relationship queries (`$user->posts()->get()`)
 - ✅ Tracks 9 different issue types with appropriate severity levels
 - ✅ Configurable thresholds for @php block complexity and arithmetic operator sensitivity
+- ✅ Recognises the single-statement `@php($expr)` form as self-closing — never emits a false-positive "Unclosed @php block" for this syntax
 
 **Detected Operations by Severity:**
 
