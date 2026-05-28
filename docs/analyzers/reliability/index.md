@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Reliability Analyzers
 
-**28 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
+**13 analyzers** ensuring your application handles errors gracefully, maintains uptime, and prevents runtime failures.
 
 ## Overview
 
@@ -76,14 +76,6 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   link="/analyzers/reliability/maintenance-mode-status"
 />
 
-<AnalyzerCard
-  title="Disk Space"
-  description="Monitors available disk space and warns when storage is running low"
-  severity="medium"
-  link="/analyzers/reliability/disk-space"
-  pro
-/>
-
 </div>
 
 ### Infrastructure & Permissions
@@ -122,179 +114,6 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   description="Ensures all database migrations are up to date and have been executed"
   severity="high"
   link="/analyzers/reliability/up-to-date-migrations"
-/>
-
-<AnalyzerCard
-  title="Queue Blocking"
-  description="Detects blocking operations in queue workers that can cause timeouts"
-  severity="high"
-  link="/analyzers/reliability/queue-blocking"
-/>
-
-<AnalyzerCard
-  title="Dead Route"
-  description="Detects routes pointing to non-existent controllers or methods"
-  severity="medium"
-  link="/analyzers/reliability/dead-routes"
-  pro
-/>
-
-<AnalyzerCard
-  title="Job Queue Configuration"
-  description="Validates job queue configuration including blocking, retry policies, and failed job handling"
-  severity="high"
-  link="/analyzers/reliability/job-queue-config"
-  pro
-/>
-
-<AnalyzerCard
-  title="Data Retention Policy"
-  description="Validates that proper data retention policies are in place to prevent unbounded data growth"
-  severity="medium"
-  link="/analyzers/reliability/data-retention-policy"
-  pro
-/>
-
-</div>
-
-### Cache & Redis
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Cache Busting"
-  description="Detects cache invalidation issues and stale cache problems"
-  severity="medium"
-  link="/analyzers/reliability/cache-busting"
-  pro
-/>
-
-<AnalyzerCard
-  title="Redis Eviction Policy"
-  description="Ensures Redis eviction policy is configured appropriately"
-  severity="high"
-  link="/analyzers/reliability/redis-eviction-policy"
-  pro
-/>
-
-<AnalyzerCard
-  title="Redis Shared Database"
-  description="Detects when multiple services share the same Redis database"
-  severity="medium"
-  link="/analyzers/reliability/redis-shared-database"
-  pro
-/>
-
-<AnalyzerCard
-  title="Redis Status"
-  description="Validates Redis connectivity and health"
-  severity="high"
-  link="/analyzers/reliability/redis-status"
-  pro
-/>
-
-</div>
-
-### Horizon
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Horizon Reliability"
-  description="Validates Horizon prefix configuration, provisioning plan, and runtime health"
-  severity="critical"
-  link="/analyzers/reliability/horizon-reliability"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Prefix"
-  description="Ensures Horizon prefix is configured to avoid job collisions"
-  severity="medium"
-  link="/analyzers/reliability/horizon-prefix"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Provisioning Plan"
-  description="Validates Horizon supervisor provisioning configuration"
-  severity="high"
-  link="/analyzers/reliability/horizon-provisioning-plan"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Status"
-  description="Checks if Horizon is running and processing jobs"
-  severity="high"
-  link="/analyzers/reliability/horizon-status"
-  pro
-/>
-
-</div>
-
-### Application Servers & Deployment
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Octane Configuration"
-  description="Validates Laravel Octane configuration for long-running server reliability including memory management and state isolation"
-  severity="high"
-  link="/analyzers/reliability/octane-config"
-  pro
-/>
-
-<AnalyzerCard
-  title="Vapor Configuration"
-  description="Validates Laravel Vapor configuration for proper serverless deployment on AWS Lambda"
-  severity="medium"
-  link="/analyzers/reliability/vapor-config"
-  pro
-/>
-
-</div>
-
-### Monitoring & Observability
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="Health Check"
-  description="Validates that the application has proper health check endpoints for monitoring and load balancer integration"
-  severity="medium"
-  link="/analyzers/reliability/health-check"
-  pro
-/>
-
-<AnalyzerCard
-  title="Alerting Configuration"
-  description="Validates that proper alerting and notification mechanisms are configured for production issues"
-  severity="medium"
-  link="/analyzers/reliability/alerting-config"
-  pro
-/>
-
-</div>
-
-### Extensions & Variables
-
-<div class="grid gap-4 md:grid-cols-2 mt-4">
-
-<AnalyzerCard
-  title="PCNTL Extension"
-  description="Ensures PCNTL extension is available for queue workers and signal handling"
-  severity="medium"
-  link="/analyzers/reliability/pcntl-extension"
-  pro
-/>
-
-<AnalyzerCard
-  title="Global Variable"
-  description="Detects usage of global variables which can cause unpredictable behavior"
-  severity="medium"
-  link="/analyzers/reliability/global-variable"
-  pro
 />
 
 </div>

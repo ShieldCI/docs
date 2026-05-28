@@ -36,13 +36,12 @@ Specifically checks for:
 
 ## How to Fix
 
-### Quick Fix (5 minutes)
+### HandleCors - configure paths or disable
 
-Configure the flagged middleware so it runs with a purpose:
+The most common fix is to configure CORS properly rather than remove the middleware.
 
-**HandleCors — add CORS paths:**
-
-```php
+::: code-group
+```php [Configure paths (recommended)]
 // config/cors.php
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
@@ -50,32 +49,14 @@ return [
 ];
 ```
 
-**TrustProxies — configure your proxy (Laravel 9–10):**
-
-```php
-// app/Http/Middleware/TrustProxies.php
-protected $proxies = '*'; // or specific IPs: ['192.168.1.1']
-```
-
-**TrustHosts — configure TrustProxies alongside it (Laravel 9–10):**
-
-`TrustHosts` only functions when `TrustProxies` is registered and configured. Apply the `TrustProxies` fix above first.
-
-### Proper Fix (10 minutes)
-
-If you don't use the middleware's feature, remove it entirely rather than adding placeholder configuration.
-
-**HandleCors — remove if you have no CORS requirements:**
-
-::: code-group
-```php [Laravel 11+]
+```php [Laravel 11+ - disable if not needed]
 // bootstrap/app.php
 ->withMiddleware(function (Middleware $middleware): void {
     $middleware->remove(\Illuminate\Http\Middleware\HandleCors::class);
 })
 ```
 
-```php [Laravel 9–10]
+```php [Laravel 9–10 - remove from Kernel]
 // app/Http/Kernel.php
 protected $middleware = [
     // Comment out or remove:
@@ -84,16 +65,26 @@ protected $middleware = [
 ```
 :::
 
-**TrustProxies and TrustHosts — remove both if you are not behind a proxy (Laravel 9–10):**
+### TrustProxies - configure or remove (Laravel 9–10 only)
 
-```php
+::: code-group
+```php [Configure proxies]
+// app/Http/Middleware/TrustProxies.php
+protected $proxies = '*'; // or specific IPs: ['192.168.1.1']
+```
+
+```php [Remove from Kernel]
 // app/Http/Kernel.php
 protected $middleware = [
-    // Comment out or remove both:
+    // Comment out or remove:
     // \App\Http\Middleware\TrustProxies::class,
-    // \App\Http\Middleware\TrustHosts::class,
 ];
 ```
+:::
+
+### TrustHosts - add TrustProxies or remove (Laravel 9–10 only)
+
+`TrustHosts` only works when `TrustProxies` is also registered and configured. Either configure `TrustProxies` alongside it, or remove both if you are not behind a proxy.
 
 ## References
 

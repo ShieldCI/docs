@@ -1,6 +1,6 @@
 ---
 title: Cache Status Analyzer
-description: Verifies your configured cache driver can write, read, and delete entries without errors, catching misconfigurations before they cause runtime failures
+description: Verify your cache driver can write, read, and clean up entries without errors
 icon: database
 outline: [2, 3]
 tags: cache,infrastructure,reliability,availability

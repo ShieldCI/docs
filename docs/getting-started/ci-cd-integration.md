@@ -1,6 +1,6 @@
 ---
 title: CI/CD Integration
-description: Integrate ShieldCI into GitHub Actions, GitLab CI, or Bitbucket Pipelines to catch security and performance issues automatically on every commit
+description: Integrate ShieldCI into your continuous integration and deployment pipelines
 tags: ci-cd,github-actions,gitlab-ci,automation,pipeline,deployment
 icon: git-branch
 outline: [2, 3]

@@ -1,6 +1,6 @@
 ---
 title: Method Length Analyzer
-description: Flags methods exceeding recommended line count thresholds to encourage smaller, single-responsibility functions and better maintainability
+description: Flags methods exceeding recommended line count for better maintainability
 icon: code
 outline: [2, 3]
 tags: complexity,maintainability,code-quality,readability
@@ -288,7 +288,7 @@ private function getUserProcessor(User $user): UserProcessor
 }
 ```
 
-## ShieldCI Configuration
+#### 5: Customize ShieldCI Custom Settings (Optional)
 
 To customize the method length threshold and excluded patterns, publish the config:
 

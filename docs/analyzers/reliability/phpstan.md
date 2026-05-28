@@ -78,6 +78,7 @@ php artisan vendor:publish --tag=shieldci-config
 Then start with level 5, increase gradually in `config/shieldci.php`: 
 
 ```php
+// config/shieldci.php
 'analyzers' => [
     'reliability' => [
         'enabled' => true,
@@ -178,8 +179,6 @@ return $value;
 - **Level 9**: Maximum (Larastan max), catches everything
 
 ## ShieldCI Configuration
-
-This analyzer runs in all environments. Customize which categories to enable and which paths to analyze:
 
 ### Available Categories
 

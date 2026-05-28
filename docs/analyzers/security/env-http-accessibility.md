@@ -261,7 +261,7 @@ grep ".env" .gitignore
 
 ## ShieldCI Configuration
 
-This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+This analyzer is automatically skipped in CI environments.
 
 **Why skip in CI?**
 - HTTP checks require a live web server, not applicable in CI

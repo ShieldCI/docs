@@ -5,7 +5,6 @@ defineProps<{
   severity?: 'critical' | 'high' | 'medium' | 'low' | 'info'
   category?: string
   link?: string
-  pro?: boolean
 }>()
 
 const severityConfig = {
@@ -27,10 +26,6 @@ const severityConfig = {
     <div class="flex items-start justify-between gap-3">
       <div class="flex-1 min-w-0">
         <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 m-0!">
-          <span
-            v-if="pro"
-            class="pro-pill inline-flex mr-1.5 px-1.5 py-px text-[0.625rem] font-bold leading-tight uppercase tracking-wide rounded text-amber-700 bg-amber-100 dark:text-amber-400 dark:bg-amber-900/30 align-middle"
-          >Pro</span>
           {{ title }}
         </h3>
         <p class="mt-2! text-sm text-gray-600 dark:text-gray-400 m-0! line-clamp-2">
