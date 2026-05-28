@@ -17,8 +17,8 @@ pro: true
 
 Detects weak cryptographic algorithms, insecure cipher usage, and unsafe implementations in PHP code. Checks for:
 
-- Direct use of `md5()`, `sha1()`, or `crc32()` in a security context (cache keys and ETags are excluded)
-- `hash()` or `hash_hmac()` called with a weak first-argument algorithm: `md5`, `md4`, `md2`, `sha1`, `crc32`, `crc32b`
+- Direct use of `md5()` or `sha1()` when a **security signal is present** — the result is assigned to a security-named variable (`$password`, `$token`, `$secret`…), the argument being hashed is a security-named variable (`md5($password)`), the call is passed to a security-named function, or it appears inside a security-named method such as `authenticate()` or `login()`.
+- `hash()` or `hash_hmac()` called with a weak first-argument algorithm: `md5`, `md4`, `md2`, `sha1`, `crc32`, `crc32b` — flagged regardless of context because specifying a weak algorithm string is an explicit cryptographic decision. Direct `crc32()` calls are not flagged; CRC32 is a checksum, not a cryptographic hash.
 - Weak ciphers in `openssl_encrypt()` / `openssl_decrypt()`: `DES`, `3DES`, `RC2`, `RC4`, `BF-*` (Blowfish)
 - `ECB` mode in any cipher string - identical plaintext blocks produce identical ciphertext
 - Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` - IVs must be random per encryption
