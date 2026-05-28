@@ -109,5 +109,5 @@ Post::withCount('comments')->get();
 
 ## Related Analyzers
 
-- [Eloquent N+1 Analyzer](/analyzers/performance/eloquent-n-plus-one) — detects *missing* eager loading that causes N+1 queries inside loops (free package)
+- [Eloquent N+1 Analyzer](/analyzers/best-practices/eloquent-n-plus-one) — detects *missing* eager loading that causes N+1 queries inside loops (free package)
 - [Database Query Optimization Analyzer](/analyzers/performance/database-query-optimization) — broader query pattern analysis including SELECT * and count() misuse
