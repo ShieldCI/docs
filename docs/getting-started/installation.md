@@ -119,7 +119,7 @@ composer config repositories.shieldci-pro composer https://packages.shieldci.com
 Your API token is displayed when you create a project in the [ShieldCI dashboard](https://shieldci.com/dashboard). Copy it and run:
 
 ```bash
-composer config http-basic.packages.shieldci.com token YOUR_API_TOKEN
+composer config --auth http-basic.packages.shieldci.com you@email.com YOUR_API_TOKEN
 ```
 
 ::: warning Keep your token out of version control
@@ -144,7 +144,7 @@ Pro analyzers are automatically discovered alongside free analyzers. No addition
 php artisan shield:analyze
 ```
 
-Pro analyzers run automatically. Look for entries like Filament Security, GDPR Compliance, or Octane Config in the report output.
+Pro analyzers run automatically. Look for entries like CORS Configuration, GDPR Compliance, or Regular Expression DoS in the report output.
 
 ---
 

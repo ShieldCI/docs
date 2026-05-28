@@ -27,12 +27,6 @@ This analyzer detects Regular Expression Denial of Service (ReDoS) vulnerabiliti
 
 The analyzer extracts regex patterns from `preg_match()`, `preg_match_all()`, `preg_replace()`, `Str::match()`, and `Str::matchAll()` calls.
 
-::: tip Safe Patterns Recognized
-The analyzer skips patterns that use safe constructs:
-- **Atomic grouping** `(?>...)` - prevents backtracking
-- **Possessive quantifiers** `*+`, `++` - greedy without backtracking
-:::
-
 ## Why It Matters
 
 ReDoS occurs when specially crafted input causes a regular expression engine to enter catastrophic backtracking, consuming exponentially increasing CPU time:
