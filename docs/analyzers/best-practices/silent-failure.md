@@ -40,7 +40,7 @@ The Silent Failure Analyzer identifies four dangerous error handling patterns th
 
 ## Why It Matters
 
-Silent failures are among the most dangerous anti-patterns in production — when exceptions are swallowed, applications appear to work while silently losing data, failing operations, and hiding security events:
+Silent failures are among the most dangerous anti-patterns in production: when exceptions are swallowed, applications appear to work while silently losing data, failing operations, and hiding security events:
 
 - **Impossible Debugging**: Swallowed exceptions leave no log trace. When a payment fails silently, there is no stack trace, no context, and no way to reproduce the issue.
 - **Hidden Security Events**: Silent failures in authentication or token validation mask attack attempts, making security audits blind to brute-force or injection activity.

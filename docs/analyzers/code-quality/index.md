@@ -1,6 +1,6 @@
 ---
 title: Code Quality Analyzers
-description: Analyzers maintaining clean, maintainable code following Laravel conventions and PSR standards
+description: Analyzers maintaining clean, maintainable Laravel code — enforcing naming conventions, method length limits, docblock requirements, and PSR standards
 tags: code-quality,maintainability,psr,conventions,laravel,refactoring
 icon: code
 outline: [2, 3]
@@ -8,7 +8,7 @@ outline: [2, 3]
 
 # Code Quality Analyzers
 
-**5 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
+**8 analyzers** maintaining clean, maintainable code following Laravel conventions and PSR standards.
 
 ## Overview
 
@@ -45,6 +45,36 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
   description="Detects commented-out code that should be removed in favor of version control"
   severity="low"
   link="/analyzers/code-quality/commented-code"
+/>
+
+</div>
+
+### Testing
+
+<div class="grid gap-4 md:grid-cols-2 mt-4">
+
+<AnalyzerCard
+  title="Test Coverage"
+  description="Checks that critical application modules have corresponding test files for adequate code coverage"
+  severity="medium"
+  link="/analyzers/code-quality/test-coverage"
+  pro
+/>
+
+<AnalyzerCard
+  title="Test Quality"
+  description="Checks test files for quality issues like missing assertions, empty test methods, and poor test practices"
+  severity="medium"
+  link="/analyzers/code-quality/test-quality"
+  pro
+/>
+
+<AnalyzerCard
+  title="Test Data Management"
+  description="Checks test files for proper test data management practices including factory usage and database cleanup"
+  severity="low"
+  link="/analyzers/code-quality/test-data-management"
+  pro
 />
 
 </div>

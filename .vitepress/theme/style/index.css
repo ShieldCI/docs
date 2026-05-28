@@ -156,6 +156,24 @@ code {
   }
 }
 
+/* Sidebar Pro badge */
+.VPSidebar .pro-badge {
+  font-size: 0.55rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--color-amber-700);
+  background: var(--color-amber-100);
+  padding: 0.5px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.dark .VPSidebar .pro-badge {
+  color: var(--color-amber-400);
+  background: color-mix(in srgb, var(--color-amber-900) 30%, transparent);
+}
+
 /* Scroll-triggered reveal animations */
 [data-reveal] {
   opacity: 0;

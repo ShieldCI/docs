@@ -1,6 +1,6 @@
 ---
 title: Commented Code Analyzer
-description: Detects commented-out code that should be removed in favor of version control
+description: Detects commented-out code blocks that should be removed and tracked in version control history instead, keeping the codebase clean and readable
 icon: code
 outline: [2, 3]
 tags: maintainability,code-quality,comments,dead-code,version-control
@@ -177,7 +177,7 @@ return $this->paymentProcessor->process($order);
 return $this->paymentProcessor->process($order);
 ```
 
-#### 7: Customize ShieldCI Settings (Optional)
+## ShieldCI Configuration
 
 To customize the commented code detection sensitivity, publish the config:
 

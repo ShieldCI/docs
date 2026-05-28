@@ -1,6 +1,6 @@
 ---
 title: Configuration
-description: Configure ShieldCI analyzers and settings for your Laravel application
+description: Configure ShieldCI analyzers, set severity thresholds, exclude paths, and tailor the analysis rules for your specific Laravel application needs
 tags: laravel,configuration,analyzers,settings,customization
 icon: settings
 outline: [2, 3]
@@ -42,6 +42,37 @@ return [
     'enabled' => env('SHIELDCI_ENABLED', true),
     'timeout' => env('SHIELDCI_TIMEOUT', 300), // seconds
     'memory_limit' => env('SHIELDCI_MEMORY_LIMIT', '512M'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | ShieldCI Platform Integration
+    |--------------------------------------------------------------------------
+    |
+    | Connect to the ShieldCI platform for centralized dashboards, historical
+    | trends, and team-wide visibility. Sign up at https://shieldci.com
+    |
+    | These settings are optional. The package works fully offline without
+    | any platform credentials configured.
+    |
+    */
+
+    'token' => env('SHIELDCI_TOKEN'),
+    'project_id' => env('SHIELDCI_PROJECT_ID'),
+    'api_url' => env('SHIELDCI_API_URL', 'https://shieldci.com'),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Documentation Base URL
+    |--------------------------------------------------------------------------
+    |
+    | Base URL for analyzer documentation
+    |
+    | URLs are auto-generated as: {base_url}/analyzers/{category}/{analyzer-id}
+    | Example: https://docs.shieldci.com/analyzers/security/sql-injection
+    |
+    */
+
+    'docs_base_url' => env('SHIELDCI_DOCS_URL', 'https://docs.shieldci.com'),
 
     /*
     |--------------------------------------------------------------------------
@@ -118,7 +149,11 @@ return [
         'output_file' => null,
         'show_recommendations' => env('SHIELDCI_SHOW_RECOMMENDATIONS', true),
         'show_code_snippets' => env('SHIELDCI_SHOW_CODE_SNIPPETS', true),
-        'max_issues_per_check' => env('SHIELDCI_MAX_ISSUES', 5),
+        'snippet_context_lines' => env('SHIELDCI_SNIPPET_CONTEXT_LINES', 8), // Lines before/after the issue
+        'snippet_plain_mode' => env('SHIELDCI_SNIPPET_PLAIN_MODE', false), // Disable ANSI colors for copy-paste
+        'snippet_syntax_highlighting' => env('SHIELDCI_SNIPPET_SYNTAX_HIGHLIGHTING', true), // Enable PHP syntax highlighting
+        'max_issues_per_check' => env('SHIELDCI_MAX_ISSUES', 5), // Limit displayed issues per check
+        'send_to_api' => env('SHIELDCI_SEND_TO_API', false),
     ],
 
     /*
@@ -202,6 +237,32 @@ Set `SHIELDCI_ENABLED=false` in your `.env` to completely disable ShieldCI.
 ```bash
 php artisan shield:analyze --analyzer=sql-injection
 ```
+
+### Guest URL Override
+
+Authentication-related analyzers auto-detect your login route. Override it if your app uses a non-standard URL:
+
+```php
+'guest_url' => env('SHIELDCI_GUEST_URL'),
+```
+
+```ini
+SHIELDCI_GUEST_URL=/auth/sign-in
+```
+
+Leave unset to use auto-detection (checks common patterns like `/login`, `/auth/login`, `/sign-in`).
+
+### Security Advisory Source
+
+Configure the API used to fetch PHP vulnerability data for the [Vulnerable Dependencies](/analyzers/security/vulnerable-dependencies) analyzer:
+
+```php
+'security_advisories' => [
+    'source' => env('SHIELDCI_ADVISORY_SOURCE', 'https://api.osv.dev/v1/querybatch'),
+],
+```
+
+The default source is the [OSV API](https://osv.dev) (Open Source Vulnerability database). Override only if you're running a self-hosted advisory mirror or operating in a network-restricted environment.
 
 ## Path Configuration
 
@@ -779,6 +840,61 @@ When an analyzer finds more issues than this limit, only the first N issues are 
 | 8 context lines (default) | ~18 lines | ~90 lines |
 | 10 context lines | ~22 lines | ~110 lines |
 
+## Platform Reporting
+
+Send analysis results to the [ShieldCI platform](https://shieldci.com) for centralized dashboards, historical trends, and team visibility.
+
+### Connect Your Project
+
+Add your credentials to `.env`:
+
+```ini
+SHIELDCI_TOKEN=your_api_token
+SHIELDCI_PROJECT_ID=your_project_id
+```
+
+Your API token and project ID are displayed when you create a project in the [ShieldCI dashboard](https://shieldci.com/dashboard).
+
+### Sending Reports
+
+**One-time — use the `--report` flag:**
+```bash
+php artisan shield:analyze --report
+```
+
+**Always — enable `send_to_api` in config:**
+```php
+'report' => [
+    'send_to_api' => env('SHIELDCI_SEND_TO_API', false),
+],
+```
+
+Or set `SHIELDCI_SEND_TO_API=true` in `.env`.
+
+### Report Metadata
+
+ShieldCI auto-detects git context in CI/CD environments. Override or supplement auto-detection with these flags:
+
+| Flag | Description | Example |
+|------|-------------|---------|
+| `--git-branch=` | Git branch name | `--git-branch=main` |
+| `--git-commit=` | Git commit SHA | `--git-commit=abc1234` |
+| `--git-pr-number=` | Pull request number | `--git-pr-number=42` |
+| `--git-repository=` | Repository `owner/name` | `--git-repository=acme/app` |
+| `--git-base-branch=` | PR target branch | `--git-base-branch=main` |
+| `--triggered-by=` | Override trigger source | `--triggered-by=ci_cd` |
+
+**Trigger sources:** `manual` (default), `ci_cd`, `scheduled`
+
+**Example — GitHub Actions:**
+```yaml
+- name: Run ShieldCI
+  run: php artisan shield:analyze --report --format=json
+  env:
+    SHIELDCI_TOKEN: ${{ secrets.SHIELDCI_TOKEN }}
+    SHIELDCI_PROJECT_ID: ${{ secrets.SHIELDCI_PROJECT_ID }}
+```
+
 ## Additional Configuration Options
 
 ### Fail Threshold
@@ -804,6 +920,8 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `enabled` | bool | `true` | Globally enable/disable ShieldCI |
 | `timeout` | int | `300` | Analysis timeout in seconds |
 | `memory_limit` | string | `'512M'` | PHP memory limit for analysis |
+| `guest_url` | string\|null | `null` | Override login URL for authentication analyzers (auto-detected by default) |
+| `security_advisories.source` | string | `'https://api.osv.dev/v1/querybatch'` | API endpoint for PHP security advisory data |
 | `ci_mode_analyzers` | array | `[]` | Whitelist of analyzers to run in CI mode (use `--ci` flag to activate CI mode) |
 | `ci_mode_exclude_analyzers` | array | `[]` | Blacklist of analyzers to exclude in CI mode |
 | `environment_mapping` | array | `[]` | Map custom environment names to standard types |
@@ -820,6 +938,7 @@ If set, analysis will fail if the overall score is below this threshold. Useful 
 | `report.snippet_plain_mode` | bool | `false` | Plain text mode (no ANSI colors) |
 | `report.snippet_syntax_highlighting` | bool | `true` | PHP syntax highlighting in snippets |
 | `report.max_issues_per_check` | int | `5` | Limit displayed issues per analyzer |
+| `report.send_to_api` | bool | `false` | Send report to ShieldCI platform on every run (or use `--report` flag once) |
 | `baseline_file` | string | `.shieldci-baseline.json` | Baseline file path |
 | `ignore_errors` | array | `[]` | Ignore specific errors by analyzer (completely removes from report) |
 | `fail_on` | string | `'high'` | Failure threshold for CI (never, critical, high, medium, low) |

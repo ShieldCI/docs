@@ -312,7 +312,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 - [Laravel Security Best Practices](https://laravel.com/docs/deployment#optimization)
 - [Unix File Permissions Guide](https://www.redhat.com/sysadmin/linux-file-permissions-explained)
-- [OWASP: Insufficient Authorization](https://owasp.org/www-community/vulnerabilities/Insufficient_Authorization)
+- [OWASP: Insufficient Authorization](https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html)
 - [CIS Controls: Access Control Management](https://www.cisecurity.org/controls)
 
 ## Related Analyzers

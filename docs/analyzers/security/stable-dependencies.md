@@ -174,7 +174,7 @@ With strict mode enabled, missing `minimum-stability` will be flagged with **Low
 
 - [Composer Stability Settings](https://getcomposer.org/doc/04-schema.md#minimum-stability)
 - [Prefer Stable Flag](https://getcomposer.org/doc/03-cli.md#config-set)
-- [Secure Supply Chain Checklist (OWASP)](https://owasp.org/www-community/controls/Software_Supply_Chain_Security)
+- [Secure Supply Chain Checklist (OWASP)](https://cheatsheetseries.owasp.org/cheatsheets/Software_Supply_Chain_Security_Cheat_Sheet.html)
 
 ## Related Analyzers
 
