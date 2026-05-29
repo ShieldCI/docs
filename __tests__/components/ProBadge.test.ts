@@ -53,7 +53,7 @@ describe('ProBadge', () => {
     const wrapper = mount(ProBadge)
     const link = wrapper.find('a')
     expect(link.exists()).toBe(true)
-    expect(link.attributes('href')).toBe('/pro/')
+    expect(link.attributes('href')).toBe('https://shieldci.com/pricing')
     expect(link.text()).toBe('ShieldCI Pro')
   })
 
