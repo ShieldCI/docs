@@ -125,13 +125,6 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 />
 
 <AnalyzerCard
-  title="Queue Blocking"
-  description="Detects blocking operations in queue workers that can cause timeouts"
-  severity="high"
-  link="/analyzers/reliability/queue-blocking"
-/>
-
-<AnalyzerCard
   title="Dead Route"
   description="Detects routes pointing to non-existent controllers or methods"
   severity="medium"
@@ -207,29 +200,6 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
   pro
 />
 
-<AnalyzerCard
-  title="Horizon Prefix"
-  description="Ensures Horizon prefix is configured to avoid job collisions"
-  severity="medium"
-  link="/analyzers/reliability/horizon-prefix"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Provisioning Plan"
-  description="Validates Horizon supervisor provisioning configuration"
-  severity="high"
-  link="/analyzers/reliability/horizon-provisioning-plan"
-  pro
-/>
-
-<AnalyzerCard
-  title="Horizon Status"
-  description="Checks if Horizon is running and processing jobs"
-  severity="high"
-  link="/analyzers/reliability/horizon-status"
-  pro
-/>
 
 </div>
 
@@ -290,12 +260,13 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 />
 
 <AnalyzerCard
-  title="Global Variable"
+  title="Global Variables"
   description="Detects usage of global variables which can cause unpredictable behavior"
   severity="medium"
-  link="/analyzers/reliability/global-variable"
+  link="/analyzers/reliability/global-variables"
   pro
 />
+
 
 </div>
 
