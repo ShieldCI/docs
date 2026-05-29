@@ -132,7 +132,7 @@ class PaymentService
 ```
 
 **Step 4: Add `.env` to `.gitignore`:**
-```gitignore
+```txt
 .env
 .env.backup
 .env.production
