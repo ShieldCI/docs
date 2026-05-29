@@ -24,7 +24,9 @@ const { frontmatter } = useData()
       <span class="text-sm text-amber-700 dark:text-amber-400">
         &mdash; Available with
         <a
-          href="/pro/"
+          href="https://shieldci.com/pricing"
+          target="_blank"
+          rel="noopener noreferrer"
           class="font-medium underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200"
         >ShieldCI Pro</a>
       </span>
