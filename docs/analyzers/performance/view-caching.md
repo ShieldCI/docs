@@ -60,15 +60,6 @@ RUN php artisan view:cache && \
     php artisan route:cache
 ```
 
-**Laravel Vapor:**
-```yaml
-# vapor.yml
-environments:
-  production:
-    build:
-      - 'php artisan view:cache'
-```
-
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments.
@@ -94,6 +85,10 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 - `APP_ENV=production` → Runs (no mapping needed)
 - `APP_ENV=production-us` → Maps to `production` → Runs
 - `APP_ENV=local` → Skipped (not production/staging)
+
+::: warning Skipped on Laravel Vapor
+The analyzer is **skipped entirely on Laravel Vapor**. Vapor's build pipeline copies files individually and then zips/unzips the artifact onto a read-only Lambda filesystem, resetting every Blade and compiled-view mtime to packaging time - so the timestamp freshness check reflects packaging order, not real staleness, and produces false "stale cache" findings. The recommendation (`php artisan view:cache`) also isn't actionable at runtime on Vapor's read-only filesystem.
+:::
 
 **Include Package Views**
 
