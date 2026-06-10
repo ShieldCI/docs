@@ -23,6 +23,8 @@ Detects PHP-side filtering patterns that should be performed at the database lev
 
 **Note:** Common patterns like `->get()->where()`, `->get()->first()`, `->get()->last()`, `->get()->take()`, and `->get()->skip()` are detected by the [Collection Call Optimization Analyzer](/analyzers/performance/collection-call-optimization) (via Larastan's `noUnnecessaryCollectionCall` rule) and are **not** checked by this analyzer to avoid duplication.
 
+**Not flagged:** `filter()` / `reject()` closures whose body performs an **authorization check** — `$user->can()`, `cannot()`, `hasRole()`, `hasPermissionTo()`, `Gate::allows()`, and similar gate/policy/permission calls — are skipped. Authorization has no SQL `where`-clause equivalent, so "filter at the database level" isn't actionable for these closures.
+
 ## Why It Matters
 
 Loading all records into memory then filtering in PHP is **extremely inefficient** and can cause:
