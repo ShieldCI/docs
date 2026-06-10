@@ -367,15 +367,15 @@ class AuthenticationTest extends TestCase
 }
 ```
 
-#### Public Routes (Exact Path Matching)
+#### Public Routes (Glob Matching)
 
-By default, the analyzer recognizes these exact public route paths and skips them:
+By default, the analyzer recognizes these public route paths and skips them:
 
 `/login`, `/register`, `/password/reset`, `/password/email`, `/forgot-password`, `/reset-password`, `/email/verify`, `/health`, `/status`, `/up`
 
-Each entry is an **exact path**: `/login` matches only `Route::post('/login', ...)`, not `/auth/login` or `/api/v1/login`.
+Matching is **slash-insensitive** (a leading `/` is optional) and supports `fnmatch()` wildcards (`*`, `?`) — the same globbing convention used by `ignore_errors` `path_pattern`.
 
-To add custom public routes, publish the config and add exact paths to the `public_routes` array:
+To add custom public routes, publish the config and add patterns to the `public_routes` array:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
@@ -391,7 +391,7 @@ Then in `config/shieldci.php`:
         'authentication-authorization' => [
             'public_routes' => [
                 '/webhooks/stripe',
-                '/webhooks/github',
+                '/webhooks/*',         // Wildcard: matches every route under /webhooks
                 '/satis/auth',
                 '/auth/login',         // If your login route is nested
                 '/api/oauth/token',
@@ -402,7 +402,11 @@ Then in `config/shieldci.php`:
 ```
 
 ::: tip
-Each entry must be an exact route path starting with `/`. For example, `/webhooks/stripe` matches only `Route::post('/webhooks/stripe', ...)`.
+Each entry is an `fnmatch()` glob. Exact paths (`/webhooks/stripe`) match exactly; wildcards (`/webhooks/*`, `/users/?`) match a family of routes. The leading slash is optional, so `webhooks/stripe` and `/webhooks/stripe` behave identically.
+:::
+
+::: info Fully-Public Route Groups
+A route **group** is not flagged when *every* route nested inside it is public — either whitelisted in `public_routes`, registered with the `guest` middleware, or declared with `withoutMiddleware('auth')`. A group is still flagged if it wraps even one route that needs protection.
 :::
 
 #### Custom Auth Middleware Detection
