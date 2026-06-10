@@ -79,6 +79,8 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 **Laravel Cloud:** This analyzer is automatically skipped on Laravel Cloud (asset cache headers are managed by the platform and cannot be configured by the application).
 
+**Laravel Vapor / serverless:** This analyzer is automatically skipped on Vapor and other serverless runtimes. Vapor serves compiled assets from a CDN (via `ASSET_URL`/CloudFront) with platform-managed cache headers rather than from `APP_URL`, so probing `APP_URL` cannot verify the real asset and there is no application-level fix to apply.
+
 ## References
 
 - [HTTP Caching](https://web.dev/http-cache/)
