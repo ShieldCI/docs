@@ -33,6 +33,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - ✅ Tracks 9 different issue types with appropriate severity levels
 - ✅ Configurable thresholds for @php block complexity and arithmetic operator sensitivity
 - ✅ Recognises the single-statement `@php($expr)` form as self-closing — never emits a false-positive "Unclosed @php block" for this syntax
+- ✅ Skips published vendor views under `resources/views/vendor/` — third-party templates dropped in by `php artisan vendor:publish` (mail, notifications, pagination) are framework-authored code the developer can't meaningfully fix; your own templates are still scanned
 
 **Detected Operations by Severity:**
 
