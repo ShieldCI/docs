@@ -303,7 +303,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - Prevents false failures that would fire on every pipeline run for conditions that are irrelevant outside a deployed server
 
 **When to run this analyzer:**
-- ✅ **Local development**: Catches overly permissive files set by local tooling before they reach a server
+- ✅ **Local development**: Catches world-writable files and directories set by local tooling before they reach a server (sensitive-file checks like world-readable `.env` are only reported in staging/production)
 - ✅ **Staging/Production servers**: Validates that sensitive files (`.env`, config) and directories have secure permissions in the actual deployment environment
 - ❌ **CI/CD pipelines**: Skipped automatically (permission bits reflect the runner's environment, not the deployed server)
 - ❌ **Docker**: Skipped automatically (permissions managed by container image and volume mounts)
