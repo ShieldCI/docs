@@ -30,6 +30,7 @@ Detects methods that perform multiple database write operations without transact
 - ✅ Configurable threshold (default: 2 writes)
 - ✅ Ignores guard clauses and mutually exclusive `if/else` branches (writes that can never co-execute are not summed toward the threshold)
 - ✅ Ignores external service client calls (e.g. `$this->stripe->customers->update()`) that match write method names but are not database operations
+- ✅ Scopes write counting **per callback closure** - sibling action/callback closures (one write each) are counted independently rather than summed, with the heaviest closure deciding the count; main-flow writes still accumulate, and closures inherit any enclosing `DB::transaction()` protection
 
 **Detected Write Operations:**
 - Eloquent: `create()`, `insert()`, `update()`, `delete()`, `save()`, `forceDelete()`, `upsert()`, `updateOrCreate()`, `increment()`, `decrement()`, `touch()`

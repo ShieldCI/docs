@@ -307,6 +307,7 @@ Then in `config/shieldci.php`:
             'threshold' => 50,  // Default: 50 physical lines (method declaration to closing brace)
             'exclude_patterns' => ['get*', 'set*', 'is*', 'has*'],  // Patterns to exclude
             'simple_accessor_max_lines' => 10,  // Default: 10 lines - max size for simple accessors
+            'ignore_fluent_chains' => true,  // Default: true - skip declarative fluent-builder methods (control flow inside callback closures is ignored)
         ],
     ],
 ],
