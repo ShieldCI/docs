@@ -25,6 +25,8 @@ Detects mass assignment vulnerabilities where unfiltered user input is passed to
 - **Nested mass assignment** via dot notation patterns like `$request->input('user.profile')`
 - **Blacklist filtering warnings** when using `request()->except()` instead of the safer `only()` approach
 
+Model detection covers every Eloquent base that carries mass-assignment behaviour — classes extending `Model`, `Authenticatable` (your `User` model), and `Pivot`/`MorphPivot` (join models) — whether or not they live in the `App\Models` namespace. This analyzer is the single source of truth for the `$guarded = []` finding; the [Fillable Foreign Key Analyzer](/analyzers/security/fillable-foreign-key) defers to it rather than duplicating that check.
+
 ## Why It Matters
 
 Mass assignment is one of the most dangerous security vulnerabilities in Laravel applications because it allows attackers to:
