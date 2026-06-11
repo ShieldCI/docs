@@ -114,10 +114,13 @@ save 300 10
 save 60 10000
 ```
 
+On **managed Redis**, persistence is controlled by the provider, not `redis.conf` — enable AOF/RDB (or confirm the tier is durable) from the provider's dashboard.
+
 3. **Configure memory limits**:
 
+On **self-hosted Redis**, the fastest way to set a `maxmemory` limit and eviction policy is via `redis-cli` (takes effect without a restart):
+
 ```bash
-# Immediate fix — takes effect without a restart:
 redis-cli CONFIG SET maxmemory 256mb
 redis-cli CONFIG SET maxmemory-policy allkeys-lru
 ```
@@ -131,6 +134,8 @@ services:
     image: redis:alpine
     command: redis-server --maxmemory 256mb --maxmemory-policy allkeys-lru
 ```
+
+On **managed Redis** (Laravel Cloud, ElastiCache, Upstash), set the memory limit and eviction policy from the provider's dashboard instead.
 
 4. **Monitor connection limits**:
 
@@ -166,7 +171,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Specify which Redis connections to check:**
 
-By default, the analyzer automatically tests all connections defined in `database.redis` (excluding the `client` and `options` keys). If you want to configure the `connections` to check, publish the config:
+By default, the analyzer automatically tests all connections defined in `database.redis` — including any under `database.redis.clusters` — while excluding the framework-reserved keys (`client`, `options`, `clusters`, `cluster`). If you want to configure the `connections` to check, publish the config:
 
 ```bash
 php artisan vendor:publish --tag=shieldci-config
@@ -177,9 +182,26 @@ Then in `config/shieldci.php`:
 'analyzers' => [
     'reliability' => [
         'enabled' => true,
-        
+
         'redis-status' => [
             'connections' => ['default', 'cache', 'queue'],
+        ],
+    ],
+],
+```
+
+**Suppress the persistence check on provider-managed connections:**
+
+On managed Redis (Laravel Cloud, ElastiCache, Upstash) durability is handled by the provider. Once you've confirmed that, list the connections to skip the "no persistence configured" finding for them:
+
+```php
+// config/shieldci.php
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+
+        'redis-status' => [
+            'managed_durable_connections' => ['default', 'sessions'],
         ],
     ],
 ],
