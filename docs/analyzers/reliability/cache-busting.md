@@ -20,7 +20,6 @@ pro: true
 - Ensures Laravel Mix versioning is enabled (checks for `?id=` query strings in `mix-manifest.json`)
 - Validates Vite manifest presence when a Vite config file is detected
 - Checks manifest file readability and JSON validity
-- Detects stale manifests older than 7 days that may indicate forgotten asset rebuilds
 - Supports both `public/build/manifest.json` and `public/build/.vite/manifest.json` paths for Vite
 
 ## Why It Matters
@@ -130,7 +129,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`) a
 **Why skip in CI and development?**
 - Asset manifests are typically absent in CI pipelines (assets are not built during test runs)
 - Local/Development environments may have unminified, un-versioned assets for easier debugging
-- Stale manifest detection is only meaningful in environments where assets are actively deployed
+- Manifest verification is only meaningful in environments where built assets are actually deployed
 
 **When to run this analyzer:**
 - ✅ **Production/Staging servers**: Confirms assets are properly versioned
