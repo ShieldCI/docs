@@ -100,10 +100,6 @@ ASSET_URL=https://d123456789.cloudfront.net
 ASSET_URL=https://your-zone.b-cdn.net
 ```
 
-**Laravel Vapor / Laravel Cloud:**
-
-Both platforms automatically configure CloudFront and upload assets on every deploy. No manual CDN setup is required — ShieldCI skips this analyzer for Vapor and Cloud projects entirely.
-
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`) and only runs in production and staging environments. It also skips when no compiled assets are detected (no `public/mix-manifest.json` or `public/build/manifest.json`).
@@ -125,9 +121,7 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 ],
 ```
 
-**Laravel Vapor:** This analyzer is automatically skipped on Laravel Vapor. Vapor injects `ASSET_URL` at deploy-time via its environment management system — the value is never present in the project's source files, so static analysis would always produce a false positive.
-
-**Laravel Cloud:** This analyzer is automatically skipped on Laravel Cloud. Cloud provisions and manages the CDN automatically, so no `ASSET_URL` configuration is required in the project.
+**Laravel Vapor & Laravel Cloud:** This analyzer is automatically skipped on both platforms, which provision and manage the CDN for you — no `ASSET_URL` configuration is needed in the project.
 
 ## References
 
