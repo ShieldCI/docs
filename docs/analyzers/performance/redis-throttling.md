@@ -62,6 +62,29 @@ protected $middlewareAliases = [
 On Laravel 11+, calling `$middleware->throttleWithRedis()` and then passing `'throttle' => ThrottleRequests::class` to `$middleware->alias()` in the same `withMiddleware()` block will override the Redis mapping. Remove the explicit `throttle` entry from `alias()` when using `throttleWithRedis()`.
 :::
 
+### Conditional Redis throttling
+
+If your application uses Redis only in some environments (for example, Redis in production but an `array` or `database` store locally and in tests), swap the `throttle` alias at runtime in a service provider rather than hard-coding `throttleWithRedis()`:
+
+```php
+// app/Providers/AppServiceProvider.php
+use Illuminate\Routing\Middleware\ThrottleRequestsWithRedis;
+use Illuminate\Support\Facades\Route;
+
+public function boot(): void
+{
+    if (config('cache.default') === 'redis') {
+        Route::aliasMiddleware('throttle', ThrottleRequestsWithRedis::class);
+    }
+}
+```
+
+ShieldCI resolves the live `throttle` alias from the router, so this runtime swap is recognized as a valid fix — routes using `throttle:60,1` are reported as compliant.
+
+::: warning Don't gate Redis throttling on `env()`
+Wrapping `$middleware->throttleWithRedis()` in an `env('CACHE_STORE') === 'redis'` check is unreliable in production. Once `php artisan config:cache` runs, the `.env` file is no longer read, so `env()` falls back to its default and the Redis throttler is silently never applied. Read `config('cache.default')` from a service provider's `boot()` instead, where cached config is always available.
+:::
+
 ### Explicit per-route middleware
 
 If you need different throttle behaviour per route group without changing the global alias, apply `ThrottleRequestsWithRedis` directly:
@@ -76,17 +99,18 @@ Route::middleware([ThrottleRequestsWithRedis::class.':60,1'])->group(function ()
 
 ### Prerequisites
 
-Ensure Redis is configured as your cache driver:
+`ThrottleRequestsWithRedis` needs a configured Redis connection (the `redis` block in `config/database.php`). In most applications this goes hand in hand with using Redis as the cache store:
 
-```ini
+::: code-group
+```ini [Laravel 11+]
+# .env
+CACHE_STORE=redis
+```
+```ini [Laravel 9–10]
 # .env
 CACHE_DRIVER=redis
 ```
-
-```php
-// config/cache.php
-'default' => env('CACHE_DRIVER', 'redis'),
-```
+:::
 
 ## References
 

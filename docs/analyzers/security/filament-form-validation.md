@@ -22,6 +22,8 @@ Validates that Filament form fields have proper validation rules. Checks for:
 - File uploads without type or size restrictions
 - Important fields (email, password, name, title) missing `required()`
 
+Filament's nested-validation helpers — `nestedRules()`, `nestedRecursiveRules()`, and `rule()` — are recognized as valid rules, so fields validated through them (e.g. a `TagsInput` with `->nestedRecursiveRules(['email'])`) are not flagged. Fields declared inside a table filter (`Filter`, `SelectFilter`, `TernaryFilter`, `TrashedFilter`, `QueryBuilder`) are excluded, because they only build a query constraint via the filter's `query()` closure and are never persisted. Fields inside action and modal schemas remain in scope — those accept real user input that is processed server-side.
+
 ## Why It Matters
 
 - **XSS via Rich Text:** Rich editors without sanitization allow script injection through stored XSS
