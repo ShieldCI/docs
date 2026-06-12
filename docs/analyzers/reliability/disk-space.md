@@ -15,15 +15,16 @@ pro: true
 
 ## What This Checks
 
-- Monitors disk usage against configurable warning (70%) and critical (90%) thresholds
+- Monitors disk usage against configurable warning (70%) and critical (90%) thresholds — a percentage warning is only raised when absolute free space is also below the headroom (default 10 GB), so a spacious volume never warns purely on percentage
 - Checks multiple paths: root filesystem (`/`), application directory, storage directory, and logs directory
+- Skips the host-managed root filesystem (`/`) on Laravel Cloud and inside containers, where its usage reflects the platform base image rather than anything the application owns (tenant-owned application, storage, and logs paths are still checked)
 - Detects high inode usage (many small files problem) on Unix/Linux systems with a default 80% threshold
 - Enforces a minimum free space requirement (default 500 MB)
 - Avoids redundant checks when multiple paths share the same filesystem (uses device ID deduplication)
 - Supports custom paths via configuration
 - Uses Laravel `storage_path()` for automatic storage path detection
 - Only runs in production and staging environments
-- Automatically skips in CI environments and when `disk_free_space()`/`disk_total_space()` functions are unavailable
+- Automatically skips in CI environments, on Vapor/serverless platforms (ephemeral storage), and when `disk_free_space()`/`disk_total_space()` functions are unavailable
 
 ## Why It Matters
 
@@ -192,8 +193,13 @@ return [
                 // Disk usage critical threshold (percentage)
                 'critical_threshold' => 90,
 
-                // Minimum free space in MB
+                // Minimum free space in MB (hard floor — raises a critical issue)
                 'min_free_mb' => 500,
+
+                // Absolute-free headroom in GB. A high usage percentage is only
+                // reported when free space is also below this headroom, preventing
+                // percentage warnings on large volumes that still have ample space.
+                'min_free_headroom_gb' => 10,
 
                 // Inode usage warning threshold (percentage)
                 'inode_warning_threshold' => 80,
@@ -211,8 +217,9 @@ return [
 
 **When to run this analyzer:**
 - ✅ **Production/Staging servers**: Monitors real disk usage
-- ✅ **Local development**: Validates disk space availability
+- ❌ **Local development**: Skipped automatically (only runs in production/staging)
 - ❌ **CI/CD pipelines**: Skipped automatically (disk space varies per runner)
+- ❌ **Vapor/serverless**: Skipped automatically (ephemeral, platform-managed storage)
 
 ## References
 
