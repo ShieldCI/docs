@@ -23,6 +23,8 @@ Validates that Filament navigation items have proper permission gates. Checks fo
 - Navigation badges that may leak count information without authorization
 - Custom navigation items in panel providers without visibility controls
 
+A resource counts as gated when it declares `shouldRegisterNavigation()`, `canAccess()`, or `canViewAny()`, **or** when its model policy (resolved by Laravel convention at `app/Policies/<Model>Policy.php`) defines a real `viewAny()` gate. This mirrors Filament's own visibility chain: `shouldRegisterNavigation()` → `canAccess()` → `canViewAny()` → `can('viewAny')` → the policy's `viewAny()`. A `viewAny()` that returns `false`, is conditional, or calls a permission check counts as a gate; one that returns `true` or only `auth()->check()` is still treated as weak.
+
 ## Why It Matters
 
 - **Security by Obscurity Fails:** Hiding a navigation item does **not** protect the route: users can still reach it via direct URL. `shouldRegisterNavigation()` only controls sidebar visibility; `canAccess()` is required for actual route protection.
@@ -87,6 +89,21 @@ class PaymentResource extends Resource
     public static function shouldRegisterNavigation(): bool
     {
         return auth()->user()?->hasRole(['admin', 'accountant']);
+    }
+}
+```
+
+**4. Or rely on a model policy (idiomatic Filament):**
+
+If your model has a policy with a real `viewAny()` gate, Filament uses it for navigation visibility automatically — no override needed on the resource:
+
+```php
+// app/Policies/PaymentPolicy.php
+class PaymentPolicy
+{
+    public function viewAny(User $user): bool
+    {
+        return $user->can('View Payments');
     }
 }
 ```
