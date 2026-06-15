@@ -20,7 +20,7 @@ Scans `app/Models/User.php`, `app/Models/Profile.php`, `app/Models/Customer.php`
 for technical GDPR compliance signals. Checks for:
 
 - **Data deletion capability (Article 17)** - `SoftDeletes` trait, anonymize/purge method on the User model, or a dedicated `UserDeletionService` / `UserErasureService`
-- **Encryption at rest** - `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields
+- **Encryption at rest** - `encrypted` casts in `User`, `Profile`, and `Customer` models for sensitive personal fields that are actually present and not already encrypted (e.g. `phone`, `address`, `national_id`). Identifier fields such as `email`, `password`, and `remember_token` are intentionally excluded, and a model with no encryptable sensitive field (e.g. a thin auth model with only `name`, `email`, `password`) is not flagged.
 - **Privacy policy route** - a `/privacy` or `/privacy-policy` route in web or API route files
 - **Data export capability (Article 20)** - an export controller, export route, `app/Exports/` directory, or `export` / `downloadData` method on the User model
 - **PII protection in logs** - log sanitization (`SanitizeLog`, `mask`, `redact`, `scrub`, `replace_placeholders`) in `config/logging.php` or a custom processor in `app/Logging/`
@@ -84,6 +84,16 @@ class User extends Authenticatable
     ];
 }
 ```
+
+::: warning Do not encrypt login or unique identifier fields
+Laravel's `encrypted` cast is **non-deterministic** — it uses a random IV per write,
+so the same plaintext encrypts to a different ciphertext each time. Applying it to
+`email` (or any field you query by equality or enforce a `unique` constraint on)
+breaks `where('email', ...)` lookups, authentication, and the unique index. These
+fields need **deterministic or blind-index encryption**, which Laravel does not ship
+out of the box. The analyzer never recommends encrypting `email`, `password`, or
+`remember_token` for this reason.
+:::
 
 **2. Implement true erasure alongside SoftDeletes:**
 
