@@ -21,6 +21,8 @@ Validates that proper alerting mechanisms are in place to detect production issu
 - Log alerting channel (Slack, syslog, papertrail, Monolog custom, or alerting packages)
 - Failed job notification (`Queue::failing` callback or job `failed()` methods)
 
+The exception check also follows alerting that has been delegated out of `Handler.php` / `bootstrap/app.php` into a dedicated class — it recursively scans `app/Exceptions/**` for the same alerting patterns, so extracting your reportable callback into a dedicated class still satisfies the check.
+
 ## Why It Matters
 
 - **Silent Failures:** Without alerting, production errors go unnoticed until users complain
