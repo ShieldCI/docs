@@ -20,6 +20,8 @@ Identifies collection operations that load all records into memory when lazy alt
 - `Model::all()` loading entire tables into memory
 - `Model::all()` chained with collection processing (`filter`, `map`, `sort`, `toArray`, etc.)
 - `->get()->count()/sum()/avg()/max()/min()` fetching all records just to aggregate them
+- `->get()->pluck()` hydrating full models just to extract a single column
+- `->get()->first()` loading all matching rows just to keep the first
 - Large chunk sizes (> 1000) that could use `->lazy()` instead
 - `->get()` without pagination or limiting on multi-row query builder chains
 
@@ -84,7 +86,19 @@ $count = User::count();
 $total = Order::where('paid', true)->sum('amount');
 ```
 
-**4. Replace large chunks with lazy:**
+**4. Pluck and fetch single rows at the query level:**
+
+```php
+// Before: hydrates full models, then extracts one column / keeps one row
+$names = User::where('active', true)->get()->pluck('name', 'id');
+$first = User::where('active', true)->orderBy('name')->get()->first();
+
+// After: let the database select only what's needed
+$names = User::where('active', true)->pluck('name', 'id');
+$first = User::where('active', true)->orderBy('name')->first(); // adds LIMIT 1
+```
+
+**5. Replace large chunks with lazy:**
 
 ```php
 // Before: chunk processes 5000 at a time
@@ -95,7 +109,7 @@ User::chunk(5000, function ($users) { /* ... */ });
 User::lazy()->each(function ($user) { /* ... */ });
 ```
 
-**5. Use query-level operations instead of collection buffering:**
+**6. Use query-level operations instead of collection buffering:**
 
 ```php
 // Before: loads all records then sorts in PHP (defeats lazy loading)
@@ -105,7 +119,7 @@ $sorted = User::all()->sort();
 $sorted = User::orderBy('name')->cursor();
 ```
 
-**6. Add pagination or limits to unbounded queries:**
+**7. Add pagination or limits to unbounded queries:**
 
 ```php
 // Before: may load too many records
