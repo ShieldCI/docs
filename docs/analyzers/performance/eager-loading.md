@@ -18,7 +18,7 @@ pro: true
 Detects two categories of wasteful eager loading in Eloquent queries. Checks for:
 
 - **Unnecessary eager loading** (Medium): a relation passed to `with()`, `load()`, or `loadMissing()` is never accessed within the enclosing method and the holding variable does not escape to a view, response, or downstream call
-- **Over-eager loading** (Low): a single eager-load call requests more than five relations and at least one of them goes unused, suggesting that some should be deferred with lazy eager loading
+- **Over-eager loading** (Low): a single eager-load call requests more than five *distinct top-level relations* (nested paths such as `employee.title` and `employee.department` collapse to one tree, `employee`), at least one of them goes unused, and the holding variable does not escape to a view, response, or downstream call — suggesting that some relations should be deferred with lazy eager loading
 
 ::: tip Complementary analyzer
 The free-package [Eloquent N+1 Query Analyzer](/analyzers/best-practices/eloquent-n-plus-one) covers the opposite failure mode — *missing* eager loading that causes N+1 queries inside loops. These two analyzers work together to keep your relationship loading strategy balanced.
