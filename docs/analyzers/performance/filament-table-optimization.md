@@ -110,7 +110,7 @@ Then in `config/shieldci.php`:
 ```php
 'analyzers' => [
     'performance' => [
-        'emabled' => true,
+        'enabled' => true,
         
         'filament-table-optimization' => [
             // Visible-column count above which a table is flagged (default 10)
