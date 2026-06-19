@@ -15,18 +15,20 @@ pro: true
 
 ## What This Checks
 
-Validates Filament table definitions for performance issues. Checks for:
+Validates Filament table definitions for performance issues. The analyzer resolves the resource's Eloquent model — so it can tell genuine relationships from plain columns, accessors and computed values — and cross-references your migrations to avoid redundant hints. Only columns declared in the table's `->columns([...])` are analyzed; columns in export actions (`->withColumns([...])`) are ignored.
 
-- Columns accessing relationship data without eager loading (N+1 queries)
-- Searchable columns on relationship fields without proper indexing
-- Tables with too many visible columns impacting rendering performance
-- Sortable columns on relationship fields that may cause slow queries
+It checks for:
+
+- Per-row callbacks (`description`, `getStateUsing`, `formatStateUsing`, `state`, `url`, …) that access an un-eager-loaded **relationship** — a likely N+1 query. Plain columns, accessors and aggregate attributes are ignored, and nothing is flagged when the model cannot be resolved.
+- Searchable columns on relationship fields, which join the related table on each search request (informational).
+- Tables with too many visible columns, impacting rendering performance.
+- Sortable columns on real database columns that have no index in your migrations.
 
 ## Why It Matters
 
 - **N+1 Queries:** Relationship columns without eager loading execute a query per row, degrading performance exponentially
 - **Rendering Performance:** Tables with many visible columns increase DOM size and slow client-side rendering
-- **Search Performance:** Searchable relationship columns without indexes cause full table scans
+- **Search Performance:** Searchable relationship columns join the related table on every search request
 - **User Experience:** Slow admin panels frustrate operators and reduce productivity
 
 ## How to Fix
@@ -83,7 +85,7 @@ protected static function getEloquentQuery(): Builder
 }
 ```
 
-**3. Add database indexes for searchable/sortable columns:**
+**3. Add database indexes for sortable columns:**
 
 ```php
 // migration
@@ -91,6 +93,37 @@ Schema::table('orders', function (Blueprint $table) {
     $table->index('status');
     $table->index('created_at');
 });
+```
+
+The analyzer reads your migrations, so once a sortable column is indexed — directly, via a chained `->index()`/`->unique()`, a primary or foreign key, or a `morphs()` index — the hint clears automatically. Searchable relationship columns are reported only for awareness: Filament's `searchable()` uses a leading-wildcard `LIKE`, which a plain index cannot serve, so no index is suggested there.
+
+## ShieldCI Configuration
+
+To tune the thresholds and toggles, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'performance' => [
+        'emabled' => true,
+        
+        'filament-table-optimization' => [
+            // Visible-column count above which a table is flagged (default 10)
+            'max_visible_columns' => 10,
+
+            // Set false to disable the too-many-columns check
+            'flag_too_many_columns' => true,
+
+            // Set false to silence the searchable-on-relationship finding
+            'flag_searchable_relationships' => true,
+        ],
+    ],
+],
 ```
 
 ## References
