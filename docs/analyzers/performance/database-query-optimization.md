@@ -18,10 +18,12 @@ pro: true
 Scans application code for common inefficient database query patterns and cross-references `database/migrations/` to determine which columns are actually indexed before flagging. Checks for:
 
 - `SELECT *` queries fetching all columns when only a subset is needed
-- Eloquent query calls inside `foreach`, `for`, and `while` loop bodies (N+1 problem)
+- Eloquent query calls inside `foreach`, `for`, and `while` loops — including a query delegated one level into a helper method (`$this->buildRow(...)`) called from the loop body (N+1 problem)
 - `DB::` static calls inside loops creating one round-trip per iteration
-- `->count() > 0` existence checks that scan every matching row
-- `WHERE`, `ORDER BY`, and `GROUP BY` on columns with no index in your migrations
+- `->count() > 0` / `->count() >= 1` existence checks on a live query that scan every matching row
+- `WHERE`, `ORDER BY`, and `GROUP BY` on columns that no index on the query's table can serve
+
+The index check is **table-aware**: it resolves the model (or `DB::table()`) behind each query chain and matches columns against that table's indexes, applying composite indexes left-to-right. A column is covered when it — together with the columns filtered earlier in the same chain — forms a usable index prefix, so a query on a non-leading composite column (e.g. only the second column of `index(['a', 'b'])`) is still flagged because it can't use that index on its own.
 
 ## Why It Matters
 
