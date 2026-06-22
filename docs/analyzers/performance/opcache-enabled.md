@@ -96,15 +96,16 @@ opcache.validate_timestamps=0
 ; Revalidation frequency (0 when validate_timestamps=0)
 opcache.revalidate_freq=0
 
-; Fast shutdown for better performance
-opcache.fast_shutdown=1
-
 ; Don't waste memory on comments
 opcache.save_comments=0
 
 ; Optimization level
 opcache.optimization_level=0x7FFEBFFF
 ```
+
+::: tip conf.d drop-ins
+On Debian/Ubuntu, OPcache is usually loaded and tuned from a `conf.d` drop-in rather than the main `php.ini`. Place these settings in a file such as `/etc/php/8.1/fpm/conf.d/99-opcache.ini` — drop-ins are applied after `php.ini`, in filename order. ShieldCI scans these drop-ins too, so it points you at the exact file and line where a directive is set.
+:::
 
 **Environment-Specific Configuration:**
 
@@ -151,7 +152,6 @@ opcache.interned_strings_buffer=16
 opcache.max_accelerated_files=20000
 opcache.validate_timestamps=${OPCACHE_VALIDATE_TIMESTAMPS}
 opcache.revalidate_freq=0
-opcache.fast_shutdown=1
 ```
 
 **Verification Script:**
