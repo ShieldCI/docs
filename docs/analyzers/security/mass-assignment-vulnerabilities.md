@@ -16,11 +16,11 @@ tags: mass-assignment,eloquent,security,models,sql-injection
 
 Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, allowing attackers to modify unintended database fields. This analyzer checks for:
 
-- Models without `$fillable` or `$guarded` protection
+- Models without `$fillable` or `$guarded` protection — declared as properties **or** the Laravel 12+ `#[Fillable]` / `#[Guarded]` / `#[Unguarded]` attributes
 - Dangerous method calls with `request()->all()`
 - Query builder operations with raw request data
 - Multiple unsafe request data retrieval patterns
-- **Missing `$hidden` attributes** for sensitive fields (password, api_token, remember_token, etc.)
+- **Missing `$hidden` attributes** for sensitive fields (password, api_token, remember_token, etc.) — recognized whether declared as a `$hidden` property or a `#[Hidden]` attribute
 - **Relationship operations** with unfiltered data (`sync()`, `attach()`, `updateExistingPivot()`, etc.)
 - **Nested mass assignment** via dot notation patterns like `$request->input('user.profile')`
 - **Blacklist filtering warnings** when using `request()->except()` instead of the safer `only()` approach
