@@ -14,7 +14,7 @@ tags: mass-assignment,foreign-keys,eloquent,security,relationships
 
 ## What This Checks
 
-Detects **curated ownership and impersonation foreign keys** — `user_id`, `owner_id`, `tenant_id`, `organization_id`, `parent_id`, and similar — in Laravel Eloquent models' `$fillable` arrays, where mass-assigning them enables user impersonation, multi-tenancy breaches, and privilege escalation. These keys are reported at **Critical** severity, and the flagged set is configurable via the `dangerous_patterns` config key (see [How to Fix](#how-to-fix)).
+Detects **curated ownership and impersonation foreign keys** — `user_id`, `owner_id`, `tenant_id`, `organization_id`, `parent_id`, and similar — in Laravel Eloquent models' `$fillable` arrays (or a Laravel 12+ `#[Fillable(...)]` attribute), where mass-assigning them enables user impersonation, multi-tenancy breaches, and privilege escalation. These keys are reported at **Critical** severity, and the flagged set is configurable via the `dangerous_patterns` config key (see [How to Fix](#how-to-fix)).
 
 ::: info Scope: curated patterns only
 This analyzer intentionally does **not** flag generic `*_id` fields (e.g. `category_id`, `product_id`). Whether a fillable foreign key is actually exploitable depends on data flow — untrusted input reaching a `create()`/`update()`/`fill()` sink — which is detected directly by the [Mass Assignment Vulnerabilities Analyzer](/analyzers/security/mass-assignment-vulnerabilities) (which also owns the `$guarded = []` check). This analyzer focuses on the high-signal ownership keys whose mere presence in `$fillable` reliably indicates an authorization-boundary bug.
