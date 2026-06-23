@@ -14,7 +14,7 @@ tags: authentication,rate-limiting,brute-force,security,throttling
 
 ## What This Checks
 
-Detects missing rate limiting on authentication endpoints to prevent brute force attacks. Validates that login routes have throttle middleware, controllers use Laravel's throttling traits, or RateLimiter is implemented to restrict failed login attempts.
+Detects missing rate limiting on authentication endpoints to prevent brute force attacks. Validates that login routes have throttle middleware, controllers use Laravel's throttling traits, a form request throttles via `RateLimiter` (such as the official starter kits' `App\Http\Requests\Auth\LoginRequest::ensureIsNotRateLimited()`), or `RateLimiter` is implemented to restrict failed login attempts.
 
 ## Why It Matters
 
