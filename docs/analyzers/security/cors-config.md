@@ -18,7 +18,7 @@ pro: true
 Validates Cross-Origin Resource Sharing configuration for security. Checks for:
 
 - Missing CORS configuration file (`config/cors.php`)
-- Wildcard `allowed_origins` permitting any domain
+- Wildcard `allowed_origins` permitting any domain — reported **High** when the app exposes an API surface, or **Info** when no API routes, API registration, or Laravel Sanctum is detected (CORS governs nothing, so there is no exposure)
 - Wildcard `allowed_methods` exposing all HTTP methods
 - Wildcard `allowed_headers` permitting any custom header
 - `supports_credentials` enabled with wildcard origins (**Critical** - fundamental misconfiguration)
