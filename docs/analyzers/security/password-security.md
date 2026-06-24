@@ -23,7 +23,7 @@ Validates password hashing configuration, code-level hashing practices, password
 - **Missing password policy** - no `Password::defaults()` in service providers, or missing length/complexity/breach checks
 - **Weak validation rules** - password fields with minimum length below 8 in Form Requests or Controllers
 - **Long confirmation timeout** - `password_timeout` in `config/auth.php` exceeding 3 hours
-- **Missing rehash on login** - no `Hash::needsRehash()` usage or `rehash_on_login` disabled in hashing config
+- **Missing rehash on login** - `rehash_on_login` explicitly disabled in hashing config, or a login flow on Laravel 10 or earlier that never rehashes via `Hash::needsRehash()` (Laravel 11+ rehashes automatically by default, so an unset config is not flagged)
 
 ## Why It Matters
 
