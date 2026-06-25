@@ -79,7 +79,7 @@ public function boot(): void
 }
 ```
 
-ShieldCI resolves the live `throttle` alias from the router, so this runtime swap is recognized as a valid fix — routes using `throttle:60,1` are reported as compliant.
+ShieldCI recognizes this runtime swap as a valid fix, so routes using `throttle:60,1` are reported as compliant.
 
 ::: warning Don't gate Redis throttling on `env()`
 Wrapping `$middleware->throttleWithRedis()` in an `env('CACHE_STORE') === 'redis'` check is unreliable in production. Once `php artisan config:cache` runs, the `.env` file is no longer read, so `env()` falls back to its default and the Redis throttler is silently never applied. Read `config('cache.default')` from a service provider's `boot()` instead, where cached config is always available.
