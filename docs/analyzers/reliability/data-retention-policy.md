@@ -53,15 +53,18 @@ Switch from `single` to `daily` log driver with rotation:
 
 **1. Add Prunable trait to accumulating models:**
 
+The retention window — the records `prunable()` selects for deletion — is what bounds growth. The schedule cadence is incidental; pick one suited to the window.
+
 ```php
 use Illuminate\Database\Eloquent\Prunable;
 
-class AuditLog extends Model
+class Notification extends Model
 {
     use Prunable;
 
     public function prunable(): Builder
     {
+        // Delete notifications older than your retention period.
         return static::where('created_at', '<=', now()->subDays(90));
     }
 }
@@ -76,6 +79,10 @@ Schedule::command('model:prune')->daily();
 // Or in app/Console/Kernel.php (Laravel 10-)
 $schedule->command('model:prune')->daily();
 ```
+
+::: warning Audit and compliance logs
+For audit trails and other compliance data, the retention window is a legal decision, not a default. Set `prunable()` to your data-protection obligation and prune only records **older** than that window — never delete audit records on a short cycle. If retention is handled outside Eloquent (table partitioning, an archival pipeline, or an external store), suppress this finding for that model.
+:::
 
 **3. Schedule job cleanup:**
 
