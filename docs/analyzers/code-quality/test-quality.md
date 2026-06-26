@@ -28,20 +28,20 @@ Validates test files for quality issues that reduce their effectiveness. Support
 **Pest PHP:**
 - Empty test closures
 - `it()`/`test()` calls without assertions
+- Higher-order exception expectations chained on the test — `->throws()`, `->throwsIf()`, `->throwsUnless()`, `->throwsNoExceptions()` — counted as assertions
 - `->skip()` and `->todo()` chained tests correctly ignored
 - `describe()` block nesting supported
 
 **Recognized assertion styles (PHPUnit and Pest):**
 - Direct PHPUnit: `$this->assert*()`, `self::assert*()`, `static::assert*()`
+- Global/bare assertions: `assertSame()`, `assertCount()`, and any custom `assert*()` function — Pest exposes PHPUnit's assertions as global functions
 - Pest expectations: `expect()->toBe()`, `expect()->toBeTrue()`, etc.
+- Pest exception expectations chained on `it()`/`test()`: `->throws()`, `->throwsIf()`, `->throwsUnless()`, `->throwsNoExceptions()`
+- Same-file helper functions: a test that delegates to a file-level helper whose own body asserts is recognized as asserting
 - HTTP response assertions: `$response->assertOk()`, `$response->assertStatus()`, `$response->assertInertia()`, etc.
 - Chained HTTP assertions: `$this->get('/')->assertOk()`, `$this->postJson(...)->assertStatus(422)`
 - Static facade assertions: `Http::assertSent()`, `Mail::assertNothingSent()`, `Queue::assertPushed()`, `Event::assertDispatched()`, etc.
 - Mockery expectations: `$mock->shouldReceive()`, `Log::shouldReceive()`, `$spy->shouldHaveReceived()`
-
-::: tip Assertion Detection Scope
-The analyzer checks assertions within each test method body. Assertions delegated entirely to private helper methods (with no direct assertion in the test itself) are not detected. If you centralise assertions in helpers, ensure each test method also has at least one direct assertion call.
-:::
 
 ## Why It Matters
 
