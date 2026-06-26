@@ -15,15 +15,13 @@ pro: true
 
 ## What This Checks
 
-Validates that critical application modules have corresponding test files. Recursively scans four key directories and checks each PHP class against your `tests/` directory:
+Validates that critical application modules have test coverage — using a PHPUnit/Pest coverage report when one is available, and otherwise checking each PHP class in four key directories against your `tests/` directory:
 
 - Missing `tests/` directory entirely
-- Models (`app/Models`) without matching test files
-- Controllers (`app/Http/Controllers`) without matching test files, including nested subdirectories like `Api/`
-- Services (`app/Services`) without matching test files
-- Policies (`app/Policies`) without matching test files
-
-**Automatically skipped:** Abstract/Base-prefixed classes, traits, enums, and interfaces are excluded from the count. Within `app/Services`, DTOs (`*Payload`, files under a `DTOs/` subdirectory) and exception classes (`*Exception`, files under an `Exceptions/` subdirectory) are also excluded — these utility types have no independently testable business logic.
+- Models (`app/Models`) without test coverage
+- Controllers (`app/Http/Controllers`) without test coverage, including nested subdirectories like `Api/`
+- Services (`app/Services`) without test coverage
+- Policies (`app/Policies`) without test coverage
 
 **Flexible test matching:** Test files don't need to exactly mirror the class name. PascalCase boundary matching handles all common Laravel naming conventions:
 
@@ -34,13 +32,13 @@ Validates that critical application modules have corresponding test files. Recur
 | Prefix | `UserModelTest.php` | `User.php` |
 | Reverse prefix | `EmailVerificationTest.php` | `EmailVerificationPromptController.php` |
 
-The reverse-prefix rule accommodates Laravel Breeze's convention of naming tests after features rather than individual controller classes (e.g., a single `EmailVerificationTest` can cover `EmailVerificationPromptController` and `EmailVerificationNotificationController`).
+The reverse-prefix rule accommodates Laravel Breeze's convention of naming tests after features rather than individual controller classes.
 
 **Per-directory breakdown:** Results include a per-layer summary so you can see exactly which areas need attention:
 
-> 2 of 4 critical files have tests (50% coverage). Models: 1/2, Controllers: 1/1, Services: 0/1
+> 2 of 4 critical modules have a dedicated test file (50%). Models: 1/2, Controllers: 1/1, Services: 0/1
 
-### Coverage Thresholds
+**Coverage Thresholds**
 
 | Coverage | Result | Issue Severity |
 |----------|--------|---------------|
@@ -110,11 +108,38 @@ class UserTest extends TestCase
 }
 ```
 
-**3. Run coverage report:**
+**3. Generate a coverage report for ShieldCI to read:**
 
 ```bash
-php artisan test --coverage --min=80
+php artisan test --coverage-clover coverage.xml
 ```
+
+## ShieldCI Configuration
+
+The coverage report path and per-file threshold are configurable. To customize them, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'code-quality' => [
+        'enabled' => true,
+
+        'test-coverage' => [
+            'clover_path' => 'build/reports/clover.xml', // Default: auto-discovered
+            'min_file_coverage' => 80, // Default: 0 — flag critical classes below this line coverage
+        ],
+    ],
+],
+```
+
+::: tip Coverage Report Discovery
+When `clover_path` is unset, ShieldCI auto-discovers the report at `coverage.xml`, `clover.xml`, `build/logs/clover.xml`, `coverage/clover.xml`, or `build/coverage/clover.xml`. Generate one with `php artisan test --coverage-clover coverage.xml`.
+:::
 
 ## References
 
