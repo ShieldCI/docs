@@ -24,16 +24,6 @@ The Service Container Resolution Analyzer identifies usage of `app()`, `resolve(
 - `Container::getInstance()->make()` - Container singleton access
 - `app()->bind()`, `app()->singleton()` outside service providers - Binding in wrong location
 
-**Not Flagged:**
-
-These contexts are suppressed because there is no constructor to inject into:
-
-- **Global helper functions** — `app()` inside a free function (the same shape as Laravel's own `auth()`/`cache()` helpers)
-- **Container-as-factory calls** — `app(Class::class, [$params])` and `makeWith()`, where runtime arguments are passed that dependency injection cannot supply
-- **Filament static methods & closures** — `table()`/`form()` and action closures have no injectable method signature
-
-Bindings (`bind()`/`singleton()` in the wrong place) stay flagged everywhere, and a bare `app(X::class)` in a service or controller is still flagged.
-
 ## Why It Matters
 
 Manual container resolution is a recognized anti-pattern that creates several problems:
