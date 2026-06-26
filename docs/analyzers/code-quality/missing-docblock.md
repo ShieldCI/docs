@@ -178,39 +178,55 @@ public function searchUsers(array $filters, int $limit = 10)
 
 **Note**: The `int $limit` parameter doesn't need a `@param` tag because `int` is a scalar type. The `array $filters` parameter DOES need documentation because `array` is a generic type that needs structure specification.
 
-#### 5: Document Nullable Class Returns
+#### 5: Nullable Class Returns
 
 ```php
-// ❌ BAD - Missing documentation for nullable class return
-public function findUserByEmail(string $email)
+// ❌ BAD - Missing @param for the array criteria (generic type)
+public function findMatchingUser(array $criteria): ?User
 {
-    return User::where('email', $email)->first();
+    $query = User::query();
+
+    foreach ($criteria as $field => $value) {
+        $query->where($field, $value);
+    }
+
+    return $query->first();
 }
 
-// ✅ GOOD - Document nullable class return type
+// ✅ GOOD - Document the array param; the concrete nullable return needs no @return
 /**
- * Find a user by email address.
+ * Find the first user matching the given criteria.
  *
- * @return \App\Models\User|null
+ * @param  array<string, mixed>  $criteria  Field/value pairs to match
  */
-public function findUserByEmail(string $email): ?User
+public function findMatchingUser(array $criteria): ?User
 {
-    return User::where('email', $email)->first();
+    $query = User::query();
+
+    foreach ($criteria as $field => $value) {
+        $query->where($field, $value);
+    }
+
+    return $query->first();
 }
 ```
 
-**Note**: The `string $email` parameter doesn't need a `@param` tag because `string` is a scalar type. The `@return` tag is optional for concrete class names (`?User` is self-documenting). Including it (as shown) is encouraged for readability but will not be flagged if omitted.
+**Note**: The `array $criteria` parameter needs a `@param` tag because `array` is a generic type that needs structure specification. The `?User` return needs no `@return` — a concrete (nullable) class type is self-documenting.
 
 #### 6: Union Types of Concrete Classes
 
 ```php
 // ✅ GOOD - No @return needed, union is fully self-documenting
 /**
- * Handle the request.
+ * Respond to the request.
  */
-public function handle(): Response|JsonResponse
+public function respond(Request $request): Response|JsonResponse
 {
-    return response()->json([]);
+    if ($request->wantsJson()) {
+        return response()->json([]);
+    }
+
+    return response('OK');
 }
 
 // ❌ BAD - @return required because array is a generic type needing shape documentation
