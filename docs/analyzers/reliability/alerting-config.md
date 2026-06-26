@@ -19,7 +19,7 @@ Validates that proper alerting mechanisms are in place to detect production issu
 
 - Exception notification handler (`report` / `reportable` callbacks with actual alerting)
 - Log alerting channel (Slack, syslog, papertrail, Monolog custom, or alerting packages)
-- Failed job notification (`Queue::failing` callback or job `failed()` methods)
+- Failed job notification (`Queue::failing` callback, job `failed()` methods, Laravel Horizon, or an installed error-tracking package)
 
 The exception check also follows alerting that has been delegated out of `Handler.php` / `bootstrap/app.php` into a dedicated class — it recursively scans `app/Exceptions/**` for the same alerting patterns, so extracting your reportable callback into a dedicated class still satisfies the check.
 
@@ -110,6 +110,8 @@ public function boot(): void
     });
 }
 ```
+
+An installed error-tracking package (Sentry, Bugsnag, or Flare) also satisfies the failed-job check: when a job exhausts its retries, the worker reports the exception through the framework's exception handling, which these SDKs hook to capture and alert on the failure. A job `failed()` method that forwards the exception with `report($exception)` is credited for the same reason.
 
 ## References
 
