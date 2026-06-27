@@ -65,13 +65,28 @@ SESSION_SECURE_COOKIE=false
 
 **Scenario 4: EncryptCookies Middleware Missing**
 
-```php
-// app/Http/Kernel.php
-protected $middleware = [
-    \App\Http\Middleware\EncryptCookies::class,  // Uncomment or add
-    // ... other middleware
+EncryptCookies lives in the `web` middleware group — the framework default in every supported Laravel version. Register it there (not the global stack), so only stateful web-route cookies are encrypted.
+
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php — cookie encryption ships in the 'web' group by default.
+// Nothing to add unless you removed it; customize exclusions only if needed:
+$middleware->encryptCookies(except: [
+    // cookies to leave unencrypted (use sparingly)
+]);
+```
+
+```php [Laravel 9–10]
+// app/Http/Kernel.php — add EncryptCookies to the 'web' middleware group
+protected $middlewareGroups = [
+    'web' => [
+        \App\Http\Middleware\EncryptCookies::class,  // ✅ Add this
+        \Illuminate\Session\Middleware\StartSession::class,
+        // ... other web middleware
+    ],
 ];
 ```
+:::
 
 ### Proper Fix (15 minutes)
 
@@ -120,47 +135,12 @@ return [
 ];
 ```
 
-**2. Enable EncryptCookies Middleware (Laravel 10 and below)**
+**2. Register EncryptCookies Middleware**
 
-```php
-// app/Http/Kernel.php
+EncryptCookies is registered in the `web` middleware group by default in every supported Laravel version, so most apps need no change here. Encryption is correctly scoped to web routes — keep it out of the global stack so stateless/API routes aren't needlessly encrypted.
 
-namespace App\Http;
-
-use Illuminate\Foundation\Http\Kernel as HttpKernel;
-
-class Kernel extends HttpKernel
-{
-    /**
-     * The application's global HTTP middleware stack.
-     */
-    protected $middleware = [
-        // CRITICAL: Must be early in the stack
-        \App\Http\Middleware\EncryptCookies::class,
-
-        \App\Http\Middleware\TrustProxies::class,
-        \Illuminate\Http\Middleware\HandleCors::class,
-        \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
-        \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
-        \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-    ];
-
-    protected $middlewareGroups = [
-        'web' => [
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        ],
-    ];
-}
-```
-
-**3. Laravel 11+ Cookie Encryption**
-
-```php
+::: code-group
+```php [Laravel 11+]
 // bootstrap/app.php
 
 <?php
@@ -176,8 +156,8 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Cookie encryption enabled by default in Laravel 11
-        // Explicitly configure if needed:
+        // Cookie encryption is enabled by default via the 'web' group.
+        // Nothing to add unless you removed it — optionally set exclusions:
         $middleware->encryptCookies(except: [
             // Cookies to exclude from encryption (use sparingly)
         ]);
@@ -187,7 +167,33 @@ return Application::configure(basePath: dirname(__DIR__))
     })->create();
 ```
 
-**4. Configure Cookie Encryption Exceptions**
+```php [Laravel 9–10]
+// app/Http/Kernel.php
+
+namespace App\Http;
+
+use Illuminate\Foundation\Http\Kernel as HttpKernel;
+
+class Kernel extends HttpKernel
+{
+    /**
+     * The application's route middleware groups.
+     */
+    protected $middlewareGroups = [
+        'web' => [
+            \App\Http\Middleware\EncryptCookies::class,  // ✅ Encrypts web-route cookies
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+    ];
+}
+```
+:::
+
+**3. Configure Cookie Encryption Exceptions**
 
 ```php
 // app/Http/Middleware/EncryptCookies.php
@@ -210,7 +216,7 @@ class EncryptCookies extends Middleware
 }
 ```
 
-**5. Test Cookie Security**
+**4. Test Cookie Security**
 
 ```php
 // tests/Feature/CookieSecurityTest.php
@@ -263,7 +269,7 @@ class CookieSecurityTest extends TestCase
 }
 ```
 
-**6. Environment-Specific Configuration**
+**5. Environment-Specific Configuration**
 
 ```php
 // config/session.php - Environment-aware configuration
