@@ -133,39 +133,39 @@ foreach ($posts as $post) {
 The finding is reported on the template line, but the fix belongs in the controller that renders the view — the template is only iterating data it was handed.
 
 ```blade
-{{-- ❌ BAD - resources/views/airports/members.blade.php --}}
-@foreach ($airports as $airport)
-    {{ $airport->market->name }} {{-- N+1: one query per airport --}}
+{{-- ❌ BAD - resources/views/posts/index.blade.php --}}
+@foreach ($posts as $post)
+    {{ $post->user->name }} {{-- N+1: one query per post --}}
 @endforeach
 ```
 
 ```php
-// ❌ BAD - the controller fetches airports without the relation
-class AirportController
+// ❌ BAD - the controller fetches posts without the relation
+class PostController
 {
-    public function members()
+    public function index()
     {
-        $airports = Airport::whereNotNull('grouping_name')->get();
+        $posts = Post::published()->get();
 
-        return view('airports.members', compact('airports'));
+        return view('posts.index', compact('posts'));
     }
 }
 
 // ✅ GOOD - eager-load the relation the view iterates
-class AirportController
+class PostController
 {
-    public function members()
+    public function index()
     {
-        $airports = Airport::whereNotNull('grouping_name')
-            ->with('market')
+        $posts = Post::published()
+            ->with('user')
             ->get();
 
-        return view('airports.members', compact('airports'));
+        return view('posts.index', compact('posts'));
     }
 }
 ```
 
-The template is unchanged — once `market` is eager-loaded, `{{ $airport->market->name }}` runs no additional queries.
+The template is unchanged — once `user` is eager-loaded, `{{ $post->user->name }}` runs no additional queries.
 
 ### Proper Fix (30 minutes)
 
