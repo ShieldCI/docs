@@ -31,7 +31,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - ✅ Excludes config/session/cache helper calls
 - ✅ Detects relationship queries (`$user->posts()->get()`)
 - ✅ Tracks 9 different issue types with appropriate severity levels
-- ✅ Configurable thresholds for @php block complexity and arithmetic operator sensitivity
+- ✅ Configurable thresholds for @php block complexity, arithmetic operator sensitivity, and `@foreach` nesting depth
 - ✅ Recognises the single-statement `@php($expr)` form as self-closing — never emits a false-positive "Unclosed @php block" for this syntax
 - ✅ Skips published vendor views under `resources/views/vendor/` — third-party templates dropped in by `php artisan vendor:publish` (mail, notifications, pagination) are framework-authored code the developer can't meaningfully fix; your own templates are still scanned
 
@@ -52,6 +52,7 @@ Detects business logic in Blade templates that violates the MVC pattern. Checks 
 - Array manipulation (`array_filter()`, `array_map()`, `array_reduce()`)
 - Collection transformations in loops
 - @php blocks exceeding line threshold
+- Nested `@foreach` that scans a collection for each outer item — an inner loop over an unrelated collection whose body matches items back to the outer one (`@if($post->user_id === $user->id)`), which costs O(n×m) to render O(n) of output
 
 **Low** - Complex Calculations:
 - Multi-operation arithmetic
@@ -449,6 +450,10 @@ Then in `config/shieldci.php`:
             // Minimum arithmetic operators to flag a calculation in {{ }} expressions
             // Default: 2 (e.g., {{ ($a * $b) + $c }} triggers, {{ $a * $b }} does not)
             'min_arithmetic_operators' => 2,
+
+            // Nesting depth at which a searching @foreach is reported
+            // Default: 2
+            'max_foreach_depth' => 2,
         ],
     ],
 ],
