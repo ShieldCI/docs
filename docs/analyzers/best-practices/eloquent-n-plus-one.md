@@ -17,6 +17,7 @@ tags: laravel,performance,eloquent,database,n+1,optimization,eager-loading,best-
 Detects missing eager loading that causes N+1 query performance problems in Eloquent. Checks:
 
 - **Relationship access inside loops**: Accessing relationships like `$post->user` inside `foreach`, `for`, `while`, or `do-while` loops
+- **Relationship access inside Blade loops**: Accessing relationships like `$post->user` inside a `@foreach` or `@forelse` in a template
 - **Missing with() calls**: Queries without eager loading using `->with()` before the loop
 - **Missing load() calls**: Collections without lazy eager loading using `->load()` after fetching
 - **Common N+1 patterns**: Typical code patterns like `$post->user->name` or `$post->comments->count()` in loops
@@ -27,6 +28,8 @@ Detects missing eager loading that causes N+1 query performance problems in Eloq
 - ✅ Tracks eager loading from `with()` and `load()` methods
 - ✅ Supports nested loops with proper variable tracking
 - ✅ Deduplicates same relationship accessed multiple times
+- ✅ **Analyzes Blade templates** — compiles the template and carries each variable's model type and eager-loaded relations across from the controller that renders the view, so a relation the controller already eager-loaded is not reported
+- ✅ Reports a Blade finding on the template line and names the controller method to eager-load it in, so the fix lands where the data is fetched
 
 ## Why It Matters
 
@@ -124,6 +127,45 @@ foreach ($posts as $post) {
     echo $post->user->name; // No additional queries
 }
 ```
+
+**Scenario 4: Relationship Accessed in a Blade Template**
+
+The finding is reported on the template line, but the fix belongs in the controller that renders the view — the template is only iterating data it was handed.
+
+```blade
+{{-- ❌ BAD - resources/views/posts/index.blade.php --}}
+@foreach ($posts as $post)
+    {{ $post->user->name }} {{-- N+1: one query per post --}}
+@endforeach
+```
+
+```php
+// ❌ BAD - the controller fetches posts without the relation
+class PostController
+{
+    public function index()
+    {
+        $posts = Post::published()->get();
+
+        return view('posts.index', compact('posts'));
+    }
+}
+
+// ✅ GOOD - eager-load the relation the view iterates
+class PostController
+{
+    public function index()
+    {
+        $posts = Post::published()
+            ->with('user')
+            ->get();
+
+        return view('posts.index', compact('posts'));
+    }
+}
+```
+
+The template is unchanged — once `user` is eager-loaded, `{{ $post->user->name }}` runs no additional queries.
 
 ### Proper Fix (30 minutes)
 
