@@ -165,7 +165,7 @@ class PostController
 }
 ```
 
-The template is unchanged — once `user` is eager-loaded, `{{ $post->user->name }}` runs no additional queries.
+The template is unchanged — once `user` is eager-loaded, `$post->user->name` runs no additional queries.
 
 ### Proper Fix (30 minutes)
 
