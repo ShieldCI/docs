@@ -37,7 +37,7 @@ Validates test files for quality issues that reduce their effectiveness. Support
 - Global/bare assertions: `assertSame()`, `assertCount()`, and any custom `assert*()` function — Pest exposes PHPUnit's assertions as global functions
 - Pest expectations: `expect()->toBe()`, `expect()->toBeTrue()`, etc.
 - Pest exception expectations chained on `it()`/`test()`: `->throws()`, `->throwsIf()`, `->throwsUnless()`, `->throwsNoExceptions()`
-- Same-file helper functions: a test that delegates to a file-level helper whose own body asserts is recognized as asserting
+- Helper functions across the test suite: a test that delegates to a helper whose own body asserts is recognized as asserting — including Pest global helpers (e.g. in `tests/Pest.php`) called from another test file
 - HTTP response assertions: `$response->assertOk()`, `$response->assertStatus()`, `$response->assertInertia()`, etc.
 - Chained HTTP assertions: `$this->get('/')->assertOk()`, `$this->postJson(...)->assertStatus(422)`
 - Static facade assertions: `Http::assertSent()`, `Mail::assertNothingSent()`, `Queue::assertPushed()`, `Event::assertDispatched()`, etc.
