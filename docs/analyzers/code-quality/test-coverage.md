@@ -141,6 +141,19 @@ Then in `config/shieldci.php`:
 When `clover_path` is unset, ShieldCI auto-discovers the report at `coverage.xml`, `clover.xml`, `build/logs/clover.xml`, `coverage/clover.xml`, or `build/coverage/clover.xml`. Generate one with `php artisan test --coverage-clover coverage.xml`.
 :::
 
+This analyzer runs in local, development, and testing environments. In production and staging it is automatically skipped unless a clover coverage report is present.
+
+**Why skip in production and staging?**
+- Coverage reports are generated where tests run (CI and development), not on production servers
+- Production deployments often exclude the `tests/` directory, so the file-mapping fallback would have nothing to inspect
+- Without coverage artifacts, the analyzer would report missing coverage that actually exists in your test pipeline
+
+**When to run this analyzer:**
+- ✅ **CI/CD pipelines**: Generate a report with `php artisan test --coverage-clover coverage.xml` for real line coverage
+- ✅ **Local development**: Falls back to the file-mapping heuristic when no report is present
+- ✅ **Production/Staging with a shipped report**: Runs when a clover report is deployed alongside the app (auto-discovered or via `clover_path`)
+- ❌ **Production/Staging without a report**: Skipped automatically and reported as Not Applicable
+
 ## References
 
 - [Laravel Testing Documentation](https://laravel.com/docs/testing)
