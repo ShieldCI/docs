@@ -1,6 +1,6 @@
 ---
 title: Environment Example Documentation Analyzer
-description: Ensures all environment variables used in .env are documented in .env.example for proper team onboarding and deployment
+description: Ensures all environment variables used in .env and read by config files are documented in .env.example for proper team onboarding and deployment
 icon: book-open
 outline: [2, 3]
 tags: environment,configuration,documentation,team-collaboration
@@ -15,6 +15,10 @@ tags: environment,configuration,documentation,team-collaboration
 ## What This Checks
 
 - Verifies that all environment variables in `.env` are documented in `.env.example`
+- Verifies that every `env()` key read by the app's own `config/` files appears in `.env.example`, actively or commented out
+- Reports each undocumented config-read key as a Medium issue located at the config file and line where it is first read
+- Recognizes keys shipped by installed packages' own vendor configs and stock Laravel skeleton keys as vendor/framework-owned
+- Runs the config direction even when `.env` is absent
 - Ensures `.env.example` serves as complete documentation for the project
 - Identifies variables added to `.env` but not documented
 - Validates that `.env.example` exists and is accessible
@@ -32,6 +36,8 @@ tags: environment,configuration,documentation,team-collaboration
 - **Knowledge loss**: When team members leave, undocumented variables become mysteries that are hard to understand
 - **Integration issues**: Third-party service configurations added by developers aren't discovered by the rest of the team
 - **Feature flags forgotten**: New feature toggles work locally but aren't documented for other environments
+- **Invisible config knobs**: A tunable introduced as `env('ACME_TIMEOUT', 30)` in a config file works everywhere via its default, so nothing forces it into `.env.example` — until this check, nobody else learns it exists
+- **Optional variables stay optional**: Commented documentation (`# ACME_TIMEOUT=30`) counts, so a variable can be documented without being enabled anywhere
 
 ## How to Fix
 
@@ -117,7 +123,21 @@ ENABLE_NEW_DASHBOARD=false
 ENABLE_BETA_FEATURES=false
 ```
 
-4. **Verify all variables are documented**:
+4. **For a config-read key finding, document the key where the issue points**:
+
+The finding names the config file and line reading the key. Add it to `.env.example` — actively when environments usually set it, or commented out when it is a tunable most environments leave at the config default:
+
+```dotenv
+# .env.example
+
+# Widget billing - set to override the config default
+WIDGET_MAX_SEATS=1000
+
+# Optional tunable, defaults to 30 in config/widget.php
+# ACME_TIMEOUT=30
+```
+
+5. **Verify all variables are documented**:
 
 ```bash
 # Should return no results
@@ -129,7 +149,7 @@ comm -23 <(grep -E '^[A-Z_]+=' .env | cut -d= -f1 | sort) \
 php artisan shieldci:check env-example-documented
 ```
 
-5. **Commit .env.example** (but never .env!):
+6. **Commit .env.example** (but never .env!):
 
 ```bash
 git add .env.example
@@ -160,6 +180,23 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ❌ **Laravel Cloud**: Skipped automatically (platform-injected variables should not be in `.env.example`)
 - ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
 
+### Options
+
+Additional keys to exempt from the config-direction check can be listed in `config/shieldci.php` — exact names or `fnmatch` wildcards, merged with the built-in framework list:
+
+```php
+'analyzers' => [
+    'reliability' => [
+        'env-example-documented' => [
+            'ignored_keys' => [
+                'ACME_INTERNAL_TOKEN',
+                'LEGACY_*',
+            ],
+        ],
+    ],
+],
+```
+
 ## References
 
 - [Laravel Configuration Documentation](https://laravel.com/docs/configuration)
@@ -174,3 +211,4 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - [Environment File Existence Analyzer](/analyzers/reliability/env-file-exists) - Ensures .env file exists
 - [Environment File Analyzer](/analyzers/security/env-file) - Ensures .env.example doesn't contain real secrets
 - [App Key Analyzer](/analyzers/security/app-key-security) - Validates APP_KEY format
+- [Env Call Outside Config Analyzer](/analyzers/performance/env-call-outside-config) - Keeps env() reads inside config files, where this analyzer's config direction looks for them
