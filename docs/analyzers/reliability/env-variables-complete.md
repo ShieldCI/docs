@@ -17,16 +17,16 @@ tags: environment,configuration,reliability,deployment
 - Verifies that `.env.example` file exists in the application root
 - Compares all environment variables defined in `.env.example` against `.env`
 - Grades each missing variable by whether an `env()` call in the app's `config/` files supplies a real default
-- Reports a variable with **no config default** — a bare `env('KEY')` or an explicit `null` default — as a High issue when it is absent from `.env`
+- Reports a variable with **no config default** (a bare `env('KEY')` or an explicit `null` default) as a High issue when it is absent from `.env`
 - Treats a variable **with a real config default** as the lean-`.env` style working as intended: it is listed in the result metadata (`defaulted_variables`) and the result stays passed
-- Reports variables commented out in `.env` (`# KEY=...`) as a Low issue — the sanctioned "consciously not set" idiom
+- Reports variables commented out in `.env` (`# KEY=...`) as a Low issue, the sanctioned "consciously not set" idiom
 - Validates variable names (regardless of their values), ignoring comments and blank lines in both files
 - Handles variables with empty values, special characters, and spaces
 - Provides actionable recommendations with specific variable names
 
 ## Why It Matters
 
-- **Lean `.env` support**: `env('KEY', $default)` in a config file is Laravel's official default mechanism — a variable with a safe config default does not need restating in `.env`. Restating it silently pins a stale value when the config default later changes, so config owns defaults and `.env` owns overrides
+- **Lean `.env` support**: `env('KEY', $default)` in a config file is Laravel's official default mechanism, so a variable with a safe config default does not need restating in `.env`. Restating it silently pins a stale value when the config default later changes: config owns defaults, `.env` owns overrides
 - **Configuration drift**: As your app evolves, new required variables are added to `.env.example` but team members forget to update their `.env`, causing subtle bugs
 - **Deployment failures**: Missing environment variables in production can cause crashes or silent failures that are hard to debug
 - **Onboarding friction**: New developers copy `.env.example` but miss critical variables, wasting hours troubleshooting
@@ -74,7 +74,7 @@ REDIS_PASSWORD=  # Good - no password needed locally
 
 3. **Leave config-defaulted variables out** if the default suits this environment:
 
-A variable read as `env('WIDGET_MAX_SEATS', 1000)` in a config file can simply stay out of `.env` — the config default applies, and the analyzer lists it in the result metadata instead of raising an issue. Set it in `.env` only when this environment needs a different value.
+A variable read as `env('WIDGET_MAX_SEATS', 1000)` in a config file can simply stay out of `.env`: the config default applies, and the analyzer lists it in the result metadata instead of raising an issue. Set it in `.env` only when this environment needs a different value.
 
 4. **Verify**:
 
@@ -93,6 +93,34 @@ echo "NEW_API_KEY=your_api_key_here" >> .env.example
 echo "NEW_SERVICE_URL=https://example.com" >> .env.example
 ```
 
+6. **Configure optional reports** if you want defaulted or redundant variables surfaced as findings, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+
+        'env-variables-complete' => [
+            // Also report config-defaulted absences as a single Info issue
+            // Default: false
+            'report_defaulted' => true,
+
+            // Report .env values identical to the statically-known config
+            // default as a single Info issue (removing the override lets
+            // future config default changes take effect)
+            // Default: false
+            'report_redundant' => true,
+        ],
+    ],
+],
+```
+
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
@@ -108,26 +136,6 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent)
 - ❌ **Laravel Cloud**: Skipped automatically (platform-managed `.env`)
 - ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
-
-### Options
-
-Two opt-in reports are available (both default to `false`), set in `config/shieldci.php`:
-
-```php
-'analyzers' => [
-    'reliability' => [
-        'env-variables-complete' => [
-            // Also report config-defaulted absences as a single Info issue
-            'report_defaulted' => true,
-
-            // Report .env values identical to the statically-known config
-            // default as a single Info issue - removing such an override lets
-            // future config default changes take effect without editing .env
-            'report_redundant' => true,
-        ],
-    ],
-],
-```
 
 ## References
 

@@ -36,7 +36,7 @@ tags: environment,configuration,documentation,team-collaboration
 - **Knowledge loss**: When team members leave, undocumented variables become mysteries that are hard to understand
 - **Integration issues**: Third-party service configurations added by developers aren't discovered by the rest of the team
 - **Feature flags forgotten**: New feature toggles work locally but aren't documented for other environments
-- **Invisible config knobs**: A tunable introduced as `env('ACME_TIMEOUT', 30)` in a config file works everywhere via its default, so nothing forces it into `.env.example` — until this check, nobody else learns it exists
+- **Invisible config knobs**: A tunable introduced as `env('ACME_TIMEOUT', 30)` in a config file works everywhere via its default, so nothing forces it into `.env.example` and nobody else learns it exists
 - **Optional variables stay optional**: Commented documentation (`# ACME_TIMEOUT=30`) counts, so a variable can be documented without being enabled anywhere
 
 ## How to Fix
@@ -125,7 +125,7 @@ ENABLE_BETA_FEATURES=false
 
 4. **For a config-read key finding, document the key where the issue points**:
 
-The finding names the config file and line reading the key. Add it to `.env.example` — actively when environments usually set it, or commented out when it is a tunable most environments leave at the config default:
+The finding names the config file and line reading the key. Add it to `.env.example`: actively when environments usually set it, or commented out when it is a tunable most environments leave at the config default:
 
 ```dotenv
 # .env.example
@@ -164,6 +164,33 @@ These variables were added during recent feature development."
 git push origin main
 ```
 
+7. **Configure exceptions** for config-read keys that should not require documentation, publish the config:
+
+```bash
+php artisan vendor:publish --tag=shieldci-config
+```
+
+Then in `config/shieldci.php`:
+
+```php
+'analyzers' => [
+    'reliability' => [
+        'enabled' => true,
+
+        'env-example-documented' => [
+            // Config-read keys to exempt from the documentation check,
+            // exact names or fnmatch wildcards, merged with the built-in
+            // framework list (document why!)
+            // Default: []
+            'ignored_keys' => [
+                'ACME_INTERNAL_TOKEN', // Injected by the deploy platform
+                'LEGACY_*',            // Pre-rename keys still read by old config
+            ],
+        ],
+    ],
+],
+```
+
 ## ShieldCI Configuration
 
 This analyzer is automatically skipped in CI environments (`$runInCI = false`).
@@ -171,7 +198,6 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 **Why skip in CI?**
 - CI runners do not check out `.env` (it is gitignored); the analyzer would warn on every pipeline run for a missing file that is intentionally absent
 - Documentation completeness of `.env.example` is a developer workflow concern, not a CI gate
-- The companion check ([Environment Variables Complete](/analyzers/reliability/env-variables-complete)) is also skipped in CI for the same reason
 
 **When to run this analyzer:**
 - ✅ **Local development**: Ensures every variable you add to `.env` gets documented for your teammates
@@ -179,23 +205,6 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 - ❌ **CI/CD pipelines**: Skipped automatically (`.env` file intentionally absent in CI)
 - ❌ **Laravel Cloud**: Skipped automatically (platform-injected variables should not be in `.env.example`)
 - ❌ **Laravel Vapor**: Skipped automatically (no `.env` file in serverless deployments)
-
-### Options
-
-Additional keys to exempt from the config-direction check can be listed in `config/shieldci.php` — exact names or `fnmatch` wildcards, merged with the built-in framework list:
-
-```php
-'analyzers' => [
-    'reliability' => [
-        'env-example-documented' => [
-            'ignored_keys' => [
-                'ACME_INTERNAL_TOKEN',
-                'LEGACY_*',
-            ],
-        ],
-    ],
-],
-```
 
 ## References
 
