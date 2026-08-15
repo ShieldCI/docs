@@ -19,6 +19,7 @@ tags: environment,configuration,documentation,team-collaboration
 - Treats a key with a real config default as an optional knob that config owns, so documenting it stays voluntary; this mirrors the [Environment Variables Complete](/analyzers/reliability/env-variables-complete) grading
 - Reports each undocumented defaultless key as a Medium issue located at the config file and line where it is first read
 - Recognizes keys also read by installed packages' own vendor configs (the framework's included) as vendor-owned
+- Treats a key read in a config file sharing a vendor config file's name (`services.php`, `mail.php`, `filesystems.php`, ...) as stock-file territory; custom keys placed there are covered by the `.env` direction once they are set
 - Runs the config direction even when `.env` is absent
 - Ensures `.env.example` serves as complete documentation for the project
 - Identifies variables added to `.env` but not documented
