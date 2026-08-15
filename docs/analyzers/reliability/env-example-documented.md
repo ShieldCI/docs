@@ -15,9 +15,10 @@ tags: environment,configuration,documentation,team-collaboration
 ## What This Checks
 
 - Verifies that all environment variables in `.env` are documented in `.env.example`
-- Verifies that every `env()` key read by the app's own `config/` files appears in `.env.example`, actively or commented out
-- Reports each undocumented config-read key as a Medium issue located at the config file and line where it is first read
-- Recognizes keys shipped by installed packages' own vendor configs and stock Laravel skeleton keys as vendor/framework-owned
+- Verifies that every `env()` key read by the app's own `config/` files **without a default** (a bare `env('KEY')` or an explicit `null` default) appears in `.env.example`, actively or commented out
+- Treats a key with a real config default as an optional knob that config owns, so documenting it stays voluntary; this mirrors the [Environment Variables Complete](/analyzers/reliability/env-variables-complete) grading
+- Reports each undocumented defaultless key as a Medium issue located at the config file and line where it is first read
+- Recognizes keys also read by installed packages' own vendor configs (the framework's included) as vendor-owned
 - Runs the config direction even when `.env` is absent
 - Ensures `.env.example` serves as complete documentation for the project
 - Identifies variables added to `.env` but not documented
@@ -36,8 +37,8 @@ tags: environment,configuration,documentation,team-collaboration
 - **Knowledge loss**: When team members leave, undocumented variables become mysteries that are hard to understand
 - **Integration issues**: Third-party service configurations added by developers aren't discovered by the rest of the team
 - **Feature flags forgotten**: New feature toggles work locally but aren't documented for other environments
-- **Invisible config knobs**: A tunable introduced as `env('ACME_TIMEOUT', 30)` in a config file works everywhere via its default, so nothing forces it into `.env.example` and nobody else learns it exists
-- **Optional variables stay optional**: Commented documentation (`# ACME_TIMEOUT=30`) counts, so a variable can be documented without being enabled anywhere
+- **Required inputs surface**: A bare `env('ACME_API_KEY')` read in a config file returns null when the variable is unset, so the app degrades silently until someone documents that the key must be configured
+- **Optional variables stay optional**: Commented documentation (`# ACME_API_KEY=`) counts, so a variable can be documented without being set anywhere
 
 ## How to Fix
 
@@ -125,17 +126,19 @@ ENABLE_BETA_FEATURES=false
 
 4. **For a config-read key finding, document the key where the issue points**:
 
-The finding names the config file and line reading the key. Add it to `.env.example`: actively when environments usually set it, or commented out when it is a tunable most environments leave at the config default:
+The finding names the config file and line reading a key that has no default, so the app reads null when it is unset. Add the key to `.env.example`: actively when environments must set it, or commented out when leaving it unset is a supported state:
 
 ```dotenv
 # .env.example
 
-# Widget billing - set to override the config default
-WIDGET_MAX_SEATS=1000
+# Acme API - required for widget sync
+ACME_API_KEY=your_acme_api_key_here
 
-# Optional tunable, defaults to 30 in config/widget.php
-# ACME_TIMEOUT=30
+# Optional - leave unset to disable the reporting webhook
+# ACME_REPORTING_WEBHOOK_URL=
 ```
+
+Alternatively, give the key a real default in the config file (for example `env('ACME_TIMEOUT', 30)`); a defaulted key does not require a `.env.example` entry.
 
 5. **Verify all variables are documented**:
 
@@ -179,8 +182,7 @@ Then in `config/shieldci.php`:
 
         'env-example-documented' => [
             // Config-read keys to exempt from the documentation check,
-            // exact names or fnmatch wildcards, merged with the built-in
-            // framework list (document why!)
+            // exact names or fnmatch wildcards (document why!)
             // Default: []
             'ignored_keys' => [
                 'ACME_INTERNAL_TOKEN', // Injected by the deploy platform
