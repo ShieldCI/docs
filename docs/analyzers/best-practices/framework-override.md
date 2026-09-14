@@ -14,29 +14,14 @@ tags: laravel,framework,upgradability,maintenance,solid,best-practices,macros,se
 
 ## What This Checks
 
-Detects extensions of Laravel core framework classes that should never or rarely be extended. Categorizes framework classes into three groups:
+Detects classes that extend Laravel core framework classes instead of using Laravel's own extension points. Checks for:
 
-**NEVER EXTEND (High Severity - 14 classes):**
-- Core Foundation: `Application`, `Kernel` (HTTP & Console)
-- HTTP Layer: `Request`, `Response`, `Router`, `UrlGenerator`
-- Database: `Connection`, `Query\Builder`
-- Services: `AuthManager`, `CacheManager`, `Queue\Worker`, `Validator`, `View`
-
-**RARELY EXTEND (Medium Severity - 4 classes):**
-- Database ORM: `Eloquent\Builder`
-- HTTP Responses: `RedirectResponse`, `JsonResponse`
-- Support: `Facade`
-
-**OK TO EXTEND (Explicitly Safe - 10 classes):**
-- `Model`, `Command`, `FormRequest`, `Controller`, `ServiceProvider`, `Seeder`, `TestCase`, `TrustProxies`, `TrustHosts`, `Middleware\*`
-
-**Smart Features:**
-- ✅ Handles short class names, fully qualified names, and leading backslashes
-- ✅ Excludes test files (`/tests/`, `/Tests/`)
-- ✅ Excludes vendor packages (`/vendor/`)
-- ✅ Supports wildcard patterns for namespaces (e.g., `Illuminate\Http\Middleware\*` matches all middleware classes)
-- ✅ Provides class-specific recommendations with alternatives
-- ✅ **Fully configurable** - customize lists per project via constructor parameters
+- **Core foundation extensions** (High): Classes extending `Foundation\Application` or the HTTP and Console `Kernel`
+- **HTTP layer extensions** (High): Classes extending `Http\Request`, `Http\Response`, `Routing\Router`, or `Routing\UrlGenerator`
+- **Database extensions** (High): Classes extending `Database\Connection` or `Database\Query\Builder`
+- **Service extensions** (High): Classes extending `AuthManager`, `CacheManager`, `Queue\Worker`, `Validation\Validator`, or `View\View`
+- **Eloquent builder extensions** (Medium): Classes extending `Eloquent\Builder`, where a query scope or a custom builder returned from `newEloquentBuilder()` is usually the better route
+- **Response subclass extensions** (Medium): Classes extending `RedirectResponse` or `JsonResponse`
 
 ## Why It Matters
 
@@ -266,47 +251,7 @@ public function rules()
 }
 ```
 
-**4. Facade → Use Dependency Injection or Helpers**
-
-```php
-// ❌ BAD - Creating custom facade by extending Facade
-namespace App\Support;
-
-use Illuminate\Support\Facades\Facade;
-
-class CustomFacade extends Facade
-{
-    protected static function getFacadeAccessor()
-    {
-        return 'custom-service';
-    }
-}
-
-// ✅ GOOD - Use dependency injection
-class SomeController
-{
-    public function __construct(
-        private CustomService $customService
-    ) {}
-
-    public function index()
-    {
-        return $this->customService->doSomething();
-    }
-}
-
-// ✅ ALTERNATIVE - Create helper function
-// app/helpers.php
-function custom_service()
-{
-    return app(CustomService::class);
-}
-
-// Usage
-custom_service()->doSomething();
-```
-
-**5. Query Builder → Use Database Macros**
+**4. Query Builder → Use Database Macros**
 
 ```php
 // ❌ BAD - Extending Query Builder
@@ -340,7 +285,7 @@ class AppServiceProvider extends ServiceProvider
 $recentPosts = DB::table('posts')->whereRecent(7)->get();
 ```
 
-**6. Connection → Use Database Events**
+**5. Connection → Use Database Events**
 
 ```php
 // ❌ BAD - Extending Connection
@@ -375,26 +320,7 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-**7. Configure Custom Lists (Per-Project Flexibility)**
-
-```php
-// If you MUST extend a class, configure it as allowed
-// config/shieldci.php (or in analyzer instantiation)
-use ShieldCI\Analyzers\BestPractices\FrameworkOverrideAnalyzer;
-
-$analyzer = new FrameworkOverrideAnalyzer(
-    $parser,
-    neverExtend: [
-        'MyApp\\Core\\BaseClass',  // Add your own critical classes
-    ],
-    rarelyExtend: [],
-    okToExtend: [
-        'Illuminate\\Http\\Request',  // Allow Request for this specific project
-    ]
-);
-```
-
-**8. Additional Classes - Quick Migration Guide**
+**6. Additional Classes - Quick Migration Guide**
 
 ```php
 // ❌ Extending RedirectResponse/JsonResponse
@@ -413,7 +339,7 @@ class CustomAuthManager extends AuthManager { }
 // See Laravel docs on custom auth drivers and cache stores
 ```
 
-**9. Customize ShieldCI Custom Settings (Optional)**
+**7. Customize ShieldCI Custom Settings (Optional)**
 
 To customize which classes are flagged by the analyzer, publish the config:
 
@@ -430,7 +356,7 @@ return [
             'enabled' => true,
 
             'framework-override' => [
-                // Add your own classes to never extend
+                // Replaces the default never-extend list
                 'never_extend' => [
                     'MyApp\\Core\\BaseApplication',
                     'MyApp\\Http\\CoreRequest',
