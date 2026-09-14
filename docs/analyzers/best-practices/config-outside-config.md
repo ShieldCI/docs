@@ -16,17 +16,10 @@ tags: laravel,configuration,maintainability,testability,best-practices,environme
 
 Detects configuration values hardcoded directly in your code that should be externalized to config files. Checks:
 
-- **Hardcoded URLs**: Production API endpoints, webhook URLs, service URLs
-- **API Keys & Secrets**: Long alphanumeric strings that look like API keys (with smart hash exclusion)
+- **Environment-specific URLs**: Endpoints naming an environment in the host or path, or using a non-standard port (`https://api.staging.example.com`)
+- **API keys and secrets**: Long alphanumeric strings that look like API keys, including prefixed formats (`sk_live_...`, `api_...`)
 - **Localhost URLs**: Development URLs that should be configured (`http://localhost`, `127.0.0.1`)
-- **Private IP Addresses**: Internal network IPs (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`)
-
-**Smart Detection Features:**
-- ✅ Excludes documentation URLs (`laravel.com`, `github.com`, `stackoverflow.com`, `example.com`)
-- ✅ Excludes hash values (MD5, SHA1, SHA256) to prevent false positives
-- ✅ Detects common API key patterns (`sk_`, `pk_`, `live_`, `test_` prefixes)
-- ✅ Skips config directory files (configuration in config files is expected)
-- ✅ Supports custom domain exclusions via configuration
+- **Private IP addresses**: Internal network IPs (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`)
 
 ## Why It Matters
 
@@ -280,9 +273,14 @@ SLACK_WEBHOOK_URL=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
 SLACK_CHANNEL=#general
 ```
 
-**5. Customize ShieldCI exclusion list (Optional)**
+**6. Customize ShieldCI detection (Optional)**
 
-To add custom domains to the exclusion list, publish the config:
+By default a URL is reported only when it carries an environment marker, so stable
+third-party endpoints such as `https://api.stripe.com/v1/charges` are treated as intentional.
+Turn on `strict_url_detection` to report every external URL instead, and add the endpoints you
+do want treated as constants to `excluded_domains`.
+
+Publish the config:
 ```bash
 php artisan vendor:publish --tag=shieldci-config
 ```
@@ -294,8 +292,11 @@ return [
     'analyzers' => [
         'best-practices' => [
             'enabled' => true,
-            
+
             'config-outside-config' => [
+                // Report every external URL, not just environment-specific ones
+                'strict_url_detection' => true, // Default: false
+
                 'excluded_domains' => [
                     'api.stripe.com',
                     'api.twilio.com',

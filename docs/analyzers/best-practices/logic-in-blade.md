@@ -16,47 +16,15 @@ tags: laravel,blade,mvc,views,architecture,best-practices,separation-of-concerns
 
 Detects business logic in Blade templates that violates the MVC pattern. Checks for:
 
-- **Complex @php blocks**: PHP blocks exceeding configurable line threshold (default: 10 lines)
-- **Database queries**: Eloquent queries, DB facade calls, or query builder operations in views
-- **API calls**: HTTP requests, cURL calls, or external service calls in templates
-- **Business logic in directives**: Complex conditionals (4+ conditions), data transformations in @foreach loops
-- **Complex calculations**: Multi-operation arithmetic, data manipulation in view layer
-- **Inline PHP tags**: Use of `<?php` instead of Blade directives
-- **Unclosed @php blocks**: Missing `@endphp` directives (the single-statement `@php($expr)` form is self-closing and is never flagged)
-
-**Smart Detection Features:**
-- ✅ **Hybrid regex + AST analysis** - structural checks on raw Blade, logic detection via compiled PHP AST
-- ✅ Distinguishes between presentation logic and business logic
-- ✅ Allows simple calculations (`{{ $price * $quantity }}`)
-- ✅ Excludes config/session/cache helper calls
-- ✅ Detects relationship queries (`$user->posts()->get()`)
-- ✅ Tracks 9 different issue types with appropriate severity levels
-- ✅ Configurable thresholds for @php block complexity, arithmetic operator sensitivity, and `@foreach` nesting depth
-- ✅ Recognises the single-statement `@php($expr)` form as self-closing — never emits a false-positive "Unclosed @php block" for this syntax
-- ✅ Skips published vendor views under `resources/views/vendor/` — third-party templates dropped in by `php artisan vendor:publish` (mail, notifications, pagination) are framework-authored code the developer can't meaningfully fix; your own templates are still scanned
-
-**Detected Operations by Severity:**
-
-**Critical** - Database Queries:
-- Eloquent: `User::where()`, `User::find()`, `User::create()`, `$user->save()`, `$model->update()`
-- Query Builder: `DB::table()->get()`, `DB::insert()`, `DB::update()`, `DB::delete()`
-- Relationships: `$user->posts()->get()`, `$user->posts()->count()`
-
-**High** - API Calls:
-- HTTP: `Http::get()`, `Http::post()`, Guzzle client
-- cURL: `curl_init()`, `curl_exec()`
-- File operations: `file_get_contents()` with URLs
-
-**Medium** - Business Logic:
-- Complex conditionals (4+ conditions)
-- Array manipulation (`array_filter()`, `array_map()`, `array_reduce()`)
-- Collection transformations in loops
-- @php blocks exceeding line threshold
-- Nested `@foreach` that scans a collection for each outer item — an inner loop over an unrelated collection whose body matches items back to the outer one (`@if($post->user_id === $user->id)`), which costs O(n×m) to render O(n) of output
-
-**Low** - Complex Calculations:
-- Multi-operation arithmetic
-- Nested calculations
+- **Database queries** (Critical): Eloquent calls such as `User::find()` or `User::where(...)->count()`, any `DB` facade call, `$model->save()`, and relationship queries such as `$user->posts()->get()`
+- **API calls** (High): `Http` facade calls, `curl_init()`, `curl_exec()`, and `file_get_contents()`
+- **Unclosed @php blocks** (High): a `@php` directive with no matching `@endphp`
+- **Complex @php blocks**: PHP blocks longer than the configured line threshold (default: 10 lines)
+- **Inline PHP tags**: use of `<?php` instead of `@php ... @endphp`
+- **Business logic in directives**: conditionals with four or more conditions, array functions such as `array_filter()` and `array_map()`, and collection methods such as `filter()` or `sortBy()` applied in a `@foreach` expression
+- **Expensive computation**: `toArray()`, `all()`, `toJson()` or `jsonSerialize()` chains, and regex or string-replacement functions such as `preg_replace()` or `str_replace()` called inside a loop
+- **Nested `@foreach` that scans a collection for each outer item**: an inner loop over an unrelated collection whose body matches items back to the outer one (`@if($post->user_id === $user->id)`), which costs O(n×m) to render O(n) of output
+- **Complex calculations** (Low): `{{ }}` expressions with two or more arithmetic operators, and compound assignments such as `$total += $item->price`
 
 ## Why It Matters
 
