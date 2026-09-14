@@ -20,7 +20,7 @@ Detects business logic in middleware that violates separation of concerns. Check
 - **Database write operations** - instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
 - **Email/notification sending** - `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
 - **Event/job dispatching via facades** - `Event::dispatch()`, `Event::fire()`, `Bus::dispatch()`, `Bus::dispatchSync()`, `Bus::dispatchNow()`
-- **Direct model instantiation** - `new Model()` in middleware (responses (`Response`, `JsonResponse`, `RedirectResponse`), exceptions (`RuntimeException`, `ValidationException`, HTTP exceptions, etc.), dates (`Carbon`, `DateTime`), and utilities (`Closure`, `stdClass`, `Collection`) are allowed)
+- **Direct Eloquent model instantiation** - `new Order()` in middleware, where the class is confirmed to be an Eloquent model: its `extends` chain reaches `Model`, `Authenticatable`, `Pivot` or `MorphPivot`, or it lives in a `Models` namespace
 - **Complex conditional logic** - if-statement nesting 4+ levels deep, suggesting embedded business rules
 
 ## Why It Matters
@@ -145,7 +145,40 @@ class EnsureActiveSubscription
 }
 ```
 
-**3. Configuration and Customization**
+**3. Move model creation out of the request pipeline:**
+
+**Before (❌):**
+```php
+class AuditMiddleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        $entry = new AuditEntry();
+        $entry->path = $request->path();
+        $entry->user_id = $request->user()?->id;
+
+        return $next($request);
+    }
+}
+```
+
+**After (✅):**
+```php
+// Middleware stays a guard; the model is built where the work belongs
+class AuditMiddleware
+{
+    public function handle(Request $request, Closure $next)
+    {
+        $response = $next($request);
+
+        RecordAuditEntry::dispatch($request->path(), $request->user()?->id);
+
+        return $response;
+    }
+}
+```
+
+**4. Configuration and Customization**
 
 Customize the nesting depth threshold for your project, publish the config:
 ```bash
