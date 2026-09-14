@@ -16,18 +16,13 @@ tags: laravel,portability,configuration,paths,deployment,best-practices,helpers,
 
 Detects hardcoded file system paths in your code instead of using Laravel's path helper functions. Checks:
 
-- **Unix absolute paths**: `/var/www/storage/`, `/var/www/public/`, `/storage/app/`, etc.
+- **Unix absolute paths**: Server paths like `/var/www/storage/` or `/var/www/public/`, flagged wherever they appear
+- **Filesystem-context paths**: Root-relative paths like `/storage/app/` or `/public/uploads/` where the string reaches a filesystem call such as `file_put_contents()`, `Storage::put()`, or `File::get()`
 - **Windows absolute paths**: `C:\storage\app\`, `D:\public\images\`, etc.
 - **Relative paths**: `../storage/`, `./public/`, etc.
 - **All Laravel directories**: storage, public, app, resources, database, config
 - **Heredoc/Nowdoc strings**: Path strings in heredoc/nowdoc syntax
 - **Array literals and constants**: Paths in arrays and class constants
-
-**Smart Detection**:
-- ✅ Automatically skips URLs (`http://`, `https://`) to avoid false positives
-- ✅ Uses anchored patterns to avoid matching helper function arguments
-- ✅ Supports configuration for legitimate exceptions via `allowed_paths`
-- ✅ Extensible with custom patterns via `additional_patterns`
 
 ## Why It Matters
 

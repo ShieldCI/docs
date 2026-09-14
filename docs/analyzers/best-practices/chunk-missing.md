@@ -21,8 +21,6 @@ Detects queries on large datasets that load all records into memory using `->all
 - **Missing chunking methods**: Queries that should use `chunk()`, `cursor()`, `lazy()`, or `lazyById()`
 - **Memory-safe patterns**: Validates that large dataset queries use memory-efficient iteration
 
-**Smart Detection**: The analyzer ignores queries with explicit limits (`->limit()`, `->take()`, `->first()`) since these are small datasets.
-
 ## Why It Matters
 
 - **Memory Exhaustion:** Loading thousands of records with `->all()` or `->get()` loads the entire result set into memory, causing out-of-memory errors
