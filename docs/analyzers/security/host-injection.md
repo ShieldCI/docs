@@ -28,10 +28,6 @@ This analyzer detects Host header injection vulnerabilities where the applicatio
 - **TrustHosts middleware** - Checks if the `TrustHosts` middleware exists with a properly configured `hosts()` method (L9/10), or `trustHosts()` is called in `bootstrap/app.php` (L11/12)
 - **Wildcard host patterns** - Flags overly broad regex patterns (e.g., `.*`, `.+`, or plain `*`) that disable host validation entirely
 
-::: tip Smart Detection
-Configuration checks are only performed when unsafe code patterns are detected. If your application uses safe patterns like `config('app.url')` and `url()` consistently, the analyzer passes without raising configuration warnings. Additionally, `URL::forceRootUrl()` in a service provider is recognized as a global mitigation and suppresses configuration-level warnings.
-:::
-
 ## Why It Matters
 
 Host header injection allows attackers to manipulate the HTTP `Host` header to exploit applications that trust it:
