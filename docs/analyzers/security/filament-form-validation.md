@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `filament-form-validation` | 🛡️ Security  | Medium    | 15 minutes   |
+| `filament-form-validation` | 🛡️ Security  | High      | 15 minutes   |
 
 ## What This Checks
 

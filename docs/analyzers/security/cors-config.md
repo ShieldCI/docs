@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `cors-config` | 🛡️ Security  | High    | 10 minutes   |
+| `cors-config` | 🛡️ Security  | Critical| 10 minutes   |
 
 ## What This Checks
 

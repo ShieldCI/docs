@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category       | Severity | Time To Fix |
 | -------------------| :------------: |:--------:| -----------:|
-| `global-variables` | ✅ Reliability |  Medium  | 15 minutes  |
+| `global-variables` | ✅ Reliability | High     | 15 minutes  |
 
 ## What This Checks
 

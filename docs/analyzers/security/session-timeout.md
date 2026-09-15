@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID       | Category      | Severity | Time To Fix |
 | ----------------- | :-----------: | :------: | ----------: |
-| `session-timeout` | 🛡️ Security  | Medium   | 5 minutes   |
+| `session-timeout` | 🛡️ Security  | High     | 5 minutes   |
 
 ## What This Checks
 

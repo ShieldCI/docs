@@ -143,7 +143,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Database Query Optimization"
   description="Detects inefficient database query patterns that can be optimized"
-  severity="medium"
+  severity="high"
   link="/analyzers/performance/database-query-optimization"
   pro
 />
@@ -167,7 +167,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Lazy Collection Opportunity"
   description="Detects large collection operations that could benefit from lazy loading to reduce memory usage"
-  severity="low"
+  severity="medium"
   link="/analyzers/performance/lazy-collection-opportunity"
   pro
 />
@@ -209,7 +209,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="CDN Configuration"
   description="Detects CDN configuration for optimal asset delivery"
-  severity="low"
+  severity="medium"
   link="/analyzers/performance/cdn-configuration"
   pro
 />

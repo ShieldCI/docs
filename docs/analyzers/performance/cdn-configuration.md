@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID          | Category       | Severity   | Time To Fix  |
 | ---------------------| :------------: |:----------:| ------------:|
-| `cdn-configuration`  | ⚡ Performance  | Low        | 60 minutes   |
+| `cdn-configuration`  | ⚡ Performance  | Medium     | 60 minutes   |
 
 ## What This Checks
 

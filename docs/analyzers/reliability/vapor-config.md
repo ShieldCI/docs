@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID    | Category     | Severity   | Time To Fix  |
 | ---------------| :----------: |:----------:| ------------:|
-| `vapor-config` | ✅ Reliability  | Medium    | 15 minutes   |
+| `vapor-config` | ✅ Reliability  | High      | 15 minutes   |
 
 ## What This Checks
 

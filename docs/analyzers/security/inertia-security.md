@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `inertia-security` | 🛡️ Security  | Medium    | 10 minutes   |
+| `inertia-security` | 🛡️ Security  | High      | 10 minutes   |
 
 ## What This Checks
 

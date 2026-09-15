@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `filament-widget-security` | 🛡️ Security  | Medium    | 10 minutes   |
+| `filament-widget-security` | 🛡️ Security  | High      | 10 minutes   |
 
 ## What This Checks
 

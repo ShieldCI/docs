@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID   | Category       | Severity | Time To Fix |
 | --------------| :------------: |:--------:| -----------:|
-| `disk-space`  | ✅ Reliability |   High   | 15 minutes  |
+| `disk-space`  | ✅ Reliability | Critical | 15 minutes  |
 
 ## What This Checks
 
