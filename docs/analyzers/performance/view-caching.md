@@ -26,7 +26,7 @@ By default, only application views (`resources/views`) are checked. Published ve
 
 - **Performance Impact:** Precompiled views improve render time by 2-5x
 - **Bootstrap Speed:** Eliminates template compilation on first request
-- **Production Critical:** Without caching, Blade templates are compiled on-demand, adding latency
+- **In Production:** Without caching, Blade templates are compiled on-demand, adding latency
 - **Stale Cache Risk:** Modified views after caching means users see outdated templates until cache is regenerated
 
 Blade templates must be compiled to PHP before execution. Without caching, Laravel compiles templates on the first request, adding overhead. Precompiling ensures all views are ready before the first user request.

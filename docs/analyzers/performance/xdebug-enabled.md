@@ -22,7 +22,7 @@ Validates that Xdebug and other debugging extensions (Blackfire, Tideways, PCOV)
 - **Performance Impact:** Xdebug can slow PHP execution by 50% or more, even when not actively debugging
 - **Security Risk:** Xdebug can expose sensitive information through stack traces and debugging output
 - **Memory Overhead:** Debugging extensions consume additional memory for tracking execution
-- **Production Critical:** These extensions are designed for development, not production use
+- **In Production:** These extensions are designed for development, not production use
 
 Even with Xdebug mode set to "off", there is still some overhead from the extension being loaded. The safest approach is to not load it at all in production.
 

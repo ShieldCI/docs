@@ -19,7 +19,7 @@ Validates that PHP's OPcache extension is installed, enabled, and properly confi
 ## Why It Matters
 
 - **Performance Impact:** OPcache can improve PHP performance by 30-70% by caching precompiled bytecode
-- **Production Critical:** Without OPcache, PHP recompiles every script on every request, wasting CPU cycles
+- **In Production:** Without OPcache, PHP recompiles every script on every request, wasting CPU cycles
 - **Memory Efficiency:** Proper OPcache configuration reduces memory usage through interned strings and shared memory
 
 PHP normally parses and compiles scripts on every request. OPcache stores the compiled bytecode in shared memory, eliminating the compilation step for subsequent requests. This is one of the single most impactful performance optimizations for any PHP application.
