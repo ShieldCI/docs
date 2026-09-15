@@ -11,15 +11,15 @@ pro: true
 
 | Analyzer ID          | Category       | Severity   | Time To Fix  |
 | ---------------------| :------------: |:----------:| ------------:|
-| `cdn-configuration`  | ⚡ Performance  | Medium     | 60 minutes   |
+| `cdn-configuration`  | ⚡ Performance  | High       | 60 minutes   |
 
 ## What This Checks
 
 Validates that `ASSET_URL` in your `.env` file points to a CDN for serving static assets (JavaScript, CSS, images) in production environments. Checks for:
 
 - `ASSET_URL` not set or empty (assets served from origin)
-- `ASSET_URL` is not a valid absolute URL (missing scheme or host)
-- `ASSET_URL` points to a local address (`localhost`, `127.0.0.1`, `::1`)
+- `ASSET_URL` is not a valid absolute URL (missing scheme or host) — reported at **High**, because Laravel emits broken asset URLs to real users
+- `ASSET_URL` points to a local address (`localhost`, `127.0.0.1`, `::1`) — also **High**, for the same reason
 - `ASSET_URL` uses HTTP instead of HTTPS
 - `ASSET_URL` points to the same host as `APP_URL` (not a CDN)
 

@@ -209,7 +209,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="CDN Configuration"
   description="Detects CDN configuration for optimal asset delivery"
-  severity="medium"
+  severity="high"
   link="/analyzers/performance/cdn-configuration"
   pro
 />
