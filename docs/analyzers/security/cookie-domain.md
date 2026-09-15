@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID       | Category     | Severity   | Time To Fix  |
 | ------------------| :----------: |:----------:| ------------:|
-| `cookie-domain` | 🛡️ Security  | Low   | 1 minute   |
+| `cookie-domain` | 🛡️ Security  | Critical| 1 minute   |
 
 ## What This Checks
 

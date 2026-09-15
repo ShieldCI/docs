@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `cashier-paddle` | 🛡️ Security  | High    | 10 minutes   |
+| `cashier-paddle` | 🛡️ Security  | Critical| 10 minutes   |
 
 ## What This Checks
 

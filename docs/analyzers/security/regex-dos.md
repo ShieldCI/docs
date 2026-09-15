@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID | Category      | Severity | Time To Fix |
 | ----------- | :-----------: | :------: | ----------: |
-| `regex-dos` | 🛡️ Security  | Medium   | 15 minutes  |
+| `regex-dos` | 🛡️ Security  | Critical | 15 minutes  |
 
 ## What This Checks
 

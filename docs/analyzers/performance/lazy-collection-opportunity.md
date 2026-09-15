@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `lazy-collection-opportunity` | ⚡ Performance  | Low    | 10 minutes   |
+| `lazy-collection-opportunity` | ⚡ Performance  | Medium | 10 minutes   |
 
 ## What This Checks
 

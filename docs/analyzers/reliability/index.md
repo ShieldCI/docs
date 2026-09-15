@@ -79,7 +79,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Disk Space"
   description="Monitors available disk space and warns when storage is running low"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/disk-space"
   pro
 />
@@ -210,7 +210,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Octane Configuration"
   description="Validates Laravel Octane configuration for long-running server reliability including memory management and state isolation"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/octane-config"
   pro
 />
@@ -218,7 +218,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Vapor Configuration"
   description="Validates Laravel Vapor configuration for proper serverless deployment on AWS Lambda"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/vapor-config"
   pro
 />
@@ -254,7 +254,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="PCNTL Extension"
   description="Ensures PCNTL extension is available for queue workers and signal handling"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/pcntl-extension"
   pro
 />
@@ -262,7 +262,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Global Variables"
   description="Detects usage of global variables which can cause unpredictable behavior"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/global-variables"
   pro
 />

@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID     |     Category      | Severity | Time To Fix  |
 |-----------------|:-----------------:|:--------:| ------------:|
-| `octane-config` |   ✅ Reliability  | High     | 15 minutes   |
+| `octane-config` |   ✅ Reliability  | Critical | 15 minutes   |
 
 ## What This Checks
 

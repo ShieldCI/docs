@@ -38,7 +38,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Validation SQL Injection"
   description="Detects SQL injection vulnerabilities in validation rules"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/validation-sql-injection"
   pro
 />
@@ -54,7 +54,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Directory Traversal"
   description="Detects path traversal vulnerabilities that allow accessing files outside intended directories"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/directory-traversal"
   pro
 />
@@ -94,7 +94,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Extract Function"
   description="Detects unsafe extract usage that can overwrite variables"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/extract"
   pro
 />
@@ -110,7 +110,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Regular Expression DoS"
   description="Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns"
-  severity="medium"
+  severity="critical"
   link="/analyzers/security/regex-dos"
   pro
 />
@@ -174,7 +174,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Session Timeout"
   description="Ensures session lifetime is configured appropriately for security"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/session-timeout"
   pro
 />
@@ -244,7 +244,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Filament Custom Pages"
   description="Validates that custom Filament pages have proper authorization to prevent unauthorized access"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/filament-custom-pages"
   pro
 />
@@ -252,7 +252,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Filament Form Validation"
   description="Validates that Filament form fields have proper validation rules to prevent invalid or malicious input"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/filament-form-validation"
   pro
 />
@@ -268,7 +268,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Filament Widget Security"
   description="Validates that Filament widgets have proper authorization and don't expose sensitive data to unauthorized users"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/filament-widget-security"
   pro
 />
@@ -282,7 +282,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Cashier Security (Stripe)"
   description="Validates Laravel Cashier Stripe webhook verification, key exposure, and payment handling security"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/cashier-security"
   pro
 />
@@ -290,7 +290,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Cashier Paddle"
   description="Validates Laravel Cashier Paddle webhook verification, sandbox detection, and configuration security"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/cashier-paddle"
   pro
 />
@@ -363,7 +363,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Horizon Security"
   description="Ensures Laravel Horizon dashboard is properly secured"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/horizon-security"
   pro
 />
@@ -371,7 +371,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Pulse Security"
   description="Validates Laravel Pulse dashboard authorization, data retention, and security settings"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/pulse-security"
   pro
 />
@@ -399,7 +399,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Cookie Domain"
   description="Detects unnecessary cookie domain configuration that makes cookies less restrictive"
-  severity="low"
+  severity="critical"
   link="/analyzers/security/cookie-domain"
   pro
 />
@@ -481,7 +481,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Host Header Injection"
   description="Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/host-injection"
   pro
 />
@@ -489,7 +489,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="CORS Configuration"
   description="Validates Cross-Origin Resource Sharing configuration for security, preventing overly permissive API access"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/cors-config"
   pro
 />
@@ -535,7 +535,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Inertia Security"
   description="Validates Inertia.js shared data exposure and middleware configuration to prevent sensitive data leakage"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/inertia-security"
   pro
 />

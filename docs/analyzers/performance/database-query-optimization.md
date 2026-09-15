@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID                      | Category       | Severity   | Time To Fix  |
 | ---------------------------------| :------------: |:----------:| ------------:|
-| `database-query-optimization`    | ⚡ Performance  | Medium     | 15 minutes   |
+| `database-query-optimization`    | ⚡ Performance  | High       | 15 minutes   |
 
 ## What This Checks
 

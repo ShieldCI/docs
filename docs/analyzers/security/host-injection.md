@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID      | Category      | Severity | Time To Fix |
 | ---------------- | :-----------: | :------: | ----------: |
-| `host-injection` | 🛡️ Security  | Medium   | 10 minutes  |
+| `host-injection` | 🛡️ Security  | High     | 10 minutes  |
 
 ## What This Checks
 

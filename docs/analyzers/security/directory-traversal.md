@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID          | Category     | Severity   | Time To Fix  |
 | -------------------- | :----------: |:----------:| ------------:|
-| `directory-traversal`| 🛡️ Security  | High       | 25 minutes   |
+| `directory-traversal`| 🛡️ Security  | Critical   | 25 minutes   |
 
 ## What This Checks
 

@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID                | Category      | Severity | Time To Fix |
 | -------------------------- | :-----------: | :------: | ----------: |
-| `validation-sql-injection` | 🛡️ Security  | High     | 15 minutes  |
+| `validation-sql-injection` | 🛡️ Security  | Critical | 15 minutes  |
 
 ## What This Checks
 

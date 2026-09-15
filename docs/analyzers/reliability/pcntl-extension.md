@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category       | Severity | Time To Fix |
 | -------------------| :------------: |:--------:| -----------:|
-| `pcntl-extension`  | ✅ Reliability |   High   | 10 minutes  |
+| `pcntl-extension`  | ✅ Reliability | Critical | 10 minutes  |
 
 ## What This Checks
 

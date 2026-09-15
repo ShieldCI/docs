@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | ------------------ | :----------: |:----------:| ------------:|
-| `horizon-security` | 🛡️ Security  | High       | 10 minutes   |
+| `horizon-security` | 🛡️ Security  | Critical   | 10 minutes   |
 
 ## What This Checks
 
