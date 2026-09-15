@@ -10,7 +10,7 @@ tags: mass-assignment,foreign-keys,eloquent,security,relationships
 
 | Analyzer ID            | Category     | Severity   | Time To Fix  |
 | -----------------------| :----------: |:----------:| ------------:|
-| `fillable-foreign-key` | 🛡️ Security  | High       | 15 minutes   |
+| `fillable-foreign-key` | 🛡️ Security  | Critical   | 15 minutes   |
 
 ## What This Checks
 

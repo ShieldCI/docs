@@ -102,6 +102,8 @@ The commercial package adds advanced analyzers:
 | **Medium** | Code quality issues or minor performance problems | Address in upcoming sprint |
 | **Low** | Best practice violations or optimization opportunities | Fix when convenient |
 
+The severity listed on an analyzer's page is the highest it can report. Several analyzers grade a finding by how far it exceeds their threshold, so individual issues may come back lower than that.
+
 ### Environment Awareness
 
 Many analyzers are environment-aware and only run when relevant:

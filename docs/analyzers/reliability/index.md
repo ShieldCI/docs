@@ -51,7 +51,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Environment Example Documentation"
   description="Ensures all environment variables used in .env are documented in .env.example for team collaboration"
-  severity="low"
+  severity="medium"
   link="/analyzers/reliability/env-example-documented"
 />
 
@@ -65,7 +65,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Environment Variables Complete"
   description="Ensures all required environment variables from .env.example are defined in .env"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/env-variables-complete"
 />
 
@@ -79,7 +79,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Disk Space"
   description="Monitors available disk space and warns when storage is running low"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/disk-space"
   pro
 />
@@ -127,7 +127,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Dead Route"
   description="Detects routes pointing to non-existent controllers or methods"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/dead-routes"
   pro
 />
@@ -157,7 +157,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Cache Busting"
   description="Detects cache invalidation issues and stale cache problems"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/cache-busting"
   pro
 />
@@ -173,7 +173,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Redis Shared Database"
   description="Detects when multiple services share the same Redis database"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/redis-shared-database"
   pro
 />
@@ -181,7 +181,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Redis Status"
   description="Validates Redis connectivity and health"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/redis-status"
   pro
 />
@@ -254,7 +254,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="PCNTL Extension"
   description="Ensures PCNTL extension is available for queue workers and signal handling"
-  severity="medium"
+  severity="high"
   link="/analyzers/reliability/pcntl-extension"
   pro
 />
@@ -277,7 +277,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="PHPStan Static Analysis"
   description="Comprehensive static analysis detecting 13 categories of code reliability issues including dead code, undefined variables, invalid method calls, and more"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/phpstan"
 />
 

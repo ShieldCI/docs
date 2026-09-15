@@ -10,7 +10,7 @@ tags: dependency-injection,architecture,testability,laravel,ioc,service-locator
 
 | Analyzer ID                    |      Category      | Severity | Time To Fix |
 |--------------------------------|:------------------:|:--------:|------------:|
-| `service-container-resolution` | 🏅 Best Practices   |  Medium  |  25 minutes |
+| `service-container-resolution` | 🏅 Best Practices   | High     |  25 minutes |
 
 ## What This Checks
 

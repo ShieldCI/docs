@@ -30,14 +30,14 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Logic in Blade"
   description="Detects complex logic in Blade templates"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/logic-in-blade"
 />
 
 <AnalyzerCard
   title="Hardcoded Configuration"
   description="Detects configuration values outside config files"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/config-outside-config"
 />
 
@@ -93,7 +93,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Mixed Query Builder and Eloquent"
   description="Detects inconsistent query building patterns"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/mixed-query-builder-eloquent"
 />
 
@@ -113,7 +113,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Service Container Resolution"
   description="Detects manual service container resolution and recommends constructor dependency injection"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/service-container-resolution"
 />
 
@@ -134,7 +134,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Silent Failure"
   description="Detects empty catch blocks and error suppression that hide failures"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/silent-failure"
 />
 
@@ -168,7 +168,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Helper Function Abuse"
   description="Detects overuse of global helper functions"
-  severity="low"
+  severity="medium"
   link="/analyzers/best-practices/helper-function-abuse"
 />
 

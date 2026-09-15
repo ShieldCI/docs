@@ -30,7 +30,7 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 <AnalyzerCard
   title="Method Length"
   description="Flags methods exceeding recommended line count for better maintainability"
-  severity="low"
+  severity="medium"
   link="/analyzers/code-quality/method-length"
 />
 
@@ -43,7 +43,7 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 <AnalyzerCard
   title="Commented Code"
   description="Detects commented-out code that should be removed in favor of version control"
-  severity="low"
+  severity="medium"
   link="/analyzers/code-quality/commented-code"
 />
 

@@ -38,7 +38,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Validation SQL Injection"
   description="Detects SQL injection vulnerabilities in validation rules"
-  severity="critical"
+  severity="high"
   link="/analyzers/security/validation-sql-injection"
   pro
 />
@@ -54,7 +54,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Directory Traversal"
   description="Detects path traversal vulnerabilities that allow accessing files outside intended directories"
-  severity="critical"
+  severity="high"
   link="/analyzers/security/directory-traversal"
   pro
 />
@@ -110,7 +110,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Regular Expression DoS"
   description="Detects ReDoS vulnerabilities from catastrophic backtracking in regex patterns"
-  severity="high"
+  severity="medium"
   link="/analyzers/security/regex-dos"
   pro
 />
@@ -140,14 +140,14 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Mass Assignment Vulnerabilities"
   description="Detects mass assignment vulnerabilities in Eloquent models and query builders"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/mass-assignment-vulnerabilities"
 />
 
 <AnalyzerCard
   title="Unguarded Models"
   description="Detects Model::unguard() usage that disables mass assignment protection"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/unguarded-models"
 />
 
@@ -167,7 +167,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Login Throttling"
   description="Detects missing rate limiting on authentication endpoints to prevent brute force attacks"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/login-throttling"
 />
 
@@ -340,14 +340,14 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="PHP Configuration"
   description="Validates that PHP ini settings are configured securely"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/php-ini"
 />
 
 <AnalyzerCard
   title="Telescope Security"
   description="Ensures Laravel Telescope is properly secured in production"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/telescope-security"
   pro
 />
@@ -355,7 +355,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Nova Security"
   description="Ensures Laravel Nova admin panel is properly secured"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/nova-security"
   pro
 />
@@ -399,7 +399,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Cookie Domain"
   description="Detects unnecessary cookie domain configuration that makes cookies less restrictive"
-  severity="medium"
+  severity="low"
   link="/analyzers/security/cookie-domain"
   pro
 />
@@ -407,14 +407,14 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Fillable Foreign Key"
   description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/fillable-foreign-key"
 />
 
 <AnalyzerCard
   title="Cryptographic Weakness"
   description="Detects weak cryptographic algorithms and insecure random number generation"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/cryptographic-weakness"
   pro
 />
@@ -465,7 +465,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="MIME Sniffing Protection"
   description="Ensures X-Content-Type-Options header prevents MIME type sniffing"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/mime-sniffing"
   pro
 />
@@ -473,7 +473,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Web Server Fingerprinting"
   description="Detects server information leakage through HTTP headers"
-  severity="low"
+  severity="medium"
   link="/analyzers/security/web-server-fingerprinting"
   pro
 />
@@ -481,7 +481,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Host Header Injection"
   description="Detects host header injection vulnerabilities that can lead to cache poisoning or password reset attacks"
-  severity="high"
+  severity="medium"
   link="/analyzers/security/host-injection"
   pro
 />
@@ -505,7 +505,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Open Redirection"
   description="Detects open redirect vulnerabilities that can be used for phishing attacks"
-  severity="medium"
+  severity="high"
   link="/analyzers/security/open-redirection"
   pro
 />
@@ -570,7 +570,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Stable Dependencies"
   description="Validates that all dependencies use stable versions rather than dev/alpha/beta releases"
-  severity="low"
+  severity="medium"
   link="/analyzers/security/stable-dependencies"
 />
 

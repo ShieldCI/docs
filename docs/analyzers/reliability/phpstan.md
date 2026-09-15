@@ -10,7 +10,7 @@ tags: phpstan,static-analysis,type-safety,reliability,code-quality
 
 | Analyzer ID | Category       | Severity | Time To Fix |
 | ----------- | :------------: |:--------:|------------:|
-| `phpstan`   | ✅ Reliability | High     | 120 minutes |
+| `phpstan`   | ✅ Reliability | Critical | 120 minutes |
 
 ## What This Checks
 

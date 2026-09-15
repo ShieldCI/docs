@@ -10,7 +10,7 @@ tags: laravel,testability,dependency-injection,best-practices,helpers,code-quali
 
 | Analyzer ID                 | Category           | Severity | Time To Fix |
 | ----------------------------| :----------------: |:--------:| -----------:|
-| `helper-function-abuse`     | 🏅 Best Practices  |   Low    | 25 minutes  |
+| `helper-function-abuse`     | 🏅 Best Practices  | Medium   | 25 minutes  |
 
 ## What This Checks
 
@@ -18,7 +18,7 @@ Detects excessive use of Laravel helper functions that hide dependencies and vio
 
 - **Dependency-hiding helper calls**: Counts calls to helpers that create implicit dependencies like `auth()`, `request()`, `cache()`, `config()`, `session()`, etc.
 - **Threshold violations**: Flags classes exceeding the configured threshold (default: 5 helpers)
-- **Severity escalation**: Low severity for moderate violations, Medium for 10+ over threshold, High for 20+ over threshold
+- **Severity escalation**: Low severity just over the threshold, Medium from five helpers over it
 - **Per-helper tracking**: Shows which specific helpers are used and how many times
 
 **Tracked Helpers** (23 dependency-hiding helpers):

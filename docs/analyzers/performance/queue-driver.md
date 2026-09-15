@@ -10,7 +10,7 @@ tags: queue,performance,configuration,redis,sqs
 
 | Analyzer ID    | Category       | Severity   | Time To Fix  |
 | ---------------| :------------: |:----------:| ------------:|
-| `queue-driver` | ⚡ Performance  | Medium     | 30 minutes   |
+| `queue-driver` | ⚡ Performance  | Critical   | 30 minutes   |
 
 ## What This Checks
 
