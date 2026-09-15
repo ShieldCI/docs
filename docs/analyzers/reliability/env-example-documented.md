@@ -10,7 +10,7 @@ tags: environment,configuration,documentation,team-collaboration
 
 | Analyzer ID               | Category       | Severity | Time To Fix |
 | --------------------------| :------------: |:--------:| -----------:|
-| `env-example-documented`  | ✅ Reliability | Low      | 10 minutes  |
+| `env-example-documented`  | ✅ Reliability | Medium   | 10 minutes  |
 
 ## What This Checks
 

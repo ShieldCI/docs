@@ -23,8 +23,7 @@ Detects Eloquent models that have grown too large and contain too much business 
 
 **Dynamic Severity:**
 - **Low**: 16-19 methods or 301-399 lines (slightly over threshold)
-- **Medium**: 20-29 methods or 400-499 lines (concerning)
-- **High**: 30+ methods or 500+ lines (severe violation)
+- **Medium**: 20+ methods or 400+ lines (concerning)
 
 **Customizable thresholds** via configuration file for different project standards.
 

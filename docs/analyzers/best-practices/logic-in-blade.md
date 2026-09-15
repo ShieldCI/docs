@@ -10,13 +10,13 @@ tags: laravel,blade,mvc,views,architecture,best-practices,separation-of-concerns
 
 | Analyzer ID                           | Category           | Severity | Time To Fix |
 | ------------------------------------- | :----------------: |:--------:| -----------:|
-| `logic-in-blade`                      | 🏅 Best Practices  | Medium   | 30 minutes  |
+| `logic-in-blade`                      | 🏅 Best Practices  | High     | 30 minutes  |
 
 ## What This Checks
 
 Detects business logic in Blade templates that violates the MVC pattern. Checks for:
 
-- **Database queries** (Critical): Eloquent calls such as `User::find()` or `User::where(...)->count()`, any `DB` facade call, `$model->save()`, and relationship queries such as `$user->posts()->get()`
+- **Database queries** (High): Eloquent calls such as `User::find()` or `User::where(...)->count()`, any `DB` facade call, `$model->save()`, and relationship queries such as `$user->posts()->get()`
 - **API calls** (High): `Http` facade calls, `curl_init()`, `curl_exec()`, and `file_get_contents()` where the argument is an `http`, `https` or `ftp` URL, whether written as a literal, built by concatenation or interpolation, or returned by a helper such as `url()` or `asset()`
 - **Unclosed @php blocks** (High): a `@php` directive with no matching `@endphp`
 - **Complex @php blocks**: PHP blocks longer than the configured line threshold (default: 10 lines)

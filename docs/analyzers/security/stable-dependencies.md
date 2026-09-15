@@ -10,7 +10,7 @@ tags: dependencies,composer,stability,versions,production
 
 | Analyzer ID           | Category     | Severity | Time To Fix  |
 | ----------------------| :----------: |:--------:| ------------:|
-| `stable-dependencies` | 🛡️ Security  |  Low  | 30 minutes   |
+| `stable-dependencies` | 🛡️ Security  | Medium| 30 minutes   |
 
 ## What This Checks
 

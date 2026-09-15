@@ -10,7 +10,7 @@ tags: eloquent,mass-assignment,models,security,unguard
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `unguarded-models` | 🛡️ Security  | High       | 20 minutes   |
+| `unguarded-models` | 🛡️ Security  | Critical   | 20 minutes   |
 
 ## What This Checks
 

@@ -10,7 +10,7 @@ tags: authentication,rate-limiting,brute-force,security,throttling
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `login-throttling` | 🛡️ Security  | High       | 20 minutes   |
+| `login-throttling` | 🛡️ Security  | Critical   | 20 minutes   |
 
 ## What This Checks
 

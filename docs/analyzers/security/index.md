@@ -140,14 +140,14 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Mass Assignment Vulnerabilities"
   description="Detects mass assignment vulnerabilities in Eloquent models and query builders"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/mass-assignment-vulnerabilities"
 />
 
 <AnalyzerCard
   title="Unguarded Models"
   description="Detects Model::unguard() usage that disables mass assignment protection"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/unguarded-models"
 />
 
@@ -167,7 +167,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Login Throttling"
   description="Detects missing rate limiting on authentication endpoints to prevent brute force attacks"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/login-throttling"
 />
 
@@ -340,7 +340,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="PHP Configuration"
   description="Validates that PHP ini settings are configured securely"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/php-ini"
 />
 
@@ -407,7 +407,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Fillable Foreign Key"
   description="Detects foreign keys in fillable arrays that may allow unauthorized relationship manipulation"
-  severity="high"
+  severity="critical"
   link="/analyzers/security/fillable-foreign-key"
 />
 
@@ -570,7 +570,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Stable Dependencies"
   description="Validates that all dependencies use stable versions rather than dev/alpha/beta releases"
-  severity="low"
+  severity="medium"
   link="/analyzers/security/stable-dependencies"
 />
 

@@ -10,7 +10,7 @@ tags: php,configuration,ini,security,server
 
 | Analyzer ID        | Category     | Severity   | Time To Fix  |
 | -------------------| :----------: |:----------:| ------------:|
-| `php-ini`          | 🛡️ Security  | High       | 15 minutes  |
+| `php-ini`          | 🛡️ Security  | Critical   | 15 minutes  |
 
 ## What This Checks
 

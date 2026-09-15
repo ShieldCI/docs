@@ -10,7 +10,7 @@ tags: mass-assignment,eloquent,security,models,sql-injection
 
 | Analyzer ID                       | Category     | Severity   | Time To Fix  |
 | ----------------------------------| :----------: |:----------:| ------------:|
-| `mass-assignment-vulnerabilities` | 🛡️ Security  | High       | 25 minutes   |
+| `mass-assignment-vulnerabilities` | 🛡️ Security  | Critical   | 25 minutes   |
 
 ## What This Checks
 

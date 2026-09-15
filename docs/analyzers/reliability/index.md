@@ -51,7 +51,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Environment Example Documentation"
   description="Ensures all environment variables used in .env are documented in .env.example for team collaboration"
-  severity="low"
+  severity="medium"
   link="/analyzers/reliability/env-example-documented"
 />
 
@@ -65,7 +65,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Environment Variables Complete"
   description="Ensures all required environment variables from .env.example are defined in .env"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/env-variables-complete"
 />
 
@@ -277,7 +277,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="PHPStan Static Analysis"
   description="Comprehensive static analysis detecting 13 categories of code reliability issues including dead code, undefined variables, invalid method calls, and more"
-  severity="high"
+  severity="critical"
   link="/analyzers/reliability/phpstan"
 />
 

@@ -72,7 +72,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Cache Driver Configuration"
   description="Ensures a proper cache driver is configured for optimal performance"
-  severity="high"
+  severity="critical"
   link="/analyzers/performance/cache-driver"
 />
 
@@ -123,7 +123,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Queue Driver Configuration"
   description="Ensures a proper queue driver is configured for optimal performance and reliability"
-  severity="medium"
+  severity="critical"
   link="/analyzers/performance/queue-driver"
 />
 

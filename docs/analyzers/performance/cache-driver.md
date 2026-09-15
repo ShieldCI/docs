@@ -10,7 +10,7 @@ tags: cache,performance,configuration,redis,memcached
 
 | Analyzer ID    | Category       | Severity   | Time To Fix  |
 | ---------------| :------------: |:----------:| ------------:|
-| `cache-driver` | ⚡ Performance  | High       | 60 minutes   |
+| `cache-driver` | ⚡ Performance  | Critical   | 60 minutes   |
 
 ## What This Checks
 

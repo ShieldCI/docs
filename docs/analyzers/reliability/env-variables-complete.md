@@ -10,7 +10,7 @@ tags: environment,configuration,reliability,deployment
 
 | Analyzer ID               | Category       | Severity | Time To Fix |
 | --------------------------| :------------: |:--------:| -----------:|
-| `env-variables-complete`  | ✅ Reliability | High     | 20 minutes  |
+| `env-variables-complete`  | ✅ Reliability | Critical | 20 minutes  |
 
 ## What This Checks
 
