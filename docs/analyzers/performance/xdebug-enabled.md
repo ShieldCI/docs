@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID       | Category       | Severity   | Time To Fix  |
 | ------------------| :------------: |:----------:| ------------:|
-| `xdebug-enabled`  | ⚡ Performance  | Critical   | 5 minutes    |
+| `xdebug-enabled`  | ⚡ Performance  | High       | 5 minutes    |
 
 ## What This Checks
 

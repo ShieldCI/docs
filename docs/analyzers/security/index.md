@@ -606,14 +606,6 @@ Security analyzers use a combination of:
 4. **File System Checks:** Validates file permissions and .env file security
 5. **HTTP Header Analysis:** Verifies security headers are properly configured
 
-## Severity Levels
-
-| Severity | Description | Examples                                                                             |
-|----------|-------------|--------------------------------------------------------------------------------------|
-| **Critical** | Severe security vulnerabilities that can lead to data breaches | SQL injection, XSS, missing authentication, exposed secrets, vulnerable dependencies |
-| **High** | Significant security risks that need immediate attention | Mass assignment, unguarded models                                                    |
-| **Low** | Best practice violations and minor security improvements | Up-to-date dependencies                                                              |
-
 ## Running Security Analyzers
 
 ### Run All Security Analyzers

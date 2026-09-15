@@ -267,7 +267,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Xdebug Production Check"
   description="Detects if Xdebug is enabled in production, which severely impacts performance"
-  severity="critical"
+  severity="high"
   link="/analyzers/performance/xdebug-enabled"
   pro
 />
@@ -307,15 +307,6 @@ Performance analyzers use a combination of:
 3. **Code Analysis:** Detects inefficient patterns like collection operations that should be database queries
 4. **Environment Validation:** Ensures production environments are properly configured
 5. **Asset Analysis:** Checks frontend assets for minification and cache headers
-
-## Severity Levels
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Critical** | Issues that severely impact performance | Missing OPcache, debug mode in production, no caching enabled |
-| **High** | Issues that significantly slow down the application | Inefficient queries, missing route caching, wrong cache driver |
-| **Medium** | Issues that reduce performance | Unminified assets, unused middleware, collection operations |
-| **Low** | Optimization opportunities | Missing cache headers, suboptimal configuration |
 
 ## Running Performance Analyzers
 

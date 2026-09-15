@@ -97,10 +97,11 @@ The commercial package adds advanced analyzers:
 
 | Severity | Description | Action Required |
 |----------|-------------|-----------------|
-| **Critical** | Severe security vulnerabilities or data loss risks | Fix immediately before deployment |
-| **High** | Significant performance issues or security concerns | Fix before next release |
-| **Medium** | Code quality issues or minor performance problems | Address in upcoming sprint |
+| **Critical** | Severe security vulnerabilities, data loss risks, or an application that cannot serve requests | Fix immediately before deployment |
+| **High** | Significant performance issues, security concerns, or reliability problems in a running application | Fix before next release |
+| **Medium** | Code quality issues, minor performance problems, or lesser security and reliability concerns | Address in upcoming sprint |
 | **Low** | Best practice violations or optimization opportunities | Fix when convenient |
+| **Info** | Observations that require no action | Act on it only if it matters to your project |
 
 The severity listed on an analyzer's page is the highest it can report. Several analyzers grade a finding by how far it exceeds their threshold, so individual issues may come back lower than that.
 
