@@ -72,7 +72,7 @@ Code Quality analyzers focus on maintaining high code standards, reducing comple
 <AnalyzerCard
   title="Test Data Management"
   description="Checks test files for proper test data management practices including factory usage and database cleanup"
-  severity="medium"
+  severity="low"
   link="/analyzers/code-quality/test-data-management"
   pro
 />
