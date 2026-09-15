@@ -108,14 +108,6 @@ Code Quality analyzers use:
 3. **Metrics Calculation:** Computes complexity metrics (cyclomatic, cognitive)
 4. **Convention Validation:** Checks code against PSR standards and Laravel conventions
 
-## Severity Levels
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **High** | Issues that significantly impact maintainability | Excessive complexity, very long methods, deep nesting |
-| **Medium** | Issues that reduce code quality | Code duplication, magic numbers, missing documentation |
-| **Low** | Best practice violations | TODO comments, naming inconsistencies |
-
 ## Running Code Quality Analyzers
 
 ### Run All Code Quality Analyzers

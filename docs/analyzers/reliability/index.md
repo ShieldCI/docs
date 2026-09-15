@@ -308,15 +308,6 @@ Reliability analyzers use a combination of:
 3. **Runtime Checks:** Validates that services (cache, database) are accessible and functioning
 4. **File System Analysis:** Verifies file permissions, existence of required files, and directory structure
 
-## Severity Levels
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **Critical** | Issues that will cause immediate runtime failures | Undefined variables, invalid method calls, missing environment files |
-| **High** | Issues that may cause failures under certain conditions | Missing migrations, invalid queue configuration, cache connectivity issues |
-| **Medium** | Issues that reduce reliability or maintainability | Deprecated code usage, dead code, missing return statements |
-| **Low** | Best practice violations that don't directly impact reliability | Custom error pages, cache prefix configuration |
-
 ## Running Reliability Analyzers
 
 ### Run All Reliability Analyzers

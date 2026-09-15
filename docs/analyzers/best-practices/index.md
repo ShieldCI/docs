@@ -182,7 +182,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="PHP-Side Data Filtering"
   description="Detects filtering that should be done in database"
-  severity="critical"
+  severity="high"
   link="/analyzers/best-practices/php-side-filtering"
 />
 
@@ -203,14 +203,6 @@ Best Practices analyzers use:
 2. **AST Analysis:** Analyzes code structure to detect architectural violations
 3. **Query Analysis:** Examines database queries for optimization opportunities
 4. **Convention Validation:** Checks code against Laravel best practices
-
-## Severity Levels
-
-| Severity | Description | Examples |
-|----------|-------------|----------|
-| **High** | Issues that violate core Laravel principles | Logic in routes, N+1 queries, missing transactions |
-| **Medium** | Issues that reduce maintainability | Fat models, hardcoded paths |
-| **Low** | Best practice violations | Helper function abuse |
 
 ## Running Best Practices Analyzers
 
