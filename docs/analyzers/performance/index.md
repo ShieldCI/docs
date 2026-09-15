@@ -58,7 +58,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Event Caching"
   description="Ensures event discovery is cached for optimal performance"
-  severity="medium"
+  severity="low"
   link="/analyzers/performance/event-caching"
   pro
 />
@@ -93,7 +93,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Redis Single Server Optimization"
   description="Ensures Redis is configured optimally for single-server setups using Unix sockets"
-  severity="low"
+  severity="medium"
   link="/analyzers/performance/redis-single-server"
   pro
 />
@@ -101,7 +101,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Redis Rate Limiting"
   description="Ensures Redis is used for rate limiting in production environments"
-  severity="medium"
+  severity="low"
   link="/analyzers/performance/redis-rate-limiting"
   pro
 />
@@ -109,7 +109,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Redis Throttling"
   description="Ensures Redis is used for request throttling in production"
-  severity="medium"
+  severity="low"
   link="/analyzers/performance/redis-throttling"
   pro
 />
@@ -151,7 +151,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="Eager Loading"
   description="Ensures relationships are eager loaded to prevent N+1 query problems"
-  severity="high"
+  severity="medium"
   link="/analyzers/performance/eager-loading"
   pro
 />
@@ -225,7 +225,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
 <AnalyzerCard
   title="HTTP/2 Support"
   description="Detects HTTP/2 support for improved performance"
-  severity="low"
+  severity="medium"
   link="/analyzers/performance/http2-support"
   pro
 />
