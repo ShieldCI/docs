@@ -21,7 +21,7 @@ Validates Cross-Origin Resource Sharing configuration for security. Checks for:
 - Wildcard `allowed_origins` permitting any domain — reported **High** when the app exposes an API surface, or **Info** when no API routes, API registration, or Laravel Sanctum is detected (CORS governs nothing, so there is no exposure)
 - Wildcard `allowed_methods` exposing all HTTP methods
 - Wildcard `allowed_headers` permitting any custom header
-- `supports_credentials` enabled with wildcard origins (**Critical** - fundamental misconfiguration)
+- `supports_credentials` enabled with wildcard origins (**Critical** - the middleware echoes the requesting origin, so every origin receives credentialed access)
 - CORS `max_age` set to 0 (no preflight caching) or excessively high values (> 24 hours)
 - Sensitive headers exposed cross-origin: `Authorization`, `Set-Cookie`, `Cookie`, `X-CSRF-TOKEN`, `X-XSRF-TOKEN`
 - Overly permissive `allowed_origins_patterns` - regex patterns that match all origins (e.g., `.*`)
