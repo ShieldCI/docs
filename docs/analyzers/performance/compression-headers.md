@@ -30,7 +30,7 @@ Checks for:
 - **Bandwidth Reduction:** Compression reduces transfer size by 60-90% for text-based assets, directly cutting hosting costs
 - **Faster Load Times:** Smaller files download faster, especially on slow or mobile connections. Gzip cuts JS by ~70%, brotli by ~75%
 - **Core Web Vitals:** Faster asset delivery improves LCP and FID scores, which affect SEO rankings
-- **Production Critical:** Uncompressed assets are one of the easiest performance wins to miss in server configuration
+- **In Production:** Uncompressed assets are one of the easiest performance wins to miss in server configuration
 
 ## How to Fix
 
