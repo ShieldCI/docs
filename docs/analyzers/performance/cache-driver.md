@@ -38,7 +38,8 @@ sudo apt-get install redis-server php-redis
 docker run -d -p 6379:6379 redis:alpine
 
 # Update .env
-CACHE_DRIVER=redis
+CACHE_STORE=redis      # Laravel 11+
+CACHE_DRIVER=redis     # Laravel 10 and earlier
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
 REDIS_PORT=6379
@@ -76,7 +77,8 @@ composer require predis/predis
 
 ```ini
 # .env configuration
-CACHE_DRIVER=redis
+CACHE_STORE=redis      # Laravel 11+
+CACHE_DRIVER=redis     # Laravel 10 and earlier
 REDIS_CLIENT=phpredis  # or 'predis'
 REDIS_HOST=127.0.0.1
 REDIS_PASSWORD=null
@@ -124,7 +126,8 @@ echo "stats" | nc localhost 11211
 
 ```ini
 # .env configuration
-CACHE_DRIVER=memcached
+CACHE_STORE=memcached      # Laravel 11+
+CACHE_DRIVER=memcached     # Laravel 10 and earlier
 MEMCACHED_HOST=127.0.0.1
 MEMCACHED_PORT=11211
 ```
@@ -160,7 +163,8 @@ composer require aws/aws-sdk-php
 ```
 
 ```ini
-CACHE_DRIVER=dynamodb
+CACHE_STORE=dynamodb      # Laravel 11+
+CACHE_DRIVER=dynamodb     # Laravel 10 and earlier
 AWS_ACCESS_KEY_ID=your-key
 AWS_SECRET_ACCESS_KEY=your-secret
 AWS_DEFAULT_REGION=us-east-1
@@ -176,7 +180,8 @@ services:
   app:
     build: .
     environment:
-      CACHE_DRIVER: redis
+      CACHE_STORE: redis      # Laravel 11+
+      CACHE_DRIVER: redis     # Laravel 10 and earlier
       REDIS_HOST: redis
     depends_on:
       - redis
