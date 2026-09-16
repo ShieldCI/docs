@@ -38,7 +38,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
 <AnalyzerCard
   title="Validation SQL Injection"
   description="Detects SQL injection vulnerabilities in validation rules"
-  severity="critical"
+  severity="high"
   link="/analyzers/security/validation-sql-injection"
   pro
 />

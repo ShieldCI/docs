@@ -11,7 +11,7 @@ pro: true
 
 | Analyzer ID                | Category      | Severity | Time To Fix |
 | -------------------------- | :-----------: | :------: | ----------: |
-| `validation-sql-injection` | 🛡️ Security  | Critical | 15 minutes  |
+| `validation-sql-injection` | 🛡️ Security  | High | 15 minutes  |
 
 ## What This Checks
 
@@ -21,7 +21,7 @@ Detects SQL injection vulnerabilities that arise specifically through Laravel's 
 
 - **Dynamic table/column names** in `exists` and `unique` rules — e.g., `"exists:$table,col"` or `"unique:{$var},col"`
 - **Request input in rule strings** — e.g., `"exists:users,$request->column"`
-- **`Rule` builder with string concatenation** — e.g., `Rule::exists('table_' . $var)` or `Rule::unique('table_' . $var)` — reported at **Critical** severity
+- **`Rule` builder with string concatenation** — e.g., `Rule::exists('table_' . $var)` or `Rule::unique('table_' . $var)` — reported at **High** severity. Any variable in the concatenation triggers it, including one you control, so check where the value comes from
 - **`Validator::extend()` closures** that contain database queries without parameter binding
 - **Public and protected `validate*()` methods** that contain database queries (`DB::` static calls or Eloquent query execution) — private helper methods are excluded as they cannot be registered as Laravel validators
 
