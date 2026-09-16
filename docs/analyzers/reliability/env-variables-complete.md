@@ -34,7 +34,7 @@ tags: environment,configuration,reliability,deployment
 - **Feature flags missing**: New feature toggles defined in `.env.example` aren't configured in `.env`, causing unexpected behavior
 - **Third-party integrations broken**: API keys and service credentials in `.env.example` aren't added to `.env`, breaking integrations silently
 - **Database connection failures**: Missing database configuration variables cause connection errors that could have been prevented
-- **Cache/Queue misconfiguration**: Missing `CACHE_DRIVER`, `QUEUE_CONNECTION` variables cause performance issues
+- **Cache/Queue misconfiguration**: Missing `CACHE_STORE`, `QUEUE_CONNECTION` variables cause performance issues
 
 ## How to Fix
 
