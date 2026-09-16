@@ -44,7 +44,7 @@ Best Practices analyzers focus on Laravel-specific patterns, framework conventio
 <AnalyzerCard
   title="Policy Authorization"
   description="Validates that resource controllers have corresponding Policy classes for proper authorization enforcement"
-  severity="medium"
+  severity="high"
   link="/analyzers/best-practices/policy-authorization"
   pro
 />
