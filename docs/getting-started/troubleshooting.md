@@ -293,6 +293,38 @@ echo "Exit code: $?"
 SHIELDCI_FAIL_ON=critical php artisan shield:analyze
 ```
 
+**Exit 1 with no issues above the threshold:**
+
+An analyzer that could not run fails the build at every `fail_on` level except `'never'`,
+because it produced no verdict at all. Look for this near the end of the output:
+
+```
+✗ Analysis incomplete: 1 analyzer could not run (phpstan).
+```
+
+Fix the underlying cause if you can. To waive it, add the analyzer id to `dont_report` in
+`config/shieldci.php`. A baseline will not waive it, by design.
+
+**Exit 1 with a `fail_threshold` set:**
+
+The score is compared after excluding analyzers listed in `dont_report`. The run names the
+score it compared:
+
+```
+✗ Score 90% is below the configured fail_threshold of 95%.
+```
+
+A non-numeric `fail_threshold` is ignored rather than compared.
+
+**`fail_on` appears to be ignored:**
+
+A value outside `never`, `critical`, `high`, `medium`, `low` falls back to `'high'`, and the
+run warns before it starts. Check for a typo:
+
+```
+⚠️  fail_on 'hgh' is not one of never, critical, high, medium, low. Falling back to 'high'.
+```
+
 ### Baseline Not Working
 
 **Problem:** Issues are still reported despite baseline
