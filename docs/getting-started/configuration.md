@@ -542,8 +542,11 @@ Analyzers in `dont_report` run normally and show in the report, but **don't affe
 - Analyzers run normally and show in report output
 - Issues are displayed in console/JSON output
 - Exit code is not affected (won't fail CI/CD)
-- Can be auto-populated by `php artisan shield:baseline`
-- Merged with baseline's `dont_report` when using `--baseline` flag
+- Excluded from the score compared against `fail_threshold`, so waiving an analyzer cannot fail the build through the threshold instead
+- Can be auto-populated by `php artisan shield:baseline`, which adds any analyzer that fails without naming a specific issue
+- Merged with the baseline's `dont_report` when using `--baseline`, for findings
+
+An analyzer that **could not run** is never added to the baseline automatically, and is waived by this config value only. It produced no verdict, so waiving it is a decision only you can make, and a baseline taken while one was broken would otherwise hide it permanently.
 
 #### Comparison: ignore_errors vs dont_report vs disabled_analyzers
 

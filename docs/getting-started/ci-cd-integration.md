@@ -48,6 +48,42 @@ The exit code behavior is controlled by the `fail_on` configuration:
 | `'medium'` | Medium + High + Critical | Stricter quality standards |
 | `'low'` | Any issue | Zero-tolerance enforcement |
 
+A value outside this list falls back to `'high'`, and the run tells you so before it starts.
+
+### Analyses that could not complete
+
+An analyzer can finish without producing a verdict: PHPStan runs out of memory, an advisory
+fetch times out, a file it needs cannot be parsed. Such a result carries no issues, so no
+severity threshold above can describe it.
+
+**These fail the build at every `fail_on` level except `'never'`.** Reporting success for a
+check that never ran would mean shipping in the belief you were checked. The run names the
+analyzers concerned:
+
+```
+✗ Analysis incomplete: 1 analyzer could not run (phpstan).
+  Add an analyzer id to 'dont_report' in config/shieldci.php to stop it affecting the exit code.
+```
+
+The same applies to an analyzer that reports a problem without attributing it to a specific
+issue. A warning of that shape gates only at `'low'` and `'medium'`, where warnings reach the
+exit code at all.
+
+To waive one, add its id to `dont_report` in `config/shieldci.php`. A baseline cannot waive it:
+`shield:baseline` deliberately leaves analyzers that could not run out of the file, so that one
+baseline taken while a check was broken does not hide it permanently.
+
+### Piping the report
+
+Advisory messages go to stderr, so stdout carries only the report:
+
+```bash
+php artisan shield:analyze --format=json | jq '.summary'
+```
+
+Colour is omitted automatically when the output is redirected, piped, or run with `--no-ansi`,
+and `NO_COLOR` is honoured.
+
 ## CI Mode
 
 CI mode is a special operating mode that only runs analyzers suitable for CI environments. Some analyzers (like those checking server configuration) don't make sense in ephemeral CI containers.
