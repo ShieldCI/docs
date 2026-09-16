@@ -58,7 +58,7 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
 {
     protected function gate(): void
     {
-        // NO AUTHORIZATION - Horizon is publicly accessible!
+        // NO AUTHORIZATION - access falls back to "local environment only"
     }
 }
 ```
