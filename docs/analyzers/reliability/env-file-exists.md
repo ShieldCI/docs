@@ -92,7 +92,8 @@ DB_USERNAME=your_username
 DB_PASSWORD=your_password
 
 # Cache (optional but recommended)
-CACHE_DRIVER=file          # file, redis, memcached, database
+CACHE_STORE=file           # Laravel 11+; file, redis, memcached, database
+CACHE_DRIVER=file          # Laravel 10 and earlier
 SESSION_DRIVER=file        # file, cookie, database, redis
 QUEUE_CONNECTION=sync      # sync, database, redis, sqs
 ```

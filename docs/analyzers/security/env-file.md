@@ -146,7 +146,8 @@ DB_USERNAME=your_username
 DB_PASSWORD=
 
 # Cache & Sessions
-CACHE_DRIVER=redis
+CACHE_STORE=redis      # Laravel 11+
+CACHE_DRIVER=redis     # Laravel 10 and earlier
 SESSION_DRIVER=redis
 REDIS_PASSWORD=
 

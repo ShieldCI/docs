@@ -15,7 +15,7 @@ pro: true
 
 ## What This Checks
 
-Validates the **structure and contents of `vapor.yml`** - the file that drives AWS Lambda provisioning and environment variable injection on Laravel Vapor. This analyzer deliberately does **not** grep `vapor.yml` for runtime variables such as `FILESYSTEM_DISK`, `SESSION_DRIVER`, `CACHE_DRIVER`, or `QUEUE_CONNECTION`: per Vapor's documentation those are managed via the Vapor UI or `.env.{env}` files synced with `vapor env:pull/push`, not inlined in `vapor.yml`. Validation of those driver values is the responsibility of the per-concern analyzers (filesystem, session, cache, queue).
+Validates the **structure and contents of `vapor.yml`** - the file that drives AWS Lambda provisioning and environment variable injection on Laravel Vapor. This analyzer deliberately does **not** grep `vapor.yml` for runtime variables such as `FILESYSTEM_DISK`, `SESSION_DRIVER`, `CACHE_STORE`, or `QUEUE_CONNECTION`: per Vapor's documentation those are managed via the Vapor UI or `.env.{env}` files synced with `vapor env:pull/push`, not inlined in `vapor.yml`. Validation of those driver values is the responsibility of the per-concern analyzers (filesystem, session, cache, queue).
 
 Specific checks:
 
