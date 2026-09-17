@@ -306,7 +306,7 @@ The default source is the [OSV API](https://osv.dev) (Open Source Vulnerability 
 **Note:** Blade templates are analyzed by default. To exclude them, add to `excluded_paths`:
 ```php
 'excluded_paths' => [
-    'resources/views/**/*.blade.php',
+    'resources/views/*.blade.php',
 ],
 ```
 
