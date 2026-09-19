@@ -217,11 +217,6 @@ The package also sends a `trace` key on errored results. The API accepts it and 
 ingest** — it is not part of the stored contract, so do not build against it. Your CI log already
 has the full trace, which is where output of that size belongs. Use `message` and `exception` to
 diagnose an analyzer that could not run.
-
-Separately, the trace's current form is unsafe to transmit at all: `getTraceAsString()` embeds
-frame arguments, which can include credentials. That is tracked in
-[analyzers-core#64](https://github.com/ShieldCI/analyzers-core/issues/64), and fixing it changes
-what the package sends, not what the platform stores.
 :::
 
 **`results[].issues[]` fields:**
