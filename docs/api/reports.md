@@ -196,7 +196,28 @@ Contains all summary fields plus a `results` array with per-analyzer detail:
 | `category` | string | Category (`security`, `performance`, `reliability`, etc.) |
 | `status` | string | `passed`, `failed`, `warning`, `skipped`, or `error` |
 | `execution_time` | float\|null | Time this analyzer took in seconds |
+| `message` | string\|null | The analyzer's own summary. When `status` is `error` this is the reason it could not run. Stored stripped of control characters and capped at 1000 characters |
 | `issues` | array | List of issues found (empty array if none) |
+| `metadata` | object | Analyzer descriptors — see below |
+
+**`results[].metadata` fields:**
+
+Only the keys below are stored. Anything else in the object is discarded on ingest.
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `description` | string | What the analyzer checks |
+| `docsUrl` | string | Link to this analyzer's documentation |
+| `severity` | string | The analyzer's default severity |
+| `timeToFix` | integer | Estimated minutes to fix one issue, used for the technical-debt estimate |
+| `exception` | string | Class of the throwable that stopped the analyzer. Only present when `status` is `error` |
+
+::: warning Stack traces are not stored
+The package also sends a `trace` key on errored results. The API accepts it and **discards it on
+ingest** — it is not part of the stored contract, so do not build against it. Your CI log already
+has the full trace, which is where output of that size belongs. Use `message` and `exception` to
+diagnose an analyzer that could not run.
+:::
 
 **`results[].issues[]` fields:**
 
