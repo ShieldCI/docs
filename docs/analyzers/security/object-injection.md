@@ -211,7 +211,7 @@ class CacheItem
 
 ## Related Analyzers
 
-- [Eval Usage Analyzer](/analyzers/security/eval) - Detects dynamic code execution functions
+- [Eval Usage Analyzer](/analyzers/security/eval-usage) - Detects dynamic code execution functions
 - [RCE Analyzer](/analyzers/security/rce) - Detects remote code execution via variable functions
 - [Command Injection Analyzer](/analyzers/security/command-injection) - Detects shell command injection
 - [Arbitrary File Upload Analyzer](/analyzers/security/arbitrary-file-upload) - Detects unsafe file upload handling

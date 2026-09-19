@@ -94,7 +94,7 @@ Performance analyzers focus on optimizing application speed, reducing resource c
   title="Redis Single Server Optimization"
   description="Ensures Redis is configured optimally for single-server setups using Unix sockets"
   severity="medium"
-  link="/analyzers/performance/redis-single-server"
+  link="/analyzers/performance/redis-single-server-optimization"
   pro
 />
 

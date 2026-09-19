@@ -3,3 +3,13 @@
 /introduction/ /introduction/what-is-shieldci 301
 /getting-started /getting-started/installation 301
 /getting-started/ /getting-started/installation 301
+
+# Analyzer pages renamed to match their analyzer ID (#137)
+/analyzers/security/xxe-vulnerabilities /analyzers/security/xxe 301
+/analyzers/security/xxe-vulnerabilities/ /analyzers/security/xxe 301
+/analyzers/security/eval /analyzers/security/eval-usage 301
+/analyzers/security/eval/ /analyzers/security/eval-usage 301
+/analyzers/security/extract /analyzers/security/extract-usage 301
+/analyzers/security/extract/ /analyzers/security/extract-usage 301
+/analyzers/performance/redis-single-server /analyzers/performance/redis-single-server-optimization 301
+/analyzers/performance/redis-single-server/ /analyzers/performance/redis-single-server-optimization 301

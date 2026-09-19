@@ -259,8 +259,8 @@ export default defineConfig({
                                 { text: 'Directory Traversal', link: '/analyzers/security/directory-traversal' },
                                 { text: 'Environment File', link: '/analyzers/security/env-file' },
                                 { text: 'Env HTTP Exposure', link: '/analyzers/security/env-http-accessibility' },
-                                { text: 'Eval Usage', link: '/analyzers/security/eval' },
-                                { text: 'Extract Usage', link: '/analyzers/security/extract' },
+                                { text: 'Eval Usage', link: '/analyzers/security/eval-usage' },
+                                { text: 'Extract Usage', link: '/analyzers/security/extract-usage' },
                                 { text: 'File Permissions', link: '/analyzers/security/file-permissions' },
                                 { text: 'Filament Pages', link: '/analyzers/security/filament-custom-pages' },
                                 { text: 'Filament Forms', link: '/analyzers/security/filament-form-validation' },
@@ -307,7 +307,7 @@ export default defineConfig({
                                 { text: 'Validation Injection', link: '/analyzers/security/validation-sql-injection' },
                                 { text: 'Vulnerable Dependencies', link: '/analyzers/security/vulnerable-dependencies' },
                                 { text: 'XSS Vulnerabilities', link: '/analyzers/security/xss-vulnerabilities' },
-                                { text: 'XXE Vulnerabilities', link: '/analyzers/security/xxe-vulnerabilities' },
+                                { text: 'XXE Vulnerabilities', link: '/analyzers/security/xxe' },
                             ]
                         },
                         {
@@ -339,7 +339,7 @@ export default defineConfig({
                                 { text: 'Query Optimization', link: '/analyzers/performance/database-query-optimization' },
                                 { text: 'Queue Driver', link: '/analyzers/performance/queue-driver' },
                                 { text: 'Redis Rate Limiting', link: '/analyzers/performance/redis-rate-limiting' },
-                                { text: 'Redis Single Server', link: '/analyzers/performance/redis-single-server' },
+                                { text: 'Redis Single Server', link: '/analyzers/performance/redis-single-server-optimization' },
                                 { text: 'Redis Throttling', link: '/analyzers/performance/redis-throttling' },
                                 { text: 'Route Caching', link: '/analyzers/performance/route-caching' },
                                 { text: 'Scout Config', link: '/analyzers/performance/scout-config' },

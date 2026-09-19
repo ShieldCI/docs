@@ -17,8 +17,8 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/security/cors-config',
   '/analyzers/security/cryptographic-weakness',
   '/analyzers/security/directory-traversal',
-  '/analyzers/security/eval',
-  '/analyzers/security/extract',
+  '/analyzers/security/eval-usage',
+  '/analyzers/security/extract-usage',
   '/analyzers/security/filament-custom-pages',
   '/analyzers/security/filament-form-validation',
   '/analyzers/security/filament-navigation',
@@ -50,7 +50,7 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/security/telescope-security',
   '/analyzers/security/validation-sql-injection',
   '/analyzers/security/web-server-fingerprinting',
-  '/analyzers/security/xxe-vulnerabilities',
+  '/analyzers/security/xxe',
 
   // ── Performance (15) ───────────────────────────────────────
   '/analyzers/performance/cdn-configuration',
@@ -64,7 +64,7 @@ export const proAnalyzerPaths = new Set<string>([
   '/analyzers/performance/http2-support',
   '/analyzers/performance/lazy-collection-opportunity',
   '/analyzers/performance/redis-rate-limiting',
-  '/analyzers/performance/redis-single-server',
+  '/analyzers/performance/redis-single-server-optimization',
   '/analyzers/performance/redis-throttling',
   '/analyzers/performance/scout-config',
   '/analyzers/performance/xdebug-enabled',
