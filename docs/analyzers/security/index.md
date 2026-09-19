@@ -87,7 +87,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   title="Eval Usage"
   description="Detects dangerous eval usage that can execute arbitrary code"
   severity="critical"
-  link="/analyzers/security/eval"
+  link="/analyzers/security/eval-usage"
   pro
 />
 
@@ -95,7 +95,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   title="Extract Function"
   description="Detects unsafe extract usage that can overwrite variables"
   severity="critical"
-  link="/analyzers/security/extract"
+  link="/analyzers/security/extract-usage"
   pro
 />
 
@@ -103,7 +103,7 @@ Security analyzers focus on identifying and preventing security vulnerabilities 
   title="XXE Injection Vulnerabilities"
   description="Detects XML External Entity injection vulnerabilities"
   severity="critical"
-  link="/analyzers/security/xxe-vulnerabilities"
+  link="/analyzers/security/xxe"
   pro
 />
 

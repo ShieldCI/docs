@@ -164,7 +164,7 @@ public function format(Request $request)
 
 ## Related Analyzers
 
-- [Eval Usage Analyzer](/analyzers/security/eval) - Focused detection of dynamic code execution functions
+- [Eval Usage Analyzer](/analyzers/security/eval-usage) - Focused detection of dynamic code execution functions
 - [Command Injection Analyzer](/analyzers/security/command-injection) - Detects shell command injection with escaping analysis
 - [Object Injection Analyzer](/analyzers/security/object-injection) - Detects unsafe deserialization leading to code execution
 - [SQL Injection Analyzer](/analyzers/security/sql-injection) - Detects SQL injection vulnerabilities
