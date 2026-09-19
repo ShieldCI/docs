@@ -212,10 +212,16 @@ Only the keys below are stored. Anything else in the object is discarded on inge
 | `timeToFix` | integer | Estimated minutes to fix one issue, used for the technical-debt estimate |
 | `exception` | string | Class of the throwable that stopped the analyzer. Only present when `status` is `error` |
 
-::: warning Stack traces are never stored
-The package also sends a `trace` key on errored results. It is **discarded on ingest and never
-persisted**, because `getTraceAsString()` embeds frame arguments, which can include credentials.
-Use `message` and `exception` to diagnose a failed analyzer — the full trace stays in your CI log.
+::: warning Stack traces are not stored
+The package also sends a `trace` key on errored results. The API accepts it and **discards it on
+ingest** — it is not part of the stored contract, so do not build against it. Your CI log already
+has the full trace, which is where output of that size belongs. Use `message` and `exception` to
+diagnose an analyzer that could not run.
+
+Separately, the trace's current form is unsafe to transmit at all: `getTraceAsString()` embeds
+frame arguments, which can include credentials. That is tracked in
+[analyzers-core#64](https://github.com/ShieldCI/analyzers-core/issues/64), and fixing it changes
+what the package sends, not what the platform stores.
 :::
 
 **`results[].issues[]` fields:**
