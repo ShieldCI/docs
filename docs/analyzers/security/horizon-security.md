@@ -20,11 +20,19 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 **Checks Performed:**
 
 #### Service Provider Validation
-- **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
-- **Horizon::auth() gate** - Checks that an authorization gate is defined to restrict dashboard access
-- **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone)
-- **Auth-only checks** - Flags gates that only verify the user is logged in (`auth()->check()`) without restricting to specific users or roles
+- **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists; without it `Horizon::check()` grants access only in the local environment
+- **Authorization gate** - Checks that a gate is registered, through either `Gate::define('viewHorizon', ...)` or `Horizon::auth(...)`. The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `HorizonServiceProvider`
+- **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone), including the `fn ($user) => true` shorthand. A `Horizon::auth(...)` callback that never reads the `$request` it was given is reported the same way, since it can only answer alike for everyone
+- **Auth-only checks** - Flags gates that only verify the user is logged in (`auth()->check()`, `auth()?->check()`, `Auth::check()`, `$request->user() !== null`, `! is_null($request->user())`) without restricting to specific users or roles
+- **Permissive fallback** - Flags gates that can fall through to `true` in the fallback position (`$user?->isAdmin() ?? true`, `... ?: true`), which admits people exactly when the real check could not be answered
+- **Environment bypass** - Flags gates that decide on the environment or the debug flag somewhere beyond `local`, where that decision can grant on its own: as the whole answer, alongside an `||`, or as an `if` whose branch returns `true`
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
+
+::: tip Severity depends on how the gate is registered
+These defects are graded by reach rather than at a fixed level. A gate registered unconditionally reports **High**, or **Critical** for a blanket grant. One registered only inside an `environment('local')` check drops to **Low**, or **Medium** for a blanket grant, because Laravel's own dashboards already behave that way by default. Any wider guard, such as `staging`, lands between the two.
+
+Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, because the `true` is not in the fallback position; `app()->environment('local') || $user->isAdmin()`, because a local-only escape hatch is not a bypass; and an environment test that only picks which user check to run.
+:::
 
 #### Configuration File Validation
 - **Middleware configuration** - Flags when `config/horizon.php` only includes `web` middleware without `auth`, but only when no `viewHorizon` gate is configured. When a gate is present it already handles authorization, making `auth` middleware redundant.
@@ -119,6 +127,30 @@ protected function gate(): void
 {
     Horizon::auth(function ($request) {
         return auth()->check(); // Any logged-in user can access Horizon
+    });
+}
+```
+
+**Before (❌) — permissive fallback:**
+```php
+protected function gate(): void
+{
+    Gate::define('viewHorizon', function ($user): bool {
+        // VULNERABLE: opens the dashboard whenever the real check cannot be
+        // answered, such as a null user or a missing relation
+        return $user?->isAdmin() ?? true;
+    });
+}
+```
+
+**Before (❌) — environment bypass:**
+```php
+protected function gate(): void
+{
+    Gate::define('viewHorizon', function ($user): bool {
+        // VULNERABLE: access now depends on APP_ENV staying correct on every
+        // deployed box, which is configuration rather than authorization
+        return app()->environment('staging') || $user->hasRole('admin');
     });
 }
 ```
