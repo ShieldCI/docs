@@ -20,14 +20,16 @@ This analyzer validates the security configuration of Laravel Nova to ensure the
 **Checks Performed:**
 
 #### Service Provider Validation
-- **NovaServiceProvider existence** - Verifies the file exists; if missing, Nova has no authorization gate
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `NovaServiceProvider`.
+
+- **NovaServiceProvider existence** - Verifies the file exists; if missing, access falls back to the local-environment default
 - **Authorization gate** - Checks for `Gate::define('viewNova', ...)` (Nova 4/5) or `Nova::auth()` (Nova 3 legacy)
 - **Empty gate() method** - Flags a `gate()` method with no `Gate::define('viewNova')` call
-- **Hardcoded return true** - Flags callbacks that unconditionally return `true`
+- **Blanket grant** - Flags callbacks that unconditionally return `true`, plus ones that never read their argument
 - **Arrow function shorthand** - Flags `fn($user) => true` gate definitions
-- **Auth-only gate** - Flags callbacks that only verify authentication without checking roles or permissions
-- **Permissive fallback** - Flags `?? true` or `?: true` in the gate expression
-- **Environment bypass** - Flags environment conditions (`staging`, `testing`, `dev`) or `config('app.debug')` used as the sole authorization check
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 
 #### Configuration Validation
 - **Stripped middleware** - Flags when `middleware` contains only `'web'`, meaning Nova's own middleware have been removed
@@ -41,6 +43,14 @@ This analyzer validates the security configuration of Laravel Nova to ensure the
 #### Tool Authorization
 - **Missing canSee()** - Flags tools registered without a `->canSee()` authorization callback
 - **Permissive canSee()** - Flags tools where `canSee()` unconditionally returns `true`
+
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 

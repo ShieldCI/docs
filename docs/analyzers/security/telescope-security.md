@@ -15,22 +15,48 @@ pro: true
 
 ## What This Checks
 
-Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production. Checks for:
+Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production.
 
-- **`composer.json`**: Telescope in `require` instead of `require-dev` - will be installed in production
-- **`composer.json`**: Auto-discovery not disabled (missing `dont-discover` entry) - registered in all environments
-- **`config/app.php`**: `TelescopeServiceProvider` listed in providers array - loads in all environments
-- **`bootstrap/providers.php`**: `TelescopeServiceProvider` registered unconditionally - loads in all environments
-- **`AppServiceProvider`**: Telescope registration without an `environment('local')` guard
-- **`TelescopeServiceProvider`**: File missing entirely - no gate or access control in place
-- **`TelescopeServiceProvider`**: No `viewTelescope` gate defined - dashboard open to everyone
-- **`TelescopeServiceProvider`**: `gate()` method exists but `Gate::define('viewTelescope', ...)` is absent
-- **`TelescopeServiceProvider`**: Authorization callback returns hardcoded `true` - anyone can access the dashboard
-- **`config/telescope.php`**: `enabled` defaults to `true` - Telescope active when `TELESCOPE_ENABLED` env var is unset
-- **`config/telescope.php`**: Middleware only includes `web` - no authentication layer protecting the dashboard
-- **`config/telescope.php`**: Default `/telescope` path - predictable and increases exposure risk (Info)
-- **Scheduler**: `telescope:prune` not scheduled - `telescope_entries` table grows indefinitely
-- **`TelescopeServiceProvider`**: `hideSensitiveRequestDetails()` not called - passwords and tokens may be recorded
+**Checks Performed:**
+
+#### Package Installation
+- **Production dependency** - Flags Telescope in `require` instead of `require-dev` in `composer.json`; it will be installed in production
+- **Auto-discovery enabled** - Flags a missing `dont-discover` entry in `composer.json`; Telescope is then registered in all environments
+
+#### Provider Registration
+- **Listed in `config/app.php`** - Flags `TelescopeServiceProvider` in the providers array; it loads in all environments
+- **Listed in `bootstrap/providers.php`** - Flags `TelescopeServiceProvider` registered unconditionally; it loads in all environments
+- **Unguarded registration** - Flags Telescope registered in `AppServiceProvider` without an `environment('local')` guard
+- **TelescopeServiceProvider existence** - Verifies the file exists; if missing, access falls back to the local-environment default
+
+#### Gate Registration
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `TelescopeServiceProvider`.
+
+- **Authorization gate** - Checks that `Gate::define('viewTelescope', ...)` or `Telescope::auth(...)` is registered
+- **Empty gate() method** - Flags a `gate()` method with no `Gate::define('viewTelescope')` call
+
+#### Gate Callback Quality
+- **Blanket grant** - Flags callbacks that return `true` on every path, plus ones that never read their argument
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
+
+#### Configuration Validation
+- **Enabled by default** - Flags `enabled` defaulting to `true` in `config/telescope.php`; Telescope is active whenever `TELESCOPE_ENABLED` is unset
+- **Middleware configuration** - Flags when `config/telescope.php` middleware only includes `web`, leaving no authentication layer protecting the dashboard
+- **Predictable path** - Warns when `path` is left at the default `/telescope`, which increases exposure risk (Info)
+
+#### Data Retention and Redaction
+- **Pruning not scheduled** - Flags a missing `telescope:prune` schedule; the `telescope_entries` table then grows indefinitely
+- **Sensitive data recorded** - Flags when `hideSensitiveRequestDetails()` is not called; passwords and tokens may be recorded
+
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 
@@ -139,6 +165,26 @@ protected function gate(): void
 }
 ```
 
+**Fix the weaker gate shapes:**
+
+A gate that stops short of naming who may look is reported too, not just one that returns `true`. Each of these grants more than intended:
+
+```php
+// app/Providers/TelescopeServiceProvider.php
+
+// ❌ Auth-only: every registered user passes, including one who signed up a second ago
+Gate::define('viewTelescope', fn ($user) => auth()->check());
+
+// ❌ Permissive fallback: admits people exactly when the real check cannot be answered,
+//    such as a null user or a missing relation
+Gate::define('viewTelescope', fn ($user) => $user?->isAdmin() ?? true);
+
+// ❌ Environment bypass: access now depends on APP_ENV staying correct on every box
+Gate::define('viewTelescope', fn ($user) => app()->environment('staging') || $user->isAdmin());
+
+// ✅ Decide on the user's role or permission, and fall back to denial
+Gate::define('viewTelescope', fn ($user) => $user?->hasRole('admin') ?? false);
+```
 
 ## References
 

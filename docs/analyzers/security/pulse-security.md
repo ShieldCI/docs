@@ -15,12 +15,32 @@ pro: true
 
 ## What This Checks
 
-Validates Laravel Pulse dashboard security. Checks for:
+Validates Laravel Pulse dashboard security.
 
-- `viewPulse` gate defined in a service provider (AppServiceProvider, AuthServiceProvider, or PulseServiceProvider)
-- Gate callback is not trivially permissive (`return true`, `fn() => true`, auth-only, `?? true` fallback)
-- Data retention (`keep` config) is 7 days or less
-- Data trimming lottery is not disabled (`lottery` not set to `[0, …]`)
+**Checks Performed:**
+
+#### Gate Registration
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in the conventional providers. Pulse has no `Pulse::auth()` form, so only `Gate::define('viewPulse', ...)` is matched.
+
+- **`viewPulse` gate defined** - Checks that the gate is registered
+
+#### Gate Callback Quality
+- **Blanket grant** - Flags callbacks that return `true` on every path, including `fn () => true`
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
+
+#### Configuration Validation
+- **Data retention** - Checks that `keep` is 7 days or less
+- **Data trimming** - Flags a disabled trimming lottery (`lottery` set to `[0, …]`)
+
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 
@@ -79,7 +99,26 @@ Gate::define('viewPulse', function (User $user) {
 });
 ```
 
-**2. Configure data retention and trimming:**
+**2. Fix an environment bypass:**
+
+**Before (❌):**
+```php
+Gate::define('viewPulse', function ($user) {
+    // Access depends on APP_ENV staying correct on every deployed box,
+    // and the environment test grants on its own
+    return app()->environment('staging') || $user->isAdmin();
+});
+```
+
+**After (✅):**
+```php
+Gate::define('viewPulse', function (User $user) {
+    // Decide on the user, not on configuration
+    return $user->isAdmin();
+});
+```
+
+**3. Configure data retention and trimming:**
 
 **Before (❌):**
 ```php

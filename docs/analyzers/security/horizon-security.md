@@ -20,10 +20,14 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 **Checks Performed:**
 
 #### Service Provider Validation
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `HorizonServiceProvider`.
+
 - **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
-- **Horizon::auth() gate** - Checks that an authorization gate is defined to restrict dashboard access
-- **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone)
-- **Auth-only checks** - Flags gates that only verify the user is logged in (`auth()->check()`) without restricting to specific users or roles
+- **Authorization gate** - Checks that `Gate::define('viewHorizon', ...)` or `Horizon::auth(...)` is registered
+- **Blanket grant** - Flags `return true;` and `fn ($user) => true`, plus callbacks that never read their argument
+- **Auth-only checks** - Flags gates that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
 
 #### Configuration File Validation
@@ -32,6 +36,13 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 #### Redis Configuration Validation
 - **Redis password** - Flags when `config/database.php` has a hardcoded `null` or empty password for the Redis connection instead of using `env('REDIS_PASSWORD')`
 
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 
@@ -119,6 +130,30 @@ protected function gate(): void
 {
     Horizon::auth(function ($request) {
         return auth()->check(); // Any logged-in user can access Horizon
+    });
+}
+```
+
+**Before (❌) — permissive fallback:**
+```php
+protected function gate(): void
+{
+    Gate::define('viewHorizon', function ($user): bool {
+        // VULNERABLE: opens the dashboard whenever the real check cannot be
+        // answered, such as a null user or a missing relation
+        return $user?->isAdmin() ?? true;
+    });
+}
+```
+
+**Before (❌) — environment bypass:**
+```php
+protected function gate(): void
+{
+    Gate::define('viewHorizon', function ($user): bool {
+        // VULNERABLE: access now depends on APP_ENV staying correct on every
+        // deployed box, which is configuration rather than authorization
+        return app()->environment('staging') || $user->hasRole('admin');
     });
 }
 ```
