@@ -20,19 +20,15 @@ This analyzer validates the security configuration of Laravel Horizon's dashboar
 **Checks Performed:**
 
 #### Service Provider Validation
-- **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists; without it `Horizon::check()` grants access only in the local environment
-- **Authorization gate** - Checks that a gate is registered, through either `Gate::define('viewHorizon', ...)` or `Horizon::auth(...)`. The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `HorizonServiceProvider`
-- **Hardcoded boolean returns** - Flags `return true;` in the auth gate as insecure (grants access to everyone), including the `fn ($user) => true` shorthand. A `Horizon::auth(...)` callback that never reads the `$request` it was given is reported the same way, since it can only answer alike for everyone
-- **Auth-only checks** - Flags gates that only verify the user is logged in (`auth()->check()`, `auth()?->check()`, `Auth::check()`, `$request->user() !== null`, `! is_null($request->user())`) without restricting to specific users or roles
-- **Permissive fallback** - Flags gates that can fall through to `true` in the fallback position (`$user?->isAdmin() ?? true`, `... ?: true`), which admits people exactly when the real check could not be answered
-- **Environment bypass** - Flags gates that decide on the environment or the debug flag somewhere beyond `local`, where that decision can grant on its own: as the whole answer, alongside an `||`, or as an `if` whose branch returns `true`
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `HorizonServiceProvider`.
+
+- **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
+- **Authorization gate** - Checks that `Gate::define('viewHorizon', ...)` or `Horizon::auth(...)` is registered
+- **Blanket grant** - Flags `return true;` and `fn ($user) => true`, plus callbacks that never read their argument
+- **Auth-only checks** - Flags gates that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
-
-::: tip Severity depends on how the gate is registered
-These defects are graded by reach rather than at a fixed level. A gate registered unconditionally reports **High**, or **Critical** for a blanket grant. One registered only inside an `environment('local')` check drops to **Low**, or **Medium** for a blanket grant, because Laravel's own dashboards already behave that way by default. Any wider guard, such as `staging`, lands between the two.
-
-Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, because the `true` is not in the fallback position; `app()->environment('local') || $user->isAdmin()`, because a local-only escape hatch is not a bypass; and an environment test that only picks which user check to run.
-:::
 
 #### Configuration File Validation
 - **Middleware configuration** - Flags when `config/horizon.php` only includes `web` middleware without `auth`, but only when no `viewHorizon` gate is configured. When a gate is present it already handles authorization, making `auth` middleware redundant.
@@ -40,6 +36,13 @@ Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, b
 #### Redis Configuration Validation
 - **Redis password** - Flags when `config/database.php` has a hardcoded `null` or empty password for the Redis connection instead of using `env('REDIS_PASSWORD')`
 
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 

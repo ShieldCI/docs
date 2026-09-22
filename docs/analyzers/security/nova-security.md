@@ -20,20 +20,16 @@ This analyzer validates the security configuration of Laravel Nova to ensure the
 **Checks Performed:**
 
 #### Service Provider Validation
-- **NovaServiceProvider existence** - Verifies the file exists; if missing, Nova access falls back to the local-environment default
-- **Authorization gate** - Checks for `Gate::define('viewNova', ...)` (Nova 4/5) or `Nova::auth()` (Nova 3 legacy). The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `NovaServiceProvider`
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `NovaServiceProvider`.
+
+- **NovaServiceProvider existence** - Verifies the file exists; if missing, access falls back to the local-environment default
+- **Authorization gate** - Checks for `Gate::define('viewNova', ...)` (Nova 4/5) or `Nova::auth()` (Nova 3 legacy)
 - **Empty gate() method** - Flags a `gate()` method with no `Gate::define('viewNova')` call
-- **Hardcoded return true** - Flags callbacks that unconditionally return `true`. A `Nova::auth(...)` callback that never reads the `$request` it was given is reported the same way, since it can only answer alike for everyone
+- **Blanket grant** - Flags callbacks that unconditionally return `true`, plus ones that never read their argument
 - **Arrow function shorthand** - Flags `fn($user) => true` gate definitions
-- **Auth-only gate** - Flags callbacks that only verify authentication without checking roles or permissions: `auth()->check()`, `auth()?->check()`, `Auth::check()`, `$request->user() !== null`, `! is_null($request->user())`
-- **Permissive fallback** - Flags callbacks that can fall through to `true` in the fallback position (`$user?->isAdmin() ?? true`, `... ?: true`), which admits people exactly when the real check could not be answered
-- **Environment bypass** - Flags callbacks that decide on the environment (`staging`, `testing`, `dev`) or the debug flag somewhere beyond `local`, where that decision can grant on its own: as the whole answer, alongside an `||`, or as an `if` whose branch returns `true`
-
-::: tip Severity depends on how the gate is registered
-These defects are graded by reach rather than at a fixed level. A gate registered unconditionally reports **High**, or **Critical** for a blanket grant. One registered only inside an `environment('local')` check drops to **Low**, or **Medium** for a blanket grant, because Laravel's own dashboards already behave that way by default. Any wider guard, such as `staging`, lands between the two.
-
-Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, because the `true` is not in the fallback position; `app()->environment('local') || $user->isAdmin()`, because a local-only escape hatch is not a bypass; and an environment test that only picks which user check to run.
-:::
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 
 #### Configuration Validation
 - **Stripped middleware** - Flags when `middleware` contains only `'web'`, meaning Nova's own middleware have been removed
@@ -47,6 +43,14 @@ Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, b
 #### Tool Authorization
 - **Missing canSee()** - Flags tools registered without a `->canSee()` authorization callback
 - **Permissive canSee()** - Flags tools where `canSee()` unconditionally returns `true`
+
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
+
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
+:::
 
 ## Why It Matters
 

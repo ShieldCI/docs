@@ -15,35 +15,47 @@ pro: true
 
 ## What This Checks
 
-Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production. Checks for:
+Validates that Laravel Telescope is properly secured and cannot leak sensitive data in production.
 
-- **`composer.json`**: Telescope in `require` instead of `require-dev` - will be installed in production
-- **`composer.json`**: Auto-discovery not disabled (missing `dont-discover` entry) - registered in all environments
-- **`config/app.php`**: `TelescopeServiceProvider` listed in providers array - loads in all environments
-- **`bootstrap/providers.php`**: `TelescopeServiceProvider` registered unconditionally - loads in all environments
-- **`AppServiceProvider`**: Telescope registration without an `environment('local')` guard
-- **`TelescopeServiceProvider`**: File missing entirely - access falls back to the local-environment default
-- **`TelescopeServiceProvider`**: `gate()` method exists but `Gate::define('viewTelescope', ...)` is absent
-- **Gate**: No `viewTelescope` gate registered anywhere - access relies on the local-environment default
-- **`config/telescope.php`**: `enabled` defaults to `true` - Telescope active when `TELESCOPE_ENABLED` env var is unset
-- **`config/telescope.php`**: Middleware only includes `web` - no authentication layer protecting the dashboard
-- **`config/telescope.php`**: Default `/telescope` path - predictable and increases exposure risk (Info)
-- **Scheduler**: `telescope:prune` not scheduled - `telescope_entries` table grows indefinitely
-- **`TelescopeServiceProvider`**: `hideSensitiveRequestDetails()` not called - passwords and tokens may be recorded
+**Checks Performed:**
+
+#### Package Installation
+- **Production dependency** - Flags Telescope in `require` instead of `require-dev` in `composer.json`; it will be installed in production
+- **Auto-discovery enabled** - Flags a missing `dont-discover` entry in `composer.json`; Telescope is then registered in all environments
+
+#### Provider Registration
+- **Listed in `config/app.php`** - Flags `TelescopeServiceProvider` in the providers array; it loads in all environments
+- **Listed in `bootstrap/providers.php`** - Flags `TelescopeServiceProvider` registered unconditionally; it loads in all environments
+- **Unguarded registration** - Flags Telescope registered in `AppServiceProvider` without an `environment('local')` guard
+- **TelescopeServiceProvider existence** - Verifies the file exists; if missing, access falls back to the local-environment default
+
+#### Gate Registration
+The gate is read from the parsed syntax tree, so it is found in any file under `app/Providers` or in `bootstrap/app.php`, not only in `TelescopeServiceProvider`.
+
+- **Authorization gate** - Checks that `Gate::define('viewTelescope', ...)` or `Telescope::auth(...)` is registered
+- **Empty gate() method** - Flags a `gate()` method with no `Gate::define('viewTelescope')` call
 
 #### Gate Callback Quality
+- **Blanket grant** - Flags callbacks that return `true` on every path, plus ones that never read their argument
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
+- **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 
-The gate is read from the parsed syntax tree, so it is found wherever it is registered: any file under `app/Providers`, or `bootstrap/app.php`, through either `Gate::define('viewTelescope', ...)` or `Telescope::auth(...)`. The callback itself is then checked for:
+#### Configuration Validation
+- **Enabled by default** - Flags `enabled` defaulting to `true` in `config/telescope.php`; Telescope is active whenever `TELESCOPE_ENABLED` is unset
+- **Middleware configuration** - Flags when `config/telescope.php` middleware only includes `web`, leaving no authentication layer protecting the dashboard
+- **Predictable path** - Warns when `path` is left at the default `/telescope`, which increases exposure risk (Info)
 
-- **Blanket grant** - Flags callbacks that return `true` on every path, including the `fn ($user) => true` shorthand, so everyone who reaches the dashboard is admitted. A `Telescope::auth(...)` callback that never reads the `$request` it was given is reported the same way, since it can only answer alike for everyone
-- **Auth-only gate** - Flags callbacks that only ask whether anybody is signed in, which every registered user satisfies: `auth()->check()`, `auth()?->check()`, `Auth::check()`, `$request->user() !== null`, `! is_null($request->user())`
-- **Permissive fallback** - Flags callbacks that can fall through to `true` in the fallback position (`$user?->isAdmin() ?? true`, `... ?: true`), which admits people exactly when the real check could not be answered
-- **Environment bypass** - Flags callbacks that decide on the environment or the debug flag somewhere beyond `local`, where that decision can grant on its own: as the whole answer, alongside an `||`, or as an `if` whose branch returns `true`
+#### Data Retention and Redaction
+- **Pruning not scheduled** - Flags a missing `telescope:prune` schedule; the `telescope_entries` table then grows indefinitely
+- **Sensitive data recorded** - Flags when `hideSensitiveRequestDetails()` is not called; passwords and tokens may be recorded
 
-::: tip Severity depends on how the gate is registered
-These defects are graded by reach rather than at a fixed level. A gate registered unconditionally reports **High**, or **Critical** for a blanket grant. One registered only inside an `environment('local')` check drops to **Low**, or **Medium** for a blanket grant, because Laravel's own dashboards already behave that way by default. Any wider guard, such as `staging`, lands between the two.
+::: info Gate Severity Is Graded by Reach
+The gate defects above are not reported at a fixed level. Where the gate is registered decides the grade:
 
-Three shapes are deliberately not reported: `$user->isAdmin() ? true : false`, because the `true` is not in the fallback position; `app()->environment('local') || $user->isAdmin()`, because a local-only escape hatch is not a bypass; and an environment test that only picks which user check to run.
+- **Unconditionally** - **High**, or **Critical** for a blanket grant
+- **Only inside an `environment('local')` check** - **Low**, or **Medium** for a blanket grant, since Laravel's own dashboards already behave that way by default
+- **Behind any wider guard**, such as `staging` - between the two
 :::
 
 ## Why It Matters
