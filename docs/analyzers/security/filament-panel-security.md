@@ -25,11 +25,13 @@ Validates Filament admin panel security configuration. Checks for:
 - Revealable passwords enabled (`->revealablePasswords()`)
 - No model implements `FilamentUser`: any authenticated user can access all panels
 - `canAccessPanel()` returns `true`, or only checks that someone is signed in: implementing the interface restricts nobody
+- `canAccessPanel()` ignores the `Panel` it is given, where two or more panels share one guard: a single answer admits a user to every panel
 
 ## Why It Matters
 
 - **Public Admin Access:** Without auth middleware, anyone can access your admin panel
-- **Rubber-Stamp Access:** `canAccessPanel()` returning `true`, or only calling `auth()->check()`, reads as an access decision while admitting every registered user. When several panels share one guard it is the only thing separating them
+- **Rubber-Stamp Access:** `canAccessPanel()` returning `true`, or only calling `auth()->check()`, reads as an access decision while admitting every registered user
+- **One Answer for Every Panel:** a `canAccessPanel()` that checks a role but never reads its `$panel` argument gives the same verdict for all of them, so reaching one panel grants the rest. Where panels share a guard, that method is the only thing separating them
 - **Missing Login:** Panels without login pages may be accessible to unauthenticated users
 - **Unrestricted Panel Access:** Without `FilamentUser::canAccessPanel()`, all authenticated users reach all panels regardless of role
 - **Admin Self-Registration:** Allowing self-signup on admin panels lets untrusted users create privileged accounts
