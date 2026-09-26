@@ -17,19 +17,19 @@ pro: true
 
 Validates Filament admin panel security configuration. Checks for:
 
-- Panel provider exists in `app/Providers/Filament/`
-- Authentication middleware is configured (`Authenticate::class` in `->authMiddleware()`)
+- Panel provider exists in `app/Providers/Filament/` or `app/Providers/`
+- Authentication middleware is configured (`Authenticate::class` or the `auth` alias, in `->authMiddleware()` or `->middleware()`)
 - Login page is enabled (`->login()`)
-- Auth guard is configured for multi-panel setups (`->authGuard()`)
 - Public registration on admin/staff panels (`->registration()` on privileged surfaces)
 - Registration without email verification (`->emailVerification()` absent)
 - Revealable passwords enabled (`->revealablePasswords()`)
 - No model implements `FilamentUser`: any authenticated user can access all panels
+- `canAccessPanel()` returns `true`, or only checks that someone is signed in: implementing the interface restricts nobody
 
 ## Why It Matters
 
 - **Public Admin Access:** Without auth middleware, anyone can access your admin panel
-- **Guard Confusion:** Multiple panels without custom guards can share authentication state
+- **Rubber-Stamp Access:** `canAccessPanel()` returning `true`, or only calling `auth()->check()`, reads as an access decision while admitting every registered user. When several panels share one guard it is the only thing separating them
 - **Missing Login:** Panels without login pages may be accessible to unauthenticated users
 - **Unrestricted Panel Access:** Without `FilamentUser::canAccessPanel()`, all authenticated users reach all panels regardless of role
 - **Admin Self-Registration:** Allowing self-signup on admin panels lets untrusted users create privileged accounts
@@ -80,7 +80,7 @@ public function panel(Panel $panel): Panel
 }
 ```
 
-**2. Configure separate guards for multiple panels:**
+**2. Optionally, give each panel its own guard.** Not required — Filament's generated providers declare none, and panels sharing the default `web` guard are separated by `canAccessPanel()`. Use a separate guard when the panels are backed by different user models:
 
 ```php
 // config/auth.php
@@ -98,7 +98,7 @@ public function panel(Panel $panel): Panel
 ],
 ```
 
-**3. Restrict panel access per user with FilamentUser:**
+**3. Restrict panel access per user with FilamentUser.** Read the `$panel` you are given — a `canAccessPanel()` that ignores it applies one decision to every panel:
 
 ```php
 // app/Models/User.php
