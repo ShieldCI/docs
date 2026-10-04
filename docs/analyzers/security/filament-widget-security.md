@@ -23,6 +23,7 @@ Validates that Filament widgets have proper authorization and safe data handling
 - `StatsOverviewWidget` classes referencing financial models (`Payment`, `Transaction`, `Invoice`, etc.) have access controls
 - `TableWidget` classes with a custom `getTableQuery()` have proper record scoping (tenant/user filtering)
 - Widgets using `InteractsWithPageFilters` validate filter values before using them in database queries
+- A widget whose syntax error stopped it parsing
 
 ## Why It Matters
 

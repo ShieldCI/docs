@@ -20,7 +20,7 @@ Validates multi-tenancy scope enforcement in Filament panels. Checks for:
 - Panel providers with `->tenant()` configuration
 - User model implements `HasTenants` interface
 - User model implements `canAccessTenant()` to prevent cross-tenant access via URL manipulation
-- Resources have proper tenant scoping (`BelongsToTenant` trait or scoped queries)
+- Resources of panels that declare `->tenant()` have proper tenant scoping (`BelongsToTenant` trait or scoped queries)
 - Tenant middleware is configured
 - Tenant registration has profile management
 

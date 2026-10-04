@@ -25,6 +25,7 @@ Validates that Filament resources have proper authorization. Checks for:
 - SoftDeletes models have both single-record and bulk soft-delete policy methods (`restore`, `forceDelete`, `restoreAny`, `forceDeleteAny`)
 - Model-less resources must override `canAccess()` to control who can access them
 - Resources override authorization methods when no policy exists
+- A resource whose syntax error stopped it parsing
 
 ## Why It Matters
 

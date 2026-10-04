@@ -17,7 +17,7 @@ pro: true
 
 Validates Filament admin panel security configuration. Checks for:
 
-- Panel provider exists in `app/Providers/Filament/` or `app/Providers/`
+- Panel provider exists at any depth under `app/Providers/`, not only directly in it or in `app/Providers/Filament/`
 - Authentication middleware is configured (`Authenticate::class` or the `auth` alias, in `->authMiddleware()` or `->middleware()`)
 - Login page is enabled (`->login()`)
 - Public registration on admin/staff panels (`->registration()` on privileged surfaces)
@@ -26,6 +26,7 @@ Validates Filament admin panel security configuration. Checks for:
 - No model implements `FilamentUser`: any authenticated user can access all panels
 - `canAccessPanel()` returns `true`, or only checks that someone is signed in: implementing the interface restricts nobody
 - `canAccessPanel()` ignores the `Panel` it is given, where two or more panels share one guard: a single answer admits a user to every panel
+- A panel provider whose syntax error stopped it parsing
 
 ## Why It Matters
 
