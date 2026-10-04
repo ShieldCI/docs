@@ -53,8 +53,8 @@ A value outside this list falls back to `'high'`, and the run tells you so befor
 ### Analyses that could not complete
 
 An analyzer can finish without producing a verdict: PHPStan runs out of memory, an advisory
-fetch times out, a file it needs cannot be parsed. Such a result carries no issues, so no
-severity threshold above can describe it.
+fetch times out, a config file it must read cannot be parsed. Such a result carries no issues,
+so no severity threshold above can describe it.
 
 **These fail the build at every `fail_on` level except `'never'`.** Reporting success for a
 check that never ran would mean shipping in the belief you were checked. The run names the

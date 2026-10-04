@@ -24,6 +24,8 @@ It checks for:
 - Tables with too many visible columns, impacting rendering performance.
 - Sortable columns on real database columns that have no index in your migrations.
 
+A table declared on a custom page built with `InteractsWithTable` is analyzed as well, not only one declared on a resource.
+
 ## Why It Matters
 
 - **N+1 Queries:** Relationship columns without eager loading execute a query per row, degrading performance exponentially

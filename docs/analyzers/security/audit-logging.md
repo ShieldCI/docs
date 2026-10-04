@@ -19,11 +19,14 @@ Validates that security-sensitive operations have proper audit logging. Checks f
 
 - Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) - supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
 - Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) - detects audit traits and Observer-based logging
-- Admin action logging in admin controllers, backend controllers, and Filament resources
+- Admin action logging across the admin surface: admin and backend controllers, and every Filament resource, page, widget and cluster
 - Dedicated audit/security log channel configuration (`audit`, `security`, `activity`, `audit-log`, or `security-log`)
 - API token lifecycle logging - Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
 - Data export/download operations - `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
 - `saveQuietly()` and `withoutEvents()` calls that bypass model observers without explicit logging at the call site
+- A Filament cluster whose syntax error stopped it parsing
+
+An `activity()` call counts as logging only where it reaches `->log()`: a widget that reads the log with `activity()->latest()->get()` displays an audit trail rather than writing one.
 
 ## Why It Matters
 

@@ -24,6 +24,7 @@ Validates that custom Filament pages have proper authorization. Checks for:
 - Pages extending `SettingsPage` (from `filament/spatie-laravel-settings-plugin`) without authorization - reported at **High** severity because the parent class writes settings automatically
 - Dashboard pages are skipped entirely (panel-level auth typically covers them), including when the parent class is imported under an alias (`use Filament\Pages\Dashboard as BasePage`)
 - Accepts `abort_unless()`, `$this->authorize()`, or `Gate::authorize()` inside `mount()` as valid authorization patterns
+- A page whose syntax error stopped it parsing
 
 ## Why It Matters
 
