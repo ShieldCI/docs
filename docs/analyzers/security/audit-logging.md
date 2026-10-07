@@ -17,10 +17,10 @@ pro: true
 
 Validates that security-sensitive operations have proper audit logging. Checks for:
 
-- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) - supports EventServiceProvider (Laravel 9/10), AppServiceProvider, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
-- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting) - detects audit traits and Observer-based logging
-- Admin action logging across the admin surface: admin and backend controllers, and every Filament resource, page, widget and cluster
-- Dedicated audit/security log channel configuration (`audit`, `security`, `activity`, `audit-log`, or `security-log`)
+- Authentication event logging (Login, Logout, Failed, Registered, PasswordReset) - supports any service provider in `app/Providers`, bootstrap/app.php (Laravel 11+), and dedicated Listener classes
+- Model activity logging on sensitive models (User, Order, Payment, Transaction, Invoice, Role, Permission, Setting), anywhere under `app/Models` - detects audit traits and Observer-based logging
+- Admin action logging across the admin surface: every controller a route reaches through privileged middleware (`can:` with an ability or on the `User`, `Role` or `Permission` class, spatie/laravel-permission's `role:` or `permission:`, or an `auth:` guard over a separate user provider), wherever it lives, and every Filament resource, page, widget and cluster
+- Dedicated audit/security log channel configuration (any channel whose name contains `audit`, `security`, `activity` or `compliance`)
 - API token lifecycle logging - Sanctum/Passport `createToken()`, `->revoke()`, and `tokens()->delete()` should be audited for SOC 2/PCI-DSS compliance
 - Data export/download operations - `Excel::download()`, `streamDownload()`, `ExportAction`, and `ExportBulkAction` should be logged with actor, scope, and format for GDPR compliance
 - `saveQuietly()` and `withoutEvents()` calls that bypass model observers without explicit logging at the call site
@@ -111,7 +111,7 @@ Choose the driver that suits your deployment environment:
 ```
 :::
 
-Any of these channel names are recognised by the analyzer: `audit`, `security`, `activity`, `audit-log`, `security-log`.
+Any channel whose name contains `audit`, `security`, `activity` or `compliance` is recognised, such as `audit_trail`.
 
 **2. Add activity logging to sensitive models:**
 
@@ -162,7 +162,14 @@ class UserObserver
 }
 ```
 
-**4. Log admin actions (controllers and Filament resources):**
+**4. Log admin actions in each controller behind privileged middleware, and in Filament resources.** A controller that writes through a model audited as in steps 2 or 3 needs no logging of its own:
+
+```php
+// routes/web.php
+Route::middleware(['auth', 'can:manage-users'])->group(function () {
+    Route::delete('/users/{user}', [AdminUserController::class, 'destroy']);
+});
+```
 
 ```php
 class AdminUserController extends Controller
