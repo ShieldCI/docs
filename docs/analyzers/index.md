@@ -39,7 +39,7 @@ ShieldCI includes comprehensive analyzers organized into five categories. With 1
 **28 analyzers** (13 Free, 15 Pro) ensuring your application handles errors gracefully and maintains uptime.
 
 **Key Analyzers:**
-- PHPStan Static Analysis (13 categories consolidated)
+- PHPStan Static Analysis (16 categories consolidated)
 - Configuration & Environment Validation
 - Cache & Database Connectivity
 - Queue Reliability

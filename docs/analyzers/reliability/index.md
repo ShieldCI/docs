@@ -276,7 +276,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 
 <AnalyzerCard
   title="PHPStan Static Analysis"
-  description="Comprehensive static analysis detecting 13 categories of code reliability issues including dead code, undefined variables, invalid method calls, and more"
+  description="Comprehensive static analysis detecting 16 categories of code reliability issues including dead code, undefined variables, invalid method calls, and more"
   severity="critical"
   link="/analyzers/reliability/phpstan"
 />
@@ -284,9 +284,10 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 </div>
 
 ::: details PHPStan Detection Categories
+- **Compile Errors** - Syntax errors, colliding `use` imports, and methods, properties, constants, enum cases or parameters declared twice, all of which PHP refuses to load
 - **Dead Code** - Unreachable statements, unused variables, and code with no effect
 - **Deprecated Code** - Usage of deprecated methods, classes, and functions
-- **Foreach Iterable** - Invalid foreach usage with non-iterable values
+- **Foreach Iterable Issues** - Invalid foreach usage with non-iterable values
 - **Invalid Function Calls** - Calls to undefined or incorrectly parameterized functions
 - **Invalid Imports** - Invalid use statements for non-existent classes
 - **Invalid Method Calls** - Calls to undefined or incorrectly parameterized methods
@@ -297,6 +298,8 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 - **Missing Return Statements** - Methods with missing return statements
 - **Undefined Constants** - References to undefined constants
 - **Undefined Variables** - References to undefined variables
+- **Used Void Results** - Using the result of a void function, method, closure, `match` or `yield`, which is always null
+- **Other PHPStan Issues** - PHPStan errors that no specific category claims
 :::
 
 ## How They Work
