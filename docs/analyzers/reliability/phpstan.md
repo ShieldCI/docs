@@ -74,29 +74,29 @@ public function process()
 
 ### Proper Fix (120 minutes)
 
-1. **Fix compile errors first** - When PHPStan cannot process a file, it stops there and drops every other finding in the project. The result says:
+1. **Fix compile errors first** - When PHPStan cannot process a file, such as one with a syntax error, it stops there and drops every other finding in the project. The result names the file and line, after any findings that were reported:
 
 ```
-PHPStan stopped at file(s) it could not process, so the rest of the project was not analysed: app/Services/InvoiceService.php
+PHPStan stopped at file(s) it could not process, so the rest of the project was not analysed: app/Services/InvoiceService.php:12
 ```
 
 That error is reported as Critical whatever its category, so the run fails the build. Fix the file, then rerun the analyzer to see the findings for the rest of the project:
 
 ```php
-// ❌ Before: the method is declared twice, so PHP refuses to load the class
-class InvoiceService
+// ❌ Before: a missing semicolon is a syntax error, so PHPStan cannot parse the file
+public function total(): int
 {
-    public function total(): int { /* ... */ }
-
-    public function total(): int { /* ... */ }
+    return $this->lines->sum('amount')
 }
 
-// ✅ After: one declaration
-class InvoiceService
+// ✅ After
+public function total(): int
 {
-    public function total(): int { /* ... */ }
+    return $this->lines->sum('amount');
 }
 ```
+
+Other compile errors, such as a method declared twice, are also reported under Compile Errors at Critical, but PHPStan still analyses the rest of the project.
 
 2. **Configure PHPStan level** - Publish the config:
 ```bash
