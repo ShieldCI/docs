@@ -1,6 +1,6 @@
 ---
 title: Health Check Analyzer
-seoTopic: Missing Health Check Endpoint
+seoTopic: Missing Health Checks
 description: Validates that the application has proper health check endpoints for monitoring and load balancer integration
 icon: shield
 outline: [2, 3]

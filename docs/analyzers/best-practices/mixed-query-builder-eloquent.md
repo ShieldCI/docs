@@ -1,5 +1,6 @@
 ---
 title: Mixed Query Builder and Eloquent Analyzer
+seoTopic: 'Mixing DB:: and Eloquent'
 description: Detects inconsistent mixing of Query Builder and Eloquent ORM that bypasses global scopes and model events, risking data leaks in multi-tenant applications
 icon: shield-alert
 outline: [2, 3]

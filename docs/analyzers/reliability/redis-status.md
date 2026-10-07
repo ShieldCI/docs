@@ -1,6 +1,6 @@
 ---
 title: Redis Status Analyzer
-seoTopic: Redis Connection & Health Issues
+seoTopic: Unhealthy Redis Connections
 description: Verifies Redis connectivity, health, and configuration across all named connections, catching misconfigured hosts and auth failures before production
 icon: database
 outline: [2, 3]

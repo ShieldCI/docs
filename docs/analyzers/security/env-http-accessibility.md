@@ -1,5 +1,6 @@
 ---
 title: Environment File HTTP Accessibility Analyzer
+seoTopic: .env Exposed Over HTTP
 description: Performs runtime HTTP checks to verify that .env files cannot be accessed via web requests
 icon: shield-alert
 outline: [2, 3]

@@ -1,5 +1,6 @@
 ---
 title: Redis Single Server Optimization Analyzer
+seoTopic: Redis TCP vs Unix Socket
 description: Suggests using Unix sockets instead of TCP for local Redis connections, reducing connection overhead and improving throughput in single-server deployments
 icon: zap
 outline: [2, 3]

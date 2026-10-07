@@ -1,6 +1,6 @@
 ---
 title: Database Status Analyzer
-seoTopic: Database Connection Failures
+seoTopic: Database Connection Errors
 description: Ensures all configured database connections are accessible and functioning, catching connection failures before they surface as runtime errors in production
 icon: database
 outline: [2, 3]
