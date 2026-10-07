@@ -1,5 +1,6 @@
 ---
 title: Environment File Analyzer
+seoTopic: .env File Security
 description: Validates that Laravel environment files are properly secured against exposure and credential leaks
 icon: lock
 outline: [2, 3]

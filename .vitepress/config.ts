@@ -2,6 +2,7 @@ import { defineConfig, type HeadConfig } from 'vitepress'
 import { loadEnv } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import llmstxt from 'vitepress-plugin-llms'
+import { analyzerSeoTitle } from './seo'
 
 // Load env vars from .env files (local dev) merged with process.env (CloudFlare Pages)
 const env = loadEnv('production', process.cwd(), '')
@@ -61,10 +62,19 @@ export default defineConfig({
         ] as HeadConfig[] : []),
     ],
 
+    // Search-facing <title> for analyzer pages; the frontmatter title stays as the H1 and breadcrumb
+    transformPageData(pageData) {
+        const seoTitle = analyzerSeoTitle(pageData.relativePath, pageData.frontmatter)
+        if (seoTitle) {
+            pageData.title = seoTitle
+        }
+    },
+
     // Dynamic per-page OG/Twitter meta and JSON-LD structured data
     transformHead({ pageData }) {
         const head: HeadConfig[] = []
         const title = pageData.frontmatter.title || pageData.title || 'ShieldCI Documentation'
+        const seoTitle = analyzerSeoTitle(pageData.relativePath, pageData.frontmatter) ?? title
         const description = pageData.frontmatter.description || 'Automated code analysis for Laravel applications — security, performance, reliability, best practices, and code quality.'
         const relativePath = pageData.relativePath.replace(/\.md$/, '').replace(/index$/, '')
         const pageUrl = `${siteUrl}/${relativePath}`
@@ -91,7 +101,7 @@ export default defineConfig({
         }
 
         // OG meta tags
-        head.push(['meta', { property: 'og:title', content: title }])
+        head.push(['meta', { property: 'og:title', content: seoTitle }])
         head.push(['meta', { property: 'og:description', content: description }])
         const isHomepage = relativePath === '' || relativePath === 'index'
         head.push(['meta', { property: 'og:type', content: isHomepage ? 'website' : 'article' }])
@@ -104,7 +114,7 @@ export default defineConfig({
         // Twitter card meta tags
         head.push(['meta', { name: 'twitter:card', content: 'summary_large_image' }])
         head.push(['meta', { name: 'twitter:site', content: '@shieldci' }])
-        head.push(['meta', { name: 'twitter:title', content: title }])
+        head.push(['meta', { name: 'twitter:title', content: seoTitle }])
         head.push(['meta', { name: 'twitter:description', content: description }])
         head.push(['meta', { name: 'twitter:image', content: `${siteUrl}/og-image.png` }])
 
@@ -141,7 +151,7 @@ export default defineConfig({
             const techArticleSchema = {
                 '@context': 'https://schema.org',
                 '@type': 'TechArticle',
-                headline: title,
+                headline: seoTitle,
                 description: description,
                 url: pageUrl,
                 author: {

@@ -1,5 +1,6 @@
 ---
 title: Eloquent N+1 Query Analyzer
+seoTopic: Eloquent N+1 Queries
 description: Identifies missing eager loading that causes N+1 query performance problems, ensuring efficient database access patterns
 icon: zap
 outline: [2, 3]

@@ -1,5 +1,6 @@
 ---
 title: Environment Example Documentation Analyzer
+seoTopic: Undocumented .env.example Keys
 description: Ensures all environment variables used in .env and read by config files are documented in .env.example for proper team onboarding and deployment
 icon: book-open
 outline: [2, 3]

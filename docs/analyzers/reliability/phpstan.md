@@ -1,5 +1,6 @@
 ---
 title: PHPStan Static Analyzer
+seoTopic: PHPStan Static Analysis
 description: Comprehensive static analysis detecting 13 categories of type errors, undefined references, and code quality issues
 icon: shield-check
 outline: [2, 3]

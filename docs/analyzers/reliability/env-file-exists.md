@@ -1,5 +1,6 @@
 ---
 title: Environment File Existence Analyzer
+seoTopic: Missing or Empty .env File
 description: Ensures .env file exists and is properly configured for Laravel to load application configuration
 icon: file-cog
 outline: [2, 3]
