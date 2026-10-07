@@ -1,7 +1,7 @@
 ---
 title: PHPStan Static Analyzer
 seoTopic: PHPStan Static Analysis
-description: Comprehensive static analysis detecting 13 categories of type errors, undefined references, and code quality issues
+description: Comprehensive static analysis detecting 16 categories of type errors, undefined references, and code quality issues
 icon: shield-check
 outline: [2, 3]
 tags: phpstan,static-analysis,type-safety,reliability,code-quality
@@ -15,11 +15,12 @@ tags: phpstan,static-analysis,type-safety,reliability,code-quality
 
 ## What This Checks
 
-The PHPStan analyzer is a **consolidated analyzer**. It runs PHPStan once and categorizes issues into 13 distinct categories:
+The PHPStan analyzer is a **consolidated analyzer**. It runs PHPStan once and categorizes issues into 16 distinct categories:
 
+- **Compile Errors** - Syntax errors, colliding `use` imports, and methods, properties, constants, enum cases or parameters declared twice, all of which PHP refuses to load
 - **Dead Code** - Unreachable statements, unused variables, and code with no effect
 - **Deprecated Code** - Usage of deprecated methods, classes, and functions
-- **Foreach Iterable** - Invalid foreach usage with non-iterable values
+- **Foreach Iterable Issues** - Invalid foreach usage with non-iterable values
 - **Invalid Function Calls** - Calls to undefined or incorrectly parameterized functions
 - **Invalid Imports** - Invalid use statements for non-existent classes
 - **Invalid Method Calls** - Calls to undefined or incorrectly parameterized methods
@@ -30,6 +31,8 @@ The PHPStan analyzer is a **consolidated analyzer**. It runs PHPStan once and ca
 - **Missing Return Statements** - Methods with missing return statements
 - **Undefined Constants** - References to undefined constants
 - **Undefined Variables** - References to undefined variables
+- **Used Void Results** - Using the result of a void function, method, closure, `match` or `yield`, which is always null
+- **Other PHPStan Issues** - PHPStan errors that no specific category claims
 
 Each issue is automatically categorized and reported with category-specific recommendations.
 
@@ -37,7 +40,7 @@ Each issue is automatically categorized and reported with category-specific reco
 
 - **Type safety** - Catches type errors before they cause runtime failures
 - **Early detection** - Finds bugs during development, not in production
-- **Comprehensive coverage** - Detects 13 categories of reliability issues in one analyzer
+- **Comprehensive coverage** - Detects 16 categories of reliability issues in one analyzer
 - **Cleaner codebase** - Removes dead code and unused variables
 - **Better maintainability** - Ensures deprecated code is updated
 - **Laravel-specific** - Detects issues with Eloquent relations and Laravel patterns
@@ -71,7 +74,31 @@ public function process()
 
 ### Proper Fix (120 minutes)
 
-1. **Configure PHPStan level** - Publish the config:
+1. **Fix compile errors first** - When PHPStan cannot process a file, it stops there and drops every other finding in the project. A syntax error does this, and so can two `use` imports that claim the same name. The result names the file and line, after any findings that were reported:
+
+```
+PHPStan stopped at file(s) it could not process, so the rest of the project was not analysed: app/Services/InvoiceService.php:12
+```
+
+That error is reported as Critical whatever its category, so the run fails the build. Fix the file, then rerun the analyzer to see the findings for the rest of the project:
+
+```php
+// ❌ Before: a missing semicolon is a syntax error, so PHPStan cannot parse the file
+public function total(): int
+{
+    return $this->lines->sum('amount')
+}
+
+// ✅ After
+public function total(): int
+{
+    return $this->lines->sum('amount');
+}
+```
+
+Other compile errors, such as a method declared twice, are also reported under Compile Errors at Critical, but PHPStan still analyses the rest of the project.
+
+2. **Configure PHPStan level** - Publish the config:
 ```bash
 php artisan vendor:publish --tag=shieldci-config
 ```
@@ -90,6 +117,7 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
             // 'paths' => ['app', 'routes'],
 
             'categories' => [
+                'compile-errors',
                 'dead-code',
                 'deprecated-code',
                 'foreach-iterable',
@@ -103,6 +131,8 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
                 'missing-return-statement',
                 'undefined-constant',
                 'undefined-variable',
+                'used-void-result',
+                'other',
             ],
             'disabled_categories' => [
                 // Optionally disable specific categories
@@ -112,7 +142,7 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
 ],
 ```
 
-2. **Fix issues by category** - Address high-severity issues first:
+3. **Fix issues by category** - Address high-severity issues first:
 
 ```php
 // Invalid Method Call
@@ -150,9 +180,16 @@ if ($condition) {
     $value = 'something';
 }
 return $value;
+
+// Used Void Result
+// ❌ Before
+$sent = $mailer->send($message); // send() returns void, so $sent is always null
+
+// ✅ After
+$mailer->send($message);
 ```
 
-3. **Enable/disable categories** - Focus on specific issue types:
+4. **Enable/disable categories** - Focus on specific issue types:
 
 ```php
 // Disable less critical categories temporarily
@@ -161,7 +198,7 @@ return $value;
 ],
 ```
 
-4. **Adjust PHPStan level** - Increase strictness over time:
+5. **Adjust PHPStan level** - Increase strictness over time:
 
 ```php
 // Start with level 5 (balanced)
@@ -188,6 +225,7 @@ You can enable/disable specific categories:
 
 ```php
 'categories' => [
+    'compile-errors',         // Critical severity
     'dead-code',              // Medium severity
     'deprecated-code',        // High severity
     'foreach-iterable',       // High severity
@@ -201,8 +239,12 @@ You can enable/disable specific categories:
     'missing-return-statement', // High severity
     'undefined-constant',     // High severity
     'undefined-variable',     // High severity
+    'used-void-result',       // High severity
+    'other',                  // Medium severity
 ],
 ```
+
+`compile-errors`, `used-void-result` and `other` stay on even when you pin a `categories` list that leaves them out. Only `disabled_categories` turns them off.
 
 ### Disable Specific Categories
 

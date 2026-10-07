@@ -25,6 +25,8 @@ Uses **PHPStan/Larastan** to detect inefficient collection operations that shoul
 
 **Detection Method:** Leverages Larastan's built-in `noUnnecessaryCollectionCall` rule for accurate detection.
 
+If PHPStan stops at a file it cannot process, the analyzer reports an error naming that file rather than a pass, because the rest of the project went unanalysed.
+
 ## Why It Matters
 
 - **Database Performance:** Loading entire result sets into memory when you only need aggregates wastes database resources
