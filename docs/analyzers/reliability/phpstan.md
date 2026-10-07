@@ -74,7 +74,7 @@ public function process()
 
 ### Proper Fix (120 minutes)
 
-1. **Fix compile errors first** - When PHPStan cannot process a file, such as one with a syntax error, it stops there and drops every other finding in the project. The result names the file and line, after any findings that were reported:
+1. **Fix compile errors first** - When PHPStan cannot process a file, it stops there and drops every other finding in the project. A syntax error does this, and so can two `use` imports that claim the same name. The result names the file and line, after any findings that were reported:
 
 ```
 PHPStan stopped at file(s) it could not process, so the rest of the project was not analysed: app/Services/InvoiceService.php:12
