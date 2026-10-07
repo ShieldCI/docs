@@ -1,5 +1,6 @@
 ---
 title: HTTP/2 Support Analyzer
+seoTopic: HTTP/2 Not Enabled
 description: Verifies that HTTP/2 protocol is enabled for your Laravel application, enabling request multiplexing and header compression for improved page load performance
 icon: zap
 outline: [2, 3]

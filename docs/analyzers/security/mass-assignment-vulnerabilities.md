@@ -1,5 +1,6 @@
 ---
 title: Mass Assignment Vulnerabilities Analyzer
+seoTopic: Mass Assignment
 description: Detects mass assignment vulnerabilities where user input can modify unintended Eloquent model fields, bypassing $fillable protection and leaking sensitive data
 icon: shield-alert
 outline: [2, 3]

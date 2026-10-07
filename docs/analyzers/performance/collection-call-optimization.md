@@ -1,5 +1,6 @@
 ---
 title: Collection Call Optimization Analyzer
+seoTopic: Unneeded Collection Calls
 description: Detects inefficient collection operations that could be optimized for better performance
 icon: zap
 outline: [2, 3]

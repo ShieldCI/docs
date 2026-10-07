@@ -1,5 +1,6 @@
 ---
 title: PHP-Side Collection Filtering Analyzer
+seoTopic: Filtering in PHP, Not SQL
 description: Detects filter(), reject(), whereIn(), and whereNotIn() usage after database fetch - patterns not covered by Larastan that cause memory issues on large datasets
 icon: shield-alert
 outline: [2, 3]

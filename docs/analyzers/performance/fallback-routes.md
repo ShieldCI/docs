@@ -1,5 +1,6 @@
 ---
 title: Fallback Routes SEO Analyzer
+seoTopic: Fallback Route Soft 404s
 description: Detects fallback routes that silently swallow unmatched URLs, causing soft 404 issues that confuse users and hurt search engine crawl efficiency
 icon: route
 outline: [2, 3]

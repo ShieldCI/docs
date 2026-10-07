@@ -1,5 +1,6 @@
 ---
 title: Missing Database Transactions Analyzer
+seoTopic: Missing DB Transactions
 description: Detects multiple database write operations without transaction protection, ensuring ACID compliance and data integrity
 icon: database
 outline: [2, 3]

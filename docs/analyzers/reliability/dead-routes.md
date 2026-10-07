@@ -1,5 +1,6 @@
 ---
 title: Dead Route Analyzer
+seoTopic: Dead Routes
 description: Detects routes pointing to non-existent or renamed controllers and actions, preventing runtime 500 errors that only surface in production
 icon: link-2
 outline: [2, 3]

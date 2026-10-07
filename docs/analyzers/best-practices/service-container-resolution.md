@@ -1,5 +1,6 @@
 ---
 title: Service Container Resolution Analyzer
+seoTopic: Service Locator Usage
 description: Detects manual service container resolution (Service Locator anti-pattern) and recommends constructor dependency injection for testability and maintainability
 icon: shield-alert
 outline: [2, 3]

@@ -1,5 +1,6 @@
 ---
 title: Frontend Vulnerable Dependencies Analyzer
+seoTopic: Vulnerable npm Packages
 description: Scans npm and yarn dependencies for known security vulnerabilities using npm audit and yarn audit
 icon: shield-alert
 outline: [2, 3]

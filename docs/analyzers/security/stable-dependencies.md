@@ -1,5 +1,6 @@
 ---
 title: Stable Dependencies Analyzer
+seoTopic: Unstable Composer Packages
 description: Ensures composer.json enforces stable dependencies and scans for unstable package constraints
 icon: package
 outline: [2, 3]

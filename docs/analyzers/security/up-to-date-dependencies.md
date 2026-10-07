@@ -1,5 +1,6 @@
 ---
 title: Up-to-Date Dependencies Analyzer
+seoTopic: Outdated Composer Packages
 description: Detects pending dependency updates within declared version constraints using composer install --dry-run
 icon: package
 outline: [2, 3]

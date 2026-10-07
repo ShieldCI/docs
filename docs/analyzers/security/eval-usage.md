@@ -1,5 +1,6 @@
 ---
 title: Eval Usage Analyzer
+seoTopic: eval() Code Execution
 description: Detects usage of eval() and other dynamic code execution functions that allow arbitrary PHP code execution
 icon: code
 outline: [2, 3]

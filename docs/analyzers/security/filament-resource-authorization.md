@@ -1,5 +1,6 @@
 ---
 title: Filament Resource Authorization Analyzer
+seoTopic: Filament Resource Policies
 description: Validates that Filament resources have proper policy bindings for authorization on CRUD operations
 icon: lock
 outline: [2, 3]

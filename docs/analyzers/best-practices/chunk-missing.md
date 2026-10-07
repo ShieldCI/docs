@@ -1,5 +1,6 @@
 ---
 title: Missing Chunk Analyzer
+seoTopic: Unchunked Large Queries
 description: Detects queries on large datasets without chunk() or cursor() for memory efficiency, preventing out-of-memory errors
 icon: database
 outline: [2, 3]

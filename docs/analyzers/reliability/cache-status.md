@@ -1,5 +1,6 @@
 ---
 title: Cache Status Analyzer
+seoTopic: Cache Store Failures
 description: Verifies your configured cache driver can write, read, and delete entries without errors, catching misconfigurations before they cause runtime failures
 icon: database
 outline: [2, 3]

@@ -1,5 +1,6 @@
 ---
 title: Dependency License Compliance Analyzer
+seoTopic: Package License Compliance
 description: Validates that all dependencies use legally acceptable licenses for your application type
 icon: file-text
 outline: [2, 3]

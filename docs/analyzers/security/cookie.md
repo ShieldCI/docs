@@ -1,5 +1,6 @@
 ---
 title: Cookie Analyzer
+seoTopic: Cookie Security
 description: Validates that Laravel's cookie security configuration properly protects against XSS, CSRF, and man-in-the-middle attacks
 icon: lock
 outline: [2, 3]

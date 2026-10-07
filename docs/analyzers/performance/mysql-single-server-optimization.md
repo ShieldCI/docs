@@ -1,5 +1,6 @@
 ---
 title: MySQL Single Server Optimization Analyzer
+seoTopic: MySQL Read/Write Split
 description: Detects MySQL read/write configuration on single server, suggesting optimization opportunities
 icon: zap
 outline: [2, 3]

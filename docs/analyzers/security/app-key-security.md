@@ -1,5 +1,6 @@
 ---
 title: Application Key Analyzer
+seoTopic: APP_KEY Security
 description: Validates that Laravel's APP_KEY encryption key is properly configured and secure in your .env file
 icon: lock
 outline: [2, 3]

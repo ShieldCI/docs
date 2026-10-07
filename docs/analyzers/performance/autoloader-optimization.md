@@ -1,5 +1,6 @@
 ---
 title: Composer Autoloader Optimization Analyzer
+seoTopic: Unoptimized Autoloader
 description: Validates that Composer's autoloader is optimized for production performance by checking for classmap optimization
 icon: zap
 outline: [2, 3]

@@ -1,5 +1,6 @@
 ---
 title: Lazy Collection Opportunity Analyzer
+seoTopic: Full-Table Memory Loads
 description: Detects large collection operations that could benefit from lazy loading to reduce memory usage
 icon: zap
 outline: [2, 3]

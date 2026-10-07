@@ -1,5 +1,6 @@
 ---
 title: Dev Dependencies in Production Analyzer
+seoTopic: Dev Packages in Production
 description: Ensures development-only Composer dependencies are not installed in production, reducing attack surface and keeping the production footprint minimal
 icon: alert-circle
 outline: [2, 3]

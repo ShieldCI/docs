@@ -1,5 +1,6 @@
 ---
 title: Horizon Suggestion Analyzer
+seoTopic: Horizon for Redis Queues
 description: Recommends Laravel Horizon for better queue monitoring and management when using Redis queues
 icon: zap
 outline: [2, 3]

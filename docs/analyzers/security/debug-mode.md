@@ -1,5 +1,6 @@
 ---
 title: Debug Mode Analyzer
+seoTopic: APP_DEBUG in Production
 description: Detects debug mode configurations and debugging functions that expose sensitive information in production environments
 icon: alert-triangle
 outline: [2, 3]

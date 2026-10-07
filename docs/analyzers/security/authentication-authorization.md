@@ -1,5 +1,6 @@
 ---
 title: Authentication & Authorization Analyzer
+seoTopic: Missing Auth Checks
 description: Detects missing authentication and authorization protection throughout your Laravel application
 icon: lock
 outline: [2, 3]
