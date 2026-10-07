@@ -1,5 +1,6 @@
 ---
 title: OPcache Enabled Analyzer
+seoTopic: OPcache Disabled or Misconfigured
 description: Validates that PHP's OPcache extension is installed, enabled, and properly configured for production performance
 icon: zap
 outline: [2, 3]

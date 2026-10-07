@@ -1,5 +1,6 @@
 ---
 title: Test Coverage Analyzer
+seoTopic: Missing Test Coverage
 description: Checks that critical application modules have corresponding test files for adequate code coverage
 icon: code
 outline: [2, 3]

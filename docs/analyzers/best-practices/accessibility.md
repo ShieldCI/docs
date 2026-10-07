@@ -1,5 +1,6 @@
 ---
 title: Accessibility Analyzer
+seoTopic: Blade Accessibility Issues
 description: Validates that Blade templates follow basic accessibility best practices for inclusive web applications
 icon: check-circle
 outline: [2, 3]
