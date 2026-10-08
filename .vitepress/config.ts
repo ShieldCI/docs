@@ -52,9 +52,8 @@ export default defineConfig({
         ['meta', { name: 'author', content: 'ShieldCI' }],
         ['meta', { name: 'apple-mobile-web-app-capable', content: 'yes' }],
         ['meta', { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }],
-        ['link', { rel: 'preconnect', href: 'https://fonts.googleapis.com' }],
-        ['link', { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' }],
-        ['link', { href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap', rel: 'stylesheet' }],
+        // Enables the scroll-reveal hidden state only when JS runs (see theme/style/index.css)
+        ['script', {}, `document.documentElement.classList.add('js-reveal')`],
         // Google Analytics (conditional — disabled when GA_MEASUREMENT_ID is unset)
         ...(gaMeasurementId ? [
             ['script', { async: '', src: `https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}` }],
@@ -90,26 +89,31 @@ export default defineConfig({
             head.push(['meta', { name: 'keywords', content: pageData.frontmatter.tags }])
         }
 
-        // Article date metadata — frontmatter.date takes priority; fall back to git lastUpdated
-        const publishedDate = pageData.frontmatter.date
-            ?? (pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : null)
-        if (publishedDate) {
-            head.push(['meta', { property: 'article:published_time', content: publishedDate }])
-        }
-        if (pageData.lastUpdated) {
-            head.push(['meta', { property: 'article:modified_time', content: new Date(pageData.lastUpdated).toISOString() }])
+        const isHomepage = relativePath === '' || relativePath === 'index'
+
+        // Article date metadata — frontmatter.date takes priority; fall back to git lastUpdated.
+        // Skipped on the homepage, which is og:type=website rather than an article.
+        if (!isHomepage) {
+            const publishedDate = pageData.frontmatter.date
+                ?? (pageData.lastUpdated ? new Date(pageData.lastUpdated).toISOString() : null)
+            if (publishedDate) {
+                head.push(['meta', { property: 'article:published_time', content: publishedDate }])
+            }
+            if (pageData.lastUpdated) {
+                head.push(['meta', { property: 'article:modified_time', content: new Date(pageData.lastUpdated).toISOString() }])
+            }
         }
 
         // OG meta tags
         head.push(['meta', { property: 'og:title', content: seoTitle }])
         head.push(['meta', { property: 'og:description', content: description }])
-        const isHomepage = relativePath === '' || relativePath === 'index'
         head.push(['meta', { property: 'og:type', content: isHomepage ? 'website' : 'article' }])
         head.push(['meta', { property: 'og:site_name', content: 'ShieldCI' }])
         head.push(['meta', { property: 'og:url', content: pageUrl }])
         head.push(['meta', { property: 'og:image', content: `${siteUrl}/og-image.png` }])
         head.push(['meta', { property: 'og:image:width', content: '1200' }])
         head.push(['meta', { property: 'og:image:height', content: '630' }])
+        head.push(['meta', { property: 'og:image:alt', content: 'ShieldCI — automated code analysis for Laravel applications' }])
 
         // Twitter card meta tags
         head.push(['meta', { name: 'twitter:card', content: 'summary_large_image' }])
@@ -117,6 +121,7 @@ export default defineConfig({
         head.push(['meta', { name: 'twitter:title', content: seoTitle }])
         head.push(['meta', { name: 'twitter:description', content: description }])
         head.push(['meta', { name: 'twitter:image', content: `${siteUrl}/og-image.png` }])
+        head.push(['meta', { name: 'twitter:image:alt', content: 'ShieldCI — automated code analysis for Laravel applications' }])
 
         // Build breadcrumb items for JSON-LD
         const pathSegments = relativePath.split('/').filter(Boolean)
@@ -168,20 +173,47 @@ export default defineConfig({
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(techArticleSchema)])
         }
 
-        // Organization JSON-LD (homepage only)
-        if (relativePath === '' || relativePath === 'index') {
+        // Organization, WebSite and SoftwareApplication JSON-LD (homepage only)
+        if (isHomepage) {
             const orgSchema = {
                 '@context': 'https://schema.org',
                 '@type': 'Organization',
                 name: 'ShieldCI',
                 url: 'https://shieldci.com',
-                logo: `${siteUrl}/logo.svg`,
+                // Square raster: Google crops the logo to a square and wants at least 112x112
+                logo: `${siteUrl}/icon-square.png`,
                 sameAs: [
                     'https://github.com/shieldci/laravel',
                     'https://discord.gg/JtYHEAS2aK'
                 ]
             }
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(orgSchema)])
+
+            // Drives the site name Google shows in search results
+            const websiteSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                name: 'ShieldCI',
+                url: `${siteUrl}/`
+            }
+            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(websiteSchema)])
+
+            const softwareSchema = {
+                '@context': 'https://schema.org',
+                '@type': 'SoftwareApplication',
+                name: 'ShieldCI',
+                description: description,
+                url: 'https://shieldci.com',
+                applicationCategory: 'DeveloperApplication',
+                operatingSystem: 'Cross-platform',
+                offers: {
+                    '@type': 'Offer',
+                    price: '0',
+                    priceCurrency: 'USD',
+                    url: 'https://packagist.org/packages/shieldci/laravel'
+                }
+            }
+            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(softwareSchema)])
         }
 
         return head
