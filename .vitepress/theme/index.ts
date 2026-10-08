@@ -2,6 +2,8 @@ import { h, watch, onMounted, nextTick } from 'vue'
 import Theme from 'vitepress/theme'
 import type { EnhanceAppContext } from 'vitepress'
 import { useRoute } from 'vitepress'
+// Self-hosted code font (Inter is already bundled by the default theme)
+import '@fontsource-variable/jetbrains-mono'
 import './style/index.css'
 
 import AnalyzerCard from './components/AnalyzerCard.vue'
