@@ -173,7 +173,7 @@ export default defineConfig({
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(techArticleSchema)])
         }
 
-        // Organization, WebSite and SoftwareApplication JSON-LD (homepage only)
+        // Organization and WebSite JSON-LD (homepage only)
         if (isHomepage) {
             const orgSchema = {
                 '@context': 'https://schema.org',
@@ -197,23 +197,6 @@ export default defineConfig({
                 url: `${siteUrl}/`
             }
             head.push(['script', { type: 'application/ld+json' }, JSON.stringify(websiteSchema)])
-
-            const softwareSchema = {
-                '@context': 'https://schema.org',
-                '@type': 'SoftwareApplication',
-                name: 'ShieldCI',
-                description: description,
-                url: 'https://shieldci.com',
-                applicationCategory: 'DeveloperApplication',
-                operatingSystem: 'Cross-platform',
-                offers: {
-                    '@type': 'Offer',
-                    price: '0',
-                    priceCurrency: 'USD',
-                    url: 'https://packagist.org/packages/shieldci/laravel'
-                }
-            }
-            head.push(['script', { type: 'application/ld+json' }, JSON.stringify(softwareSchema)])
         }
 
         return head
