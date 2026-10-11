@@ -41,7 +41,11 @@ composer require sentry/sentry-laravel
 composer require rollbar/rollbar-laravel
 # or
 composer require bugsnag/bugsnag-laravel
+# or
+composer require laravel/nightwatch
 ```
+
+The package must be a production dependency: one installed with `composer require --dev` is absent from a `--no-dev` deploy and does not count. Nightwatch also does not count when `config/nightwatch.php` sets `'enabled' => false`.
 
 Alternatively, add a Slack log channel for immediate alerts:
 
@@ -111,7 +115,7 @@ public function boot(): void
 }
 ```
 
-An installed error-tracking package (Sentry, Bugsnag, or Flare) also satisfies the failed-job check: when a job exhausts its retries, the worker reports the exception through the framework's exception handling, which these SDKs hook to capture and alert on the failure. A job `failed()` method that forwards the exception with `report($exception)` is credited for the same reason.
+An installed error-tracking package (Sentry, Bugsnag, Flare, or Nightwatch) also satisfies the failed-job check: when a job exhausts its retries, the worker reports the exception through the framework's exception handling, which these SDKs hook to capture and alert on the failure. A job `failed()` method that forwards the exception with `report($exception)` is credited for the same reason.
 
 ## References
 
