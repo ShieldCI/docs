@@ -3,7 +3,7 @@ title: Missing Error Tracking Analyzer
 description: Detects applications without error tracking services or custom error monitoring, ensuring production errors are properly captured and reported
 icon: bug-play
 outline: [2, 3]
-tags: laravel,monitoring,production,error-tracking,observability,sentry,bugsnag,cloudwatch
+tags: laravel,monitoring,production,error-tracking,observability,nightwatch,sentry,bugsnag,cloudwatch
 ---
 
 # Missing Error Tracking Analyzer
@@ -16,10 +16,10 @@ tags: laravel,monitoring,production,error-tracking,observability,sentry,bugsnag,
 
 Detects applications without error tracking services or custom error monitoring. Checks for:
 
-- **Popular Error Tracking Packages**: Sentry, Bugsnag, Rollbar, Airbrake, Honeybadger
+- **Popular Error Tracking Packages**: Nightwatch, Sentry, Bugsnag, Rollbar, Airbrake, Honeybadger, Flare, Inspector, installed as production dependencies (not `require-dev`)
 - **Custom Error Tracking**: CloudWatch, Datadog, New Relic implementations in `app/Exceptions/Handler.php` (Laravel ≤10) or `bootstrap/app.php` (Laravel 11+)
 - **Logging Configurations**: Papertrail, Logtail, LogEntries in `config/logging.php`
-- **Complex Custom Implementations**: Custom `report()` methods with >10 lines of logic
+- **Disabled Nightwatch**: `'enabled' => false`, `NIGHTWATCH_ENABLED=false` or an empty `NIGHTWATCH_TOKEN` does not count
 
 ## Why It Matters
 
@@ -39,7 +39,20 @@ Without error tracking, production issues go unnoticed until users complain:
 
 Install a popular error tracking service via Composer:
 
-**Sentry (Recommended)**
+**Laravel Nightwatch (Recommended)**
+```bash
+composer require laravel/nightwatch
+
+# Add to .env
+echo "NIGHTWATCH_TOKEN=your-token" >> .env
+
+# Run the agent
+php artisan nightwatch:agent
+```
+
+Nightwatch requires Laravel 10+ and PHP 8.2+.
+
+**Sentry**
 ```bash
 composer require sentry/sentry-laravel
 
@@ -48,17 +61,6 @@ php artisan sentry:publish
 
 # Add to .env
 echo "SENTRY_LARAVEL_DSN=your-dsn-here" >> .env
-```
-
-**Bugsnag**
-```bash
-composer require bugsnag/bugsnag-laravel
-
-# Publish config
-php artisan vendor:publish --provider="Bugsnag\BugsnagLaravel\BugsnagServiceProvider"
-
-# Add to .env
-echo "BUGSNAG_API_KEY=your-api-key" >> .env
 ```
 
 **Rollbar**
@@ -74,118 +76,35 @@ echo "ROLLBAR_ACCESS_TOKEN=your-token" >> .env
 
 ### Proper Fix (30 minutes)
 
-Implement comprehensive error tracking with context enrichment:
+Implement comprehensive error tracking:
 
-**1. Install and Configure Sentry (Most Popular)**
+**1. Install and Configure Laravel Nightwatch (Most Popular)**
 
 ```bash
 # Install package
-composer require sentry/sentry-laravel
-
-# Publish configuration
-php artisan sentry:publish
+composer require laravel/nightwatch
 
 # Configure environment
 cat >> .env << 'EOF'
-SENTRY_LARAVEL_DSN=https://your-dsn@sentry.io/project-id
-SENTRY_TRACES_SAMPLE_RATE=0.2
-SENTRY_ENVIRONMENT=production
+NIGHTWATCH_TOKEN=your-token
+NIGHTWATCH_REQUEST_SAMPLE_RATE=0.1
+NIGHTWATCH_EXCEPTION_SAMPLE_RATE=1.0
 EOF
+
+# Keep the agent running, for example under Supervisor
+php artisan nightwatch:agent
 ```
 
-**2. Enrich Error Context**
+**2. Configure Release Tracking**
 
-::: code-group
-```php [Laravel 11+]
-// bootstrap/app.php
-use Sentry\State\Scope;
-
-return Application::configure(basePath: dirname(__DIR__))
-    ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->reportable(function (Throwable $e) {
-            if (app()->bound('sentry')) {
-                \Sentry\configureScope(function (Scope $scope) {
-                    $scope->setUser([
-                        'id' => auth()->id(),
-                        'email' => auth()->user()?->email,
-                        'username' => auth()->user()?->name,
-                    ]);
-
-                    $scope->setTag('environment', app()->environment());
-                    $scope->setTag('php_version', PHP_VERSION);
-                    $scope->setTag('laravel_version', app()->version());
-
-                    $scope->setContext('request', [
-                        'url' => request()->url(),
-                        'method' => request()->method(),
-                        'ip' => request()->ip(),
-                    ]);
-                });
-            }
-        });
-    })
+```bash
+# .env: identify which deployment introduced an error
+NIGHTWATCH_DEPLOY=v1.4.2
 ```
 
-```php [Laravel 9–10]
-// app/Exceptions/Handler.php
-use Sentry\State\Scope;
+Laravel Cloud, Forge and Vapor deployments set this automatically.
 
-public function register()
-{
-    $this->reportable(function (Throwable $e) {
-        if (app()->bound('sentry')) {
-            \Sentry\configureScope(function (Scope $scope) {
-                // Add user context
-                $scope->setUser([
-                    'id' => auth()->id(),
-                    'email' => auth()->user()?->email,
-                    'username' => auth()->user()?->name,
-                ]);
-
-                // Add environment tags
-                $scope->setTag('environment', app()->environment());
-                $scope->setTag('php_version', PHP_VERSION);
-                $scope->setTag('laravel_version', app()->version());
-
-                // Add custom context
-                $scope->setContext('request', [
-                    'url' => request()->url(),
-                    'method' => request()->method(),
-                    'ip' => request()->ip(),
-                ]);
-            });
-        }
-    });
-}
-```
-:::
-
-**3. Configure Release Tracking**
-
-```php
-// config/sentry.php
-return [
-    'dsn' => env('SENTRY_LARAVEL_DSN'),
-
-    // Track releases to identify which deployment introduced bugs
-    'release' => env('APP_VERSION', exec('git log --pretty="%h" -n1 HEAD')),
-
-    // Set environment
-    'environment' => env('SENTRY_ENVIRONMENT', env('APP_ENV')),
-
-    // Sample rate (0.0 to 1.0)
-    'traces_sample_rate' => (float) env('SENTRY_TRACES_SAMPLE_RATE', 0.2),
-
-    // Ignore common exceptions
-    'ignore_exceptions' => [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Validation\ValidationException::class,
-        \Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class,
-    ],
-];
-```
-
-**4. Custom Error Tracking with CloudWatch**
+**3. Custom Error Tracking with CloudWatch**
 
 If you prefer AWS CloudWatch or already have APM:
 
@@ -252,7 +171,7 @@ public function report(Throwable $exception)
 ```
 :::
 
-**5. Datadog via Logging Config**
+**4. Datadog via Logging Config**
 
 ```php
 // config/logging.php
@@ -286,13 +205,13 @@ return [
 ];
 ```
 
-**6. Test Your Error Tracking**
+**5. Test Your Error Tracking**
 
 ```php
 // Create a test route to verify error tracking works
 Route::get('/test-error-tracking', function () {
     if (!app()->environment('production')) {
-        throw new \Exception('Testing error tracking - this should appear in Sentry/CloudWatch/Datadog');
+        throw new \Exception('Testing error tracking - this should appear in Nightwatch/CloudWatch/Datadog');
     }
     abort(403, 'Only available in non-production');
 });
@@ -302,7 +221,7 @@ php artisan tinker
 >>> throw new \Exception('Test error tracking');
 ```
 
-**7. Set Up Alerts**
+**6. Set Up Alerts**
 
 Configure your error tracking service to send alerts:
 
@@ -311,7 +230,7 @@ Configure your error tracking service to send alerts:
 - **PagerDuty**: For on-call rotations
 - **Threshold Alerts**: Alert when error rate exceeds threshold
 
-**8. Customize Known Packages:**
+**7. Customize Known Packages:**
 
 To customize the list of detected error tracking packages, publish the config:
 ```bash
@@ -364,6 +283,7 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 ## References
 
+- [Laravel Nightwatch Documentation](https://nightwatch.laravel.com/docs)
 - [Sentry Laravel Documentation](https://docs.sentry.io/platforms/php/guides/laravel/)
 - [Bugsnag Laravel Documentation](https://docs.bugsnag.com/platforms/php/laravel/)
 - [AWS CloudWatch Logs](https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/)
