@@ -16,6 +16,8 @@ tags: cache,assets,performance,headers,browser-cache
 
 Validates that proper HTTP cache headers are configured for static assets and responses.
 
+Compiled Vite and Mix assets are requested from the origin that serves them: `ASSET_URL` for Vite and `MIX_URL` for Mix, falling back to `APP_URL`. Only a 2xx response is graded. When an asset cannot be checked (connection failure, non-2xx response or redirect), the analyzer reports a warning naming the reason instead of a failure.
+
 ## Why It Matters
 
 - **Performance Impact:** Browser caching reduces server load and bandwidth
@@ -79,7 +81,7 @@ The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to
 
 **Laravel Cloud:** This analyzer is automatically skipped on Laravel Cloud (asset cache headers are managed by the platform and cannot be configured by the application).
 
-**Laravel Vapor / serverless:** This analyzer is automatically skipped on Vapor and other serverless runtimes. Vapor serves compiled assets from a CDN (via `ASSET_URL`/CloudFront) with platform-managed cache headers rather than from `APP_URL`, so probing `APP_URL` cannot verify the real asset and there is no application-level fix to apply.
+**Laravel Vapor / serverless:** This analyzer is automatically skipped on Vapor and other serverless runtimes. Vapor serves compiled assets from a CDN (via `ASSET_URL`/CloudFront) with platform-managed cache headers, so there is no application-level fix to apply.
 
 ## References
 
