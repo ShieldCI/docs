@@ -111,7 +111,7 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
         'enabled' => true,
 
         'phpstan' => [
-            'level' => 5, // 0-9, higher is stricter
+            'level' => 5, // 0-10 (10 needs PHPStan 2), higher is stricter
 
             // Optional: Override global paths (uses 'paths.analyze' by default)
             // 'paths' => ['app', 'routes'],
@@ -205,7 +205,9 @@ $mailer->send($message);
 'level' => 5,
 
 // Gradually increase to 6, 7, 8 as you fix issues
-'level' => 8, // Maximum strictness
+'level' => 8, // Strict
+
+// 'level' => 10, // Maximum on PHPStan 2 (9 on PHPStan 1)
 ```
 
 **PHPStan Levels:**
@@ -213,7 +215,10 @@ $mailer->send($message);
 - **Level 0-2**: Very lenient, good for legacy code
 - **Level 3-5**: Balanced, recommended for most projects
 - **Level 6-8**: Strict, ideal for new projects
-- **Level 9**: Maximum (Larastan max), catches everything
+- **Level 9**: Strict about explicit `mixed` types; the maximum on PHPStan 1
+- **Level 10**: PHPStan 2 only; also strict about implicit `mixed` (missing types); the maximum on PHPStan 2
+
+The level must be an integer. PHPStan's `'max'` keyword is not accepted here and falls back to level 5.
 
 ## ShieldCI Configuration
 
