@@ -111,7 +111,7 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
         'enabled' => true,
 
         'phpstan' => [
-            'level' => 5, // 0-9, higher is stricter
+            'level' => 5, // 0-9 on PHPStan 1, 0-10 on PHPStan 2; higher is stricter
 
             // Optional: Override global paths (uses 'paths.analyze' by default)
             // 'paths' => ['app', 'routes'],
@@ -201,19 +201,28 @@ $mailer->send($message);
 5. **Adjust PHPStan level** - Increase strictness over time:
 
 ```php
-// Start with level 5 (balanced)
+// Start at 5 (balanced), then raise one level at a time as you fix issues:
+// 6 → 7 → 8 (strict) → 9 (maximum on PHPStan 1) → 10 (maximum on PHPStan 2)
 'level' => 5,
-
-// Gradually increase to 6, 7, 8 as you fix issues
-'level' => 8, // Maximum strictness
 ```
+
+Set `level` once. If the array contains the key more than once, PHP keeps only the last value.
 
 **PHPStan Levels:**
 
 - **Level 0-2**: Very lenient, good for legacy code
 - **Level 3-5**: Balanced, recommended for most projects
 - **Level 6-8**: Strict, ideal for new projects
-- **Level 9**: Maximum (Larastan max), catches everything
+- **Level 9**: Strict about explicit `mixed` types; the maximum on PHPStan 1
+- **Level 10**: PHPStan 2 only; also strict about implicit `mixed` (missing types); the maximum on PHPStan 2
+
+Level 10 requires PHPStan 2. On PHPStan 1, a level above 9 makes the analysis fail instead of returning findings. Check your installed version before going past 9:
+
+```bash
+vendor/bin/phpstan --version
+```
+
+The level must be an integer or a numeric string, so `env('SHIELDCI_PHPSTAN_LEVEL', 5)` works. A decimal is cut down to an integer (`8.9` becomes `8`). The analyzer does not check the range: a value outside your PHPStan version's range is passed to PHPStan as is, and the analysis fails. PHPStan's `'max'` keyword is not accepted here and falls back to level 5.
 
 ## ShieldCI Configuration
 
