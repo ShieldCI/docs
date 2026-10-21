@@ -16,9 +16,9 @@ tags: laravel,configuration,maintainability,testability,best-practices,environme
 
 Detects configuration values hardcoded directly in your code that should be externalized to config files. Checks:
 
-- **Environment-specific URLs**: Endpoints naming an environment in the host or path, or using a non-standard port (`https://api.staging.example.com`)
+- **Environment-specific URLs**: Endpoints naming an environment in the host or path, or using a non-standard port (`https://api.staging.myapp.com`)
 - **API keys and secrets**: Long alphanumeric strings that look like API keys, including prefixed formats (`sk_live_...`, `api_...`)
-- **Localhost URLs**: Development URLs that should be configured (`http://localhost`, `127.0.0.1`)
+- **Localhost URLs**: Development URLs that should be configured (`http://localhost`, `127.0.0.1`), including hosts on the reserved `.test`, `.localhost` and `.local` TLDs (`http://myapp.test`)
 - **Private IP addresses**: Internal network IPs (`192.168.x.x`, `10.x.x.x`, `172.16-31.x.x`)
 
 ## Why It Matters
