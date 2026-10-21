@@ -18,8 +18,8 @@ pro: true
 Validates that proper alerting mechanisms are in place to detect production issues. Checks for:
 
 - Exception notification handler (`report` / `reportable` callbacks with actual alerting)
-- Log alerting channel (Slack, syslog, papertrail, Monolog custom, or alerting packages)
-- Failed job notification (`Queue::failing` callback, job `failed()` methods, Laravel Horizon, or an installed error-tracking package)
+- Log alerting channel the default channel routes to (Slack, syslog, papertrail, Monolog custom, or alerting packages)
+- Failed job notification (`Queue::failing` callback, job `failed()` methods, or an installed error-tracking package)
 
 The exception check also follows alerting that has been delegated out of `Handler.php` / `bootstrap/app.php` into a dedicated class — it recursively scans `app/Exceptions/**` for the same alerting patterns, so extracting your reportable callback into a dedicated class still satisfies the check.
 
@@ -45,9 +45,9 @@ composer require bugsnag/bugsnag-laravel
 composer require laravel/nightwatch
 ```
 
-The package must be a production dependency: one installed with `composer require --dev` is absent from a `--no-dev` deploy and does not count. Nightwatch also does not count when `config/nightwatch.php` sets `'enabled' => false`.
+The package must be a production dependency: one installed with `composer require --dev` is absent from a `--no-dev` deploy and does not count. Nightwatch also does not count when `'enabled' => false`, `NIGHTWATCH_ENABLED=false` or an empty `NIGHTWATCH_TOKEN` switches it off.
 
-Alternatively, add a Slack log channel for immediate alerts:
+Alternatively, route your default log stack to Slack for immediate alerts (`LOG_STACK=single,slack` on Laravel 11+):
 
 ```php
 // config/logging.php
