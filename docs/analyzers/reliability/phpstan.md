@@ -111,7 +111,7 @@ Then start with level 5, increase gradually in `config/shieldci.php`:
         'enabled' => true,
 
         'phpstan' => [
-            'level' => 5, // 0-9 on PHPStan 1, 0-10 on PHPStan 2; higher is stricter
+            'level' => 5, // 0-9 on PHPStan 1, 0-10 on PHPStan 2, or 'max'; higher is stricter
 
             // Optional: Override global paths (uses 'paths.analyze' by default)
             // 'paths' => ['app', 'routes'],
@@ -216,13 +216,15 @@ Set `level` once. If the array contains the key more than once, PHP keeps only t
 - **Level 9**: Strict about explicit `mixed` types; the maximum on PHPStan 1
 - **Level 10**: PHPStan 2 only; also strict about implicit `mixed` (missing types); the maximum on PHPStan 2
 
-Level 10 requires PHPStan 2. On PHPStan 1, a level above 9 makes the analysis fail instead of returning findings. Check your installed version before going past 9:
+Level 10 requires PHPStan 2. Check your installed version before going past 9:
 
 ```bash
 vendor/bin/phpstan --version
 ```
 
-The level must be an integer or a numeric string, so `env('SHIELDCI_PHPSTAN_LEVEL', 5)` works. A decimal is cut down to an integer (`8.9` becomes `8`). The analyzer does not check the range: a value outside your PHPStan version's range is passed to PHPStan as is, and the analysis fails. PHPStan's `'max'` keyword is not accepted here and falls back to level 5.
+Set `'max'` to run the highest level your installed PHPStan has: 9 on PHPStan 1, 10 on PHPStan 2.
+
+The level must be a whole number or `'max'`. It can be written as an integer, a numeric string (`'8'` or `'8.0'`) or a float (`8.0`), so `env('SHIELDCI_PHPSTAN_LEVEL', 5)` works. The analyzer checks the level before PHPStan starts. A fraction (`8.9`), any other string, or a level outside your PHPStan version's range (such as 10 on PHPStan 1) ends the analysis with an error that names the installed version and the levels it accepts.
 
 ## ShieldCI Configuration
 
