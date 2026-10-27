@@ -20,7 +20,7 @@ This analyzer validates that your application sends the `X-Content-Type-Options:
 - **Missing header** - Checks if the `X-Content-Type-Options` header is present in HTTP responses
 - **Invalid value** - Verifies the header value is `nosniff` (the only valid value per spec)
 - **Duplicate headers** - Detects multiple `X-Content-Type-Options` headers that can cause inconsistent browser behavior
-- **Non-2xx response** - Warns when the header check is performed against an error response, as results may not reflect normal app behavior
+- **Non-2xx response** - Warns instead of checking the header when the guest route, after any same-host redirects, does not answer with a 2xx response
 
 ## Why It Matters
 
