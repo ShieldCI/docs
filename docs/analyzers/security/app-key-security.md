@@ -20,6 +20,7 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 - Missing or empty APP_KEY in `.env`
 - Placeholder/example values (e.g., "your-key-here")
 - Weak key formats (too short or improperly encoded)
+- Key size that does not match the cipher in `config/app.php` (16 bytes for AES-128, 32 bytes for AES-256)
 - Duplicate APP_KEY definitions in `.env`
 - Hardcoded keys in `config/app.php` (should use `env()`)
 - Insecure cipher algorithms
@@ -28,6 +29,7 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 
 - **Security Risk:** HIGH - The APP_KEY is used for all encryption in Laravel (sessions, cookies, encrypted data)
 - **Data Loss:** If APP_KEY changes, all encrypted data becomes permanently unreadable
+- **Availability:** Laravel's encrypter rejects a key that is not exactly the cipher's size, and the cookie encryption middleware resolves it on every request, so every web request fails
 - **Session Security:** Weak or default keys allow attackers to forge sessions and impersonate users
 - **CSRF Protection:** Laravel's CSRF tokens depend on APP_KEY for cryptographic signing
 
@@ -52,7 +54,18 @@ php artisan key:generate
 php artisan key:generate --force
 ```
 
-**Scenario 3: Configuration is Cached**
+**Scenario 3: Key Size Does Not Match the Cipher**
+
+```bash
+# key:generate writes a key sized for the cipher in config/app.php
+php artisan key:generate
+
+# If the cipher was changed after the key was generated, setting
+# 'cipher' in config/app.php back to the original keeps existing
+# encrypted data readable instead
+```
+
+**Scenario 4: Configuration is Cached**
 
 ```bash
 # Clear the cache to allow .env changes to take effect
@@ -139,7 +152,7 @@ foreach ($users as $user) {
 
 **5. Validate Key Format**
 
-Ensure your key matches Laravel's expected format:
+Ensure your key matches Laravel's expected format and the size of the cipher in `config/app.php`:
 
 ```php
 // Valid formats:
@@ -150,8 +163,10 @@ APP_KEY=base64:/AvmHMmBChdiKxwxReS4zWfHKXAfl0vsbJIf2fT3gHA=
 // Raw 32-character string (legacy, not recommended)
 APP_KEY=SomeRandomStringWith32Characters!
 
-// The base64 format should decode to at least 16 bytes (AES-128)
-// or 32 bytes (AES-256)
+// The key must be exactly the cipher's size (a base64 key is
+// measured after decoding):
+// 32 bytes for AES-256-CBC and AES-256-GCM (the default cipher)
+// 16 bytes for AES-128-CBC and AES-128-GCM
 ```
 
 **6. Production Deployment Checklist**
@@ -166,7 +181,8 @@ php artisan tinker
 
 # 2. Verify key length
 >>> strlen(base64_decode(substr(config('app.key'), 7)))
-// Should be 16 (AES-128) or 32 (AES-256)
+// Should be 32 for an AES-256 cipher or 16 for an AES-128 cipher,
+// matching config('app.cipher')
 
 # 3. Test encryption/decryption
 >>> encrypt('test')
