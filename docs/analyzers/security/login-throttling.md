@@ -66,7 +66,36 @@ Route::middleware(['throttle:5,1'])->group(function () {
 });
 ```
 
-**Scenario 3: Use Laravel UI Traits (Built-in Throttling)**
+**Scenario 3: Throttle the Middleware Group**
+
+::: code-group
+```php [Laravel 11+]
+// bootstrap/app.php
+
+use Illuminate\Routing\Middleware\ThrottleRequests;
+
+->withMiddleware(function (Middleware $middleware) {
+    // Named limiter, defined with RateLimiter::for('web', ...)
+    $middleware->web(append: [
+        ThrottleRequests::using('web'),
+    ]);
+})
+```
+
+```php [Laravel 9–10]
+// app/Http/Kernel.php
+
+protected $middlewareGroups = [
+    'web' => [
+        // ...
+        // Named limiter, defined with RateLimiter::for('web', ...)
+        \Illuminate\Routing\Middleware\ThrottleRequests::class.':web',
+    ],
+];
+```
+:::
+
+**Scenario 4: Use Laravel UI Traits (Built-in Throttling)**
 
 ```php
 // app/Http/Controllers/Auth/LoginController.php
