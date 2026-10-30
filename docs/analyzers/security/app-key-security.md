@@ -21,6 +21,7 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 - Placeholder/example values (e.g., "your-key-here")
 - Weak key formats (too short or improperly encoded)
 - Key size that does not match the cipher in `config/app.php` (16 bytes for AES-128, 32 bytes for AES-256)
+- On Laravel 11 and later, `APP_PREVIOUS_KEYS` entries whose size does not match the cipher
 - Duplicate APP_KEY definitions in `.env`
 - Hardcoded keys in `config/app.php` (should use `env()`)
 - Insecure cipher algorithms
@@ -29,7 +30,7 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 
 - **Security Risk:** HIGH - The APP_KEY is used for all encryption in Laravel (sessions, cookies, encrypted data)
 - **Data Loss:** If APP_KEY changes, all encrypted data becomes permanently unreadable
-- **Availability:** Laravel's encrypter rejects a key that is not exactly the cipher's size, and the cookie encryption middleware resolves it on every request, so every web request fails
+- **Availability:** Laravel's encrypter rejects a key that is not exactly the cipher's size, and from Laravel 11 it checks every key in `APP_PREVIOUS_KEYS` the same way. The cookie encryption middleware resolves the encrypter on every request, so one wrong-size key fails every web request
 - **Session Security:** Weak or default keys allow attackers to forge sessions and impersonate users
 - **CSRF Protection:** Laravel's CSRF tokens depend on APP_KEY for cryptographic signing
 
@@ -65,7 +66,20 @@ php artisan key:generate
 # encrypted data readable instead
 ```
 
-**Scenario 4: Configuration is Cached**
+**Scenario 4: A Previous Key Does Not Match the Cipher**
+
+```bash
+# Remove the reported entry from APP_PREVIOUS_KEYS in .env.
+# Laravel decrypts with the configured cipher for every key, so
+# a key generated for another cipher cannot read the data it
+# encrypted anyway
+
+# The list is comma-separated with no spaces: a space after a
+# comma becomes part of the next key, so it is the wrong size
+APP_PREVIOUS_KEYS=base64:FIRST_OLD_KEY,base64:SECOND_OLD_KEY
+```
+
+**Scenario 5: Configuration is Cached**
 
 ```bash
 # Clear the cache to allow .env changes to take effect
@@ -121,6 +135,8 @@ APP_URL=https://yourapp.com
 ```
 
 **4. Handle Key Rotation Carefully**
+
+On Laravel 11 and later, keep the cipher unchanged and move the old key into `APP_PREVIOUS_KEYS` when you generate a new one: Laravel then decrypts existing data with the old key. Every previous key must still be the cipher's size. Changing the cipher in the same rotation means `APP_PREVIOUS_KEYS` cannot read the old data, so re-encrypt it instead, building the old encrypter with the old cipher rather than `config('app.cipher')`.
 
 ```php
 // If you must rotate keys, decrypt with old key and re-encrypt with new key
