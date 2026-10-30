@@ -68,8 +68,6 @@ Route::middleware(['throttle:5,1'])->group(function () {
 
 **Scenario 3: Throttle the Middleware Group**
 
-A throttle in the `web` group covers the login routes in `routes/web.php`, and one in the `api` group covers `routes/api.php`. The analyzer reads the group from `bootstrap/app.php` or `app/Http/Kernel.php`, and accepts a `throttle:` string, `ThrottleRequests::class` (with or without `:params`), or `ThrottleRequests::using()` (Laravel 10+), under any import alias.
-
 ::: code-group
 ```php [Laravel 11+]
 // bootstrap/app.php
