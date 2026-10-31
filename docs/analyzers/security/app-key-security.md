@@ -22,7 +22,7 @@ Validates that Laravel's `APP_KEY` encryption key is properly configured and sec
 - Weak key formats (too short or improperly encoded)
 - Key size that does not match the cipher in `config/app.php` (16 bytes for AES-128, 32 bytes for AES-256)
 - On Laravel 11 and later, `APP_PREVIOUS_KEYS` entries whose size does not match the cipher
-- Duplicate APP_KEY definitions in `.env`
+- Duplicate APP_KEY definitions in `.env`, validating the last one, which is the key Laravel reads
 - Hardcoded keys in `config/app.php` (should use `env()`)
 - Insecure cipher algorithms
 
@@ -87,6 +87,40 @@ php artisan config:clear
 
 # After making changes, recache for production
 php artisan config:cache
+```
+
+**Scenario 6: The APP_KEY Line Is Not a Plain APP_KEY= Line**
+
+```bash
+# key:generate only rewrites a line that starts with APP_KEY= followed
+# by the current value. On an export, quoted-name or indented line it
+# fails with "No APP_KEY variable was found in the .env file", and on
+# APP_KEY="" it writes the new key with the quotes still attached
+
+# ❌ Before: key:generate cannot rewrite this line
+export APP_KEY="placeholder"
+
+# ✅ After: a plain, unquoted line, then run php artisan key:generate
+APP_KEY=
+```
+
+**Scenario 7: Multiple APP_KEY Definitions**
+
+```bash
+# Laravel reads the last APP_KEY line in .env, so that is the key
+# encrypting current sessions, cookies and data: keep it as APP_KEY.
+# Data encrypted with an earlier key is unreadable while that key is
+# only a duplicate line. On Laravel 11 and later, move the earlier key
+# to APP_PREVIOUS_KEYS instead of deleting it, so Laravel can decrypt
+# that data again
+
+# ❌ Before: two definitions
+APP_KEY=base64:EARLIER_KEY
+APP_KEY=base64:KEY_IN_USE
+
+# ✅ After: the key Laravel was reading, and the earlier key kept for decryption
+APP_KEY=base64:KEY_IN_USE
+APP_PREVIOUS_KEYS=base64:EARLIER_KEY
 ```
 
 ### Proper Fix (5 minutes)
@@ -183,6 +217,8 @@ APP_KEY=SomeRandomStringWith32Characters!
 // measured after decoding):
 // 32 bytes for AES-256-CBC and AES-256-GCM (the default cipher)
 // 16 bytes for AES-128-CBC and AES-128-GCM
+
+// In an unquoted value, # starts a comment, so APP_KEY= # note is empty
 ```
 
 **6. Production Deployment Checklist**
