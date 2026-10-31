@@ -108,16 +108,19 @@ APP_KEY=
 
 ```bash
 # Laravel reads the last APP_KEY line in .env, so that is the key
-# encrypting current sessions, cookies and data. Keep that value and
-# delete the earlier lines: deleting the last one instead leaves that
-# data unreadable
+# encrypting current sessions, cookies and data: keep it as APP_KEY.
+# Data encrypted with an earlier key is unreadable while that key is
+# only a duplicate line. On Laravel 11 and later, move the earlier key
+# to APP_PREVIOUS_KEYS instead of deleting it, so Laravel can decrypt
+# that data again
 
 # ❌ Before: two definitions
 APP_KEY=base64:EARLIER_KEY
 APP_KEY=base64:KEY_IN_USE
 
-# ✅ After: only the key Laravel was reading
+# ✅ After: the key Laravel was reading, and the earlier key kept for decryption
 APP_KEY=base64:KEY_IN_USE
+APP_PREVIOUS_KEYS=base64:EARLIER_KEY
 ```
 
 ### Proper Fix (5 minutes)
