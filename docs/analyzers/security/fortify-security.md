@@ -21,7 +21,7 @@ Validates Laravel Fortify authentication configuration. Checks for:
 - Two-factor authentication has `confirm` and/or `confirmPassword` options set
 - Password validation rules are configured (`Features::updatePasswords` or `Password::defaults`)
 - Email verification is enabled and User model implements `MustVerifyEmail`
-- Password reset routes have rate limiting applied
+- Password reset routes have rate limiting applied, when `Features::resetPasswords()` is enabled
 - Custom `authenticateUsing()` includes rate limiting or lockout checks
 - Custom `authenticateThrough()` pipeline includes `EnsureLoginIsNotThrottled`, `AttemptToAuthenticate`, and `PrepareAuthenticatedSession`
 - Registration feature has `Fortify::createUsersUsing()` or `CreateNewUser` action configured
@@ -89,11 +89,11 @@ class User extends Authenticatable implements MustVerifyEmail
 
 **3. Add rate limiting to password reset:**
 
+Fortify throttles only the login route. A `RateLimiter::for()` definition alone is not enough; the throttle has to be applied to the reset routes:
+
 ```php
-// app/Providers/FortifyServiceProvider.php
-RateLimiter::for('password-reset', function (Request $request) {
-    return Limit::perMinute(5)->by($request->ip());
-});
+// config/fortify.php
+'middleware' => ['web', 'throttle:6,1'],
 ```
 
 **4. Secure custom `authenticateUsing` pipelines:**
