@@ -19,14 +19,14 @@ This analyzer detects Host header injection vulnerabilities where the applicatio
 
 **Code-level checks:**
 - **Direct `$_SERVER` usage** - Detects `$_SERVER['HTTP_HOST']`, `$_SERVER['SERVER_NAME']`, and `$_SERVER['HTTP_X_FORWARDED_HOST']` in application code
-- **Unvalidated request methods** - Flags `request()->getHost()`, `getHttpHost()`, `getSchemeAndHttpHost()`, `header('Host')`, `header('X-Forwarded-Host')`, `server('HTTP_HOST')`, and `headers->get('host')` calls without nearby validation (e.g., `in_array`, `===`, `config('app.url')` checks)
+- **Unvalidated request methods** - Flags `request()->getHost()`, `getHttpHost()`, `getSchemeAndHttpHost()`, `header('Host')`, `header('X-Forwarded-Host')`, `server('HTTP_HOST')`, and `headers->get('host')` calls without nearby validation (e.g., `in_array`, `===`, `config('app.url')` checks). A strict trusted-hosts allowlist clears the `getHost()`-style getters in request-time code, but never the raw `header()`, `server()` or `headers->get()` reads
 - **URL methods in sensitive contexts** - Flags `request()->url()`, `fullUrl()`, and `root()` when used in security-sensitive operations such as redirects, cache keys, signed routes, or email notifications
 - **Email URL generation** - Detects URLs generated using the Host header near email-sending code (`Mail::to`, `->send()`, `new ...Mail()`), which can lead to password reset poisoning
 
 **Configuration checks (only if unsafe code patterns are found):**
 - **APP_URL configuration** - Verifies `.env.example` does not use placeholder values and `config/app.php` references `APP_URL`
-- **TrustHosts middleware** - Checks if the `TrustHosts` middleware exists with a properly configured `hosts()` method (L9/10), or `trustHosts()` is called in `bootstrap/app.php` (L11/12)
-- **Wildcard host patterns** - Flags overly broad regex patterns (e.g., `.*`, `.+`, or plain `*`) that disable host validation entirely
+- **TrustHosts middleware** - Checks if the `TrustHosts` middleware exists with a properly configured `hosts()` method (L9/10), or `trustHosts()` is called in `bootstrap/app.php` (L11/12) and stays in the global middleware stack
+- **Host patterns** - Flags patterns that trust every host (`.*`, `.+`), patterns missing `^`/`$` anchors or with unescaped dots, and plain `*`, which is not a valid regex
 
 ## Why It Matters
 
@@ -119,7 +119,7 @@ For **Laravel 11/12**, configure trusted hosts in `bootstrap/app.php`:
 ```
 
 ::: warning Use Regex, Not Glob
-`TrustHosts` passes host patterns directly to `preg_match()`. Glob-style patterns like `*.yourdomain.com` are invalid regexes and will silently fail, leaving host validation disabled. Always use anchored regex patterns: `^(.+\.)?yourdomain\.com$`.
+`TrustHosts` passes host patterns directly to `preg_match()`. Glob-style patterns like `*.yourdomain.com` are invalid regexes, so every host is rejected. Always use anchored regex patterns: `^(.+\.)?yourdomain\.com$`.
 :::
 
 3. **Set APP_URL in production `.env`**:
