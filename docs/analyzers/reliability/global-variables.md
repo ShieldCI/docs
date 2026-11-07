@@ -15,7 +15,7 @@ pro: true
 
 ## What This Checks
 
-- Detects **reads** from PHP superglobals: `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `$_SESSION`, `$_SERVER`, `$_FILES`, `$GLOBALS`, `$_ENV` — writes to superglobals (e.g. `$_SERVER['HTTPS'] = 'on'`) are intentionally not flagged as they have no Laravel equivalent
+- Detects use of PHP superglobals: `$_GET`, `$_POST`, `$_REQUEST`, `$_COOKIE`, `$_SESSION`, `$_SERVER`, `$_FILES`, `$GLOBALS`, `$_ENV` — writes to `$_SERVER` and `$_COOKIE` (e.g. `$_SERVER['HTTPS'] = 'on'`) are intentionally not flagged as they have no Laravel equivalent
 - Detects `filter_input()` and `filter_input_array()` calls that bypass Laravel's request validation
 - Detects the `global` keyword (`global $var;`) which imports hidden global state
 - Detects discouraged session functions: `session_start()`, `session_destroy()`, `session_id()`, `session_regenerate_id()`, `session_name()`, `session_unset()`, `session_write_close()`, `session_abort()`, `session_reset()` — note: `session_status()` is intentionally excluded as it is a read-only diagnostic
