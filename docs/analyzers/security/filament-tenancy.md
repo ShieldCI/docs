@@ -20,7 +20,7 @@ Validates multi-tenancy scope enforcement in Filament panels. Checks for:
 - Panel providers with `->tenant()` configuration
 - The tenant user model (the model behind the panel's auth guard) implements `HasTenants` interface
 - The tenant user model implements `canAccessTenant()` that checks the requested tenant, to prevent cross-tenant access via URL manipulation
-- Resources of panels that declare `->tenant()` have proper tenant scoping (`BelongsToTenant` trait or scoped queries)
+- Resources of panels that declare `->tenant()` keep Filament's tenant scoping: a `getEloquentQuery()` override must build on `parent::getEloquentQuery()` or apply a tenant filter
 - Tenant middleware is configured
 - Tenant registration has profile management
 
@@ -90,7 +90,7 @@ class ProjectResource extends Resource
 }
 ```
 
-**Note:** Resources that should not be scoped to a tenant (e.g., global settings panels) can opt out with `public static bool $isScopedToTenant = false;`. This is recognized by the analyzer and will not trigger a scoping warning.
+**Note:** Resources that should not be scoped to a tenant (e.g., global settings panels) can opt out with `public static bool $isScopedToTenant = false;`. The analyzer reports this at Low severity so the opt-out can be reviewed.
 
 **3. Add tenant profile management:**
 
