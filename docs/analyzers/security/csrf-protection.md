@@ -303,6 +303,8 @@ protected $middlewareGroups = [
 ];
 ```
 
+The middleware counts as registered when it runs in the `web` group, directly or through an alias or nested group, or in the global `$middleware` stack. Listing it only in `$middlewarePriority` or importing it with `use` does not register it.
+
 **Laravel 11+ - bootstrap/app.php:**
 
 ```php
