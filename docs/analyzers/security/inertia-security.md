@@ -27,10 +27,10 @@ Validates Inertia.js shared data exposure and middleware configuration. Inertia 
 Flags known credential-related key names in the `share()` method return array of any class extending `Inertia\Middleware`, whatever its name or location: `password`, `secret`, `api_key`, `access_token`, `refresh_token`, `client_secret`, `private_key`, `bearer`, `authorization`, and similar. Session flash reads (values sourced from `$request->session()->get(...)`) are excluded — they are intentional one-time display values.
 
 #### Dangerous Values in `share()`
-Flags high-risk expressions regardless of key name: `config('app.key')`, `env('APP_KEY')` and other sensitive env vars, `->bearerToken()`, `->password`, `->remember_token`, `->two_factor_secret`, `->recoveryCodes()`. Null-existence checks such as `$user->password !== null` are excluded — they evaluate to a boolean and expose no field value.
+Flags high-risk expressions regardless of key name: `config('app.key')` (also read through the `Config` facade), whole config arrays that hold a secret such as `config('app')` or `config('services.stripe')`, `env('APP_KEY')` and other sensitive env vars, `->bearerToken()`, `->password`, `->remember_token`, `->two_factor_secret`, `->recoveryCodes()`. Presence checks such as `$user->password !== null` or `filled(config('services.stripe.secret'))` are excluded — they evaluate to a boolean and expose no field value.
 
 #### Unfiltered User Model
-Flags `$request->user()`, `auth()->user()`, or `Auth::user()` shared without field filtering. The full Eloquent model serializes every column, including hashed password and `remember_token`. Filtered forms are safe: `->only([...])`, `->makeHidden([...])`, a wrapping API Resource, or an `instanceof` check (which produces a boolean).
+Flags `$request->user()`, `auth()->user()`, or `Auth::user()` shared without field filtering, including inside a lazy closure or `Inertia::defer()`. The full Eloquent model serializes every column, including hashed password and `remember_token`. Filtered forms are safe: `->only([...])`, `->makeHidden([...])`, a wrapping API Resource, or an `instanceof` check (which produces a boolean).
 
 #### CSRF Token Sharing
 Flags explicit CSRF token sharing (`'csrf_token'`, `'_token'`, or `'token'` paired with `session()->token()` / `csrf_token()`). Inertia handles CSRF automatically via the `X-XSRF-TOKEN` header.
