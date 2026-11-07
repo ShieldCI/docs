@@ -20,11 +20,11 @@ Validates Inertia.js shared data exposure and middleware configuration. Inertia 
 **Checks Performed:**
 
 #### Middleware Configuration
-- **Missing middleware** — flags when no class extending `Inertia\Middleware` exists in `app/Http/Middleware/`
-- **Unregistered middleware** — flags when `HandleInertiaRequests` exists but is not added to the `web` group in `Kernel.php` (Laravel 9/10)
+- **Missing middleware** — flags when no class extending `Inertia\Middleware` exists in the analyzed paths or `app/Http/Middleware/`
+- **Unregistered middleware** — flags when the Inertia middleware (`HandleInertiaRequests` or any class extending `Inertia\Middleware`) exists but is not added to the `web` group in `Kernel.php` (Laravel 9/10)
 
 #### Sensitive Keys in `share()`
-Flags known credential-related key names in the `share()` method return array: `password`, `secret`, `api_key`, `access_token`, `refresh_token`, `client_secret`, `private_key`, `bearer`, `authorization`, and similar. Session flash reads (values sourced from `$request->session()->get(...)`) are excluded — they are intentional one-time display values.
+Flags known credential-related key names in the `share()` method return array of any class extending `Inertia\Middleware`, whatever its name or location: `password`, `secret`, `api_key`, `access_token`, `refresh_token`, `client_secret`, `private_key`, `bearer`, `authorization`, and similar. Session flash reads (values sourced from `$request->session()->get(...)`) are excluded — they are intentional one-time display values.
 
 #### Dangerous Values in `share()`
 Flags high-risk expressions regardless of key name: `config('app.key')`, `env('APP_KEY')` and other sensitive env vars, `->bearerToken()`, `->password`, `->remember_token`, `->two_factor_secret`, `->recoveryCodes()`. Null-existence checks such as `$user->password !== null` are excluded — they evaluate to a boolean and expose no field value.
