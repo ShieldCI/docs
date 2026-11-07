@@ -16,6 +16,8 @@ tags: csrf,cross-site-request-forgery,security,forms
 
 Detects missing or weak Cross-Site Request Forgery (CSRF) protection in Laravel applications. Validates that forms include `@csrf` directives, AJAX requests use CSRF tokens, VerifyCsrfToken middleware is properly registered, middleware exception patterns aren't overly broad, and state-changing routes have appropriate protection.
 
+Routes that run under the `api` middleware group carry no session, so they are not reported for missing `web`. That covers `routes/api.php`, files registered under `api`, and routes that a `Route::middleware('api')` group or chain reaches inside any other route file. A file that a route file loads inside an `api` group is skipped only when no plain load of it exists.
+
 ## Why It Matters
 
 - **Session Hijacking**: Attackers can trick authenticated users into performing unwanted actions
