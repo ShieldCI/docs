@@ -18,6 +18,8 @@ Detects missing or weak Cross-Site Request Forgery (CSRF) protection in Laravel 
 
 Routes that run under the `api` middleware group carry no session, so they are not reported for missing `web`. That covers `routes/api.php`, files registered under `api`, and routes that a `Route::middleware('api')` group or chain reaches inside any other route file. A file that a route file loads inside an `api` group is skipped only when no plain load of it exists.
 
+Route files passed to `group()` are read whether the argument is a literal path, such as `base_path('routes/admin.php')`, or a variable holding one or a list of them. A variable counts only when every write to it in that scope is a plain assignment: one set in a branch or loop, or in a scope that uses references, `require` or `extract()`, is not read.
+
 ## Why It Matters
 
 - **Session Hijacking**: Attackers can trick authenticated users into performing unwanted actions
