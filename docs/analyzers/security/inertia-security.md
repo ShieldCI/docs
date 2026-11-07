@@ -39,7 +39,7 @@ Flags explicit CSRF token sharing (`'csrf_token'`, `'_token'`, or `'token'` pair
 Flags `version()` methods that return a hardcoded version string or `config('app.version')`. A content hash is a safer alternative.
 
 #### Controller and Provider Shares
-Scans `app/Http/Controllers/`, `app/Providers/`, and `app/Livewire/` for the same sensitive-key and dangerous-value patterns in `Inertia::share()`, `Inertia::render()`, the `inertia()` helper, and Inertia v2 APIs (`defer()`, `merge()`, `optional()`, `always()`).
+Scans every PHP file in the analyzed paths, including route closures, Action classes and Livewire single-file components, for the same sensitive-key and dangerous-value patterns in `Inertia::share()`, `Inertia::render()`, the `inertia()` helper, and Inertia v2 APIs (`defer()`, `merge()`, `optional()`, `always()`).
 
 ## Why It Matters
 

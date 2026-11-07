@@ -21,7 +21,7 @@ Validates Laravel Cashier Paddle integration security. Supports both Paddle Clas
 - Cashier Paddle v2 auto-registered webhook routes are recognized (no false positives)
 - Sandbox mode is not enabled in production
 - Vendor/seller ID and API key use `env()` rather than hardcoded values
-- Price IDs are stored in config/env rather than hardcoded in source (Controllers, Services, Actions, Livewire components)
+- Price IDs are stored in config/env rather than hardcoded in application source (any PHP file in the analyzed paths outside `config/` and `database/`)
 - Webhook secret (`webhook_secret`) is configured and not hardcoded or empty
 - Server-side Paddle credentials (API key, webhook secret) are not present in Blade, JS, Vue, or TypeScript frontend files
 - Return URL passed to `returnTo()` in checkout flows is not derived from user-controlled request input (open redirect prevention)
