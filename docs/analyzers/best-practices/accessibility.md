@@ -21,8 +21,8 @@ Validates that Blade templates follow basic accessibility standards. Checks for:
 - Images without `alt` attributes
 - Form inputs without associated labels or `aria` attributes
 - Missing `lang` attribute on `<html>` tags
-- Empty links without accessible text
-- Empty buttons without accessible text
+- Empty or icon-only links without accessible text
+- Empty or icon-only buttons without accessible text
 
 ## Why It Matters
 
