@@ -17,6 +17,8 @@ tags: composer,autoloader,performance,optimization
 
 Validates that Composer's autoloader is optimized for production performance by checking for classmap optimization and authoritative classmap configuration.
 
+Every `composer dump-autoload` writes `vendor/composer/autoload_static.php` and `autoload_classmap.php`, so neither file's presence or size shows that optimization ran. What `-o` adds is your application's own classes: the analyzer reads the generated classmap and treats the autoloader as optimized when it contains a class under one of your `composer.json` `autoload` PSR-4 or PSR-0 prefixes (such as `App\`). Prefixes whose directories are excluded with `exclude-from-classmap` are not used. Authoritative mode is read from `setClassMapAuthoritative(true)` in `vendor/composer/autoload_real.php`.
+
 ## Why It Matters
 
 - **Performance Impact:** Unoptimized autoloaders can slow down every single request by 10-30% as PHP searches through PSR-4 and PSR-0 rules
@@ -73,12 +75,12 @@ php artisan view:cache
 
 3. **Verify optimization:**
 ```bash
-# Check if optimization is active
+# Optimized: your App\ classes appear in the generated classmap
 php -r "
 \$classMap = include 'vendor/composer/autoload_classmap.php';
-echo 'Classmap entries: ' . count(\$classMap) . PHP_EOL;
-\$realPath = include 'vendor/composer/autoload_real.php';
-echo 'Authoritative: ' . (strpos(file_get_contents('vendor/composer/autoload_real.php'), 'setClassMapAuthoritative(true)') !== false ? 'YES' : 'NO') . PHP_EOL;
+\$appClasses = count(array_filter(array_keys(\$classMap), fn (\$class) => str_starts_with(\$class, 'App\\\\')));
+echo 'App classes in classmap: ' . \$appClasses . PHP_EOL;
+echo 'Authoritative: ' . (str_contains(file_get_contents('vendor/composer/autoload_real.php'), 'setClassMapAuthoritative(true)') ? 'YES' : 'NO') . PHP_EOL;
 "
 ```
 
@@ -89,8 +91,10 @@ echo 'Authoritative: ' . (strpos(file_get_contents('vendor/composer/autoload_rea
 if (app()->environment('production', 'staging')) {
     // Autoloader should already be optimized via composer.json config
     // This is just a runtime verification
-    if (!file_exists(base_path('vendor/composer/autoload_classmap.php'))) {
-        logger()->warning('Autoloader classmap not found - performance will be degraded');
+    $classMap = require base_path('vendor/composer/autoload_classmap.php');
+
+    if (! isset($classMap[\App\Providers\AppServiceProvider::class])) {
+        logger()->warning('Autoloader is not optimized - performance will be degraded');
     }
 }
 ```
