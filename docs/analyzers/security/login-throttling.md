@@ -95,6 +95,8 @@ protected $middlewareGroups = [
 ```
 :::
 
+A group throttle covers only routes Laravel runs with that group. A route file registered without `web`, such as `Route::prefix('hooks')->group(base_path('routes/hooks.php'))`, does not get the web group's throttle, and a later `$middleware->api(remove: ['throttle:api'])` takes out the throttle `throttleApi()` added. Throttle those routes directly.
+
 **Scenario 4: Use Laravel UI Traits (Built-in Throttling)**
 
 ```php
