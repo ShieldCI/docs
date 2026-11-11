@@ -17,7 +17,7 @@ pro: true
 
 Validates Cross-Origin Resource Sharing configuration for security. Checks for:
 
-- Missing CORS configuration file (`config/cors.php`)
+- Missing CORS configuration file (`config/cors.php`) on Laravel 9 / 10 apps with an API surface. On Laravel 11+, an unpublished `config/cors.php`, or any key a published one leaves out, is checked against the framework's default (`vendor/laravel/framework/config/cors.php`), which allows every origin, method and header
 - Wildcard `allowed_origins` permitting any domain — reported **High** when the app exposes an API surface, or **Info** when no API routes, API registration, or Laravel Sanctum is detected (CORS governs nothing, so there is no exposure)
 - Wildcard `allowed_methods` exposing all HTTP methods
 - Wildcard `allowed_headers` permitting any custom header
