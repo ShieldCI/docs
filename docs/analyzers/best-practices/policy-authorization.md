@@ -22,8 +22,8 @@ Validates that resource controllers use Laravel's Policy system for authorizatio
 - Policy classes that don't type-hint an Eloquent model (only flagged when at least one policy method has 2+ parameters; intentionally model-less policies are excluded)
 - Policy files where the class name doesn't match the expected policy name
 - `authorizeResource()` called with a model that doesn't match the controller name
-- Recognizes multiple authorization patterns: `Gate` facades, `middleware('can:...')`, `$user->can()`, `Policy::class` references, and FormRequest `authorize()` methods
-- Recognizes route-level authorization: controllers where `->middleware()` is chained directly on the route definition, or within a `Route::middleware()->group()` closure in `routes/*.php`
+- Recognizes multiple authorization patterns: `Gate` facades, `middleware('can:...')`, `HasMiddleware` with `new Middleware('can:...')`, `#[Authorize]` and `#[Middleware('can:...')]` controller attributes, `$user->can()` and `$user->cannot()`, `Policy::class` references, and FormRequest `authorize()` methods
+- Recognizes route-level authorization: controllers where `->middleware()` is chained directly on the route definition, `->can()` is chained on a `post`, `put`, `patch` or `delete` route, or within a `Route::middleware()->group()` or `Route::can()->group()` closure in `routes/*.php`
 
 > [!TIP]
 > A "model-less policy" is one whose methods only receive the `$user` parameter (e.g., `viewAny`, `create`). These are valid for user-scoped permissions and are not flagged by this analyzer.
@@ -100,6 +100,8 @@ class PostPolicy
 
 **2. Use `authorizeResource()` in controllers:**
 
+On Laravel 11+, `authorizeResource()` needs a base controller that extends `Illuminate\Routing\Controller` and uses the `AuthorizesRequests` trait; `authorize()` needs only the trait.
+
 ```php
 class PostController extends Controller
 {
@@ -135,7 +137,9 @@ public function update(Request $request, Post $post)
 Gate::authorize('update', $post);
 
 // User can() method
-if (! $request->user()->can('update', $post)) {
+$user = $request->user();
+
+if ($user->cannot('update', $post)) {
     abort(403);
 }
 
@@ -143,6 +147,15 @@ if (! $request->user()->can('update', $post)) {
 public function __construct()
 {
     $this->middleware('can:update,post')->only(['update', 'destroy']);
+}
+
+// Laravel 11+: HasMiddleware
+class PostController extends Controller implements HasMiddleware
+{
+    public static function middleware(): array
+    {
+        return [new Middleware('can:update,post', only: ['update', 'destroy'])];
+    }
 }
 
 // Route-group middleware — all controllers inside are suppressed
