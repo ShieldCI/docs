@@ -17,8 +17,8 @@ pro: true
 
 Validates Laravel Cashier Paddle integration security. Supports both Paddle Classic (`vendor_id`, `auth_code`) and Paddle Billing v2 (`seller_id`, `api_key`). Checks for:
 
-- Webhook routes verify signatures via Paddle middleware (routes/web.php, routes/api.php, bootstrap/app.php)
-- Cashier Paddle v2 auto-registered webhook routes are recognized (no false positives)
+- Each Paddle webhook route verifies signatures via Paddle's `VerifyWebhookSignature` middleware or Cashier's own `WebhookController` (routes/web.php, routes/api.php, bootstrap/app.php)
+- A webhook route is defined when `Cashier::ignoreRoutes()` turns off the auto-registered one
 - Sandbox mode is not enabled in production
 - Vendor/seller ID and API key use `env()` rather than hardcoded values
 - Price IDs are stored in config/env rather than hardcoded in application source (any PHP file in the analyzed paths outside `config/` and `database/`)
