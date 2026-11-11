@@ -38,8 +38,8 @@ Additional detection:
 **Excluded from detection:**
 - `*Raw` methods (`orderByRaw`, `selectRaw`, `groupByRaw`, `havingRaw`) - Covered by [SQL Injection Analyzer](/analyzers/security/sql-injection)
 
-**Allowlist suppression:**
-- A file containing `in_array($var, $allowed, true)` (strict comparison) is treated as allowlist-validated and skipped. For per-line suppression, add `// @shieldci-ignore` on the affected line.
+**Suppression:**
+- For per-line suppression, add `// @shieldci-ignore` on the affected line.
 
 ## Why It Matters
 
