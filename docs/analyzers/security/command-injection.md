@@ -38,6 +38,7 @@ This analyzer detects command injection vulnerabilities in your Laravel applicat
 
 #### Symfony Process Component
 - `new Process($cmd)` instantiated with a string command
+- `Process::fromShellCommandline($cmd)` with a command string
 
 
 ::: tip What's NOT Flagged
