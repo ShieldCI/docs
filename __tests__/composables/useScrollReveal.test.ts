@@ -100,6 +100,15 @@ describe('useScrollReveal', () => {
     expect(disconnectMock).toHaveBeenCalled()
   })
 
+  it('does nothing when the container has no [data-reveal] elements', async () => {
+    createWrapper('<div ref="containerRef"><div>no reveal</div></div>')
+
+    await nextTick()
+
+    expect(observeMock).not.toHaveBeenCalled()
+    expect(() => getLastObserverCallback()).toThrow()
+  })
+
   it('does nothing when container ref is null', async () => {
     mount(
       defineComponent({

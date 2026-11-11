@@ -11,6 +11,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'lcov'],
       include: ['.vitepress/theme/**/*.{ts,vue}', '.vitepress/seo.ts'],
+      thresholds: { 100: true },
     },
   },
 })
