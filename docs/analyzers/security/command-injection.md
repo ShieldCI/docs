@@ -32,7 +32,7 @@ This analyzer detects command injection vulnerabilities in your Laravel applicat
 - **Backtick operator** (\`cmd\`) - Executes shell command (often overlooked!)
 
 #### Laravel APIs
-- **Process facade**: `Process::run()`, `::command()`, `::pipe()`, `::pool()`, `::start()` with string commands
+- **Process facade**: `Process::run()`, `::command()`, `::pipe()`, `::pool()`, `::start()` with string commands, including builder chains such as `Process::timeout(120)->run($cmd)`
 - **process() helper** (Laravel 10+): `process($cmd)` with a string command
 - **Artisan facade**: `Artisan::call()` / `::queue()` - Critical if command name is user-controlled, Medium if only parameters are
 
@@ -64,7 +64,7 @@ A single command injection vulnerability can give attackers complete control of 
 
 ### Quick Fix (5 minutes)
 
-Use `escapeshellarg()` or `escapeshellcmd()` to escape user input:
+Use `escapeshellarg()` to escape each argument. `escapeshellcmd()` is reported, because it leaves spaces and leading dashes, so the user can still inject options:
 
 **Before (❌):**
 ```php
