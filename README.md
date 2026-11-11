@@ -1,5 +1,10 @@
 # ShieldCI Documentation
 
+[![CI](https://github.com/ShieldCI/docs/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/ShieldCI/docs/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/github/ShieldCI/docs/graph/badge.svg?token=H9VZ2JH889)](https://codecov.io/github/ShieldCI/docs)
+[![Release](https://img.shields.io/github/v/release/ShieldCI/docs)](https://github.com/ShieldCI/docs/releases)
+[![Docs](https://img.shields.io/website?url=https%3A%2F%2Fdocs.shieldci.com&label=docs.shieldci.com)](https://docs.shieldci.com)
+
 A modern, high-performance documentation site built with **VitePress** to serve ShieldCI's analyzer documentation with a beautiful, developer-friendly interface.
 
 ## Overview

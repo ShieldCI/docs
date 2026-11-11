@@ -7,5 +7,10 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['__tests__/**/*.test.ts'],
     globals: true,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov'],
+      include: ['.vitepress/theme/**/*.{ts,vue}', '.vitepress/seo.ts'],
+    },
   },
 })
