@@ -16,7 +16,7 @@ tags: laravel,framework,upgradability,maintenance,solid,best-practices,macros,se
 
 Detects classes that extend Laravel core framework classes instead of using Laravel's own extension points. Checks for:
 
-- **Core foundation extensions** (High): Classes extending `Foundation\Application` or the HTTP and Console `Kernel`
+- **Core foundation extensions** (High): Classes extending `Foundation\Application`. The HTTP and Console `Kernel` are not flagged, since the Laravel 9 and 10 skeletons extend both
 - **HTTP layer extensions** (High): Classes extending `Http\Request`, `Http\Response`, `Routing\Router`, or `Routing\UrlGenerator`
 - **Database extensions** (High): Classes extending `Database\Connection` or `Database\Query\Builder`
 - **Service extensions** (High): Classes extending `AuthManager`, `CacheManager`, `Queue\Worker`, `Validation\Validator`, or `View\View`
