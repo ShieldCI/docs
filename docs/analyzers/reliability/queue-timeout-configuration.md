@@ -18,12 +18,13 @@ tags: queue,configuration,reliability,jobs
 - Ensures proper timeout configuration for queue workers
 - Prevents jobs from being processed twice due to timeout issues
 - Checks all queue connections (Redis, Database, Beanstalkd)
-- Skips sync and SQS drivers (they don't use retry_after)
+- Treats a missing `retry_after` on Redis, Database and Beanstalkd as 60 seconds, Laravel's own default
+- Skips drivers that don't use retry_after (sync, SQS, null, deferred, background, failover), and custom drivers unless they set `retry_after`
 - Reports exact configuration file location and line number
 - Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
 - **Tiered timeout detection**:
   - Detects connection-specific timeouts from queue config
-  - Automatically detects Horizon timeouts for Redis (matches queues to supervisors)
+  - Automatically detects Horizon timeouts for Redis (the longest timeout of the supervisors on each connection)
   - Supports ShieldCI config overrides for database/Beanstalkd drivers
   - Falls back to 60-second default with detection warning
 
@@ -392,7 +393,7 @@ This analyzer uses a **tiered detection approach** to determine queue worker tim
 ```
 
 **2. Horizon Configuration** (Redis only)
-The analyzer automatically detects timeouts from Laravel Horizon config by matching queue names to supervisors.
+The analyzer automatically detects timeouts from Laravel Horizon config. Each queue connection is checked against the longest `timeout` of the supervisors whose `connection` names it, whatever queues they work, since they all share that connection's `retry_after`. A supervisor without `timeout` counts as Horizon's default of 60 seconds. Supervisors are read as Horizon runs them: `defaults` merged into the environment block that matches `horizon.env` (or `app.env`). When no environment block matches, for example in CI under `testing`, every environment is checked.
 
 **3. ShieldCI Configuration Override**
 For database, Beanstalkd, and other drivers where timeout isn't automatically detectable:
