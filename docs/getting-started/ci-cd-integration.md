@@ -169,6 +169,10 @@ jobs:
         run: php artisan shield:analyze --ci
 ```
 
+::: tip Send results to the dashboard
+Add `--report` and store `SHIELDCI_TOKEN` as a repository secret. See [CI Secrets](/getting-started/configuration#ci-secrets).
+:::
+
 ## GitLab CI
 
 ### Basic Configuration
@@ -192,6 +196,10 @@ shieldci:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 ```
+
+::: tip Send results to the dashboard
+Add `--report` and store `SHIELDCI_TOKEN` as a masked CI/CD variable (not protected). See [CI Secrets](/getting-started/configuration#ci-secrets).
+:::
 
 ## Bitbucket Pipelines
 
@@ -230,6 +238,10 @@ definitions:
   caches:
     composer: ~/.composer/cache
 ```
+
+::: tip Send results to the dashboard
+Add `--report` and store `SHIELDCI_TOKEN` as a secured repository variable. See [CI Secrets](/getting-started/configuration#ci-secrets).
+:::
 
 ## Best Practices
 
@@ -374,6 +386,9 @@ If managing three tiers is too complex, use a simpler two-tier split:
 | `SHIELDCI_TIMEOUT` | `300` | Analysis timeout in seconds |
 | `SHIELDCI_MEMORY_LIMIT` | `512M` | PHP memory limit |
 | `SHIELDCI_REPORT_FORMAT` | `console` | Output format (console/json) |
+| `SHIELDCI_TOKEN` | — | Platform API token, required for `--report`. Store it as a CI secret ([setup](/getting-started/configuration#ci-secrets)) |
+| `SHIELDCI_PROJECT_ID` | — | Platform project ID (optional) |
+| `SHIELDCI_SEND_TO_API` | `false` | Send every report to the platform without `--report` |
 
 ## Next Steps
 

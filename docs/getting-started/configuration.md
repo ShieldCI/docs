@@ -889,14 +889,82 @@ ShieldCI auto-detects git context in CI/CD environments. Override or supplement 
 
 **Trigger sources:** `manual` (default), `ci_cd`, `scheduled`
 
-**Example — GitHub Actions:**
-```yaml
-- name: Run ShieldCI
-  run: php artisan shield:analyze --report --format=json
-  env:
-    SHIELDCI_TOKEN: ${{ secrets.SHIELDCI_TOKEN }}
-    SHIELDCI_PROJECT_ID: ${{ secrets.SHIELDCI_PROJECT_ID }}
+### CI Secrets
+
+Never commit `SHIELDCI_TOKEN`. Store it as a secret in your CI provider and pass it to `shield:analyze --report`:
+
+- **GitHub Actions**: *Settings > Secrets and variables > Actions*. Add a repository secret named `SHIELDCI_TOKEN`.
+- **GitLab CI**: *Settings > CI/CD > Variables*. Add a variable with key `SHIELDCI_TOKEN`, set Visibility to **Masked**, and leave **Protected** unchecked.
+- **Bitbucket Pipelines**: *Repository settings > Pipelines > Repository variables*. Add a variable named `SHIELDCI_TOKEN` and check **Secured**.
+
+::: warning GitLab: leave "Protected" unchecked
+GitLab only passes protected variables to pipelines on protected branches. Merge request pipelines from feature branches would run without `SHIELDCI_TOKEN`, so their reports would never be sent.
+:::
+
+::: code-group
+```yaml [GitHub Actions]
+# .github/workflows/shieldci.yml
+name: ShieldCI Analysis
+on: [push, pull_request]
+jobs:
+  shieldci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - run: composer install --no-interaction
+      - run: php artisan shield:analyze --report --ci
+        env:
+          SHIELDCI_TOKEN: ${{ secrets.SHIELDCI_TOKEN }}
 ```
+
+```yaml [GitLab CI]
+# .gitlab-ci.yml
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_IID
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+shieldci:
+  image: php:8.2-cli
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq git unzip libzip-dev
+    - docker-php-ext-install zip
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  script:
+    - cp .env.example .env
+    - echo "SHIELDCI_TOKEN=$SHIELDCI_TOKEN" >> .env
+    - composer install --no-interaction
+    - php artisan key:generate
+    - php artisan shield:analyze --report --ci
+```
+
+```yaml [Bitbucket Pipelines]
+# bitbucket-pipelines.yml
+pipelines:
+  default:
+    - step:
+        name: ShieldCI Analysis
+        image: php:8.2-cli
+        script:
+          - apt-get update -qq && apt-get install -y -qq git unzip libzip-dev
+          - docker-php-ext-install zip
+          - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+          - cp .env.example .env
+          - echo "SHIELDCI_TOKEN=$SHIELDCI_TOKEN" >> .env
+          - composer install --no-interaction
+          - php artisan key:generate
+          - php artisan shield:analyze --report --ci
+```
+:::
+
+::: info
+`SHIELDCI_PROJECT_ID` is optional in CI. The token alone is enough to send reports.
+:::
 
 ## Additional Configuration Options
 
