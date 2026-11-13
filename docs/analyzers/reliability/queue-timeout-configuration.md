@@ -23,7 +23,7 @@ tags: queue,configuration,reliability,jobs
 - Reports exact configuration file location and line number
 - Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
 - **Tiered timeout detection**:
-  - Automatically detects Horizon timeouts for Redis (the longest timeout of the supervisors on each connection; a supervisor `timeout` of 0 or `null` means no limit and always fails)
+  - Automatically detects Horizon timeouts for Redis (the longest timeout of the supervisors on each connection; a supervisor `timeout` of 0 or less, or an empty value such as `null`, means no limit and always fails)
   - Supports ShieldCI config overrides for database/Beanstalkd drivers
   - Falls back to 60-second default with detection warning
 
