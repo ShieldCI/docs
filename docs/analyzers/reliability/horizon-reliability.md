@@ -19,7 +19,8 @@ Validates that Laravel Horizon is correctly configured and healthy. Checks for:
 
 - Horizon prefix is set and not a generic value (`laravel_horizon:`, `horizon:`)
 - Horizon prefix differs sufficiently from the cache prefix
-- A provisioning plan exists for the current `APP_ENV`
+- A provisioning plan exists for the environment Horizon uses (`horizon.env`, else `APP_ENV`), including wildcard keys such as `'*'`
+- No environment's plan stops Horizon from starting: a plan that is not an array, or a supervisor with `minProcesses` below 1, fails startup in every environment
 - Each supervisor has valid queue, memory, worker count, timeout, balance, connection, and retry settings
 - `autoScalingStrategy` is `"time"` or `"size"` when set (Horizon v5+)
 - `horizon.memory_limit` is adequate — at least 32 MB (Horizon v2+)
