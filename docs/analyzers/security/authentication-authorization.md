@@ -117,7 +117,7 @@ public function show()
 
 **Scenario 4: FormRequest With Unconditional Authorization**
 
-The analyzer flags `FormRequest::authorize()` methods that return `true` unconditionally, meaning _any_ user (including unauthenticated ones) can submit the form. This is only flagged when the FormRequest is injected into a sensitive, unprotected controller action; orphaned FormRequests and those used in auth-gated actions are skipped.
+The analyzer flags `FormRequest::authorize()` methods that return `true` unconditionally, meaning _any_ user (including unauthenticated ones) can submit the form. It also flags a FormRequest that declares no `authorize()` method at all, because Laravel then authorizes every request. This is only flagged when the FormRequest is injected into a sensitive, unprotected controller action; orphaned FormRequests and those used in auth-gated actions are skipped.
 
 ```php
 // BAD - Anyone can submit, no real authorization check
@@ -128,6 +128,17 @@ class UpdatePostRequest extends FormRequest
         return true; // Flagged: anyone can call this action
     }
 
+    public function rules(): array
+    {
+        return ['title' => 'required|string|max:255'];
+    }
+}
+```
+
+```php
+// BAD - No authorize() method: Laravel authorizes every request
+class UpdatePostRequest extends FormRequest
+{
     public function rules(): array
     {
         return ['title' => 'required|string|max:255'];
@@ -404,10 +415,12 @@ Then in `config/shieldci.php`:
 
 ::: tip
 Each entry is an `fnmatch()` glob. Exact paths (`/webhooks/stripe`) match exactly; wildcards (`/webhooks/*`, `/users/?`) match a family of routes. The leading slash is optional, so `webhooks/stripe` and `/webhooks/stripe` behave identically.
+
+A route file registered under several prefixes (for example by `withRouting()` and by a service provider) serves its routes at each of those URLs. A route is skipped only when every URL it is served at matches a pattern, so list each one or use a wildcard.
 :::
 
 ::: info Fully-Public Route Groups
-A route **group** is not flagged when *every* route nested inside it is public — either whitelisted in `public_routes`, registered with the `guest` middleware, or declared with `withoutMiddleware('auth')`. A group is still flagged if it wraps even one route that needs protection.
+A route **group** is not flagged when *every* route nested inside it is public or protects itself — either whitelisted in `public_routes`, registered with the `guest` middleware, declared with `withoutMiddleware('auth')`, or carrying its own `auth` middleware. A group is still flagged if it wraps even one route that needs protection.
 :::
 
 #### Custom Auth Middleware Detection
