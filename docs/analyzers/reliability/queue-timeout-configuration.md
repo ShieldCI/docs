@@ -23,8 +23,7 @@ tags: queue,configuration,reliability,jobs
 - Reports exact configuration file location and line number
 - Enforces minimum buffer between timeout and retry_after (configurable, default: 10 seconds)
 - **Tiered timeout detection**:
-  - Detects connection-specific timeouts from queue config
-  - Automatically detects Horizon timeouts for Redis (the longest timeout of the supervisors on each connection)
+  - Automatically detects Horizon timeouts for Redis (the longest timeout of the supervisors on each connection; a supervisor `timeout` of 0 or `null` means no limit and always fails)
   - Supports ShieldCI config overrides for database/Beanstalkd drivers
   - Falls back to 60-second default with detection warning
 
@@ -382,20 +381,10 @@ Schema::create('jobs', function (Blueprint $table) {
 
 This analyzer uses a **tiered detection approach** to determine queue worker timeouts:
 
-**1. Connection-Specific Timeout** (Highest Priority)
-```php
-// config/queue.php - Non-standard but supported
-'database' => [
-    'driver' => 'database',
-    'timeout' => 120,  // Explicit timeout in connection config
-    'retry_after' => 150,
-],
-```
-
-**2. Horizon Configuration** (Redis only)
+**1. Horizon Configuration** (Redis only, highest priority)
 The analyzer automatically detects timeouts from Laravel Horizon config. Each queue connection is checked against the longest `timeout` of the supervisors whose `connection` names it, whatever queues they work, since they all share that connection's `retry_after`. A supervisor without `timeout` counts as Horizon's default of 60 seconds. Supervisors are read as Horizon runs them: `defaults` merged into the environment block that matches `horizon.env` (or `app.env`). When no environment block matches, for example in CI under `testing`, every environment is checked.
 
-**3. ShieldCI Configuration Override**
+**2. ShieldCI Configuration Override**
 For database, Beanstalkd, and other drivers where timeout isn't automatically detectable:
 
 ```php
@@ -426,8 +415,8 @@ return [
 ];
 ```
 
-**4. Default Assumption** (60 seconds with warning)
-If no timeout is configured, the analyzer assumes 60 seconds but includes a detection warning in the metadata.
+**3. Default Assumption** (60 seconds with warning)
+If no timeout is configured, the analyzer assumes Laravel's default of 60 seconds, and the recommendation says the value was assumed. A `timeout` key on a connection in `config/queue.php` is not read: queue workers take their timeout from `queue:work --timeout` or the Horizon supervisor, not from that key.
 
 #### Why Configure Timeouts?
 
