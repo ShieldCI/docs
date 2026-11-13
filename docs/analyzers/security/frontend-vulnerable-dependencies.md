@@ -17,6 +17,15 @@ tags: dependencies,npm,yarn,vulnerabilities,frontend,javascript
 
 Scans your npm and yarn dependencies for known security vulnerabilities using npm audit and yarn audit. Identifies packages with CVEs, security advisories, outdated versions, and missing lock files that expose your application to attacks through the frontend dependency chain.
 
+Each advisory keeps the severity npm or yarn assigns it (`critical`, `high`, `moderate`, `low`); an `info` advisory is reported as Low, and one with no severity as High.
+
+The check passes only when the audit actually ran and covered your dependencies. It reports a warning instead when:
+
+- **The audit did not run**: npm or yarn is not installed, the registry refused the audit request, the audit timed out, or its output was not an audit report. The message names the tool and the reason.
+- **The lock file is out of date**: a dependency declared in `package.json` (or in an npm workspace's `package.json`) has no entry in `package-lock.json` or `yarn.lock`, so the audit never looked at it.
+
+`npm audit` runs with `--offline=false` and `--include-workspace-root=true`, so `offline` or `workspaces` settings in `.npmrc` cannot turn it into an empty report.
+
 ## Why It Matters
 
 - **Security Risk:** CRITICAL - Vulnerable packages can contain malware, backdoors, or exploitable flaws
@@ -72,6 +81,21 @@ yarn install
 git add yarn.lock
 git commit -m "Add yarn lock file"
 ```
+
+**Scenario 4: Audit Did Not Run or Lock File Is Out of Date**
+
+```bash
+# Make sure the audit can run where ShieldCI runs
+npm --version
+npm audit
+
+# Bring the lock file in line with package.json
+npm install
+git add package-lock.json
+git commit -m "Update package lock file"
+```
+
+If your registry does not support audit requests, run the analyzer where the public npm registry is reachable, or audit in a dedicated pipeline step.
 
 ### Proper Fix (60 minutes)
 
