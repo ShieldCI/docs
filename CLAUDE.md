@@ -452,7 +452,7 @@ touch .vitepress/theme/components/MyComponent.vue
 
 ## External References
 
-- **PRD**: `../strategy/ShieldCI_PRD.md` (Section 13: Documentation)
+- **PRD**: `../strategy/product/ShieldCI_PRD.md` (Section 13: Documentation)
 - **VitePress Docs**: https://vitepress.dev/guide/what-is-vitepress
 - **Laravel Package**: `./LARAVEL_CLAUDE.md` (Analyzer metadata source)
 
