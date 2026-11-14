@@ -20,13 +20,16 @@ Specifically checks for:
 
 | Middleware | Flagged when | Laravel versions |
 |---|---|:---:|
-| `TrustProxies` | No proxies configured (property empty, no `trustedproxy.proxies` config) | 9–10 |
-| `TrustHosts` | Registered without `TrustProxies` (useless without it) | 9–10 |
+| `TrustProxies` | No proxies configured (`$proxies` property or `proxies()` method empty, no `trustedproxy.proxies` config) | 9–10 |
 | `HandleCors` | No paths configured in `config/cors.php` | 9+ |
 
 ::: info Laravel 11+
-`TrustProxies` and `TrustHosts` are framework-level defaults in Laravel 11+ and are not flagged. Only `HandleCors` is checked.
+`TrustProxies` is a framework-level default in Laravel 11+ and is not flagged. Only `HandleCors` is checked.
 :::
+
+`TrustHosts` is never flagged: it validates the `Host` header on its own and does not depend on `TrustProxies`.
+
+If the container cannot build the registered `TrustProxies` middleware, the analyzer warns that it could not be inspected instead of passing.
 
 ## Why It Matters
 
@@ -57,10 +60,6 @@ return [
 protected $proxies = '*'; // or specific IPs: ['192.168.1.1']
 ```
 
-**TrustHosts — configure TrustProxies alongside it (Laravel 9–10):**
-
-`TrustHosts` only functions when `TrustProxies` is registered and configured. Apply the `TrustProxies` fix above first.
-
 ### Proper Fix (10 minutes)
 
 If you don't use the middleware's feature, remove it entirely rather than adding placeholder configuration.
@@ -84,14 +83,13 @@ protected $middleware = [
 ```
 :::
 
-**TrustProxies and TrustHosts — remove both if you are not behind a proxy (Laravel 9–10):**
+**TrustProxies — remove if you are not behind a proxy (Laravel 9–10):**
 
 ```php
 // app/Http/Kernel.php
 protected $middleware = [
-    // Comment out or remove both:
+    // Comment out or remove:
     // \App\Http\Middleware\TrustProxies::class,
-    // \App\Http\Middleware\TrustHosts::class,
 ];
 ```
 
