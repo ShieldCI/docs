@@ -17,8 +17,8 @@ pro: true
 
 Detects business logic in middleware that violates separation of concerns. Checks for:
 
-- **Database write operations** - instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`) and equivalent static model calls
-- **Email/notification sending** - `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()`, `->notifyNow()`
+- **Database write operations** - instance calls (`->save()`, `->delete()`, `->update()`, `->create()`, `->destroy()`, `->insert()`, `->upsert()`, `->updateOrCreate()`, `->firstOrCreate()`, `->forceDelete()`, `->truncate()`, `->updateOrInsert()`, `->restore()`, `->saveQuietly()`, including `?->`) on an Eloquent model, a `DB::` query or the authenticated user, and equivalent static model calls
+- **Email/notification sending** - `Mail::send()`, `Mail::queue()`, `Mail::later()`, `Mail::sendNow()`, `Notification::send()`, `Notification::sendNow()`, `->notify()` and `->notifyNow()` on a model, the authenticated user or `Notification::route()`
 - **Event/job dispatching via facades** - `Event::dispatch()`, `Event::fire()`, `Bus::dispatch()`, `Bus::dispatchSync()`, `Bus::dispatchNow()`
 - **Direct Eloquent model instantiation** - `new Order()` in middleware, where the class is confirmed to be an Eloquent model: its `extends` chain reaches `Model`, `Authenticatable`, `Pivot` or `MorphPivot`, or it lives in a `Models` namespace
 - **Complex conditional logic** - if-statement nesting 4+ levels deep, suggesting embedded business rules
