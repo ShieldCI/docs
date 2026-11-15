@@ -237,6 +237,20 @@ php artisan tinker
 >>> cache()->store('redis')->getRedis()->info('stats')
 ```
 
+## ShieldCI Configuration
+
+This analyzer is automatically skipped in CI environments (`$runInCI = false`).
+
+**Why skip in CI?**
+- CI pipelines run with `APP_ENV=testing` or `local`, where every cache driver is acceptable, so the check could only ever pass there
+- CI environments commonly use the `array` or `file` cache driver for simplicity, which says nothing about the production cache
+- Cache driver choice is a deployment concern that doesn't need to be gated in CI
+
+**When to run this analyzer:**
+- ✅ **Local development**: Confirms your cache driver matches your production setup
+- ✅ **Staging/Production servers**: Ensures a production-grade driver (Redis, Memcached) is configured
+- ❌ **CI/CD pipelines**: Skipped automatically (the CI environment is not the production one)
+
 ## References
 
 - [Laravel Cache Documentation](https://laravel.com/docs/cache)
