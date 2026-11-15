@@ -10,13 +10,16 @@ tags: cache,configuration,reliability,multi-tenant
 
 | Analyzer ID                  | Category       | Severity  | Time To Fix  |
 | -----------------------------| :------------: |:---------:| ------------:|
-| `cache-prefix-configuration` | ✅ Reliability | High      | 5 minutes   |
+| `cache-prefix-configuration` | ✅ Reliability | Medium    | 5 minutes   |
 
 ## What This Checks
 
-- Detects when shared cache drivers (`redis`, `memcached`, `dynamodb`, `database`) are in use without a configured prefix
-- Verifies both the global `cache.prefix` and store-specific prefixes to ensure they’re non-empty
-- Flags prefixes that are too generic (e.g., `laravel_cache`, `app`, `cache`) or identical to other tenants
+- Detects when the default cache store uses a shared driver (`redis`, `memcached`, `dynamodb`, `database`) without a configured prefix
+- Resolves the prefix the way Laravel does: a store's own `prefix` wins whenever it is set, even to an empty string, and otherwise the global `cache.prefix` applies
+- Counts the prefix the cache client adds to every key: the Redis connection prefix (`REDIS_PREFIX`, a connection's own `prefix` or `options`, or a `?prefix=` in its URL) and the Memcached `OPT_PREFIX_KEY` option
+- Flags key namespaces that are too generic (e.g., `laravel_cache`, `laravel-database-`, `app`, `cache`); one unique part, such as a unique Redis prefix, is enough to pass
+- When the default store uses the `failover` driver, checks each shared store it lists, and reports each offending store by name
+- Grades a `database` store **Low**, because its keys only collide when two applications share one database connection and cache table, and a `redis`, `memcached` or `dynamodb` store **Medium**, because several applications commonly share one cache server
 - Provides location hints (line numbers in `config/cache.php`) for quick remediation
 
 ## Why It Matters
@@ -35,6 +38,8 @@ tags: cache,configuration,reliability,multi-tenant
 'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
 ```
 
+This only clears the finding when `APP_NAME` is set to something unique: with the default `Laravel` the prefix is `laravel_cache`, which is generic.
+
 2. For store-specific needs (e.g., `redis` only):
 
 ```php
@@ -46,6 +51,8 @@ tags: cache,configuration,reliability,multi-tenant
 ```
 
 3. Set `CACHE_PREFIX=myapp_production_cache` in `.env`.
+
+4. On Redis, a unique connection prefix is enough on its own, because the client puts it in front of every key. Set `REDIS_PREFIX=myapp_production_` in `.env`, or set a unique `APP_NAME`, which the default `REDIS_PREFIX` is built from.
 
 ### Proper Fix (5 minutes)
 
