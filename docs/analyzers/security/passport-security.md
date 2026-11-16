@@ -1,6 +1,6 @@
 ---
 title: Passport Security Analyzer
-description: Validates Laravel Passport OAuth2 configuration, token lifetimes, encryption keys, and security settings
+description: Validates Laravel Passport OAuth2 configuration, token lifetimes, private key permissions, and security settings
 icon: lock
 outline: [2, 3]
 tags: security,passport,oauth,authentication,tokens
@@ -20,7 +20,7 @@ Validates Laravel Passport OAuth2 configuration. Checks for:
 - Token lifetimes are configured and not overly long (default is 1 year)
 - Insecure OAuth grant types (implicit grant, password grant) are not enabled
 - PKCE is enforced via hashed client secrets
-- OAuth encryption keys exist with proper permissions
+- The OAuth private key file is not world-readable
 - Scopes are defined via `Passport::tokensCan()`
 - Expired token pruning is scheduled
 - Auth guard in `config/auth.php` uses the `passport` driver
