@@ -23,7 +23,7 @@ Reliability analyzers focus on preventing runtime errors, ensuring proper config
 <AnalyzerCard
   title="Cache Prefix Configuration"
   description="Ensures cache prefix is set to avoid collisions"
-  severity="high"
+  severity="medium"
   link="/analyzers/reliability/cache-prefix-configuration"
 />
 
