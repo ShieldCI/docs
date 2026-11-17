@@ -11,7 +11,7 @@ tags: database,collection,performance,n+1,optimization,phpstan
 
 | Analyzer ID                    | Category       | Severity   | Time To Fix  |
 | -------------------------------| :------------: |:----------:| ------------:|
-| `collection-call-optimization` | ⚡ Performance  | High       | 45 minutes   |
+| `collection-call-optimization` | ⚡ Performance  | Medium     | 45 minutes   |
 
 ## What This Checks
 
@@ -24,6 +24,8 @@ Uses **PHPStan/Larastan** to detect inefficient collection operations that shoul
 - Operations that unnecessarily load all records into memory
 
 **Detection Method:** Leverages Larastan's built-in `noUnnecessaryCollectionCall` rule for accurate detection.
+
+The rule runs with Larastan's defaults whatever your own PHPStan configuration says: `noUnnecessaryCollectionCall`, `noUnnecessaryCollectionCallOnly`, `noUnnecessaryCollectionCallExcept` and `ignoreErrors` in your `phpstan.neon` do not apply to this analyzer. To accept a finding, use ShieldCI's `dont_report`, `ignore_errors` or baseline instead.
 
 If PHPStan stops at a file it cannot process, the analyzer reports an error naming that file rather than a pass, because the rest of the project went unanalysed.
 
