@@ -223,6 +223,7 @@ class VerifyCsrfToken extends Middleware
         // ❌ CRITICAL - Never exclude all routes
         // '*',              // Disables ALL CSRF protection
         // '/*',             // Same as above
+        // '**', '*/*',      // Also match every request
 
         // ❌ HIGH SEVERITY - Too broad (single segment, non-recognized service)
         // 'admin/*',        // Entire admin area unprotected
@@ -264,6 +265,7 @@ use Illuminate\Foundation\Application;
         // ❌ CRITICAL - Never exclude all routes
         // '*',              // Disables ALL CSRF protection
         // '/*',             // Same as above
+        // '**', '*/*',      // Also match every request
 
         // ❌ HIGH SEVERITY - Too broad
         // 'admin/*',        // Entire admin area unprotected
@@ -284,7 +286,7 @@ CSRF protection (`ValidateCsrfToken`) is **enabled by default** globally. The an
 **Only use `validateCsrfTokens(except: [...])` for legitimate exceptions** like webhooks and third-party integrations.
 
 **Exception Pattern Rules (Both Versions):**
-- **Critical Issue**: `'*'` or `'/*'` - Disables CSRF for all routes
+- **Critical Issue**: `'*'`, `'/*'`, `'**'`, `'*/*'` and any other pattern made only of `*` and `/` with at most two slashes - Disables CSRF for all routes
 - **High Severity**: Single-segment wildcards like `'admin/*'`, `'dashboard/*'` (unless recognized webhook service)
 - **Allowed**: Multi-segment patterns like `'/clock/switch/*'`, `'api/external/callback/*'`
 - **Allowed**: Known webhook services like `'stripe/*'`, `'mailslurp/*'`, `'twilio/*'`
