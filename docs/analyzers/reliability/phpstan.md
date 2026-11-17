@@ -294,6 +294,8 @@ You can enable/disable specific categories:
 - Some paths (like `config/`) may have intentional dynamic code
 - Focus on application code (`app/`) for faster feedback
 
+Findings in files matched by `excluded_paths` are not reported. A pattern that covers a whole path listed here is ignored for that path, so `'paths' => ['tests']` keeps the findings under `tests/` despite the default `tests/*` exclusion, while `app/Legacy/*` still excludes `app/Legacy` under `'paths' => ['app']`.
+
 
 
 ## References
