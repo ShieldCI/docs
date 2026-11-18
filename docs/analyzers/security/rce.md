@@ -23,6 +23,8 @@ This analyzer detects Remote Code Execution (RCE) vulnerabilities by identifying
 - **Variable function calls** (`$func()`) - flagged when the function name is user-controlled
 - **`preg_replace()` with `/e` modifier** - replacement string is evaluated as PHP code (deprecated PHP 5.5, removed PHP 7.0)
 - **`call_user_func()`** / **`call_user_func_array()`** - flagged when callback is user-controlled or a plain variable
+- **Callback-taking functions** (`array_map()`, `array_filter()`, `usort()`, `preg_replace_callback()`, `set_error_handler()`, `Arr::map()`, `collect()->map()` and similar) - flagged when the callback is user-controlled
+- **Dynamic method calls** (`$obj->{$name}()`, `Foo::{$name}()`) - flagged when the method name is user-controlled; a static call on a user-controlled class (`$class::method()`) is High
 - **`new ReflectionFunction()`** / **`new ReflectionMethod()`** - invokes arbitrary function or method when arguments are user-controlled
 
 **Severity Classification:**
