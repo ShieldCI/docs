@@ -420,8 +420,33 @@ A route file registered under several prefixes (for example by `withRouting()` a
 :::
 
 ::: info Fully-Public Route Groups
-A route **group** is not flagged when *every* route nested inside it is public or protects itself — either whitelisted in `public_routes`, registered with the `guest` middleware, declared with `withoutMiddleware('auth')`, or carrying its own `auth` middleware. A group is still flagged if it wraps even one route that needs protection.
+A route **group** is not flagged when *every* route nested inside it is public or protects itself — either whitelisted in `public_routes`, registered with the `guest` (or `guest:<guard>`) middleware, declared with `withoutMiddleware('auth')`, or carrying its own `auth` middleware. A group is still flagged if it wraps even one route that needs protection.
 :::
+
+#### What Counts as Authentication
+
+A route is protected when Laravel runs authentication middleware for it. The analyzer reads it from the same places Laravel does:
+
+- The `auth`, `auth:<guard>` and `auth.basic` aliases, and the `Authenticate` and `AuthenticateWithBasicAuth` classes, with or without a guard. An app class extending `Authenticate` counts unless it overrides `handle()`, `authenticate()` or `unauthenticated()`, since an override may let guests through.
+- A middleware group that contains authentication, defined in `app/Http/Kernel.php` or with `$middleware->group()`, `appendToGroup()` or `prependToGroup()` in `bootstrap/app.php`.
+- The `middleware` key of a route's action array, which replaces any `->middleware()` on the same registrar, and its `excluded_middleware` key.
+- The controller's own middleware: a `HasMiddleware` controller's `middleware()` list, or `$this->middleware('auth')` in its constructor, when it covers every method the route runs.
+- A bare method name inside `Route::controller(OrderController::class)->group(...)`, which runs on that controller.
+
+`withoutMiddleware()` excludes only its first argument (a name or a list), as in Laravel.
+
+```php
+// None of these routes is flagged
+Route::middleware('members')->group(function () {   // 'members' => ['web', 'auth']
+    Route::post('/settings', [SettingsController::class, 'update']);
+});
+
+Route::post('/invoices', ['middleware' => 'auth', 'uses' => 'App\Http\Controllers\InvoiceController@store']);
+
+Route::controller(OrderController::class)->middleware('auth')->group(function () {
+    Route::post('/orders', 'store');
+});
+```
 
 #### Custom Auth Middleware Detection
 
