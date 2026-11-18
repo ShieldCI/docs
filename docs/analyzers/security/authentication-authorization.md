@@ -432,6 +432,7 @@ A route is protected when Laravel runs authentication middleware for it. The ana
 - The `middleware` key of a route's action array, which replaces any `->middleware()` on the same registrar, and its `excluded_middleware` key.
 - The controller's own middleware: a `HasMiddleware` controller's `middleware()` list, or `$this->middleware('auth')` in its constructor, when it covers every method the route runs.
 - A bare method name inside `Route::controller(OrderController::class)->group(...)`, which runs on that controller.
+- The middleware a route file is registered with, such as `Route::middleware('auth')->group(base_path('routes/members.php'))` in `withRouting(then: ...)` or a service provider, when every registration of that file applies authentication. If any registration cannot be read, or the file excludes middleware itself, its routes are checked on their own middleware.
 
 `withoutMiddleware()` excludes only its first argument (a name or a list), as in Laravel.
 
