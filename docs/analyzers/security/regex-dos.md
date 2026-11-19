@@ -18,9 +18,9 @@ pro: true
 This analyzer detects Regular Expression Denial of Service (ReDoS) vulnerabilities by scanning PHP files for regex patterns that are susceptible to catastrophic backtracking:
 
 - **Nested quantifiers** - Patterns like `(a+)+`, `(a*)*`, or `(a+){2,}` that cause exponential backtracking
-- **Overlapping alternatives** - Patterns like `(a|ab)*` where alternatives share common prefixes
+- **Overlapping alternatives** - Repeated groups like `(a|ab)*` whose alternatives share a common prefix
 - **Dangerous `.* `repetitions** - Patterns like `(.*)*`, `(.*)+ `, or `.*.*` that match everything multiple times
-- **Multiple consecutive quantifiers** - Patterns like `**`, `*+`, `+*`, or `++`
+- **Multiple consecutive quantifiers** - Patterns like `**` or `+*` (possessive `*+` and `++` are safe)
 - **Greedy/lazy conflicts** - Patterns combining greedy and lazy quantifiers like `*?+`
 - **Laravel validation regex** - Checks `'regex:/pattern/'` validation rules for vulnerable patterns
 - **User input escalation** - Flags higher severity (High) when vulnerable regex is used with user input (`$request->`, `$_GET`, `$_POST`)
