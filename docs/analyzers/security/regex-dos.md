@@ -18,14 +18,14 @@ pro: true
 This analyzer detects Regular Expression Denial of Service (ReDoS) vulnerabilities by scanning PHP files for regex patterns that are susceptible to catastrophic backtracking:
 
 - **Nested quantifiers** - Patterns like `(a+)+`, `(a*)*`, or `(a+){2,}` that cause exponential backtracking
-- **Overlapping alternatives** - Repeated groups like `(a|ab)*` whose alternatives share a common prefix
+- **Overlapping alternatives** - Repeated groups like `^(a|ab)*$` whose alternatives share a common prefix
 - **Dangerous `.* `repetitions** - Patterns like `(.*)*`, `(.*)+ `, or `.*.*` that match everything multiple times
 - **Multiple consecutive quantifiers** - Patterns like `**` or `+*` (possessive `*+` and `++` are safe)
 - **Greedy/lazy conflicts** - Patterns combining greedy and lazy quantifiers like `*?+`
 - **Laravel validation regex** - Checks `'regex:/pattern/'` validation rules for vulnerable patterns
 - **User input escalation** - Flags higher severity (High) when vulnerable regex is used with user input (`$request->`, `$_GET`, `$_POST`)
 
-The analyzer extracts regex patterns from `preg_match()`, `preg_match_all()`, `preg_replace()`, `Str::match()`, and `Str::matchAll()` calls.
+The analyzer extracts regex patterns from `preg_*()` calls, `Str::match()`, `Str::matchAll()`, `Str::isMatch()` and `Str::replaceMatches()`, and `str()` / `Str::of()` chains ending in `match()`, `matchAll()`, `isMatch()`, `test()`, `replaceMatches()` or `split()`. A repeated group that nothing after it can fail, such as an unanchored `(\r\n|\r|\n)+`, is not reported.
 
 ## Why It Matters
 
@@ -54,7 +54,7 @@ if (preg_match($pattern, $request->input('email'))) {
 }
 
 // Vulnerable: overlapping alternatives
-$pattern = '/^(http|https|http:\/\/)+/';
+$pattern = '/^(http|https|http:\/\/)+[a-z.]+$/';
 preg_match($pattern, $userInput);
 ```
 
@@ -67,7 +67,7 @@ if (preg_match($pattern, $request->input('email'))) {
 }
 
 // Safe: non-overlapping alternatives
-$pattern = '/^https?:\/\//';
+$pattern = '/^https?:\/\/[a-z.]+$/';
 preg_match($pattern, $userInput);
 ```
 
