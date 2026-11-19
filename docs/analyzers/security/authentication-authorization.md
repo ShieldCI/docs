@@ -15,7 +15,7 @@ tags: authentication,authorization,security,middleware
 
 ## What This Checks
 
-Detects missing authentication and authorization protection throughout your Laravel application. Scans routes, controllers, and code for authentication vulnerabilities including unprotected routes (POST, PUT, PATCH, DELETE), controllers with sensitive methods lacking authentication, missing authorization checks, and unsafe `Auth::user()`, `auth()->user()`, and `$request->user()` usage without null safety checks.
+Detects missing authentication and authorization protection throughout your Laravel application. Scans routes, controllers, and code for authentication vulnerabilities including unprotected routes (POST, PUT, PATCH, DELETE, and `Route::match()` or `Route::any()` routes that accept one of them), controllers with sensitive methods lacking authentication, missing authorization checks, and unsafe `Auth::user()`, `auth()->user()`, and `$request->user()` usage without null safety checks.
 
 ## Why It Matters
 
@@ -433,8 +433,10 @@ A route is protected when Laravel runs authentication middleware for it. The ana
 - The controller's own middleware: a `HasMiddleware` controller's `middleware()` list, or `$this->middleware('auth')` in its constructor, when it covers every method the route runs.
 - A bare method name inside `Route::controller(OrderController::class)->group(...)`, which runs on that controller.
 - The middleware a route file is registered with, such as `Route::middleware('auth')->group(base_path('routes/members.php'))` in `withRouting(then: ...)` or a service provider, when every registration of that file applies authentication. If any registration cannot be read, or the file excludes middleware itself, its routes are checked on their own middleware.
+- The middleware of a group whose callback requires a route file directly, such as `Route::middleware('auth')->group(function () { require __DIR__.'/members.php'; })`. A require inside a macro, a stored closure, a function, an `if` or a loop is not credited, since it may run outside the group or not at all.
+- `can:` middleware, from `->can('manage')` or, on Laravel 11 and later, a `'can' => [['manage']]` group attribute or action key.
 
-`withoutMiddleware()` excludes only its first argument (a name or a list), as in Laravel.
+`withoutMiddleware()` excludes only its first argument (a name or a list), as in Laravel, on groups and on routes alike. Excluding the `Authenticate` class removes a plain `auth` (and an `auth` alias pointing at a subclass of it), but keeps `auth:<guard>` and `auth.basic`, as Laravel's router does.
 
 ```php
 // None of these routes is flagged
