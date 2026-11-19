@@ -18,6 +18,7 @@ tags: database,infrastructure,reliability,availability
 - Attempts to establish PDO connections to all configured database connections
 - Validates the default database connection is reachable
 - Checks additional connections specified in `config('shieldci.database.connections')`
+- Connects to every read replica of a read/write-split connection, so an unreachable replica fails the check even when the primary is reachable
 - Reports connection failures with specific error messages (access denied, connection refused, unknown database)
 - Skips automatically in CI (where database backends may not be available)
 - Points to `config/database.php` and `.env` so you know where to fix connection details
@@ -145,7 +146,7 @@ This analyzer is automatically skipped in CI environments (`$runInCI = false`).
 
 **Check additional database connections:**
 
-By default, only the default connection is checked. To verify multiple connections (e.g., read replicas, multi-tenancy):
+By default, only the default connection is checked. The `read` hosts of a read/write-split connection are part of that connection and are checked with it. To verify other connections (e.g., separate replica connections, multi-tenancy):
 
 ```php
 // config/shieldci.php
