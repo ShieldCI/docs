@@ -23,6 +23,7 @@ Detects missing eager loading that causes N+1 query performance problems in Eloq
 - **Missing with() calls**: Queries without eager loading using `->with()` before the loop
 - **Missing load() calls**: Collections without lazy eager loading using `->load()` after fetching
 - **Common N+1 patterns**: Typical code patterns like `$post->user->name` or `$post->comments->count()` in loops
+- **Severity is evidence-based**: High when the relationship is declared on a model the analyzer has read, Medium when only the name suggests a relationship (for example, the model extends a class outside the scanned paths) or when the access is a chain such as `$post->author->team`. Every finding in an Artisan command under `app/Console/Commands/` that already uses `chunk()`, `chunkById()`, `each()`, `cursor()`, `lazy()`, `with()` or `load()` is Medium, since batched per-row work in a command is not a request-path N+1
 
 ## Why It Matters
 
