@@ -21,7 +21,7 @@ Validates that health check endpoints exist for infrastructure monitoring. Check
 - Existence of health check routes (`/health`, `/healthz`, `/health-check`, `/status`, `/up`, `/ping`)
 - Health check depth (does it verify DB, cache, storage dependencies?)
 - Laravel 11+ built-in health check route (`/up`)
-- Scheduler monitoring (ping or failure hooks on each scheduled task, a `ScheduledTaskFailed` listener, or spatie/laravel-schedule-monitor)
+- Scheduler monitoring (ping or failure hooks on each scheduled task, a registered or discovered `ScheduledTaskFailed` listener, Laravel Nightwatch, or spatie/laravel-schedule-monitor)
 
 ## Why It Matters
 
