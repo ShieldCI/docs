@@ -23,7 +23,7 @@ Detects Server-Side Request Forgery (SSRF) vulnerabilities where user input cont
 - **Guzzle client methods (URL is second arg)** - `request()`, `requestAsync()` with a user-controlled URL in the second argument
 - **PHP remote fetch functions** - `file_get_contents()`, `fopen()`, `readfile()`, `get_headers()`, `fsockopen()`, `pfsockopen()`, and `simplexml_load_file()` with user-controlled URLs
 - **cURL** - `curl_init($url)`, `curl_setopt($ch, CURLOPT_URL, ...)`, and `curl_setopt_array($ch, [CURLOPT_URL => ...])` with user-controlled URLs
-- **XML and SOAP sinks** - `new SoapClient($wsdlUrl)`, `DOMDocument::load()`, and `XMLReader::open()` with user-controlled URLs
+- **XML and SOAP sinks** - `new SoapClient($wsdlUrl)`, `DOMDocument::load()`, and `XMLReader::open()` (instance or static) with user-controlled URLs
 - **Hardcoded cloud metadata endpoints** - references to `169.254.169.254`, `169.254.170.2`, `metadata.google.internal`, or `/latest/meta-data/` outside of safe contexts (blocklist arrays, validation comparisons)
 - **Variable taint propagation** - user input assigned to a variable (e.g. `$url = request('url')`) and later passed as a request destination
 
