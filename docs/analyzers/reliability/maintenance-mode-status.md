@@ -15,7 +15,9 @@ tags: maintenance,availability,reliability,downtime
 ## What This Checks
 
 - Detects when your application is currently in maintenance mode
-- Checks for the presence of `storage/framework/down` file
+- Asks Laravel through the configured maintenance driver, so both the `file` driver and the `cache` driver (`APP_MAINTENANCE_DRIVER=cache`) are covered
+- Honours a relocated storage directory (`useStoragePath()` or `LARAVEL_STORAGE_PATH`)
+- Warns when the maintenance status cannot be read, for example when the cache store behind the `cache` driver is unreachable
 - Alerts when users cannot access your application
 - Validates maintenance mode is intentional, not accidental
 - Ensures you're aware of application downtime
@@ -189,7 +191,7 @@ php artisan up
 
 ## ShieldCI Configuration
 
-This analyzer only runs in production and staging environments and continues to run in CI environments for deployment pipelines.
+This analyzer only runs in production and staging environments, and is automatically skipped in CI environments (`$runInCI = false`).
 
 **Why only production and staging?**
 - Developers intentionally use maintenance mode during local development for testing
@@ -198,12 +200,10 @@ This analyzer only runs in production and staging environments and continues to 
 - Reduces noise from intentional development-time usage
 - Focuses the check on environments where downtime affects users
 
-**Why continue running in CI?**
-Unlike package detection analyzers, maintenance mode checks are valuable during CI/CD deployment pipelines:
-- Catches forgotten `php artisan up` after deployment
-- Prevents deploying an application stuck in maintenance mode
-- Validates post-deployment application state in real-time
-- CI environments often deploy to staging/production where this check matters
+**Why skip in CI?**
+- CI runners check out a fresh copy of the repository, which is never in maintenance mode
+- The check could only pass there, so running it would report a result that says nothing about your servers
+- Run `php artisan shield:analyze` on the production or staging server itself to check its live status
 
 **Environment Detection:**
 The analyzer checks your Laravel `APP_ENV` setting and only runs when it maps to `production` or `staging`. Custom environment names can be mapped in `config/shieldci.php`:
