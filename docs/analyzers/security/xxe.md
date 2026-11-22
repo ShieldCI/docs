@@ -19,7 +19,8 @@ This analyzer detects XML External Entity (XXE) injection vulnerabilities by sca
 
 - **`simplexml_load_string()` and `simplexml_load_file()`** called without `LIBXML_NONET` - flagged at **High** severity; escalates to **Critical** when `LIBXML_NOENT`, `LIBXML_DTDLOAD`, or `LIBXML_DTDATTR` is also present
 - **`DOMDocument::loadXML()` and `DOMDocument::load()`** called without `LIBXML_NONET` - same severity rules; bare `new DOMDocument()` instantiation without a load call is not flagged
-- **`XMLReader::open()` and `XMLReader::XML()`** in files that instantiate `XMLReader` without a preceding `setParserProperty(XMLReader::SUBST_ENTITIES, false)` call
+- **`new SimpleXMLElement()`** with `LIBXML_NOENT`, `LIBXML_DTDLOAD`, or `LIBXML_DTDATTR` in its options - flagged at **Critical**
+- **`XMLReader::open()` and `XMLReader::XML()`** on an `XMLReader` receiver, in files without a `setParserProperty(XMLReader::SUBST_ENTITIES, false)` call
 
 ## Why It Matters
 
@@ -120,10 +121,10 @@ public function readXml(string $filePath)
 ```php
 public function readXml(string $filePath)
 {
-    // SAFE: Entity substitution disabled before opening
+    // SAFE: Entity substitution disabled once the document is open
     $reader = new XMLReader();
-    $reader->setParserProperty(XMLReader::SUBST_ENTITIES, false);
     $reader->open($filePath);
+    $reader->setParserProperty(XMLReader::SUBST_ENTITIES, false);
 
     while ($reader->read()) {
         // Process nodes...
