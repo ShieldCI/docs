@@ -14,11 +14,15 @@ tags: laravel,mvc,routes,architecture,best-practices,separation-of-concerns
 
 ## What This Checks
 
-Detects business logic in Laravel route files that violates MVC separation of concerns. Identifies three types of violations:
+Detects business logic in Laravel route files that violates MVC separation of concerns. Identifies these types of violations:
 
-- **Database Queries**: DB facade calls, Eloquent model queries, and query builder methods in route closures (Critical severity)
-- **Complex Business Logic**: Nested conditionals, loops (foreach/for/while), and business calculations (High severity)
+- **Database Writes and Raw Queries**: `create()`, `update()`, `delete()`, `restore()` and other writes, and `DB` facade calls, in route closures (High severity)
+- **Complex Database Queries**: Reads with joins, `whereIn()`, `groupBy()` and similar, or long query chains (Medium severity)
+- **Simple Reads**: A read such as `User::where('active', true)->get()` or `Post::paginate(15)` is not reported unless `allow_simple_reads` is disabled (Low severity)
+- **Complex Business Logic**: Nested conditionals, loops (foreach/for/while), business facades and calls, and long method chains (High severity)
 - **Long Closures**: Route closures exceeding configurable line threshold (default: 5 lines) (Medium severity)
+
+A closure whose whole body is one read, such as `fn () => Post::latest()->paginate(15)->withQueryString()` or `auth()->user()->posts()->get()`, is graded only as a database read. A closure with any other statement, a write, or a callback such as `->each(...)` beside the read is graded for business logic as well.
 
 **Problem Detection:**
 - **DB Facade**: `DB::table()`, `DB::select()`, `DB::raw()` calls
@@ -54,7 +58,7 @@ Detects business logic in Laravel route files that violates MVC separation of co
 ```php
 // ❌ BAD - Database query in route
 Route::get('/users', function () {
-    return User::where('active', true)->get();
+    return User::whereIn('role', ['admin', 'editor'])->orderBy('name')->get();
 });
 
 // ✅ GOOD - Controller handles logic
@@ -65,7 +69,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::where('active', true)->get();
+        $users = User::whereIn('role', ['admin', 'editor'])->orderBy('name')->get();
         return response()->json($users);
     }
 }
@@ -261,6 +265,9 @@ Then in `config/shieldci.php`:
 
             // For legacy codebases
             'max_closure_lines' => 10,
+
+            // Report simple reads too, at Low severity (default: true)
+            'allow_simple_reads' => false,
         ],
     ],
 ],
@@ -272,7 +279,7 @@ For legacy codebases with many route closures:
 
 ```php
 // Step 1: Identify critical violations
-// Focus on routes with database queries first (Critical severity)
+// Focus on routes with database writes and business logic first (High severity)
 
 // Step 2: Extract to controllers
 // Move each closure to a dedicated controller method
@@ -340,9 +347,12 @@ class PostController extends Controller
 
 The analyzer provides specific issue codes for each violation type:
 
-- `route-has-db-queries` (Critical): Database operations in route closure
-- `route-has-business-logic` (High): Complex logic like loops or nested conditionals
+- `route-has-db-writes` (High): Database write operations in route closure
+- `route-has-raw-queries` (High): `DB` facade queries in route closure
+- `route-has-business-logic` (High): Complex logic like loops, nested conditionals or long method chains
+- `route-has-complex-queries` (Medium): Joins, `whereIn()`, `groupBy()` or long query chains
 - `route-closure-too-long` (Medium): Closure exceeds line threshold
+- `route-has-db-queries` (Low): Simple reads, only when `allow_simple_reads` is disabled
 
 **Consolidated Issues**: If a route has multiple problems (e.g., DB queries AND nested logic), they're combined into one issue with the highest severity.
 
