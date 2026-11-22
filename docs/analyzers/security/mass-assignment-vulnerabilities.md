@@ -17,11 +17,11 @@ tags: mass-assignment,eloquent,security,models,sql-injection
 
 Detects mass assignment vulnerabilities where unfiltered user input is passed to Eloquent models or query builders, allowing attackers to modify unintended database fields. This analyzer checks for:
 
-- Models without `$fillable` or `$guarded` protection — declared as properties **or** the Laravel 12+ `#[Fillable]` / `#[Guarded]` / `#[Unguarded]` attributes
+- Models that open every attribute to mass assignment with `$guarded = []`, or with the Laravel 12+ `#[Unguarded]` / `#[Guarded([])]` attributes. A model that declares neither `$fillable` nor `$guarded` is not reported: it inherits Laravel's `$guarded = ['*']`, so nothing on it can be mass-assigned
 - Dangerous method calls with `request()->all()`
 - Query builder operations with raw request data
 - Multiple unsafe request data retrieval patterns
-- **Missing `$hidden` attributes** for sensitive fields (password, api_token, remember_token, etc.) — recognized whether declared as a `$hidden` property or a `#[Hidden]` attribute
+- **Missing `$hidden` attributes** for sensitive fields (password, api_token, remember_token, etc.) — recognized whether declared as a `$hidden` property or a `#[Hidden]` attribute. A field left out of a `$visible` (or `#[Visible]`) allow-list counts as hidden
 - **Relationship operations** with unfiltered data (`sync()`, `attach()`, `updateExistingPivot()`, etc.)
 - **Nested mass assignment** via dot notation patterns like `$request->input('user.profile')`
 - **Blacklist filtering warnings** when using `request()->except()` instead of the safer `only()` approach
@@ -66,7 +66,8 @@ Add mass assignment protection to all Eloquent models immediately:
 ```php
 class User extends Model
 {
-    // No protection - vulnerable to mass assignment
+    // Every attribute can be mass-assigned
+    protected $guarded = [];
 }
 ```
 
@@ -231,6 +232,11 @@ DB::table('products')->insert([
 class Product extends Model
 {
     protected $guarded = []; // Allows mass assignment of ALL fields
+}
+
+#[Unguarded] // Same effect as $guarded = []
+class Invoice extends Model
+{
 }
 ```
 
