@@ -26,7 +26,7 @@ Detects missing clickjacking protection in Laravel applications. Validates that 
 
 Also detects and warns about:
 - Deprecated `ALLOW-FROM` directive (not supported by modern browsers)
-- Overly permissive `frame-ancestors *` wildcard (effectively disables protection)
+- Overly permissive `frame-ancestors` sources that match any origin: `*`, `https://*` or a bare `https:` scheme-source (effectively disables protection)
 - `Content-Security-Policy-Report-Only` used without an enforcing policy (logs violations but does not block framing)
 
 ## Why It Matters
