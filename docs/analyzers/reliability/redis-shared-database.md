@@ -19,7 +19,7 @@ pro: true
 - Detects when Redis cache shares the same database number with session storage (running `cache:clear` logs out all users)
 - Detects when Redis cache shares the same database number with Laravel Horizon (running `cache:clear` clears Horizon metrics and pending jobs)
 - Builds connection identifiers from `host:port:database` to detect collisions even across named connections
-- Resolves connections defined by a `url` (e.g. `tls://user:pass@host:6380?database=1`) to their real host, port, and database — matching Laravel's own connector, where `url` takes precedence over the discrete `host`/`port`/`database` keys
+- Resolves connections defined by a `url` (e.g. `tls://user:pass@host:6380?database=1`) to their real host, port, and database — matching Laravel's own connector, which merges the parts the `url` sets (including a database in its path, such as `/1`) over the discrete `host`/`port`/`database` keys
 - Supports Redis cluster configurations by comparing cluster connection names
 - Does **not** treat key prefixes as isolation: `cache:clear` calls Redis `FLUSHDB`, which deletes every key in the database regardless of prefix (broadcasting is not checked — Redis pub/sub is not persisted as keys and is unaffected by `FLUSHDB`)
 
@@ -100,7 +100,7 @@ REDIS_CACHE_URL=tls://default:password@redis-cache.example:6379 # cache only
 ],
 ```
 
-When `url` is set it takes precedence over the discrete `host`/`port`/`database` keys, matching Laravel's connector — so the cache connection is compared by the real server in the URL.
+When `url` is set, the parts it names override the discrete `host`/`port`/`database` keys, matching Laravel's connector — so the cache connection is compared by the real server in the URL.
 
 #### 3: Multi-database alternative (self-hosted only)
 
