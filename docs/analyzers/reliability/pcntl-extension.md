@@ -16,7 +16,7 @@ pro: true
 ## What This Checks
 
 - Verifies the PCNTL extension is loaded when Laravel Horizon is installed or a non-sync queue driver is in use
-- Checks for the Redis PHP extension (`phpredis`) or Predis library when Redis is configured for cache, queue, session, or broadcasting
+- Checks for the Redis PHP extension (`phpredis`) or Predis library when Redis is the default driver for cache, queue, session, or broadcasting, or when Laravel Horizon is configured
 - Supports custom extension requirements defined in configuration
 - Provides OS-specific installation instructions (macOS, Ubuntu/Debian, CentOS/RHEL)
 - Detects Windows environments where PCNTL is unavailable and provides alternative recommendations
