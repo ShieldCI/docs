@@ -19,8 +19,8 @@ Validates that public API endpoints have rate limiting configured. Checks for:
 
 - Custom rate limiter definitions in service providers (`RateLimiter::for()`)
 - `Limit::none()` usage in rate limiter definitions (effectively disables limiting)
-- API routes without throttle middleware
-- Webhook routes without throttle middleware (severity reduced to Low when webhook signature verification middleware is present)
+- API routes without throttle middleware, on the routes or on the `api` middleware group they are loaded under
+- Webhook routes without throttle middleware, on the routes or on the `api` middleware group they are loaded under (severity reduced to Low when webhook signature verification middleware is present)
 - Global rate limiter in API middleware group
 
 ::: tip Auth route throttle checking
