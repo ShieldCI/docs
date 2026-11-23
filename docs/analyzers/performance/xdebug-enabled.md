@@ -96,7 +96,7 @@ COPY docker/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 php -m | grep -i xdebug
 
 # If loaded, check the effective mode (an empty array means "off")
-php -r "var_dump(xdebug_info('mode'));"
+php -r "var_dump(function_exists('xdebug_info') ? xdebug_info('mode') : 'Xdebug not loaded');"
 
 # List all debugging extensions
 php -m | grep -iE 'xdebug|blackfire|tideways|pcov'
