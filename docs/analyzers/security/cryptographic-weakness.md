@@ -23,9 +23,9 @@ Detects weak cryptographic algorithms, insecure cipher usage, and unsafe impleme
 - `ECB` mode in any cipher string - identical plaintext blocks produce identical ciphertext
 - Hardcoded string literal as the IV (5th argument) in `openssl_encrypt()` - IVs must be random per encryption
 - Deprecated `mcrypt_*` functions (`mcrypt_encrypt`, `mcrypt_decrypt`, `mcrypt_cbc`, `mcrypt_cfb`, `mcrypt_ecb`, `mcrypt_ofb`) removed in PHP 7.2
-- Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` - none provide cryptographic randomness
-- `===`, `!==`, `==`, `!=` comparison of hash or HMAC output - vulnerable to timing side-channel attacks
-- Non-cryptographic random functions: `rand()`, `mt_rand()`, `srand()`, `mt_srand()`
+- Weak token generation patterns: `md5(uniqid(...))`, `sha1(uniqid(...))`, and `str_shuffle()` (with the same exceptions as the random functions below) - none provide cryptographic randomness
+- `===`, `!==`, `==`, `!=` comparison of hash or HMAC output - vulnerable to timing side-channel attacks. HMAC output is always flagged; comparing two hashes of non-secret content (e.g. `md5($new) !== md5($old)`) is not
+- Non-cryptographic random functions: `rand()`, `mt_rand()`, `srand()`, `mt_srand()`, except in seeders and factories or as a sleep duration, range bound or length argument (e.g. `usleep(rand(...))`, `Str::random(rand(40, 64))`)
 
 ## Why It Matters
 
