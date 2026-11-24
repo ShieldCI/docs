@@ -17,12 +17,19 @@ tags: laravel,mvc,routes,architecture,best-practices,separation-of-concerns
 Detects business logic in Laravel route files that violates MVC separation of concerns. Identifies these types of violations:
 
 - **Database Writes and Raw Queries**: `create()`, `update()`, `delete()`, `restore()` and other writes, and `DB` facade calls, in route closures (High severity)
-- **Complex Database Queries**: Reads with joins, `whereIn()`, `groupBy()` and similar, or long query chains (Medium severity)
+- **Complex Database Queries**: Reads with joins, `whereIn()`, `groupBy()` and similar, or long query chains (Medium severity). `whereIn()` on an in-memory collection, such as `collect($items)->whereIn('type', ['book'])`, is not a database query
 - **Simple Reads**: A read such as `User::where('active', true)->get()` or `Post::paginate(15)` is not reported unless `allow_simple_reads` is disabled (Low severity)
 - **Complex Business Logic**: Nested conditionals, loops (foreach/for/while), business facades and calls, and long method chains (High severity)
 - **Long Closures**: Route closures exceeding configurable line threshold (default: 5 lines) (Medium severity)
 
-A closure whose whole body is one read, such as `fn () => Post::latest()->paginate(15)->withQueryString()` or `auth()->user()->posts()->get()`, is graded only as a database read. A closure with any other statement, a write, or a callback such as `->each(...)` beside the read is graded for business logic as well.
+A closure that only reads is graded only as a database read. That covers:
+
+- A read rooted at a model, such as `fn () => Post::latest()->paginate(15)->withQueryString()`, including local scopes and query callbacks such as `whereHas('tags', fn ($q) => $q->where('name', 'php'))` or `with(['tags' => fn ($q) => $q->latest()])`
+- A read rooted at the signed-in user, such as `auth()->user()`, `auth()->guard('api')->user()`, `Auth::guard('api')->user()` or `$request->user()`, or at a route-bound model parameter, such as `fn (Team $team) => $team->members()->latest()->get()`
+- A read returned through `view('name', [...])` or `compact()`
+- Several statements that only assign plain values (literals, `request()` or `config()` reads), the signed-in user or reads to variables, or call `session()` with plain arguments, before returning the read
+
+A closure with any other statement, a write, or a per-row callback such as `->each(...)` beside the read is graded for business logic as well. A write through any of the roots above, including one inside a query callback, is graded as a database write.
 
 **Problem Detection:**
 - **DB Facade**: `DB::table()`, `DB::select()`, `DB::raw()` calls
