@@ -20,10 +20,9 @@ Detects dangerous usage of PHP's `extract()` function and related scope-pollutin
 
 - `extract()` called with direct user input (`$_GET`, `$_POST`, `$request->all()`, `Request::all()`)
 - `extract()` called with a variable tainted by user input (`$data = $request->all(); extract($data)`)
-- `extract()` called without safe flags - missing `EXTR_SKIP`, `EXTR_IF_EXISTS`, `EXTR_PREFIX_ALL`, `EXTR_PREFIX_SAME`, or `EXTR_PREFIX_INVALID`
-- `extract()` called with dangerous flags - `EXTR_OVERWRITE`, `EXTR_REFS`, or BitOr combinations
+- `extract()` called without a flag that keeps existing variables - `EXTR_SKIP`, `EXTR_PREFIX_SAME`, `EXTR_PREFIX_ALL`, or `EXTR_PREFIX_IF_EXISTS`. `EXTR_OVERWRITE`, `EXTR_REFS`, `EXTR_IF_EXISTS` and `EXTR_PREFIX_INVALID` still overwrite, and are reported like a call with no flag
 - `compact()` called with user-controlled variable names or a spread operator
-- `parse_str()` called without a result argument (imports variables directly into scope)
+- `parse_str()` called without a result argument (removed in PHP 8.0, so the call cannot run)
 - `parse_str()` called with user input as the first argument
 
 ## Why It Matters
@@ -174,9 +173,8 @@ public function exportData(Request $request)
 
 **Before (❌):**
 ```php
-// VULNERABLE: imports variables directly into the current scope
+// FAILS: the one-argument form was removed in PHP 8.0 and throws ArgumentCountError
 parse_str($_GET['filter']);
-// $name, $sort, $order are now global variables from user input!
 ```
 
 **After (✅):**
