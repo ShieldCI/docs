@@ -17,9 +17,9 @@ pro: true
 
 Validates that data retention policies prevent unbounded growth. Checks for:
 
-- Log channels using `single` driver (single file grows forever)
-- Accumulating models without `Prunable` or `MassPrunable` trait
-- Missing `queue:prune-failed` scheduling (`failed_jobs` table growing unbounded)
+- The default log channel using the `single` driver, directly or through a `stack` channel (single file grows forever)
+- Accumulating models (`Notification`, `Activity`, `FailedJob`, or a name ending in `Log`) without `Prunable` or `MassPrunable` trait
+- Missing `queue:prune-failed` scheduling when the default queue connection is not `sync` (`failed_jobs` table growing unbounded)
 - Missing `queue:prune-batches` scheduling when `Bus::batch()` / `Batchable` is actively used
 - Telescope installed without pruning scheduled
 - Horizon installed without purging configured
