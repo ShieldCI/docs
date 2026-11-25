@@ -22,7 +22,7 @@ Detects `eval()` and related dynamic code execution patterns. Severity escalates
 
 #### Code Execution Functions (4)
 - `eval()` - executes arbitrary PHP code
-- `assert()` with a string literal - treated as code in PHP < 8.3
+- `assert()` with a string literal - not evaluated on PHP 8+, so the string is only checked for truthiness (Low)
 - `create_function()` - deprecated (PHP 7.2), removed (PHP 8.0); uses `eval` internally
 - `preg_replace()` with `/e` modifier - executes replacement as PHP code (removed PHP 7.0)
 
@@ -38,11 +38,12 @@ Flagged when the callable or class name is tainted by user input:
 - `unserialize()` with user input - Critical; PHP object injection / RCE
 - `unserialize()` without a safe `allowed_classes` restriction - Medium; flagged even without user input. Resolved by `['allowed_classes' => false]` (no objects needed) or `['allowed_classes' => [MyClass::class, ...]]` (explicit known-class list). `true` or an empty `[]` still warns.
 
-#### User-Controlled Callbacks and Templates (4)
+#### User-Controlled Callbacks and Templates (5)
 - `ob_start()` with a user-supplied callable
 - `register_shutdown_function()` with a user-supplied callable
 - `register_tick_function()` with a user-supplied callable
-- `Blade::compileString()` with user input - `@php` directives allow arbitrary PHP execution
+- `set_error_handler()`, `spl_autoload_register()`, `array_map()`, `array_filter()`, `usort()`, `preg_replace_callback()` and other callback-taking functions with a user-supplied callable
+- `Blade::compileString()` or `Blade::render()` with user input - `@php` directives allow arbitrary PHP execution
 
 ## Why It Matters
 
@@ -132,7 +133,7 @@ $result = preg_replace_callback('/\{(\w+)\}/', function ($matches) use ($data) {
 
 **Before (❌):**
 ```php
-// VULNERABLE: assert() with string executes code
+// INEFFECTIVE: a string assertion is not evaluated on PHP 8+
 assert('$user->isValid()');
 ```
 
