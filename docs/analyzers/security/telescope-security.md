@@ -46,8 +46,7 @@ The gate is read from the parsed syntax tree, so it is found in any file under `
 - **Middleware configuration** - Flags when `config/telescope.php` middleware only includes `web`, leaving no authentication layer protecting the dashboard
 - **Predictable path** - Warns when `path` is left at the default `/telescope`, which increases exposure risk (Info)
 
-#### Data Retention and Redaction
-- **Pruning not scheduled** - Flags a missing `telescope:prune` schedule; the `telescope_entries` table then grows indefinitely
+#### Redaction
 - **Sensitive data recorded** - Flags when `hideSensitiveRequestDetails()` is not called; passwords and tokens may be recorded
 
 ::: info Gate Severity Is Graded by Reach
