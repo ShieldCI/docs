@@ -23,7 +23,7 @@ Validates that Filament navigation items have proper permission gates. Checks fo
 - Navigation badges that may leak count information without authorization
 - Custom navigation items in panel providers without visibility controls
 
-A resource counts as gated when it declares `shouldRegisterNavigation()`, `canAccess()`, or `canViewAny()`, **or** when its model policy (resolved by Laravel convention at `app/Policies/<Model>Policy.php`) defines a real `viewAny()` gate. This mirrors Filament's own visibility chain: `shouldRegisterNavigation()` → `canAccess()` → `canViewAny()` → `can('viewAny')` → the policy's `viewAny()`. A `viewAny()` that returns `false`, is conditional, or calls a permission check counts as a gate; one that returns `true` or only `auth()->check()` is still treated as weak.
+A resource counts as gated when it declares `shouldRegisterNavigation()`, `canAccess()`, or a real `canViewAny()`, **or**, when it declares no `canViewAny()`, when its model policy (resolved by Laravel convention at `app/Policies/<Model>Policy.php`) defines a real `viewAny()` gate. This mirrors Filament's own visibility chain: `shouldRegisterNavigation()` → `canAccess()` → `canViewAny()` → `can('viewAny')` → the policy's `viewAny()`. A `viewAny()` that returns `false`, is conditional, or calls a permission check counts as a gate; one that returns `true` or only `auth()->check()` is still treated as weak, and the same applies to a resource's own `canViewAny()`.
 
 ## Why It Matters
 
