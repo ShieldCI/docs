@@ -294,7 +294,9 @@ You can enable/disable specific categories:
 - Some paths (like `config/`) may have intentional dynamic code
 - Focus on application code (`app/`) for faster feedback
 
-Findings in files matched by `excluded_paths` are not reported. A pattern that covers a whole path listed here is ignored for that path, so `'paths' => ['tests']` keeps the findings under `tests/` despite the default `tests/*` exclusion, while `app/Legacy/*` still excludes `app/Legacy` under `'paths' => ['app']`.
+Files matched by `excluded_paths` are left out of the PHPStan run, so they are not reported and a file there that PHPStan cannot parse does not stop the run. A pattern that covers a whole path listed here is ignored for that path, so `'paths' => ['tests']` keeps the findings under `tests/` despite the default `tests/*` exclusion, while `app/Legacy/*` still excludes `app/Legacy` under `'paths' => ['app']`.
+
+Blade templates (`*.blade.php`) are never analysed, even though the default paths include `resources/views`. PHPStan reads a template as PHP embedded in HTML rather than as Blade, so it cannot judge one.
 
 
 
