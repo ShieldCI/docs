@@ -17,19 +17,19 @@ pro: true
 
 Validates that job queue configuration is correctly set up to prevent common reliability issues. Checks for:
 
-- Redis connections with `block_for = 0` (busy polling that wastes CPU and blocks signal handling)
+- Redis connections with `block_for = 0` (workers block indefinitely, so they cannot handle SIGTERM until the next job arrives)
 - Redis connections with a very high `block_for` value (slow SIGTERM response on shutdown)
-- Job classes in `app/Jobs/` that do not implement `ShouldQueue` or `ShouldQueueAfterCommit`
-- Job classes missing `$tries` or a `retryUntil()` method — skipped when `handle()` is entirely wrapped in a `try/catch (\Throwable)` that does not rethrow (self-managing jobs that cannot propagate failures to the queue)
+- Job classes in `app/Jobs/` that do not implement `ShouldQueue` or `ShouldQueueAfterCommit`, directly or through an application base class or interface
+- Job classes missing `$tries` or a `retryUntil()` method, on the class, an application base class or trait, or as Laravel's `#[Tries]` attribute — skipped when `handle()` is entirely wrapped in a `try/catch (\Throwable)` that does not rethrow (self-managing jobs that cannot propagate failures to the queue)
 - Job classes missing a `$timeout` property (workers can block indefinitely)
 - Job classes with `$tries > 1` but no `$backoff` — skipped when `$tries = 1` because with a single attempt there are no retries and backoff has no effect
 - Missing or incomplete `queue.failed` configuration (failed jobs are not persisted)
 
 ## Why It Matters
 
-- **CPU Waste:** `block_for = 0` causes workers to busy-poll Redis continuously, driving up CPU usage under low traffic
+- **Blocked Shutdown:** `block_for = 0` makes workers block on Redis until a job arrives, so a deploy's SIGTERM waits for the next job
 - **Graceful Shutdown Delays:** A high `block_for` value means workers ignore SIGTERM for the full duration of each poll cycle
-- **Infinite Retry Loops:** Jobs without `$tries` are retried forever on failure, filling the queue and consuming worker capacity
+- **Unpredictable Retries:** Jobs without `$tries` take the worker's `--tries` option (1 by default, unlimited when 0), so the retry policy depends on how each worker is started
 - **Stuck Workers:** Jobs without `$timeout` can run indefinitely, blocking a worker slot for all other jobs
 - **Thundering Herd:** Failing jobs without `$backoff` hammer external services on every retry, compounding failures
 - **Unrecoverable Failures:** Without a configured `failed` table, failed jobs are lost and cannot be inspected or retried
@@ -41,16 +41,16 @@ Validates that job queue configuration is correctly set up to prevent common rel
 Fix `block_for` in `config/queue.php`:
 
 ```php
-// ❌ Before: busy polling
+// ❌ Before: blocks until a job arrives
 'redis' => [
     'driver' => 'redis',
     'block_for' => 0,
 ],
 
-// ✅ After: efficient blocking with fast signal response
+// ✅ After: short blocking with fast signal response
 'redis' => [
     'driver' => 'redis',
-    'block_for' => null, // uses BLPOP — signals handled immediately
+    'block_for' => 3, // BLPOP for up to 3 seconds
 ],
 ```
 
@@ -66,7 +66,7 @@ Fix `block_for` in `config/queue.php`:
         'connection' => 'default',
         'queue' => env('REDIS_QUEUE', 'default'),
         'retry_after' => 90,
-        'block_for' => null, // ✅ BLPOP — responds to signals immediately
+        'block_for' => 3, // ✅ BLPOP for up to 3 seconds, then checks for signals
     ],
 ],
 
