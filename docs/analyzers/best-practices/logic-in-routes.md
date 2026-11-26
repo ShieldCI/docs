@@ -42,6 +42,8 @@ A closure with any other statement, a write, or a per-row callback such as `->ea
 
 **Consolidated Reporting**: Multiple problems in the same closure are consolidated into a single issue with the highest severity.
 
+**Files Checked**: Every file under `paths.analyze`, plus the route files under `routes/`, which are always read even when `paths.analyze` leaves them out. A route file that does not parse or cannot be read is reported at Low severity instead of passing, because no route it registers can be checked until it is fixed.
+
 ## Why It Matters
 
 - **Violates MVC**: Business logic belongs in controllers, services, or actions - not route files
@@ -361,6 +363,8 @@ The analyzer provides specific issue codes for each violation type:
 - `route-has-complex-queries` (Medium): Joins, `whereIn()`, `groupBy()` or long query chains
 - `route-closure-too-long` (Medium): Closure exceeds line threshold
 - `route-has-db-queries` (Low): Simple reads, only when `allow_simple_reads` is disabled
+- `route-file-parse-error` (Low): A route file the parser could not read, with the parser's message
+- `route-file-unreadable` (Low): A route file that could not be read, such as one without read permission
 
 **Consolidated Issues**: If a route has multiple problems (e.g., DB queries AND nested logic), they're combined into one issue with the highest severity.
 
