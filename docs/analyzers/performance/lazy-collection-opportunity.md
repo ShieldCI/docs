@@ -23,7 +23,7 @@ Identifies collection operations that load all records into memory when lazy alt
 - `->get()->count()/sum()/avg()/max()/min()` fetching all records just to aggregate them
 - `->get()->pluck()` hydrating full models just to extract a single column
 - `->get()->first()` loading all matching rows just to keep the first
-- Large chunk sizes (> 1000) that could use `->lazy()` instead
+- Large query builder chunk sizes (> 1000) that could use `->lazy()` instead
 - `->get()` without pagination or limiting on multi-row query builder chains
 
 ## Why It Matters
