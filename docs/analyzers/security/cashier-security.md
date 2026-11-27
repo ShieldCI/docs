@@ -17,12 +17,12 @@ pro: true
 
 Validates Laravel Cashier Stripe integration security. Checks for:
 
-- Webhook routes verify signatures via `VerifyWebhookSignature` middleware (only checked when the app calls `Cashier::ignoreRoutes()` — Cashier auto-registers the route by default)
-- `STRIPE_WEBHOOK_SECRET` is configured with a valid webhook signing secret (`whsec_*`)
+- Webhook routes to your own controller verify signatures via `VerifyWebhookSignature` middleware (Cashier's `WebhookController` applies it itself when the webhook secret is set)
+- `STRIPE_WEBHOOK_SECRET`, or the variable `config/cashier.php` reads for `webhook.secret`, is configured with a valid webhook signing secret (`whsec_*`)
 - `STRIPE_WEBHOOK_SECRET` is not accidentally set to an API key (`sk_*`, `pk_*`, or `rk_*`)
 - `IncompletePaymentException` is handled for **synchronous** billing calls — `charge()` and `newSubscription()->create()` — Checkout Sessions (`checkout()`) are exempt because Stripe handles 3DS/SCA on their hosted page
 - No Stripe secret keys (`sk_live_`, `sk_test_`) or restricted keys (`rk_*`) in Blade/JS/TS files
-- No Stripe secret or restricted keys hardcoded in PHP config or source files
+- No Stripe secret or restricted keys hardcoded in PHP config or source files, including `@php` blocks in Blade views
 - Checkout and billing portal redirect URLs are not derived from user-controlled request input
 - Payment fulfillment does not trust client-side success redirect params without server-side Stripe verification
 - Cashier migrations are published and reviewed for your billing model
