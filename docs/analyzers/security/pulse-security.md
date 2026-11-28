@@ -26,7 +26,7 @@ The gate is read from the parsed syntax tree, so it is found in any file under `
 
 #### Gate Callback Quality
 - **Blanket grant** - Flags callbacks that return `true` on every path, including `fn () => true`
-- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `Auth::guard('web')->check()`, `$request->user() !== null`
 - **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
 - **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 

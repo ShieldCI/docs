@@ -27,7 +27,7 @@ The gate is read from the parsed syntax tree, so it is found in any file under `
 - **Empty gate() method** - Flags a `gate()` method with no `Gate::define('viewNova')` call
 - **Blanket grant** - Flags callbacks that unconditionally return `true`, plus ones that never read their argument
 - **Arrow function shorthand** - Flags `fn($user) => true` gate definitions
-- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Auth-only gate** - Flags callbacks that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `Auth::guard('web')->check()`, `$request->user() !== null`
 - **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
 - **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 
@@ -41,7 +41,7 @@ The gate is read from the parsed syntax tree, so it is found in any file under `
 - **Disabled authorization** - Flags Nova resource classes where `authorizable()` returns `false`, disabling all policy checks
 
 #### Tool Authorization
-- **Missing canSee()** - Flags tools registered without a `->canSee()` authorization callback
+- **Missing canSee()** - Flags tools registered without their own `->canSee()` or `->canSeeWhen()` authorization
 - **Permissive canSee()** - Flags tools where `canSee()` unconditionally returns `true`
 
 ::: info Gate Severity Is Graded by Reach

@@ -25,7 +25,7 @@ The gate is read from the parsed syntax tree, so it is found in any file under `
 - **HorizonServiceProvider existence** - Verifies `app/Providers/HorizonServiceProvider.php` exists
 - **Authorization gate** - Checks that `Gate::define('viewHorizon', ...)` or `Horizon::auth(...)` is registered
 - **Blanket grant** - Flags `return true;` and `fn ($user) => true`, plus callbacks that never read their argument
-- **Auth-only checks** - Flags gates that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `$request->user() !== null`
+- **Auth-only checks** - Flags gates that only check whether anyone is signed in: `auth()->check()`, `Auth::check()`, `Auth::guard('web')->check()`, `$request->user() !== null`
 - **Permissive fallback** - Flags `?? true` or `?: true` in the fallback position
 - **Environment bypass** - Flags an environment or debug check beyond `local` that can grant on its own
 - **Auth middleware** - Checks for authentication middleware on the Horizon routes
